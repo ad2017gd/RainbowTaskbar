@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#define C16(a,b) a << 8 | b
 
 typedef struct {
 	COLORREF color1;
@@ -31,4 +32,3 @@ void LoadUX();
 COLORREF GetAccentColor();
 void SetAccentColor(COLORREF color);
 COLORREF clerp(unsigned int color1, unsigned int color2, double fraction);
-float lncv(float v0, float v0min, float v0max, float v1min, float v1max);

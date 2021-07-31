@@ -65,6 +65,3 @@ COLORREF clerp(unsigned int color1, unsigned int color2, double fraction)
 		((c2->G - c1->G) * fraction + c1->G),
 		((c2->B - c1->B) * fraction + c1->B));
 }
-float lncv(float v0, float v0min, float v0max, float v1min, float v1max) {
-	return (((v0 - v0min) * (v1max - v1min)) / (v0max - v0min)) + v1min;
-}
