@@ -15,3 +15,4 @@ c 10 28 118 201 fade 4000 50 0
 c 10 214 28 235 fade 4000 50 0
 c 10 80 28 235 fade 1000 50 0
 ```
+Config can be found in: `%appdata%\rnbconf.txt`
