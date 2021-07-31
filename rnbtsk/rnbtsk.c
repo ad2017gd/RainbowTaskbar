@@ -85,7 +85,7 @@ int main() {
 	RegisterClass(&wc);
 	GetWindowRect(hTaskBar, &tr);
 	HWND cw = CreateWindowEx(
-		WS_EX_TOPMOST,
+		WS_EX_TOPMOST | WS_EX_TOOLWINDOW,
 		CLASS_NAME,
 		L"RainbowTaskbar",
 		WS_POPUP | WS_VISIBLE | WS_SYSMENU,
@@ -102,16 +102,6 @@ int main() {
 	{
 		return 0;
 	}
-	long style = GetWindowLong(cw, GWL_STYLE);
-	style &= ~(WS_VISIBLE);
-
-	style |= WS_EX_TOOLWINDOW;
-	style &= ~(WS_EX_APPWINDOW);
-
-	ShowWindow(cw, SW_HIDE);
-	SetWindowLong(cw, GWL_STYLE, style);
-	ShowWindow(cw, SW_SHOW);
-	ShowWindow(cw, SW_HIDE);
 	CreateThread(NULL,
 		0,
 		Thrd,
@@ -195,7 +185,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RECT tr = {0};
 		GetWindowRect(hTaskBar, &tr);
 		//SetWindowPos(hTaskBar, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-		SetWindowBlur(hTaskBar, 4); // disable color
+		SetWindowBlur(hTaskBar, 4);
 
 		SetWindowPos(hwnd, hTaskBar, tr.left, tr.top, tr.right, tr.bottom, SWP_NOREDRAW);
 		FillRect(hdc, &ps.rcPaint, brush);
