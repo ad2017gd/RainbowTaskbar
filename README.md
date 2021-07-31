@@ -14,6 +14,7 @@ Customizable Windows taskbar color and transitions.
 # none - solid color
 # fade (ms) (steps) - fade solid color
 # grad (r2) (g2) (b2) - gradient
+# fgrd (r2) (g2) (b2) (ms) (steps) - fade gradient
 
 # fade : do not use a high amount of steps! the color interpolation function is not optimized,
 # and the Win32 Sleep function is inaccurate at low values
