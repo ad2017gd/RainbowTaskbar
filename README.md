@@ -1,5 +1,5 @@
 # RainbowTaskbar
-Customizable Windows taskbar color.
+Customizable Windows taskbar color and transitions.
 
 ![image](https://user-images.githubusercontent.com/39013925/127749893-c171da6b-6dc3-4539-8ccb-9f54dc2675cf.png)
 
