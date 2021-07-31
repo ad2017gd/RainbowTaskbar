@@ -217,12 +217,14 @@ DWORD WINAPI Thrd(void* data) {
 						SetWindowLong(hTaskBar, GWL_EXSTYLE, WS_EX_LAYERED);
 						SetLayeredWindowAttributes(hTaskBar, 0, step.r, LWA_ALPHA);
 						SetWindowPos(hTaskBar, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+						break;
 					}
 					case 2: {
 						DWORD dwStyle = GetWindowLong(winhwnd, GWL_EXSTYLE);
 						SetWindowLong(winhwnd, GWL_EXSTYLE, WS_EX_LAYERED);
 						SetLayeredWindowAttributes(winhwnd, 0, step.r, LWA_ALPHA);
 						SetWindowPos(winhwnd, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+						break;
 					}
 					case 3: {
 						DWORD dwStyle = GetWindowLong(hTaskBar, GWL_EXSTYLE);
@@ -233,10 +235,12 @@ DWORD WINAPI Thrd(void* data) {
 						SetWindowLong(winhwnd, GWL_EXSTYLE, WS_EX_LAYERED);
 						SetLayeredWindowAttributes(winhwnd, 0, step.r, LWA_ALPHA);
 						SetWindowPos(winhwnd, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+						break;
 						
 					}
 					case 4: {
 						blur = TRUE;
+						break;
 					}
 					}
 				
