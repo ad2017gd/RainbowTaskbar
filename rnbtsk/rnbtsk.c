@@ -24,7 +24,7 @@ int main() {
 	char* confpath[512];
 	sprintf(confpath, "%s\\rnbconf.txt", appdata);
 
-	FILE* fconfig = fopen(confpath, "rb");
+	FILE* fconfig = fopen(confpath, "r");
 	TCHAR thisfile[MAX_PATH];
 	GetModuleFileName(NULL, thisfile, MAX_PATH);
 	if (!fconfig) {
@@ -42,6 +42,8 @@ int main() {
 
 		
 	}
+	fclose(fconfig);
+	fconfig = fopen(confpath, "rb");
 	char* _ln = malloc(512);
 	rtcfg* cfg = malloc(2048*sizeof(rtcfg_step));
 	int i = 0;
@@ -100,7 +102,16 @@ int main() {
 	{
 		return 0;
 	}
-	ShowWindow(cw, 1);
+	long style = GetWindowLong(cw, GWL_STYLE);
+	style &= ~(WS_VISIBLE);
+
+	style |= WS_EX_TOOLWINDOW;
+	style &= ~(WS_EX_APPWINDOW);
+
+	ShowWindow(cw, SW_HIDE);
+	SetWindowLong(cw, GWL_STYLE, style);
+	ShowWindow(cw, SW_SHOW);
+	ShowWindow(cw, SW_HIDE);
 	CreateThread(NULL,
 		0,
 		Thrd,
