@@ -306,7 +306,7 @@ DWORD WINAPI Thrd(void* data) {
 					step.effect,
 					IMAGE_BITMAP,
 					step.effect_2,
-					20,
+					step.effect_3,
 					LR_LOADFROMFILE
 				);
 				GetObject(image, sizeof(BITMAP), &_image);
