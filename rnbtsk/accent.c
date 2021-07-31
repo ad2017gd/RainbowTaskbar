@@ -4,9 +4,7 @@
 
 // mess of undocumented functions
 
-static HRESULT(WINAPI* GetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceReload);
-static HRESULT(WINAPI* SetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceCommit);
-static BOOL(WINAPI* SetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
+
 void LoadUX() {
 	HMODULE hUxTheme = LoadLibrary(L"uxtheme.dll");
 	HMODULE user32 = LoadLibrary(L"user32.dll");
@@ -14,6 +12,7 @@ void LoadUX() {
 	GetUserColorPreference = GetProcAddress(hUxTheme, "GetUserColorPreference");
 	SetUserColorPreference = GetProcAddress(hUxTheme, (LPCSTR)122);
 	SetWindowCompositionAttribute = GetProcAddress(user32, "SetWindowCompositionAttribute");
+	GetWindowCompositionAttribute = GetProcAddress(user32, "GetWindowCompositionAttribute");
 }
 
 
@@ -41,6 +40,12 @@ void SetWindowBlur(HWND hWnd, DWORD appearance)
 		SetWindowCompositionAttribute(hWnd, &data);
 	}
 
+}
+ACCENTPOLICY GetWindowAccentPolicy(HWND hWnd) {
+	ACCENTPOLICY policy = { 0 };
+	WINCOMPATTRDATA data = { 19, &policy, sizeof(ACCENTPOLICY) };
+	GetWindowCompositionAttribute(hWnd, &data);
+	return policy;
 }
 
 void SetAccentColor(COLORREF color)

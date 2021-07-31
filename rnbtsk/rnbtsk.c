@@ -1,7 +1,9 @@
 // rainbow taskbar program thing
 // by ad2017!!!
+
 #define _CRT_SECURE_NO_WARNINGS
 #pragma comment(lib, "Msimg32.lib")
+#pragma comment(lib, "Gdi32.lib")
 
 #include <Windows.h>
 #include <synchapi.h>
@@ -10,17 +12,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wingdi.h>
+#include <windowsx.h>
 #include "config.h"
 #include "accent.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 DWORD WINAPI Thrd(void* data);
 
+
 COLORREF current = 0;
 HWND hTaskBar;
-int main() {
+int main(int argc, char* argv[]) {
 
 	FreeConsole();
+	HWND hwd_;
+	if (hwd_ = FindWindow(L"RnbTskWnd", NULL)) {
+		DWORD procid;
+		GetWindowThreadProcessId(hwd_, &procid);
+		HANDLE proc = OpenProcess(PROCESS_TERMINATE, FALSE, procid);
+		DestroyWindow(hwd_);
+		TerminateProcess(proc, 0);
+	}
 
 	char* appdata = getenv("APPDATA");
 	char* confpath[512];
@@ -49,13 +61,16 @@ int main() {
 	char* _ln = malloc(512);
 	rtcfg* cfg = malloc(2048*sizeof(rtcfg_step));
 	int i = 0;
+	int fci = -1;
 	while (fgets(_ln, 512, fconfig)) {
 		if (_ln[0] == '#' || _ln[0] == '\r' || _ln[0] == '\n') continue;
 
-		rtcfg_step step;
-		sscanf(_ln, "%c %i %i %i %i %4s %i %i %i %i %i %i %8s", &step.prefix, &step.time, &step.r, &step.g, &step.b, &step.effect, &step.effect_1, &step.effect_2, &step.effect_3, &step.effect_4, &step.effect_5, &step.effect_6, &step.effect_7);
-		step.effect[4] = '\0';
-		char a[2];
+		rtcfg_step step = { 0 };
+		sscanf(_ln, "%c %i %i %i %i %s %i %i %i %i %i %i %127s", &step.prefix, &step.time, &step.r, &step.g, &step.b, &step.effect, &step.effect_1, &step.effect_2, &step.effect_3, &step.effect_4, &step.effect_5, &step.effect_6, &step.effect_7);
+		if (step.prefix == 'c' && fci < 0) {
+			fci = 1;
+			current = RGB(step.r, step.g, step.b);
+		}
 		cfg->steps[i++] = step;
 	}
 	cfg->len = i;
@@ -64,14 +79,17 @@ int main() {
 	// begin
 
 	LoadUX();
+	
 	//SetAccentColor(0x00000000);
 	//current = GetAccentColor();
-	
+	if (fci < 0) {
+		current = GetAccentColor();
+	}
+
+
 	DWORD dwStyle;
 
 	hTaskBar = FindWindow(_T("Shell_TrayWnd"), 0);
-
-	
 	
 	RECT tr;
 	const wchar_t CLASS_NAME[] = L"RnbTskWnd";
@@ -102,6 +120,17 @@ int main() {
 	{
 		return 0;
 	}
+	/*
+	NOTIFYICONDATA nidApp = { 0 };
+
+	nidApp.cbSize = sizeof(NOTIFYICONDATA);
+	nidApp.hWnd = (HWND)cw;
+	nidApp.uID = 0xDEADBEEF;
+	nidApp.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+	nidApp.hIcon = hMainIcon;
+	nidApp.uCallbackMessage = WM_USER_SHELLICON;
+	LoadString(GetModuleHandleA(NULL), IDS_APPTOOLTIP, nidApp.szTip, MAX_LOADSTRING);
+	*/
 	CreateThread(NULL,
 		0,
 		Thrd,
@@ -129,10 +158,23 @@ HWND winhwnd;
 TRIVERTEX vertex[2] = { 0 };
 GRADIENT_RECT gRect;
 BOOL gradient = FALSE;
+BOOL img = FALSE;
 RECT tr;
+RECT imagepos;
+BYTE imagealpha;
+RECT imagesize;
+HBITMAP image;
+BITMAP _image;
+int rnba, tska = 0;
 
 DWORD WINAPI Thrd(void* data) {
 	rtcfg* cfg = (rtcfg*)data;
+	vertex[0].Blue = (current >> 16 & 0xFF) << 8;
+	vertex[0].Green = (current >> 8 & 0xFF) << 8;
+	vertex[0].Red = (current & 0xFF) << 8;
+	vertex[1].Blue = (current >> 16 & 0xFF) << 8;
+	vertex[1].Green = (current >> 8 & 0xFF) << 8;
+	vertex[1].Red = (current & 0xFF) << 8;
 	while (1) {
 		for (int i = 0; i < cfg->len; i++) {
 
@@ -146,6 +188,8 @@ DWORD WINAPI Thrd(void* data) {
 				else if (!strcmp(step.effect, "fade")) {
 					int j = 1;
 					COLORREF last = current;
+					if (step.effect_2 <= 0) 
+						step.effect_2 = step.effect_1 / 20;
 					while (j++ < step.effect_2) {
 						current = clerp(last, RGB(step.r, step.g, step.b), (double)j/step.effect_2);
 						Sleep(step.effect_1 / step.effect_2);
@@ -182,6 +226,9 @@ DWORD WINAPI Thrd(void* data) {
 					COLORREF c2 = RGB(vertex[1].Red >> 8, vertex[1].Green >> 8, vertex[1].Blue >> 8);
 					int j = 1;
 
+					if (step.effect_5 <= 0)
+						step.effect_5 = step.effect_4 / 20;
+
 					while (j++ < step.effect_5) {
 						COLORREF interp1 = clerp(c1, RGB(step.r, step.g, step.b), (double)j / step.effect_5);
 						COLOR* rgb1 = (COLOR*)&interp1;
@@ -213,28 +260,31 @@ DWORD WINAPI Thrd(void* data) {
 
 					switch (step.time) {
 					case 1: {
+						if (tska == step.r) break;
 						DWORD dwStyle = GetWindowLong(hTaskBar, GWL_EXSTYLE);
 						SetWindowLong(hTaskBar, GWL_EXSTYLE, WS_EX_LAYERED);
 						SetLayeredWindowAttributes(hTaskBar, 0, step.r, LWA_ALPHA);
-						SetWindowPos(hTaskBar, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+						tska = step.r;
 						break;
 					}
 					case 2: {
+						if (rnba == step.r) break;
 						DWORD dwStyle = GetWindowLong(winhwnd, GWL_EXSTYLE);
 						SetWindowLong(winhwnd, GWL_EXSTYLE, WS_EX_LAYERED);
 						SetLayeredWindowAttributes(winhwnd, 0, step.r, LWA_ALPHA);
-						SetWindowPos(winhwnd, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+						rnba = step.r;
 						break;
 					}
 					case 3: {
+						if (rnba == step.r && tska == step.r) break;
 						DWORD dwStyle = GetWindowLong(hTaskBar, GWL_EXSTYLE);
 						SetWindowLong(hTaskBar, GWL_EXSTYLE, WS_EX_LAYERED);
 						SetLayeredWindowAttributes(hTaskBar, 0, step.r, LWA_ALPHA);
-						SetWindowPos(hTaskBar, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 						dwStyle = GetWindowLong(winhwnd, GWL_EXSTYLE);
 						SetWindowLong(winhwnd, GWL_EXSTYLE, WS_EX_LAYERED);
 						SetLayeredWindowAttributes(winhwnd, 0, step.r, LWA_ALPHA);
-						SetWindowPos(winhwnd, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+						rnba = step.r;
+						tska = step.r;
 						break;
 						
 					}
@@ -249,6 +299,22 @@ DWORD WINAPI Thrd(void* data) {
 			else if (step.prefix == 'w') {
 				Sleep(step.time);
 			}
+			else if (step.prefix == 'i') {
+				if (img) continue;
+				image = (HBITMAP)LoadImageA(
+					NULL,
+					step.effect,
+					IMAGE_BITMAP,
+					step.effect_2,
+					20,
+					LR_LOADFROMFILE
+				);
+				GetObject(image, sizeof(BITMAP), &_image);
+				RECT _imagepos = { step.time, step.r, step.g, step.b };
+				imagepos = _imagepos; // ???
+				imagealpha = step.effect_1 == 0 ? 255 : step.effect_1;
+				img = TRUE;
+			}
 
 		}
 	}
@@ -262,7 +328,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_CREATE:
-		SetTimer(hwnd, idTimer = 1, 8, NULL);
+		SetTimer(hwnd, idTimer = 1, 6, NULL);
 		RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
 		//SetWindowPos(hTaskBar, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 		
@@ -280,7 +346,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 	{
 		
-
+		
 		hdc = BeginPaint(hwnd, &ps);
 		if(!blur)
 			SetWindowBlur(hTaskBar, 6);
@@ -295,11 +361,25 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HBRUSH brush = CreateSolidBrush(current);
 		SelectObject(hdc, brush);
 		
+		
 		if (gradient) {
 			GradientFill(hdc, vertex, 2, &gRect, 1, GRADIENT_FILL_RECT_H);
 		}
 		else {
 			FillRect(hdc, &ps.rcPaint, brush);
+		}
+		if (img) {
+			HDC hdcMem = CreateCompatibleDC(hdc);
+			HBITMAP hOldBitmap = SelectBitmap(hdcMem, image);
+			SetStretchBltMode(hdc, STRETCH_HALFTONE);
+			int r = imagepos.right > 0 ? imagepos.right : tr.right;
+			int b = imagepos.bottom > 0 ? imagepos.bottom : tr.bottom - tr.top;
+			BLENDFUNCTION bf = { 0, 0, imagealpha, 0 };
+
+			AlphaBlend(
+				hdc, imagepos.left, imagepos.top, r, b,
+				hdcMem, 0, 0, _image.bmWidth, _image.bmHeight, bf);
+			DeleteDC(hdcMem);
 		}
 		DeleteObject(brush);
 
