@@ -8,7 +8,7 @@ Customizable Windows taskbar color and transitions.
 # format:
 # c (ms) (r) (g) (b) (effect) (... effect options) - change taskbar color
 # t (1=taskbar, 2=rainbowtaskbar, 3=both, 4=blur taskbar, ignores alpha) (alpha, 0-255) - set transparency
-# d (ms) - wait N ms
+# w (ms) - wait N ms
 
 # effects:
 # none - solid color
