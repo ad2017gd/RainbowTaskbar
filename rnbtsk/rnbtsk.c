@@ -176,10 +176,11 @@ DWORD WINAPI Thrd(void* data) {
 	vertex[1].Green = (current >> 8 & 0xFF) << 8;
 	vertex[1].Red = (current & 0xFF) << 8;
 	while (1) {
+		int slept = 0;
 		for (int i = 0; i < cfg->len; i++) {
-
 			rtcfg_step step = cfg->steps[i];
 			if (step.prefix == 'c') {
+				slept = 1;
 				if (!strcmp(step.effect, "none")) {
 					current = RGB(step.r, step.g, step.b);
 					Sleep(step.time);
@@ -255,9 +256,12 @@ DWORD WINAPI Thrd(void* data) {
 					Sleep(step.time);
 					gradient = FALSE;
 				}
+				else {
+					slept = 0;
+				}
+
 			}
 			else if (step.prefix == 't') {
-
 					switch (step.time) {
 					case 1: {
 						if (tska == step.r) break;
@@ -298,9 +302,10 @@ DWORD WINAPI Thrd(void* data) {
 			}
 			else if (step.prefix == 'w') {
 				Sleep(step.time);
+				slept = 1;
 			}
 			else if (step.prefix == 'i') {
-				if (img) continue;
+				if (img || image) continue;
 				image = (HBITMAP)LoadImageA(
 					NULL,
 					step.effect,
@@ -317,6 +322,8 @@ DWORD WINAPI Thrd(void* data) {
 			}
 
 		}
+		if(!slept) 
+			Sleep(INFINITE); // bad cpu usage fix
 	}
 }
 
@@ -328,7 +335,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_CREATE:
-		SetTimer(hwnd, idTimer = 1, 6, NULL);
+		SetTimer(hwnd, idTimer = 1, 1 , NULL);
 		RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
 		//SetWindowPos(hTaskBar, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 		
@@ -346,15 +353,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 	{
 		
-		
 		hdc = BeginPaint(hwnd, &ps);
+		GetWindowRect(hTaskBar, &tr);
+		HDC buffer = CreateCompatibleDC(hdc);
+		HBITMAP Membitmap = CreateCompatibleBitmap(hdc, tr.right, tr.bottom - tr.top);
+		SelectObject(buffer, Membitmap);
 		if(!blur)
 			SetWindowBlur(hTaskBar, 6);
 		else
 			SetWindowBlur(hTaskBar, 3);
 
 		
-		GetWindowRect(hTaskBar, &tr);
+		
 		//SetWindowPos(hTaskBar, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 
@@ -363,24 +373,27 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		
 		
 		if (gradient) {
-			GradientFill(hdc, vertex, 2, &gRect, 1, GRADIENT_FILL_RECT_H);
+			GradientFill(buffer, vertex, 2, &gRect, 1, GRADIENT_FILL_RECT_H);
 		}
 		else {
-			FillRect(hdc, &ps.rcPaint, brush);
+			FillRect(buffer, &ps.rcPaint, brush);
 		}
 		if (img) {
-			HDC hdcMem = CreateCompatibleDC(hdc);
+			HDC hdcMem = CreateCompatibleDC(buffer);
 			HBITMAP hOldBitmap = SelectBitmap(hdcMem, image);
-			SetStretchBltMode(hdc, STRETCH_HALFTONE);
 			int r = imagepos.right > 0 ? imagepos.right : tr.right;
 			int b = imagepos.bottom > 0 ? imagepos.bottom : tr.bottom - tr.top;
 			BLENDFUNCTION bf = { 0, 0, imagealpha, 0 };
 
 			AlphaBlend(
-				hdc, imagepos.left, imagepos.top, r, b,
+				buffer, imagepos.left, imagepos.top, r, b,
 				hdcMem, 0, 0, _image.bmWidth, _image.bmHeight, bf);
 			DeleteDC(hdcMem);
 		}
+		BitBlt(hdc, 0, 0, tr.right, tr.bottom - tr.top, buffer, 0, 0, SRCCOPY);
+		DeleteObject(Membitmap);
+		DeleteDC(buffer);
+		DeleteDC(hdc);
 		DeleteObject(brush);
 
 		SetWindowPos(hwnd, hTaskBar, tr.left, tr.top, tr.right, tr.bottom, 0);
@@ -388,6 +401,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		
 		EndPaint(hwnd, &ps);
 		
+		//RedrawWindow(hwnd, NULL, NULL, RDW_UPDATENOW | RDW_INVALIDATE);
 		break;
 	}
 	return 0;
