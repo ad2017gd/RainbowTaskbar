@@ -100,4 +100,5 @@ c 100 255 255 255 grad 255 255 255
 
 # Issues
 This is a list of issues that may or may not be fixed in the future. Feel free to contribute in any way!
-- No multi monitor support
+- Multi monitor support
+- User friendly interface
