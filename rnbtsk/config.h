@@ -4,7 +4,7 @@
 // who cares anyway
 #ifndef _RNBDEFCONFIG
 const char* _RNBDEFCONFIG = "\n\
-# GITHUB LINK: https://github.com/ad2017gd/RainbowTaskbar \n\
+# Detailed config documentation at https://github.com/ad2017gd/RainbowTaskbar#usage \n\
 # format:\n\
 # c (ms) (r) (g) (b) (effect) (... effect options) - change taskbar color\n\
 # t (1 = taskbar; 2 = rainbowtaskbar; 3 = both; 4 = blur taskbar, ignores alpha) (alpha, 0 - 255) - set transparency\n\
