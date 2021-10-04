@@ -10,6 +10,7 @@ Customizable Windows taskbar color and transitions.
    - [Options](#options)
    - [Effects](#effects)
    - [Examples](#examples)
+ - [Issues](#issues)
 
 
 # Usage
@@ -96,3 +97,7 @@ c 750 0 200 255 fgrd 255 0 180 400
 c 100 255 255 255 grad 255 255 255
 ```
 ### 
+
+# Issues
+This is a list of issues that may or may not be fixed in the future. Feel free to contribute in any way!
+- No multi monitor support
