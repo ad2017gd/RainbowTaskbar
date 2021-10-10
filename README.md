@@ -6,16 +6,41 @@ Customizable Windows taskbar color and transitions.
 ![image](https://user-images.githubusercontent.com/39013925/127749893-c171da6b-6dc3-4539-8ccb-9f54dc2675cf.png)
 
 - [Usage](#usage)
-   - [Config](#config)
+   - [Editor](#editor)
+   - [Tray icon](#systray)
+- [Config](#config)
    - [Options](#options)
    - [Effects](#effects)
    - [Examples](#examples)
- - [Issues](#issues)
-
 
 # Usage
-## Config
-### Location
+## Editor
+![image](https://user-images.githubusercontent.com/39013925/136701849-914095d9-3750-4223-b8bf-f656e6359655.png)
+
+
+**1,2** - Add or remove config line
+
+**3** - Config line explorer
+
+**4** - Config line options with descriptions
+
+**5** - Apply new config
+
+
+## SysTray
+![image](https://user-images.githubusercontent.com/39013925/136702026-0333b00b-5af4-4014-9868-a092ef89acfd.png)
+
+When left clicked, it will open the GUI config editor. Closing it will actually minimize it to tray again.
+
+When right clicked, it will close RainbowTaskbar.
+
+
+
+# Config
+
+## OBSOLETE!
+**You should use the GUI editor from versions 1.3 and up.**
+
 Config can be found in: `%appdata%\rnbconf.txt`
 ## Options
 ### Color (`c`)
@@ -97,8 +122,3 @@ c 750 0 200 255 fgrd 255 0 180 400
 c 100 255 255 255 grad 255 255 255
 ```
 ### 
-
-# Issues
-This is a list of issues that may or may not be fixed in the future. Feel free to contribute in any way!
-- Multi monitor support
-- User friendly interface
