@@ -147,7 +147,7 @@ HWND hwd_;
 int main(int argc, char* argv[]) {
 	FreeConsole();
 	LoadUX();
-	CreateThread(0, 0, RnbTskGUI, GetModuleHandle(NULL), 0, 0);
+	
 
 	TIMECAPS tc;
 	timeGetDevCaps(&tc, sizeof(tc));
@@ -185,9 +185,12 @@ int main(int argc, char* argv[]) {
 	}
 	fclose(fconfig);
 
+
 	// begin
 	rcfg = malloc(2048 * sizeof(rtcfg_step));
 	ConfigParser(rcfg);
+
+	CreateThread(0, 0, (LPTHREAD_START_ROUTINE)RnbTskGUI, GetModuleHandle(NULL), 0, 0);
 
 	//SetAccentColor(0x00000000);
 	//current = GetAccentColor();
