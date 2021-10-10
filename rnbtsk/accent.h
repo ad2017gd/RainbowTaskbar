@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #define C16(a,b) a << 8 | b
+#define ARGB(a,r,g,b) (COLORREF)( (b) | ( (g)<<8 ) | ( (r) <<16) | ( (a) <<24 ) ) 
 
 typedef struct {
 	COLORREF color1;
@@ -33,6 +34,7 @@ static BOOL(WINAPI* SetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
 static BOOL(WINAPI* GetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
 ACCENTPOLICY GetWindowAccentPolicy(HWND hWnd);
 void SetWindowBlur(HWND hWnd, DWORD appearance);
+void SetWindowABlur(HWND hWnd, DWORD att, COLORREF color);
 void LoadUX();
 COLORREF GetAccentColor();
 void SetAccentColor(COLORREF color);

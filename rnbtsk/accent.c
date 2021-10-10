@@ -3,7 +3,7 @@
 #include "accent.h"
 
 // mess of undocumented functions
-
+#pragma comment(lib, "Dwmapi.lib")
 
 void LoadUX() {
 	HMODULE hUxTheme = LoadLibrary(L"uxtheme.dll");
@@ -26,7 +26,6 @@ COLORREF GetAccentColor()
 	return cp.color2 & 0x00FFFFFF;
 }
 
-
 void SetWindowBlur(HWND hWnd, DWORD appearance)
 {
 	if (SetWindowCompositionAttribute)
@@ -35,6 +34,20 @@ void SetWindowBlur(HWND hWnd, DWORD appearance)
 		policy.nAccentState = appearance ? appearance : 2;
 		policy.nAnimationId = 2;
 		policy.nColor = RGB(0, 0, 0);
+		policy.nFlags = 0;
+		WINCOMPATTRDATA data = { 19, &policy, sizeof(ACCENTPOLICY) };
+		SetWindowCompositionAttribute(hWnd, &data);
+	}
+
+}
+void SetWindowABlur(HWND hWnd, DWORD att, COLORREF color)
+{
+	if (SetWindowCompositionAttribute)
+	{
+		ACCENTPOLICY policy = { 0 };
+		policy.nAccentState = att;
+		policy.nAnimationId = 2;
+		policy.nColor = color;
 		policy.nFlags = 0;
 		WINCOMPATTRDATA data = { 19, &policy, sizeof(ACCENTPOLICY) };
 		SetWindowCompositionAttribute(hWnd, &data);
