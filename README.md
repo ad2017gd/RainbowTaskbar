@@ -9,8 +9,6 @@ Customizable Windows taskbar color and transitions.
    - [Editor](#editor)
    - [Tray icon](#systray)
 - [Config](#config)
-   - [Options](#options)
-   - [Effects](#effects)
    - [Examples](#examples)
 
 # Usage
@@ -42,56 +40,6 @@ If you chose No on the startup message box, or moved the executable, you can del
 
 ## OBSOLETE!
 **You should use the GUI editor from versions 1.3 and up.**
-
-Config can be found in: `%appdata%\rnbconf.txt`
-## Options
-### Color (`c`)
-> c (ms) (r) (g) (b) (effect) (... effect options) 
-
-Apply color effect on taskbar.
-
-
-### Transparency (`t`)
-> t (1=taskbar; 2=rainbowtaskbar; 3=both; 4=blur taskbar, ignores alpha) (alpha, 0-255)
-
-Set transparency for underlay or taskbar, or set taskbar blur.
-
-
-### Wait (`w`)
-> w (ms)
-
-Wait for (ms) miliseconds. Useful for options that have no duration paramemter.
-
-
-### Image (`i`)
-> i (x) (y) (width, full=0) (height, full=0) (full path, without spaces) (alpha, optional) (image width, optional) (image height, optional) 
-
-Show bitmap (*.bmp) on underlay. To apply other color effects, set lower opacity.
-
-
-## Effects
-### None (`none`)
-> none
-
-Solid color.
-
-
-### Fade in (`fade`)
-> fade (ms) (steps, optional)
-
-Fade solid color. Default steps are (ms)/20. **Do not use a high amount of steps!**
-
-
-### Gradient (`grad`)
-> grad (r2) (g2) (b2)
-
-2 color gradient.
-
-
-### Fade in gradient (`fgrd`)
-> fgrd (r2) (g2) (b2) (ms) (steps, optional)
-
-Fade 2 color gradient. Default steps are (ms)/20. **Do not use a high amount of steps!**
 
 ## Examples
 ### Rainbow fading gradient (default config)
