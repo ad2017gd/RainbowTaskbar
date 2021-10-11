@@ -15,8 +15,7 @@ Customizable Windows taskbar color and transitions.
 
 # Usage
 ## Editor
-![image](https://user-images.githubusercontent.com/39013925/136701849-914095d9-3750-4223-b8bf-f656e6359655.png)
-
+![image](https://user-images.githubusercontent.com/39013925/136743214-a4355570-f94e-41d1-b482-c5c87706ec77.png)
 
 **1,2** - Add or remove config line
 
@@ -25,6 +24,8 @@ Customizable Windows taskbar color and transitions.
 **4** - Config line options with descriptions
 
 **5** - Apply new config
+
+**6** - Color effect preview
 
 
 ## SysTray
