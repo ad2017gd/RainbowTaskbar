@@ -35,7 +35,8 @@ When left clicked, it will open the GUI config editor. Closing it will actually 
 
 When right clicked, it will close RainbowTaskbar.
 
-
+## Startup
+If you chose No on the startup message box, or moved the executable, you can delete the config located at `%appdata%\rnbconf.txt` to get the prompt again.
 
 # Config
 
