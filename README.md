@@ -8,8 +8,7 @@ Customizable Windows taskbar color and transitions.
 - [Usage](#usage)
    - [Editor](#editor)
    - [Tray icon](#systray)
-- [Config](#config)
-   - [Examples](#examples)
+- [Examples](#examples)
 
 # Usage
 ## Editor
@@ -36,13 +35,9 @@ When right clicked, it will close RainbowTaskbar.
 ## Startup
 If you chose No on the startup message box, or moved the executable, you can delete the config located at `%appdata%\rnbconf.txt` to get the prompt again.
 
-# Config
 
-## OBSOLETE!
-**You should use the GUI editor from versions 1.3 and up.**
-
-## Examples
-### Rainbow fading gradient (default config)
+# Examples
+## Rainbow fading gradient (default config)
 ```
 t 4
 t 2 200
@@ -59,7 +54,7 @@ c 1 186 12 248 fgrd 251 7 217 500
 c 1 251 7 217 fgrd 255 0 0 500
 ```
 
-### Pulsing gradient with image
+## Pulsing gradient with image
 ```
 t 4
 t 2 180
