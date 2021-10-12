@@ -1,5 +1,5 @@
 # RainbowTaskbar
-Customizable Windows taskbar color and transitions.
+Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images and transparency.
 **Conflicts with TransparentTB! Close it before running RainbowTaskbar**
 
 
