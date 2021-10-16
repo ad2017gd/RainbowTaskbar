@@ -39,6 +39,7 @@
   <ItemGroup>
     <Image Include="..\..\..\Downloads\funny2.bmp" />
     <Image Include="..\..\..\Downloads\icon.ico" />
+    <Image Include="icon.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

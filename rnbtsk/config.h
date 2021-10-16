@@ -60,6 +60,6 @@ typedef struct {
 	rtcfg_step steps[];
 } rtcfg;
 
-
+BOOL STARTUP;
 void NewConf(rtcfg* nw);
 rtcfg* ConfigParser();

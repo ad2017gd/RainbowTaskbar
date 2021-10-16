@@ -184,6 +184,8 @@ int main(int argc, char* argv[]) {
 
 	}
 	fclose(fconfig);
+	STARTUP = ERROR_SUCCESS == RegGetValue(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 
+		_T("RainbowTaskbar"), RRF_RT_REG_SZ, 0, 0, 0);
 
 
 	// begin

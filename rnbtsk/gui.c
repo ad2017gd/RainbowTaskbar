@@ -5,6 +5,7 @@
 #include <windowsx.h>
 #include <shellapi.h>
 #include <strsafe.h>
+#include <tchar.h>
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
@@ -1240,6 +1241,10 @@ void minimize() {
 
 }
 
+#define MENU0 0xAD20 + 0
+#define MENU1 0xAD20 + 1
+#define MENU2 0xAD20 + 2
+#define MENU3 0xAD20 + 3
 
 LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1261,23 +1266,18 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         case WM_RBUTTONUP:
         {
-            
-            NOTIFYICONDATA sh = { 0 };
-            sh.uID = 0xad2017;
-            sh.hWnd = hwnd;
-            Shell_NotifyIcon(NIM_DELETE, &sh);
+            HMENU menu = CreatePopupMenu();
+            AppendMenu(menu, 0, MENU0, L"Open config file");
+            AppendMenu(menu, STARTUP ? MF_CHECKED : MF_UNCHECKED, MENU1, L"Run at startup");
+            AppendMenu(menu, 0, MENU3, L"Open project page");
+            AppendMenu(menu, 0, MENU2, L"Exit");
 
-            HWND hwd_;
-            if (hwd_ = FindWindow(L"RnbTskWnd", NULL)) {
-                DWORD procid;
-                GetWindowThreadProcessId(hwd_, &procid);
-                HANDLE proc = OpenProcess(PROCESS_TERMINATE, FALSE, procid);
-                DestroyWindow(hwd_);
-                TerminateProcess(proc, 0);
-            }
-            DestroyWindow(under);
-            PostQuitMessage(0);
-            return 0;
+            POINT p;
+            GetCursorPos(&p);
+            TrackPopupMenu(menu, 0, p.x, p.y+8, 0, hwnd, 0);
+
+            DestroyMenu(menu);
+            break;
             
         }
         }
@@ -1317,6 +1317,53 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
     case WM_COMMAND:
     {
+
+        switch (wParam) {
+            case MENU0: // cfg file
+            {
+                system("start %appdata%\\rnbconf.txt");
+
+                break;
+            }
+            case MENU1: // startup
+            {
+                STARTUP = !STARTUP;
+
+                char* appdata = getenv("APPDATA");
+                char* confpath[512];
+                sprintf(confpath, "%s\\rnbconf.txt", appdata);
+
+                FILE* fconfig = fopen(confpath, "r");
+                TCHAR thisfile[MAX_PATH];
+                GetModuleFileName(NULL, thisfile, MAX_PATH);
+
+                HKEY hkey = NULL;
+                RegCreateKey(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), &hkey);
+                if (STARTUP) {
+                    RegSetValueEx(hkey, _T("RainbowTaskbar"), 0, REG_SZ, thisfile, (_tcslen(thisfile) + 1) * sizeof(TCHAR));
+                }
+                else {
+                    RegDeleteValue(hkey, _T("RainbowTaskbar"));
+                }
+
+                
+
+                RegCloseKey(hkey);
+
+                break;
+            }
+            case MENU2: // quit
+            {
+
+                DestroyWindow(hwnd);
+                break; // ?
+            }
+            case MENU3:
+            {
+                system("explorer \"https://github.com/ad2017gd/RainbowTaskbar\"");
+                break;
+            }
+        }
         switch (HIWORD(wParam)) {
 
         case CBN_SELCHANGE:
@@ -1435,6 +1482,21 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (hbrush) DeleteObject(hbrush);
         if (transparent) DeleteObject(transparent);
         DestroyWindow(under);
+
+        NOTIFYICONDATA sh = { 0 };
+        sh.uID = 0xad2017;
+        sh.hWnd = hwnd;
+        Shell_NotifyIcon(NIM_DELETE, &sh);
+
+        HWND hwd_;
+        if (hwd_ = FindWindow(L"RnbTskWnd", NULL)) {
+            DWORD procid;
+            GetWindowThreadProcessId(hwd_, &procid);
+            HANDLE proc = OpenProcess(PROCESS_TERMINATE, FALSE, procid);
+            DestroyWindow(hwd_);
+            TerminateProcess(proc, 0);
+        }
+
         PostQuitMessage(0);
         break;
     case WM_PAINT:
