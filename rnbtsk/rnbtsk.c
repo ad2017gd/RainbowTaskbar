@@ -143,6 +143,22 @@ void RnbTskWnd() {
 
 }
 
+void OnDestroy() {
+	ACCENTPOLICY policy = { 0 };
+	policy.nAccentState = 4;
+	policy.nAnimationId = 0;
+	policy.nColor = GetAccentColor();
+	policy.nFlags = 2;
+	WINCOMPATTRDATA data = { 19, &policy, sizeof(ACCENTPOLICY) };
+
+	SetWindowCompositionAttribute(hTaskBar, &data);
+	if (hTaskBar2) SetWindowCompositionAttribute(hTaskBar2, &data);
+	SetAccentColor(policy.nColor);
+	SetLayeredWindowAttributes(hTaskBar, 0, 255, LWA_ALPHA);
+	if (hTaskBar2) SetLayeredWindowAttributes(hTaskBar2, 0, 255, LWA_ALPHA);
+	RedrawWindow(hTaskBar, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+}
+
 HWND hwd_;
 int main(int argc, char* argv[]) {
 	FreeConsole();

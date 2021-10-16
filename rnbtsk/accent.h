@@ -28,10 +28,10 @@ typedef struct {
 	BYTE IGNORED;
 } COLOR;
 
-static HRESULT(WINAPI* GetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceReload);
-static HRESULT(WINAPI* SetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceCommit);
-static BOOL(WINAPI* SetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
-static BOOL(WINAPI* GetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
+HRESULT(WINAPI* GetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceReload);
+HRESULT(WINAPI* SetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceCommit);
+BOOL(WINAPI* SetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
+BOOL(WINAPI* GetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
 ACCENTPOLICY GetWindowAccentPolicy(HWND hWnd);
 void SetWindowBlur(HWND hWnd, DWORD appearance);
 void SetWindowABlur(HWND hWnd, DWORD att, COLORREF color);

@@ -61,5 +61,6 @@ typedef struct {
 } rtcfg;
 
 BOOL STARTUP;
+void OnDestroy();
 void NewConf(rtcfg* nw);
 rtcfg* ConfigParser();

@@ -1354,7 +1354,7 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
             case MENU2: // quit
             {
-
+                OnDestroy();
                 DestroyWindow(hwnd);
                 break; // ?
             }
@@ -1496,7 +1496,6 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             DestroyWindow(hwd_);
             TerminateProcess(proc, 0);
         }
-
         PostQuitMessage(0);
         break;
     case WM_PAINT:
