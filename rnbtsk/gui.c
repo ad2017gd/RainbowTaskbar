@@ -638,7 +638,7 @@ void ConfView_OnSelect() {
             MapGet(controls, "edit_r", input2);
 
             LPWSTR xy2 = malloc(33 * sizeof(WCHAR));
-            wsprintfW(xy2, L"%ix%i", selstep.time, selstep.r);
+            wsprintfW(xy2, L"%ix%i", selstep.g, selstep.b);
 
             Edit_SetText(input2, xy2);
             free(xy2);
