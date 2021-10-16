@@ -1,5 +1,5 @@
 # RainbowTaskbar
-Customizable Windows taskbar color and transitions.
+Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images and transparency.
 **Conflicts with TransparentTB! Close it before running RainbowTaskbar**
 
 
@@ -8,15 +8,11 @@ Customizable Windows taskbar color and transitions.
 - [Usage](#usage)
    - [Editor](#editor)
    - [Tray icon](#systray)
-- [Config](#config)
-   - [Options](#options)
-   - [Effects](#effects)
-   - [Examples](#examples)
+- [Examples](#examples)
 
 # Usage
 ## Editor
-![image](https://user-images.githubusercontent.com/39013925/136701849-914095d9-3750-4223-b8bf-f656e6359655.png)
-
+![image](https://user-images.githubusercontent.com/39013925/136743214-a4355570-f94e-41d1-b482-c5c87706ec77.png)
 
 **1,2** - Add or remove config line
 
@@ -26,6 +22,8 @@ Customizable Windows taskbar color and transitions.
 
 **5** - Apply new config
 
+**6** - Color effect preview
+
 
 ## SysTray
 ![image](https://user-images.githubusercontent.com/39013925/136702026-0333b00b-5af4-4014-9868-a092ef89acfd.png)
@@ -34,65 +32,12 @@ When left clicked, it will open the GUI config editor. Closing it will actually 
 
 When right clicked, it will close RainbowTaskbar.
 
+## Startup
+If you chose No on the startup message box, or moved the executable, you can delete the config located at `%appdata%\rnbconf.txt` to get the prompt again.
 
 
-# Config
-
-## OBSOLETE!
-**You should use the GUI editor from versions 1.3 and up.**
-
-Config can be found in: `%appdata%\rnbconf.txt`
-## Options
-### Color (`c`)
-> c (ms) (r) (g) (b) (effect) (... effect options) 
-
-Apply color effect on taskbar.
-
-
-### Transparency (`t`)
-> t (1=taskbar; 2=rainbowtaskbar; 3=both; 4=blur taskbar, ignores alpha) (alpha, 0-255)
-
-Set transparency for underlay or taskbar, or set taskbar blur.
-
-
-### Wait (`w`)
-> w (ms)
-
-Wait for (ms) miliseconds. Useful for options that have no duration paramemter.
-
-
-### Image (`i`)
-> i (x) (y) (width, full=0) (height, full=0) (full path, without spaces) (alpha, optional) (image width, optional) (image height, optional) 
-
-Show bitmap (*.bmp) on underlay. To apply other color effects, set lower opacity.
-
-
-## Effects
-### None (`none`)
-> none
-
-Solid color.
-
-
-### Fade in (`fade`)
-> fade (ms) (steps, optional)
-
-Fade solid color. Default steps are (ms)/20. **Do not use a high amount of steps!**
-
-
-### Gradient (`grad`)
-> grad (r2) (g2) (b2)
-
-2 color gradient.
-
-
-### Fade in gradient (`fgrd`)
-> fgrd (r2) (g2) (b2) (ms) (steps, optional)
-
-Fade 2 color gradient. Default steps are (ms)/20. **Do not use a high amount of steps!**
-
-## Examples
-### Rainbow fading gradient (default config)
+# Examples
+## Rainbow fading gradient (default config)
 ```
 t 4
 t 2 200
@@ -109,7 +54,7 @@ c 1 186 12 248 fgrd 251 7 217 500
 c 1 251 7 217 fgrd 255 0 0 500
 ```
 
-### Pulsing gradient with image
+## Pulsing gradient with image
 ```
 t 4
 t 2 180
