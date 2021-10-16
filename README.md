@@ -30,7 +30,7 @@ Lightweight utility for Windows taskbar customization. Supports color effects, t
 
 When left clicked, it will open the GUI config editor. Closing it will actually minimize it to tray again.
 
-When right clicked, it will close RainbowTaskbar.
+When right clicked, it will open a menu with different options.
 
 ## Startup
 If you chose No on the startup message box, or moved the executable, you can delete the config located at `%appdata%\rnbconf.txt` to get the prompt again.
