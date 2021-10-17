@@ -36,14 +36,18 @@ HWND winhwnd2;
 
 HWND hTaskBar;
 HWND hTaskBar2;
-rtcfg* rcfg;
-
 
 void RnbTskWnd();
 
 void NewConf(rtcfg* nw) {
 	memcpy(rcfg, nw, 2048 * sizeof(rtcfg_step));
-	
+	TerminateThread(penzi, 0);
+	penzi = CreateThread(NULL,
+		0,
+		Thrd,
+		rcfg,
+		0,
+		NULL);
 }
 
 rtcfg* ConfigParser(rtcfg* cfg) {
@@ -102,7 +106,7 @@ void RnbTskWnd() {
 	RegisterClass(&wc2);
 	GetWindowRect(hTaskBar, &tr);
 	winhwnd = CreateWindowEx(
-		WS_EX_TOOLWINDOW,
+		WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT,
 		CLASS_NAME,
 		L"RainbowTaskbar",
 		WS_POPUP | WS_VISIBLE,
@@ -119,7 +123,7 @@ void RnbTskWnd() {
 	if (hTaskBar2 = FindWindow(_T("Shell_SecondaryTrayWnd"), 0)) {
 		GetWindowRect(hTaskBar2, &tr2);
 		winhwnd2 = CreateWindowEx(
-			WS_EX_TOOLWINDOW,
+			WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT,
 			CLASS_NAME2,
 			L"RainbowTaskbar",
 			WS_POPUP | WS_VISIBLE,

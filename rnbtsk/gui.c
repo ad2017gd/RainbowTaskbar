@@ -173,13 +173,13 @@ void RnbTskGUI(HINSTANCE hInstance)
     );
 
 
-    SetWindowBlur(under, 3);
+    //SetWindowBlur(under, 3);
     ShowWindow(under, FALSE);
     EnableWindow(under, FALSE);
 
     DWORD dwStyle = GetWindowLong(under, GWL_EXSTYLE);
     SetWindowLong(under, GWL_EXSTYLE, WS_EX_LAYERED | WS_EX_TOOLWINDOW);
-    SetLayeredWindowAttributes(under, 0, 255, LWA_ALPHA);
+    SetLayeredWindowAttributes(under, 0, 200, LWA_ALPHA);
     SetWindowPos(under, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
 
@@ -1239,15 +1239,36 @@ void Edit3_OnModify() {
     free(here);
 }
 
-
 void minimize() {
-
+    // unused
 }
 
 #define MENU0 0xAD20 + 0
 #define MENU1 0xAD20 + 1
 #define MENU2 0xAD20 + 2
 #define MENU3 0xAD20 + 3
+#define MENU4 0xAD20 + 4
+
+#define SUB0 0xAE20 + 0
+#define SUB1 0xAE20 + 1
+#define SUB2 0xAE20 + 2
+#define SUB3 0xAE20 + 3
+#define SUB4 0xAE20 + 4
+
+void Example(char* ex) {
+    char* appdata = getenv("APPDATA");
+    char* confpath[512];
+    sprintf(confpath, "%s\\rnbconf.txt", appdata);
+    FILE* fconfig = fopen(confpath, "w");
+    fprintf(fconfig, "%s", ex);
+    fclose(fconfig);
+    ConfigParser(rcfg);
+    ConfigParser(cfg);
+    NewConf(rcfg);
+    HWND confview;
+    MapGet(controls, "treeview_conf", confview);
+    ConfView_Init(confview);
+}
 
 LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1270,9 +1291,17 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_RBUTTONUP:
         {
             HMENU menu = CreatePopupMenu();
+            HMENU submenu = CreatePopupMenu();
+            AppendMenu(submenu, 0, SUB0, L"Rainbow");
+            AppendMenu(submenu, 0, SUB1, L"Pulse");
+            AppendMenu(submenu, 0, SUB2, L"Ambient");
+            AppendMenu(submenu, 0, SUB3, L"Static");
+
+
             AppendMenu(menu, 0, MENU0, L"Open config file");
-            AppendMenu(menu, STARTUP ? MF_CHECKED : MF_UNCHECKED, MENU1, L"Run at startup");
+            AppendMenu(menu, MF_POPUP, submenu, L"Config examples");
             AppendMenu(menu, 0, MENU3, L"Open project page");
+            AppendMenu(menu, STARTUP ? MF_CHECKED : MF_UNCHECKED, MENU1, L"Run at startup");
             AppendMenu(menu, 0, MENU2, L"Exit");
 
             POINT p;
@@ -1364,6 +1393,58 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             case MENU3:
             {
                 system("explorer \"https://github.com/ad2017gd/RainbowTaskbar\"");
+                break;
+            }
+            case SUB0:
+            {
+                char example1[] = 
+                    "t 4\n"
+                    "t 2 200\n"
+                    "\n"
+                    "c 1 255 0 0 fgrd 255 154 0 500\n"
+                    "c 1 255 154 0 fgrd 208 222 33 500\n"
+                    "c 1 208 222 33 fgrd 79 220 74 500\n"
+                    "c 1 79 220 74 fgrd 63 218 216 500\n"
+                    "c 1 63 218 216 fgrd 47 201 226 500\n"
+                    "c 1 47 201 226 fgrd 28 127 238 500\n"
+                    "c 1 28 127 238 fgrd 95 21 242 500\n"
+                    "c 1 95 21 242 fgrd 186 12 248 500\n"
+                    "c 1 186 12 248 fgrd 251 7 217 500\n"
+                    "c 1 251 7 217 fgrd 255 0 0 500";
+                Example(example1);
+                break;
+            }
+            case SUB1:
+            {
+                char example2[] =
+                    "t 4\n"
+                    "t 2 180\n"
+                    "t 1 230\n"
+                    "\n"
+                    "c 750 255 0 180 fgrd 0 200 255 400\n"
+                    "c 100 255 255 255 grad 255 255 255\n"
+                    "c 750 0 200 255 fgrd 255 0 180 400\n"
+                    "c 100 255 255 255 grad 255 255 255\n";
+                Example(example2);
+                break;
+            }
+            case SUB2:
+            {
+                char example3[] =
+                    "t 4 1\n"
+                    "t 3 201\n"
+                    "c 1500 2 40 104 fgrd 0 165 253 4000\n"
+                    "c 1500 0 165 253 fgrd 2 40 104 4000\n";
+                Example(example3);
+                break;
+            }
+            case SUB3:
+            {
+                char example4[] =
+                    "t 4 0\n"
+                    "t 3 224\n"
+                    "c 99999999 30 120 219 none\n";
+                Example(example4);
                 break;
             }
         }

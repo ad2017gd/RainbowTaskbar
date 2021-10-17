@@ -51,7 +51,6 @@ typedef struct {
 	int effect_6;
 	char effect_7[128];
 	char full_line[512];
-	int used_until;
 } rtcfg_step;
 
 typedef struct {
@@ -60,6 +59,7 @@ typedef struct {
 	rtcfg_step steps[];
 } rtcfg;
 
+rtcfg* rcfg;
 BOOL STARTUP;
 void OnDestroy();
 void NewConf(rtcfg* nw);
