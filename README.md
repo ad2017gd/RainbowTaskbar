@@ -7,7 +7,11 @@ Lightweight utility for Windows taskbar customization. Supports color effects, t
 
 - [Usage](#usage)
    - [Editor](#editor)
-   - [Tray icon](#systray)
+      - [Color effects](#color)
+      - [Transparency options](#transparency)
+      - [Images](#bitmaps)
+      - [Delays](#delays)
+   - [Tray icon](#tray-icon)
 - [Examples](#examples)
 
 # Usage
@@ -25,7 +29,45 @@ Lightweight utility for Windows taskbar customization. Supports color effects, t
 **6** - Color effect preview
 
 
-## SysTray
+
+### Color
+Color effects are a basic option for RainbowTaskbar.
+In the editor, they are previewed on the top.
+
+Supported color effects are:
+- Solid - solid color
+- Fade - fade in color
+- Gradient - 2 color gradient, along the width
+- Fade gradient - fade in gradient
+
+![image](https://user-images.githubusercontent.com/39013925/137605831-1e4b7caa-61d0-4a7a-9609-a8b6891e6c53.png)
+
+
+### Transparency
+The transparency of the underlay, or the actual taskbar, can be altered. You can also toggle blur on the taskbar.
+
+Supported transparency effects are:
+- Taskbar - change taskbar alpha
+- RnbTsk - change underlay alpha
+- Both - change taskbar and underlay alpha
+- Blur - toggle taskbar blur
+
+![image](https://user-images.githubusercontent.com/39013925/137605833-33f2da34-a24d-429e-8ef3-4d2d09145210.png)
+
+
+### Bitmaps
+Bitmap (.bmp) images can be added on RainbowTaskbar. They can also blend with other color effects by altering the transparency.
+If your bitmap doesn't work, try opening it in Paint and saving it again.
+
+![image](https://user-images.githubusercontent.com/39013925/137605838-b97c7abe-0beb-4525-8724-cdd67e355cda.png)
+
+### Delays
+Delays can be used to sleep for an amount of time. They can be used along with bitmaps, to replicate animated images.
+
+![image](https://user-images.githubusercontent.com/39013925/137605869-ac5a574a-f8fb-4aac-9db4-d21d86d995f6.png)
+
+
+## Tray icon
 ![image](https://user-images.githubusercontent.com/39013925/136702026-0333b00b-5af4-4014-9868-a092ef89acfd.png)
 
 When left clicked, it will open the GUI config editor. Closing it will actually minimize it to tray again.
@@ -55,6 +97,7 @@ c 1 251 7 217 fgrd 255 0 0 500
 ```
 
 ## Pulsing gradient with image
+[Image.zip](https://github.com/ad2017gd/RainbowTaskbar/files/7358492/Image.zip)
 ```
 t 4
 t 2 180
@@ -65,5 +108,25 @@ c 750 255 0 180 fgrd 0 200 255 400
 c 100 255 255 255 grad 255 255 255
 c 750 0 200 255 fgrd 255 0 180 400
 c 100 255 255 255 grad 255 255 255
+
 ```
+
+## Calm blue gradient
+```
+t 4 1
+t 3 201
+c 1500 2 40 104 fgrd 0 165 253 4000
+c 1500 0 165 253 fgrd 2 40 104 4000
+```
+
+## Penguins
+[penguins.zip](https://github.com/ad2017gd/RainbowTaskbar/files/7358490/penguins.zip)
+```
+t 4 0
+t 3 224
+i 0 0 0 0 C:\Users\Ad2017\Documents\penguins.bmp 128 0 0
+c 99999999 30 120 219 none
+```
+
 ### 
+
