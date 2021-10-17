@@ -910,7 +910,6 @@ void Config_Pop(int idx) {
     cfg->len--;
 }
 void Config_Insert(int idx, rtcfg_step what) {
-    rtcfg_step buffer = { 0 };
     if (idx == 0 && cfg->len == 0) {
         memcpy(&cfg->steps[idx], &what, sizeof(rtcfg_step));
         cfg->len += 1;
@@ -954,11 +953,15 @@ void Remove_OnClick() {
         return;
     }
     if (ConfView_Index(selected) == -1) return;
+    
+    
+    
+    Config_Pop(selint);
+
     HWND del;
     MapGet(controls, "treeview_conf", del);
     TreeView_DeleteItem(del, selected ? selected : NULL /* all */);
-    
-    Config_Pop(selint);
+
     if (cfg->len == 0) {
         HWND picker;
         MapGet(controls, "treeview_conf", picker);
