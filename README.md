@@ -77,10 +77,6 @@ When right clicked, it will open a menu with different options.
 ![image](https://user-images.githubusercontent.com/39013925/138571165-1ef66965-abe9-4159-b024-96218393e8a1.png)
 
 
-## Startup
-If you chose No on the startup message box, or moved the executable, you can delete the config located at `%appdata%\rnbconf.txt` to get the prompt again.
-
-
 # Examples
 ## Rainbow fading gradient (default config)
 ```
