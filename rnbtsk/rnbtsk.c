@@ -358,12 +358,12 @@ DWORD WINAPI Thrd(void* data) {
 				case 1: {
 					if (tska == step.r) break;
 					DWORD dwStyle = GetWindowLong(hTaskBar, GWL_EXSTYLE);
-					SetWindowLong(hTaskBar, GWL_EXSTYLE, WS_EX_LAYERED);
+					SetWindowLong(hTaskBar, GWL_EXSTYLE, dwStyle | WS_EX_LAYERED);
 					SetLayeredWindowAttributes(hTaskBar, 0, step.r, LWA_ALPHA);
 					SetWindowPos(hTaskBar, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 					if (hTaskBar2) {
 						DWORD dwStyle = GetWindowLong(hTaskBar2, GWL_EXSTYLE);
-						SetWindowLong(hTaskBar2, GWL_EXSTYLE, WS_EX_LAYERED);
+						SetWindowLong(hTaskBar2, GWL_EXSTYLE, dwStyle | WS_EX_LAYERED);
 						SetLayeredWindowAttributes(hTaskBar2, 0, step.r, LWA_ALPHA);
 						SetWindowPos(hTaskBar2, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 					}
@@ -393,12 +393,12 @@ DWORD WINAPI Thrd(void* data) {
 				case 3: {
 					if (rnba == step.r && tska == step.r) break;
 					DWORD dwStyle = GetWindowLong(hTaskBar, GWL_EXSTYLE);
-					SetWindowLong(hTaskBar, GWL_EXSTYLE, WS_EX_LAYERED);
+					SetWindowLong(hTaskBar, GWL_EXSTYLE, dwStyle | WS_EX_LAYERED);
 					SetLayeredWindowAttributes(hTaskBar, 0, step.r, LWA_ALPHA);
 					SetWindowPos(hTaskBar, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 					if (hTaskBar2) {
 						DWORD dwStyle = GetWindowLong(hTaskBar2, GWL_EXSTYLE);
-						SetWindowLong(hTaskBar2, GWL_EXSTYLE, WS_EX_LAYERED);
+						SetWindowLong(hTaskBar2, GWL_EXSTYLE, dwStyle | WS_EX_LAYERED);
 						SetLayeredWindowAttributes(hTaskBar2, 0, step.r, LWA_ALPHA);
 						SetWindowPos(hTaskBar2, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 					}
