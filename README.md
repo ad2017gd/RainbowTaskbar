@@ -1,6 +1,6 @@
 # RainbowTaskbar
 Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images and transparency.
-**Conflicts with TransparentTB! Close it before running RainbowTaskbar**
+**Conflicts with TranslucentTB! Close it before running RainbowTaskbar**
 
 
 ![image](https://user-images.githubusercontent.com/39013925/127749893-c171da6b-6dc3-4539-8ccb-9f54dc2675cf.png)
@@ -74,8 +74,7 @@ When left clicked, it will open the GUI config editor. Closing it will actually 
 
 When right clicked, it will open a menu with different options.
 
-## Startup
-If you chose No on the startup message box, or moved the executable, you can delete the config located at `%appdata%\rnbconf.txt` to get the prompt again.
+![image](https://user-images.githubusercontent.com/39013925/138571165-1ef66965-abe9-4159-b024-96218393e8a1.png)
 
 
 # Examples
