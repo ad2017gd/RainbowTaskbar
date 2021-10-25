@@ -8,6 +8,10 @@ Lightweight utility for Windows taskbar customization. Supports color effects, t
 It works on Windows 7 and 11 too!
 ![image](https://user-images.githubusercontent.com/39013925/138756026-44c467d8-4687-4ae8-8c63-fa0621654795.png)
 
+**WINDOWS VISTA**
+![image](https://user-images.githubusercontent.com/39013925/138771919-a9f3080d-82a5-486f-b3ac-d4c21bf42037.png)
+
+
 - [Usage](#usage)
    - [Editor](#editor)
       - [Color effects](#color)
