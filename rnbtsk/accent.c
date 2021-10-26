@@ -48,7 +48,7 @@ void SetWindowABlur(HWND hWnd, DWORD att, COLORREF color)
 		policy.nAccentState = att;
 		policy.nAnimationId = 2;
 		policy.nColor = color;
-		policy.nFlags = 0;
+		policy.nFlags = 2;
 		WINCOMPATTRDATA data = { 19, &policy, sizeof(ACCENTPOLICY) };
 		SetWindowCompositionAttribute(hWnd, &data);
 	}
@@ -71,6 +71,7 @@ void SetAccentColor(COLORREF color)
 	color &= 0x00FFFFFF;
 
 	cp.color2 = color;
+	cp.color1 = color;
 	h = SetUserColorPreference(&cp, TRUE);
 }
 

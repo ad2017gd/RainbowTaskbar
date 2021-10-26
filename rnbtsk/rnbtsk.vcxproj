@@ -37,6 +37,7 @@
     <ResourceCompile Include="rnbtsk.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\downloads\bitmap2.bmp" />
     <Image Include="..\..\..\Downloads\funny2.bmp" />
     <Image Include="..\..\..\Downloads\icon.ico" />
     <Image Include="icon.ico" />
@@ -164,6 +165,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
+      <Version>
+      </Version>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

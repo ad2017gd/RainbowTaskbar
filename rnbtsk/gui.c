@@ -31,8 +31,6 @@ typedef struct {
     LPWSTR text;
 } CONTROL_TEXT;
 
-HWND under;
-HWND mainn;
 HICON hMainIcon;
 HFONT guiFont;
 MapDef(controls, HWND);
@@ -71,7 +69,7 @@ HWND Control(LPCSTR name, LPTSTR class, LPTSTR text, DWORD style, int x, int y, 
         return tindex++;
         SendMessage(mainn, WM_NEWTEXT, NULL, NULL);
     }
-    HWND a = CreateWindowExW(0L,
+    HWND a = CreateWindowExW(!strcmp(class, WC_EDIT) || !strcmp(class, WC_TREEVIEW) ? WS_EX_CLIENTEDGE : 0L,
         class,
         text,
         style | WS_VISIBLE | WS_CHILD, 
@@ -185,7 +183,7 @@ char* ExecCmd(const wchar_t* cmd, char* buf)
 
 DWORD CheckUpdate() {
     char data[1024];
-    ExecCmd(L"curl -s https://ad2017.dev/rnbver.txt", data);
+    ExecCmd(L"curl -m 10 -s https://ad2017.dev/rnbver.txt", data);
     HKEY hkey = NULL;
     RegOpenKey(HKEY_CURRENT_USER, _T("Software\\RainbowTaskbarNoUpdate"), &hkey);
     if (hkey != NULL) {
@@ -230,7 +228,7 @@ void RnbTskGUI(HINSTANCE hInstance)
 {
     MapInit(controls);
     MapInit(texts);
-    CheckUpdate();
+    CreateThread(0,0,CheckUpdate,0,0,0);
 
     hbrush = CreateSolidBrush(RGB(1, 2, 4));
     transparent = CreateSolidBrush(RGB(1, 2, 4));
@@ -257,7 +255,7 @@ void RnbTskGUI(HINSTANCE hInstance)
     metrics.cbSize = sizeof(NONCLIENTMETRICS);
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS),
         &metrics, 0);
-    guiFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Arial");
+    guiFont = CreateFont(20, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Microsoft Sans Serif");
     SendMessage(mainn, WM_SETFONT, (LPARAM)guiFont, TRUE);
 
     InitWnd();
@@ -1364,6 +1362,7 @@ void minimize() {
 #define MENU2 0xAD20 + 2
 #define MENU3 0xAD20 + 3
 #define MENU4 0xAD20 + 4
+#define MENU5 0xAD20 + 5
 
 #define SUB0 0xAE20 + 0
 #define SUB1 0xAE20 + 1
@@ -1411,12 +1410,22 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             AppendMenu(submenu, 0, SUB0, L"Rainbow");
             AppendMenu(submenu, 0, SUB1, L"Pulse");
             AppendMenu(submenu, 0, SUB2, L"Ambient");
+            AppendMenu(submenu, 0, SUB4, L"Randomize");
             AppendMenu(submenu, 0, SUB3, L"Static");
 
 
             AppendMenu(menu, 0, MENU0, L"Open config file");
             AppendMenu(menu, MF_POPUP, submenu, L"Config examples");
             AppendMenu(menu, 0, MENU3, L"Open project page");
+            AppendMenu(menu, 0, MENU5, L"Donate");
+            MENUITEMINFO real;
+            HBITMAP bmp;
+            bmp = LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP2), IMAGE_BITMAP, 16, 16, 0);
+            
+            real.cbSize = sizeof(MENUITEMINFO);
+            real.fMask = MIIM_BITMAP;
+            real.hbmpItem = bmp;
+            SetMenuItemInfo(menu, MENU5, 0, &real);
             AppendMenu(menu, STARTUP ? MF_CHECKED : MF_UNCHECKED, MENU1, L"Run at startup");
             AppendMenu(menu, 0, MENU2, L"Exit");
 
@@ -1561,6 +1570,23 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     "t 3 224\n"
                     "c 99999999 30 120 219 none\n";
                 Example(example4);
+                break;
+            }
+            case SUB4:
+            {
+                char example5[] =
+                    "t 4 1\n"
+                    "t 3 201\n"
+                    "r\n"
+                    "c 1 0 0 0 fgrd 0 0 0 1000\n"
+                    "r\n"
+                    "c 1 0 0 0 fgrd 0 0 0 1000\n";
+                Example(example5);
+                break;
+            }
+            case MENU5:
+            {
+                system("explorer \"https://paypal.me/ad2k17\"");
                 break;
             }
         }

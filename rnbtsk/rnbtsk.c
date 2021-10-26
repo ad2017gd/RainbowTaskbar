@@ -165,6 +165,7 @@ int main(int argc, char* argv[]) {
 	TIMECAPS tc;
 	timeGetDevCaps(&tc, sizeof(tc));
 	timeBeginPeriod(tc.wPeriodMin);
+	srand (time(NULL));
 
 	if (hwd_ = FindWindow(L"RnbTskWnd", NULL)) {
 		DWORD procid;
@@ -251,6 +252,7 @@ TRIVERTEX vertex[2] = { 0 };
 GRADIENT_RECT gRect;
 BOOL gradient = FALSE;
 BOOL img = FALSE;
+BOOL randomize;
 RECT tr;
 RECT imagepos;
 BYTE imagealpha;
@@ -278,36 +280,68 @@ DWORD WINAPI Thrd(void* data) {
 			if (step.prefix == 'c') {
 				slept = 1;
 				if (!strcmp(step.effect, "none")) {
-					current = RGB(step.r, step.g, step.b);
+					if (randomize) {
+						randomize = FALSE;
+						current = RGB(rand() % 256, rand() % 256, rand() % 256);
+					}
+					else {
+						current = RGB(step.r, step.g, step.b);
+					}
 					Sleep(step.time);
 
 				}
 				else if (!strcmp(step.effect, "fade")) {
 					int j = 1;
+					COLORREF nw;
+					if (randomize) {
+						randomize = FALSE;
+						nw = RGB(rand() % 256, rand() % 256, rand() % 256);
+					}
+					else {
+						nw = RGB(step.r, step.g, step.b);
+					}
 					COLORREF last = current;
 					if (step.effect_2 <= 0)
 						step.effect_2 = step.effect_1 / 20;
 					while (j++ < step.effect_2) {
-						current = clerp(last, RGB(step.r, step.g, step.b), (double)j / step.effect_2);
+						current = clerp(last, nw, (double)j / step.effect_2);
 						Sleep(step.effect_1 / step.effect_2);
 					}
 					Sleep(step.time);
 				}
 				else if (!strcmp(step.effect, "grad")) {
+					BYTE r1, g1, b1, r2, g2, b2;
+					if (randomize) {
+						randomize = FALSE;
+						r1 = (rand() % 256) << 8;
+						g1 = (rand() % 256) << 8;
+						b1 = (rand() % 256) << 8;
+						r2 = (rand() % 256) << 8;
+						g2 = (rand() % 256) << 8;
+						b2 = (rand() % 256) << 8;
+					}
+					else {
+						r1 = step.r << 8;
+						g1 = step.g << 8;
+						b1 = step.b << 8;
+						r2 = step.effect_1 << 8;
+						g2 = step.effect_2 << 8;
+						b2 = step.effect_3 << 8;
+					}
 					GetWindowRect(hTaskBar, &tr);
 
 					vertex[0].x = 0;
 					vertex[0].y = 0;
-					vertex[0].Red = step.r << 8;
-					vertex[0].Green = step.g << 8;
-					vertex[0].Blue = step.b << 8;
+					vertex[0].Red = r1;
+					vertex[0].Green = g1;
+					vertex[0].Blue = b1;
 					vertex[0].Alpha = 0xFFFF;
 
 					vertex[1].x = tr.right;
 					vertex[1].y = tr.bottom - tr.top;
-					vertex[1].Red = step.effect_1 << 8;
-					vertex[1].Green = step.effect_2 << 8;
-					vertex[1].Blue = step.effect_3 << 8;
+					vertex[1].Red = r2;
+					vertex[1].Green = g2;
+					vertex[1].Blue = b2;
 					vertex[1].Alpha = 0xFFFF;
 
 					gRect.UpperLeft = 1;
@@ -321,13 +355,23 @@ DWORD WINAPI Thrd(void* data) {
 					GetWindowRect(hTaskBar, &tr);
 					COLORREF c1 = RGB(vertex[0].Red >> 8, vertex[0].Green >> 8, vertex[0].Blue >> 8);
 					COLORREF c2 = RGB(vertex[1].Red >> 8, vertex[1].Green >> 8, vertex[1].Blue >> 8);
+					COLORREF nw1, nw2;
+					if (randomize) {
+						randomize = FALSE;
+						nw1 = RGB(rand() % 256, rand() % 256, rand() % 256);
+						nw2 = RGB(rand() % 256, rand() % 256, rand() % 256);
+					}
+					else {
+						nw1 = RGB(step.r, step.g, step.b);
+						nw2 = RGB(step.effect_1, step.effect_2, step.effect_3);
+					}
 					int j = 1;
 
 					if (step.effect_5 <= 0)
 						step.effect_5 = step.effect_4 / 20;
 
 					while (j++ < step.effect_5) {
-						COLORREF interp1 = clerp(c1, RGB(step.r, step.g, step.b), (double)j / step.effect_5);
+						COLORREF interp1 = clerp(c1, nw1, (double)j / step.effect_5);
 						COLOR* rgb1 = (COLOR*)&interp1;
 						vertex[0].x = 0;
 						vertex[0].y = 0;
@@ -336,7 +380,7 @@ DWORD WINAPI Thrd(void* data) {
 						vertex[0].Blue = rgb1->B << 8;
 						vertex[0].Alpha = 0;
 
-						COLORREF interp2 = clerp(c2, RGB(step.effect_1, step.effect_2, step.effect_3), (double)j / step.effect_5);
+						COLORREF interp2 = clerp(c2, nw2, (double)j / step.effect_5);
 						COLOR* rgb2 = (COLOR*)&interp2;
 						vertex[1].Red = rgb2->R << 8;
 						vertex[1].Green = rgb2->G << 8;
@@ -454,6 +498,9 @@ DWORD WINAPI Thrd(void* data) {
 				imagealpha = step.effect_1 == 0 ? 255 : (step.effect_1 <= -1 ? 0 : step.effect_1);
 				img = TRUE;
 			}
+			else if (step.prefix == 'r') {
+				randomize = TRUE;
+			}
 
 		}
 		if (!slept)
@@ -462,8 +509,12 @@ DWORD WINAPI Thrd(void* data) {
 	free(imgloc);
 }
 
-PAINTSTRUCT ps;
+void Experiment(COLORREF color) {
+	//SetAccentColor(color);
+}
 
+PAINTSTRUCT ps;
+#define ARGB_ABGR(a,r,g,b) ( (r) | ( (g)<<8 ) | ( (b) <<16) | ( (a) <<24 ) ) 
 LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWND which) {
 	HWND tsk = which;
 	switch (uMsg)

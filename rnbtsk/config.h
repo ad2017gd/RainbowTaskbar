@@ -1,6 +1,6 @@
 #pragma once
 
-#define RNBVER "1.3.5"
+#define RNBVER "1.3.6"
 
 #if _WIN64
 #define RNBARCH 64
@@ -17,6 +17,7 @@ static const char *const _RNBDEFCONFIG = "\n\
 # t (1 = taskbar; 2 = rainbowtaskbar; 3 = both; 4 = blur taskbar, alpha is taken as boolean) (alpha, 0 - 255) - set transparency\n\
 # w (ms) - wait N ms\n\
 # i (x) (y) (width, full = 0) (height, full = 0) (full path, without spaces) (alpha, opaque = 255) (image crop width, deprecated) (image crop height, deprecated)\n\
+# r - randomize next effect IF its a color effect (all color parameters will be ignored)\n\
 \n\
 # effects:\n\
 # none - solid color\n\
@@ -27,7 +28,7 @@ static const char *const _RNBDEFCONFIG = "\n\
 # fade : do not use a high amount of steps!the color interpolation function is not optimized,\n\
 #and the Win32 Sleep function is inaccurate at low values\n\
 \n\
-t 4\n\
+t 4 1\n\
 t 2 200\n\
 \n\
 c 1 255 0 0 fgrd 255 154 0 500\n\
@@ -64,6 +65,9 @@ typedef struct {
 	int fci;
 	rtcfg_step steps[];
 } rtcfg;
+
+HWND under;
+HWND mainn;
 
 rtcfg* rcfg;
 BOOL STARTUP;
