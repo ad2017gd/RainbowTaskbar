@@ -6,8 +6,10 @@
 #include <shellapi.h>
 #include <strsafe.h>
 #include <tchar.h>
+#include <shlwapi.h>
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#pragma comment(lib, "shlwapi.lib")
 
 #include "accent.h"
 #include "config.h"
@@ -115,10 +117,120 @@ void Class(wchar_t* name, HANDLE hInstance, WNDPROC proc) {
     
 }
 rtcfg* cfg;
+// pasted code from https://stackoverflow.com/questions/478898/how-do-i-execute-a-command-and-get-the-output-of-the-command-within-c-using-po
+char* ExecCmd(const wchar_t* cmd, char* buf)
+{
+    char* strResult = NULL;
+    HANDLE hPipeRead, hPipeWrite;
+
+    SECURITY_ATTRIBUTES saAttr = { sizeof(SECURITY_ATTRIBUTES) };
+    saAttr.bInheritHandle = TRUE; // Pipe handles are inherited by child process.
+    saAttr.lpSecurityDescriptor = NULL;
+
+    // Create a pipe to get results from child's stdout.
+    if (!CreatePipe(&hPipeRead, &hPipeWrite, &saAttr, 0))
+        return strResult;
+
+    STARTUPINFOW si = { sizeof(STARTUPINFOW) };
+    si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+    si.hStdOutput = hPipeWrite;
+    si.hStdError = hPipeWrite;
+    si.wShowWindow = SW_HIDE; // Prevents cmd window from flashing.
+                              // Requires STARTF_USESHOWWINDOW in dwFlags.
+
+    PROCESS_INFORMATION pi = { 0 };
+
+    BOOL fSuccess = CreateProcessW(NULL, (LPWSTR)cmd, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+    if (!fSuccess)
+    {
+        CloseHandle(hPipeWrite);
+        CloseHandle(hPipeRead);
+        return strResult;
+    }
+
+    BOOL bProcessEnded = FALSE;
+    for (; !bProcessEnded;)
+    {
+        // Give some timeslice (50 ms), so we won't waste 100% CPU.
+        bProcessEnded = WaitForSingleObject(pi.hProcess, 50) == WAIT_OBJECT_0;
+
+        // Even if process exited - we continue reading, if
+        // there is some data available over pipe.
+        for (;;)
+        {
+            DWORD dwRead = 0;
+            DWORD dwAvail = 0;
+
+            if (!PeekNamedPipe(hPipeRead, NULL, 0, NULL, &dwAvail, NULL))
+                break;
+
+            if (!dwAvail) // No data available, return
+                break;
+
+            if (!ReadFile(hPipeRead, buf, min(1024 - 1, dwAvail), &dwRead, NULL) || !dwRead)
+                // Error, the child process might ended
+                break;
+
+            buf[dwRead] = 0;
+            strResult = buf;
+        }
+    }
+
+    CloseHandle(hPipeWrite);
+    CloseHandle(hPipeRead);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    return strResult;
+}
+
+DWORD CheckUpdate() {
+    char data[1024];
+    ExecCmd(L"curl -s https://ad2017.dev/rnbver.txt", data);
+    HKEY hkey = NULL;
+    RegOpenKey(HKEY_CURRENT_USER, _T("Software\\RainbowTaskbarNoUpdate"), &hkey);
+    if (hkey != NULL) {
+        return 1;
+    }
+    if (strcmp(data, RNBVER)) {
+        // UPDATE!
+        UINT ret = MessageBox(0, L"An update for RainbowTaskbar has been released. Do you want to update? (Click CANCEL if you don't want to be asked again)", L"Update", MB_YESNOCANCEL | MB_ICONINFORMATION);
+        if (ret == IDYES) {
+            wchar_t szFileName[MAX_PATH];
+            GetModuleFileNameW(NULL, szFileName, MAX_PATH);
+            wchar_t* filename = PathFindFileNameW(szFileName);
+            wchar_t cmd[MAX_PATH * 3];
+            memset(cmd, 0, sizeof(wchar_t) * MAX_PATH * 3);
+            wcscat(cmd, L"cmd /c taskkill /f /im ");
+            wcscat(cmd, filename);
+            wcscat(cmd, L" && del /q /f ");
+            wcscat(cmd, szFileName);
+            wcscat(cmd, L" && curl -L ");
+            if (RNBARCH == 64) {
+                wcscat(cmd, L"https://github.com/ad2017gd/RainbowTaskbar/releases/latest/download/rnbtsk-x64.exe");
+            }
+            else {
+                wcscat(cmd, L"https://github.com/ad2017gd/RainbowTaskbar/releases/latest/download/rnbtsk.exe");
+            }
+            wcscat(cmd, L" -o ");
+            wcscat(cmd, szFileName);
+            wcscat(cmd, L" && ");
+            wcscat(cmd, szFileName);
+
+            char nothing[1024];
+            ExecCmd(cmd, nothing);
+        }
+        else if (ret == IDCANCEL) {
+            RegCreateKey(HKEY_CURRENT_USER, _T("Software\\RainbowTaskbarNoUpdate"), &hkey);
+        }
+    }
+    return 0;
+}
+
 void RnbTskGUI(HINSTANCE hInstance)
 {
     MapInit(controls);
     MapInit(texts);
+    CheckUpdate();
 
     hbrush = CreateSolidBrush(RGB(1, 2, 4));
     transparent = CreateSolidBrush(RGB(1, 2, 4));
@@ -131,7 +243,7 @@ void RnbTskGUI(HINSTANCE hInstance)
         L"RnbTskGui",
         L"",
         WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 600, 720,
+        CW_USEDEFAULT, CW_USEDEFAULT, 600, 620,
 
         NULL,
         NULL,
@@ -164,7 +276,7 @@ void RnbTskGUI(HINSTANCE hInstance)
         L"RnbTskGuiUnderlay",
         L"",
         WS_POPUP,
-        CW_USEDEFAULT, CW_USEDEFAULT, 700, 480,
+        CW_USEDEFAULT, CW_USEDEFAULT, 600, 620,
 
         NULL, 
         NULL,
@@ -197,7 +309,11 @@ void RnbTskGUI(HINSTANCE hInstance)
     nidApp.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
     nidApp.hIcon = hMainIcon;
     nidApp.uCallbackMessage = WM_USER_SHELLICON;
-    StringCchCopy(nidApp.szTip, ARRAYSIZE(nidApp.szTip), L"RainbowTaskbar Editor");
+    WCHAR wide[sizeof(RNBVER) * 2];
+    mbstowcs(wide, RNBVER, sizeof(RNBVER) * 2);
+    WCHAR real[32];
+    wsprintfW(real, L"%s %s", L"RainbowTaskbar", wide);
+    StringCchCopy(nidApp.szTip, ARRAYSIZE(nidApp.szTip), real);
     Shell_NotifyIcon(NIM_ADD, &nidApp);
 
 
@@ -335,7 +451,7 @@ void InitWnd() {
 
     Control_HideAll();
 
-    HWND apply = Control("button_apply", WC_BUTTON, L"Apply", 0, 5, 650, 100, 25);
+    HWND apply = Control("button_apply", WC_BUTTON, L"Apply", 0, 5, 550, 100, 25);
     SetWindowLong(apply, GWL_EXSTYLE, GetWindowLong(apply, GWL_EXSTYLE) | WS_EX_LAYERED | WS_EX_TRANSPARENT);
     
 

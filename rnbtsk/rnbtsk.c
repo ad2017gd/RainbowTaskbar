@@ -17,6 +17,8 @@
 #include <timeapi.h>
 #include <shobjidl_core.h>
 #include <combaseapi.h>
+#include <shlwapi.h>
+
 
 #include "config.h"
 #include "accent.h"

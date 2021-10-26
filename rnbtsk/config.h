@@ -1,6 +1,12 @@
 #pragma once
 
+#define RNBVER "1.3.5"
 
+#if _WIN64
+#define RNBARCH 64
+#else
+#define RNBARCH 32
+#endif
 // hacky way of geting the default config in
 // who cares anyway
 #ifndef _RNBDEFCONFIG
