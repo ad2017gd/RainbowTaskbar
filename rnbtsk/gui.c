@@ -228,7 +228,7 @@ void RnbTskGUI(HINSTANCE hInstance)
 {
     MapInit(controls);
     MapInit(texts);
-    CreateThread(0,0,CheckUpdate,0,0,0);
+    CreateThread(0,0,(LPTHREAD_START_ROUTINE)CheckUpdate,0,0,0);
 
     hbrush = CreateSolidBrush(RGB(1, 2, 4));
     transparent = CreateSolidBrush(RGB(1, 2, 4));

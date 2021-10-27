@@ -312,7 +312,7 @@ DWORD WINAPI Thrd(void* data) {
 					Sleep(step.time);
 				}
 				else if (!strcmp(step.effect, "grad")) {
-					BYTE r1, g1, b1, r2, g2, b2;
+					UINT r1, g1, b1, r2, g2, b2;
 					if (randomize) {
 						randomize = FALSE;
 						r1 = (rand() % 256) << 8;
