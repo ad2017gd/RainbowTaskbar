@@ -265,6 +265,8 @@ int rnba, tska = 0;
 
 
 DWORD WINAPI Thrd(void* data) {
+	srand(GetTickCount() + getpid());
+
 	imgloc = malloc(256);
 	rtcfg* cfg = (rtcfg*)rcfg;
 	vertex[0].Blue = (current >> 16 & 0xFF) << 8;

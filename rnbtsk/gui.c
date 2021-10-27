@@ -390,6 +390,7 @@ void InitWnd() {
     ComboBox_AddString(typepicker, L"Transparency");
     ComboBox_AddString(typepicker, L"Image");
     ComboBox_AddString(typepicker, L"Delay");
+    ComboBox_AddString(typepicker, L"Randomize");
 
     int helper0 = Control("label_helper0", WC_TEXT, L"- Unknown", 0, 170, 355, 0, 0);
 
@@ -563,7 +564,14 @@ void ConfView_OnSelect() {
     XY = FALSE;
 
     switch (selstep.prefix) {
+        case 'r':
+        {
+            MapGetIdx(texts, "label_helper0", idx);
+            TextModify(idx, L"- Randomize next colors");
 
+            ComboBox_SelectString(picker, 0, L"Randomize");
+            break;
+        }
         case 'w':
         {
             MapGetIdx(texts, "label_helper0", idx);
@@ -834,6 +842,9 @@ void Config_MakeLn(int idx) {
 
         }
         break;
+    case 'r':
+        sprintf(ss->full_line, "r");
+        break;
     }
 }
 
@@ -876,6 +887,9 @@ void Config_MakeFullLine() {
                 }
 
             }
+            break;
+        case 'r':
+            sprintf(selstep.full_line, "r");
             break;
     }
     HWND confview;
@@ -1139,6 +1153,10 @@ void ComboBox1_OnModify() {
         }
         casesw(L"Delay") {
             to = 'w';
+            breaks;
+        }
+        casesw(L"Randomize") {
+            to = 'r';
             breaks;
         }
     }

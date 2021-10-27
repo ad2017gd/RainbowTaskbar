@@ -1,5 +1,8 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #define RNBVER "1.3.6"
 
 #if _WIN64
@@ -17,7 +20,7 @@ static const char *const _RNBDEFCONFIG = "\n\
 # t (1 = taskbar; 2 = rainbowtaskbar; 3 = both; 4 = blur taskbar, alpha is taken as boolean) (alpha, 0 - 255) - set transparency\n\
 # w (ms) - wait N ms\n\
 # i (x) (y) (width, full = 0) (height, full = 0) (full path, without spaces) (alpha, opaque = 255) (image crop width, deprecated) (image crop height, deprecated)\n\
-# r - randomize next effect IF its a color effect (all color parameters will be ignored)\n\
+# r - randomize next color effect (all color parameters will be ignored)\n\
 \n\
 # effects:\n\
 # none - solid color\n\
