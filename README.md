@@ -18,6 +18,7 @@ It works on Windows 7 and 11 too!
       - [Transparency options](#transparency)
       - [Images](#bitmaps)
       - [Delays](#delays)
+      - [Randomizer](#randomizer)
    - [Tray icon](#tray-icon)
 - [Examples](#examples)
 
@@ -42,10 +43,15 @@ Color effects are a basic option for RainbowTaskbar.
 In the editor, they are previewed on the top.
 
 Supported color effects are:
-- Solid - solid color
-- Fade - fade in color
-- Gradient - 2 color gradient, along the width
-- Fade gradient - fade in gradient
+- Solid (none) - solid color
+- Fade (fade) - fade in color
+- Gradient (grad) - 2 color gradient, along the width
+- Fade gradient (fgrd) - fade in gradient
+
+```
+c 750 0 200 255 fgrd 255 0 180 400
+c 100 255 255 255 grad 255 255 255
+```
 
 ![image](https://user-images.githubusercontent.com/39013925/137605831-1e4b7caa-61d0-4a7a-9609-a8b6891e6c53.png)
 
@@ -54,10 +60,16 @@ Supported color effects are:
 The transparency of the underlay, or the actual taskbar, can be altered. You can also toggle blur on the taskbar.
 
 Supported transparency effects are:
-- Taskbar - change taskbar alpha
-- RnbTsk - change underlay alpha
-- Both - change taskbar and underlay alpha
-- Blur - toggle taskbar blur
+- Taskbar (1) - change taskbar alpha
+- RnbTsk (2) - change underlay alpha
+- Both (3) - change taskbar and underlay alpha
+- Blur (4) - toggle taskbar blur
+
+```
+t 4
+t 2 180
+t 1 230
+```
 
 ![image](https://user-images.githubusercontent.com/39013925/137605833-33f2da34-a24d-429e-8ef3-4d2d09145210.png)
 
@@ -65,13 +77,36 @@ Supported transparency effects are:
 ### Bitmaps
 Bitmap (.bmp) images can be added on RainbowTaskbar. They can also blend with other color effects by altering the transparency.
 If your bitmap doesn't work, try opening it in Paint and saving it again.
+```
+i 0 0 0 0 C:\troll.bmp 128
+c 200 32 128 64 fgrd 80 60 230 500
+```
 
 ![image](https://user-images.githubusercontent.com/39013925/137605838-b97c7abe-0beb-4525-8724-cdd67e355cda.png)
 
 ### Delays
 Delays can be used to sleep for an amount of time. They can be used along with bitmaps, to replicate animated images.
+```
+i 0 0 0 0 C:\penguins_1.bmp 255
+w 15
+i 0 0 0 0 C:\penguins_2.bmp 255
+w 15
+...
+i 0 0 0 0 C:\penguins_63.bmp 255
+w 15
+```
 
 ![image](https://user-images.githubusercontent.com/39013925/137605869-ac5a574a-f8fb-4aac-9db4-d21d86d995f6.png)
+
+### Randomizer
+The randomizer can be used to create random color effects. It obsoletes the color parameters of the next color effect and replaces it with random ones. It has no parameters.
+```
+r
+c 1 0 0 0 fgrd 0 0 0 1000
+```
+
+![image](https://user-images.githubusercontent.com/39013925/139097253-0e438d0e-f6e3-45e2-a5b0-d473c0b751cc.png)
+
 
 
 ## Tray icon
