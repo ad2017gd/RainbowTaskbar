@@ -119,55 +119,6 @@ When right clicked, it will open a menu with different options.
 ![image](https://user-images.githubusercontent.com/39013925/138571165-1ef66965-abe9-4159-b024-96218393e8a1.png)
 
 
-# Examples
-## Rainbow fading gradient (default config)
-```
-t 4
-t 2 200
-
-c 1 255 0 0 fgrd 255 154 0 500
-c 1 255 154 0 fgrd 208 222 33 500
-c 1 208 222 33 fgrd 79 220 74 500
-c 1 79 220 74 fgrd 63 218 216 500
-c 1 63 218 216 fgrd 47 201 226 500
-c 1 47 201 226 fgrd 28 127 238 500
-c 1 28 127 238 fgrd 95 21 242 500
-c 1 95 21 242 fgrd 186 12 248 500
-c 1 186 12 248 fgrd 251 7 217 500
-c 1 251 7 217 fgrd 255 0 0 500
-```
-
-## Pulsing gradient with image
-[Image.zip](https://github.com/ad2017gd/RainbowTaskbar/files/7358492/Image.zip)
-```
-t 4
-t 2 180
-t 1 230
-
-i 0 0 0 0 C:\Users\Ad2017\Image.bmp 150
-c 750 255 0 180 fgrd 0 200 255 400
-c 100 255 255 255 grad 255 255 255
-c 750 0 200 255 fgrd 255 0 180 400
-c 100 255 255 255 grad 255 255 255
-
-```
-
-## Calm blue gradient
-```
-t 4 1
-t 3 201
-c 1500 2 40 104 fgrd 0 165 253 4000
-c 1500 0 165 253 fgrd 2 40 104 4000
-```
-
-## Penguins
-[penguins.zip](https://github.com/ad2017gd/RainbowTaskbar/files/7358490/penguins.zip)
-```
-t 4 0
-t 3 224
-i 0 0 0 0 C:\Users\Ad2017\Documents\penguins.bmp 128 0 0
-c 99999999 30 120 219 none
-```
-
-### 
+### Examples
+Examples can now be found in the system tray menu.
 
