@@ -63,6 +63,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
+        npm install --global --production windows-build-tools
         msbuild rnbtsk/rnbtsk.vcxproj
     #   make release
 
