@@ -43,12 +43,10 @@ int index = 0;
 int tindex = 0;
 int r, g, b = 0;
 int which = 0;
-HBRUSH hbrush = 0;
 HBRUSH transparent = 0;
-HBRUSH color;
+COLORREF bgc = RGB(0x22, 0x22, 0x22);
 
 LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK UnderProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 void Config_ParseLine(char* ln);
 void ConfView_Init(HWND confview);
@@ -110,6 +108,7 @@ void Class(wchar_t* name, HANDLE hInstance, WNDPROC proc) {
     wc.lpfnWndProc = proc;
     wc.hInstance = hInstance;
     wc.lpszClassName = name;
+
 
     RegisterClass(&wc);
     
@@ -183,6 +182,10 @@ char* ExecCmd(const wchar_t* cmd, char* buf)
 
 DWORD CheckUpdate() {
     char data[1024];
+    ExecCmd(L"cmd /c curl --help 1> nul 2> nul && echo %ERRORLEVEL%", data);
+    if (!memcmp(data, "9009", 4)) {
+        return;
+    }
     ExecCmd(L"curl -m 10 -s https://ad2017.dev/rnbver.txt", data);
     HKEY hkey = NULL;
     RegOpenKey(HKEY_CURRENT_USER, _T("Software\\RainbowTaskbarNoUpdate"), &hkey);
@@ -230,17 +233,15 @@ void RnbTskGUI(HINSTANCE hInstance)
     MapInit(texts);
     CreateThread(0,0,(LPTHREAD_START_ROUTINE)CheckUpdate,0,0,0);
 
-    hbrush = CreateSolidBrush(RGB(1, 2, 4));
-    transparent = CreateSolidBrush(RGB(1, 2, 4));
-    color = CreateSolidBrush(RGB(r, g, b));
+    transparent = CreateSolidBrush(bgc);
 
     Class(L"RnbTskGui", hInstance, GUIProc);
 
     mainn = CreateWindowExW(
-        WS_EX_LAYERED | WS_EX_APPWINDOW | WS_EX_DLGMODALFRAME,
+        WS_EX_APPWINDOW | WS_EX_DLGMODALFRAME,
         L"RnbTskGui",
         L"",
-        WS_OVERLAPPEDWINDOW,
+        WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME,
         CW_USEDEFAULT, CW_USEDEFAULT, 600, 620,
 
         NULL,
@@ -261,36 +262,8 @@ void RnbTskGUI(HINSTANCE hInstance)
     InitWnd();
 
 
-    SetLayeredWindowAttributes(mainn, RGB(1,2,3), 210, LWA_ALPHA | LWA_COLORKEY);
-    SetWindowPos(mainn, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
     //SetWindowABlur(mainn, 3, ARGB(64, 128, 0, 128));
     ShowWindow(mainn, FALSE);
-
-
-    Class(L"RnbTskGuiUnderlay", hInstance, UnderProc);
-
-    under = CreateWindowEx(
-        WS_EX_LAYERED | WS_EX_APPWINDOW | WS_EX_TOOLWINDOW,
-        L"RnbTskGuiUnderlay",
-        L"",
-        WS_POPUP,
-        CW_USEDEFAULT, CW_USEDEFAULT, 600, 620,
-
-        NULL, 
-        NULL,
-        hInstance,
-        NULL
-    );
-
-
-    //SetWindowBlur(under, 3);
-    ShowWindow(under, FALSE);
-    EnableWindow(under, FALSE);
-
-    DWORD dwStyle = GetWindowLong(under, GWL_EXSTYLE);
-    SetWindowLong(under, GWL_EXSTYLE, WS_EX_LAYERED | WS_EX_TOOLWINDOW);
-    SetLayeredWindowAttributes(under, 0, 200, LWA_ALPHA);
-    SetWindowPos(under, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
 
 
@@ -374,7 +347,7 @@ void Control_HideAll() {
 }
 
 void InitWnd() {
-    int text1 = Control("label_rnbtsk", WC_TEXT, L"RNBTSK Editor", 0, 10, 10, 0, 0);
+    int text1 = Control("label_rnbtsk", WC_TEXT, L"RainbowTaskbar Editor", 0, 10, 10, 0, 0);
     HWND confview = Control("treeview_conf", WC_TREEVIEW, L"Tree", 0, 10, 40, 500, 300);
     TreeView_SetBkColor(confview, RGB(20, 20, 20));
     TreeView_SetTextColor(confview, RGB(200, 200, 200));
@@ -450,7 +423,7 @@ void InitWnd() {
 
     Control_HideAll();
 
-    HWND apply = Control("button_apply", WC_BUTTON, L"Apply", 0, 5, 550, 100, 25);
+    HWND apply = Control("button_apply", WC_BUTTON, L"Apply", 0, 480, 552, 100, 25);
     SetWindowLong(apply, GWL_EXSTYLE, GetWindowLong(apply, GWL_EXSTYLE) | WS_EX_LAYERED | WS_EX_TRANSPARENT);
     
 
@@ -1416,8 +1389,6 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
 
             ShowWindow(hwnd, TRUE);
-            EnableWindow(under, TRUE);
-            ShowWindow(under, TRUE);
             break;
 
         }
@@ -1696,36 +1667,29 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         
         break;
     }
-    case WM_MOVE:
-        SendMessage(under, WM_SETREDRAW, TRUE, NULL);
     case WM_SIZE:
     {
 
         SendMessage(hwnd, WM_PRINT, (WPARAM)NULL, PRF_NONCLIENT);
-        SendMessage(under, WM_SETREDRAW, TRUE, NULL);
         break;
     }
     case WM_SIZING:
         RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
         break;
     case WM_CLOSE:
-        EnableWindow(under, FALSE);
-        ShowWindow(under, FALSE);
         ShowWindow(hwnd, FALSE);
         return 0;
     case WM_CTLCOLORSTATIC:
     {
         HDC hdcStatic = (HDC)wParam;
-        SetBkColor(hdcStatic, RGB(1, 2, 4));
+        SetBkColor(hdcStatic, bgc);
         SetTextColor(hdcStatic, RGB(255, 255, 255));
         SetDCBrushColor(hdcStatic, RGB(255,255,255));
         
-        return (INT_PTR)hbrush;
+        return (INT_PTR)transparent;
     }
     case WM_DESTROY:
-        if (hbrush) DeleteObject(hbrush);
         if (transparent) DeleteObject(transparent);
-        DestroyWindow(under);
 
         NOTIFYICONDATA sh = { 0 };
         sh.uID = 0xad2017;
@@ -1746,11 +1710,11 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
-        Cycle();
+
         FillRect(hdc, &ps.rcPaint, transparent);
         //
         SelectObject(hdc, (LPARAM)guiFont);
-        SetBkColor(hdc, RGB(1, 2, 4));
+        SetBkColor(hdc, bgc);
         SetTextColor(hdc, RGB(200, 200, 200));
 
         if (selstep.prefix == 'c') {
@@ -1846,114 +1810,4 @@ LRESULT CALLBACK GUIProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
-}
-
-
-
-LRESULT CALLBACK UnderProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    switch (uMsg)
-    {
-    case WM_SETREDRAW:
-    {
-        RECT rc;
-        GetClientRect(mainn, &rc);
-        RECT rc2;
-        GetWindowRect(mainn, &rc2);
-        SetWindowPos(hwnd, mainn, rc2.left + 8, rc2.top, rc.right, rc.bottom + 31, SWP_NOACTIVATE);
-        break;
-    }
-    case WM_CREATE:
-
-        SetForegroundWindow(mainn);
-        SetTimer(hwnd, 1, 15, NULL);
-        RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
-        break;
-    case WM_TIMER:
-    {
-        RECT rc;
-        GetClientRect(mainn, &rc);
-        RECT rc2;
-        GetWindowRect(mainn, &rc2);
-        SetWindowPos(hwnd, mainn, rc2.left + 8, rc2.top, rc.right, rc.bottom + 31, SWP_NOACTIVATE);
-        RedrawWindow(hwnd, NULL, NULL, RDW_UPDATENOW | RDW_INVALIDATE);
-        break;
-    }
-    case WM_SIZE: 
-        //SendMessage(hwnd, WM_PRINT, (WPARAM)NULL, PRF_NONCLIENT); 
-        break;
-    case WM_DESTROY:
-        DeleteObject(color);
-        KillTimer(hwnd, 1);
-        PostQuitMessage(0);
-        return 0;
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-        Cycle();
-        color = CreateSolidBrush(RGB(r, g, b));
-        FillRect(hdc, &ps.rcPaint, color);
-
-        
-        
-        
-        EndPaint(hwnd, &ps);
-        DeleteBrush(color);
-        DeleteDC(hdc);
-    }
-    return 0;
-
-    }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
-}
-
-void Cycle(){
-    int inc = 5;
-    int max = 100;
-
-    if (which == 0) {
-        r = max;
-        g += inc;
-        if (g >= max) {
-            which = 1;
-        }
-
-    }
-    else if (which == 1) {
-        g = max;
-        r -= inc;
-        if (r <= 0) {
-            which = 2;
-        }
-    }
-    else if (which == 2) {
-        g = max;
-        b += inc;
-        if (b >= max) {
-            which = 3;
-        }
-    }
-    else if (which == 3) {
-        b = max;
-        g -= inc;
-        if (g <= 0) {
-            which = 4;
-        }
-    }
-    else if (which == 4) {
-        b = max;
-        r += inc;
-        if (r >= max) {
-            which = 5;
-        }
-    }
-    else if (which == 5) {
-        r = max;
-        b -= inc;
-        if (b <= 0) {
-            which = 0;
-        }
-    }
-
 }

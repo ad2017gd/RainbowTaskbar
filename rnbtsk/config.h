@@ -69,7 +69,6 @@ typedef struct {
 	rtcfg_step steps[];
 } rtcfg;
 
-HWND under;
 HWND mainn;
 
 rtcfg* rcfg;

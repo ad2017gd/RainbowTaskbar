@@ -503,12 +503,13 @@ DWORD WINAPI Thrd(void* data) {
 			else if (step.prefix == 'r') {
 				randomize = TRUE;
 			}
-
 		}
+
 		if (!slept)
 			Sleep(INFINITE); // bad cpu usage fix
 	}
 	free(imgloc);
+
 }
 
 void Experiment(COLORREF color) {
@@ -522,7 +523,7 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 	switch (uMsg)
 	{
 	case WM_CREATE:
-		SetTimer(hwnd, 420 + which, 2, NULL);
+		SetTimer(hwnd, 0, 6, NULL);
 		//RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
 		//SetWindowPos(hTaskBar, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
@@ -532,22 +533,11 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 		RECT tr;
 		GetWindowRect(tsk, &tr);
 		SetWindowPos(hwnd, tsk, tr.left, tr.top, tr.right, tr.bottom, SWP_NOACTIVATE | SWP_SHOWWINDOW);
-		RedrawWindow(hwnd, NULL, NULL, RDW_UPDATENOW | RDW_INVALIDATE);
+		RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		break;
-	}
-	case WM_CLOSE:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		return 0;
 	}
 	case WM_PAINT:
 	{
-
 		hdc = BeginPaint(hwnd, &ps);
 		GetWindowRect(tsk, &tr);
 		if (which == 2) {
@@ -602,12 +592,23 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 
 		EndPaint(hwnd, &ps);
 
-		//RedrawWindow(hwnd, NULL, NULL, RDW_UPDATENOW | RDW_INVALIDATE);
+		RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
 		break;
+	}
+	case WM_CLOSE:
+	{
+		PostQuitMessage(0);
+		return 0;
+	}
+	case WM_DESTROY:
+	{
+		PostQuitMessage(0);
+		return 0;
 	}
 	return 0;
 
 	}
+
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
