@@ -119,6 +119,6 @@ When right clicked, it will open a menu with different options.
 ![image](https://user-images.githubusercontent.com/39013925/138571165-1ef66965-abe9-4159-b024-96218393e8a1.png)
 
 
-### Examples
+# Examples
 Examples can now be found in the system tray menu.
 
