@@ -138,6 +138,8 @@ c 1 0 0 0 fgrd 0 0 0 1000
 
 # Examples
 Examples can now be found in the system tray menu.
+![image](https://user-images.githubusercontent.com/39013925/139342259-00fcfccc-ec94-449a-a047-9fea4f811e93.png)
+
 
 # License
 The app is distributed under the MIT License. See `LICENSE` for more information.
