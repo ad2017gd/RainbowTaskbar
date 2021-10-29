@@ -5,11 +5,11 @@
    <a href="../../releases"><img src="https://img.shields.io/github/v/release/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    
    <h1>RainbowTaskbar</h1>
-<p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images and transparency. Tested on Windows 11, 10, 7 and even Vista!</p>
+<p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images, rounded corners and transparency. Tested on Windows 11, 10, 7 and even Vista!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
 
-   <img style="margin: 0 auto; width: 75%;" src="https://user-images.githubusercontent.com/39013925/139337700-3216b58a-230b-4b47-a305-1de7525bafd5.png">
+   <img style="margin: 0 auto; width: 75%;" src="https://user-images.githubusercontent.com/39013925/139352818-714ccc11-1e08-4e19-bd82-b4f24610d082.png">
 <br>
 <br>
 <br>
@@ -25,6 +25,7 @@
       - [Images](#bitmaps)
       - [Delays](#delays)
       - [Randomizer](#randomizer)
+      - [Rounded corners](#rounded-corners)
 - [Examples](#examples)
 - [License](#license)
 
@@ -59,7 +60,7 @@ This is the editor. It works by showing you all the config lines, and a helper G
 
 You can use the `+ -` buttons to add or remove config lines.
 
-There are currently **5** basic effects, listed below.
+There are currently **6** basic options, listed below.
 <hr>
 
 
@@ -133,11 +134,20 @@ c 1 0 0 0 fgrd 0 0 0 1000
 
 ![image](https://user-images.githubusercontent.com/39013925/139097253-0e438d0e-f6e3-45e2-a5b0-d473c0b751cc.png)
 
+### Rounded corners
+**Rounded corners** are defined using a border radius. The GUI border radius maximum value is set to 64 pixels. **The corners are not antialiased!**
+```
+b 20
+```
+![image](https://user-images.githubusercontent.com/39013925/139352702-8cd26f28-3eee-49b9-92ad-277ee2909558.png)
+
+
 
 <hr>
 
 # Examples
 Examples can now be found in the system tray menu.
+
 ![image](https://user-images.githubusercontent.com/39013925/139342259-00fcfccc-ec94-449a-a047-9fea4f811e93.png)
 
 
