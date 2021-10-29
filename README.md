@@ -5,7 +5,7 @@
    <a href="../../releases"><img src="https://img.shields.io/github/v/release/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    
    <h1>RainbowTaskbar</h1>
-<p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images and transparency. Tested on Windows 11, 10, 7 and even Vista!</p>
+<p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images, rounded corners and transparency. Tested on Windows 11, 10, 7 and even Vista!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
 
@@ -25,6 +25,7 @@
       - [Images](#bitmaps)
       - [Delays](#delays)
       - [Randomizer](#randomizer)
+      - [Rounded corners](#rounded-corners)
 - [Examples](#examples)
 - [License](#license)
 
@@ -59,7 +60,7 @@ This is the editor. It works by showing you all the config lines, and a helper G
 
 You can use the `+ -` buttons to add or remove config lines.
 
-There are currently **5** basic effects, listed below.
+There are currently **6** basic options, listed below.
 <hr>
 
 
@@ -132,6 +133,14 @@ c 1 0 0 0 fgrd 0 0 0 1000
 ```
 
 ![image](https://user-images.githubusercontent.com/39013925/139097253-0e438d0e-f6e3-45e2-a5b0-d473c0b751cc.png)
+
+### Rounded corners
+**Rounded corners** are defined using a border radius. The GUI border radius maximum value is set to 64 pixels. **The corners are not antialiased!**
+```
+b 20
+```
+![image](https://user-images.githubusercontent.com/39013925/139352702-8cd26f28-3eee-49b9-92ad-277ee2909558.png)
+
 
 
 <hr>
