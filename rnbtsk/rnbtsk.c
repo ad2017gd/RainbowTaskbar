@@ -29,12 +29,14 @@
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WindowProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+void BorderRadius(LPVOID a);
 
 DWORD WINAPI Thrd(void* data);
 
 HANDLE penzi;
 HANDLE corner, corner2;
 
+UINT old_border_radius = 0;
 COLORREF current = 0;
 HWND winhwnd;
 HWND winhwnd2;
@@ -45,7 +47,10 @@ HWND hTaskBar2;
 void RnbTskWnd();
 
 void NewConf(rtcfg* nw) {
+	TerminateThread(corner, 0);
+	if(hTaskBar2) TerminateThread(corner2, 0);
 	SetAccentColor(GetAccentColor());
+	old_border_radius = 0;
 
 	memcpy(rcfg, nw, 2048 * sizeof(rtcfg_step));
 	TerminateThread(penzi, 0);
@@ -55,6 +60,11 @@ void NewConf(rtcfg* nw) {
 		rcfg,
 		0,
 		NULL);
+
+	corner = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, hTaskBar, 0, 0);
+	if(hTaskBar2) {
+		corner2 = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, hTaskBar2, 0, 0);
+	}
 }
 
 rtcfg* ConfigParser(rtcfg* cfg) {
@@ -541,13 +551,17 @@ DWORD WINAPI Thrd(void* data) {
 
 }
 
-
 void BorderRadius(LPVOID a) {
 	HWND tsk = (HWND)a;
 	HWND hwnd = tsk == hTaskBar ? winhwnd : winhwnd2;
 
 	while (1) {
 		if (border_radius) {
+			if (border_radius != old_border_radius) {
+				SetAccentColor(GetAccentColor());
+			}
+			old_border_radius = border_radius;
+
 			double scale = (double)GetDpiForWindow(tsk) / 96.0;
 
 			RECT r;
