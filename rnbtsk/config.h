@@ -3,7 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
 
-#define RNBVER "1.3.8.1"
+#define RNBVER "1.3.8.2"
 
 #if _WIN64
 #define RNBARCH 64
