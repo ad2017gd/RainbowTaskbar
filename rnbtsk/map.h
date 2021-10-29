@@ -69,11 +69,10 @@ for(int i = 0; i < __ ## name ## _size; i++){ \
 \
 
 // Add key-value pair to a map. Max key length is defined as MAP_MAXKEY.
-// todo: actually get reallocation to work?
 #define MapAdd(name,key,value) \
 if(__ ## name ## _len >= __ ## name ## _size){ \
-realloc(__ ## name ## _values, (__ ## name ## _size + MAP_REALLOC) * __ ## name ## _sizeof ); \
-realloc(__ ## name ## _keys, (__ ## name ## _size + MAP_REALLOC)*MAP_MAXKEY);\
+__ ## name ## _values = realloc(__ ## name ## _values, (__ ## name ## _size + MAP_REALLOC) * __ ## name ## _sizeof ); \
+__ ## name ## _keys = realloc(__ ## name ## _keys, (__ ## name ## _size + MAP_REALLOC)*MAP_MAXKEY);\
 __ ## name ## _size += MAP_REALLOC; \
 }; \
 MapGetIdx(name , "M__UNUSED__" , MAP_TEMP); \
