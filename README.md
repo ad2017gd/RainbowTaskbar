@@ -147,6 +147,7 @@ b 20
 
 # Examples
 Examples can now be found in the system tray menu.
+
 ![image](https://user-images.githubusercontent.com/39013925/139342259-00fcfccc-ec94-449a-a047-9fea4f811e93.png)
 
 
