@@ -116,7 +116,7 @@ void RnbTskWnd() {
 		WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT,
 		CLASS_NAME,
 		L"RainbowTaskbar",
-		WS_POPUP | WS_VISIBLE,
+		WS_POPUP | WS_VISIBLE | CS_DROPSHADOW,
 		tr.left,
 		tr.top,
 		tr.right,
@@ -133,7 +133,7 @@ void RnbTskWnd() {
 			WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT,
 			CLASS_NAME2,
 			L"RainbowTaskbar",
-			WS_POPUP | WS_VISIBLE,
+			WS_POPUP | WS_VISIBLE | CS_DROPSHADOW,
 			tr2.left,
 			tr2.top,
 			tr2.right,
@@ -589,7 +589,7 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 	{
 		RECT tr;
 		GetWindowRect(tsk, &tr);
-		SetWindowPos(hwnd, tsk, tr.left, tr.top, tr.right, tr.bottom, SWP_NOACTIVATE | SWP_SHOWWINDOW);
+		SetWindowPos(hwnd, tsk, tr.left, tr.top, tr.right-tr.left, tr.bottom-tr.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
 		RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		break;
 	}
