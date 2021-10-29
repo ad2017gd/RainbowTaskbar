@@ -551,6 +551,17 @@ DWORD WINAPI Thrd(void* data) {
 
 }
 
+float getScalingFactor()
+{
+	HDC desktop = GetDC(NULL);
+	int real = GetDeviceCaps(desktop, VERTRES);
+	int fals = GetDeviceCaps(desktop, DESKTOPVERTRES);
+
+	float scale = (float)fals / (float)real;
+	ReleaseDC(NULL, desktop);
+	return scale;
+}
+
 void BorderRadius(LPVOID a) {
 	HWND tsk = (HWND)a;
 	HWND hwnd = tsk == hTaskBar ? winhwnd : winhwnd2;
@@ -562,7 +573,7 @@ void BorderRadius(LPVOID a) {
 			}
 			old_border_radius = border_radius;
 
-			double scale = (double)GetDpiForWindow(tsk) / 96.0;
+			float scale = getScalingFactor();
 
 			RECT r;
 			GetWindowRect(tsk, &r);
