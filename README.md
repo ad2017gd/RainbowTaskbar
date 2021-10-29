@@ -9,7 +9,7 @@
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
 
-   <img style="margin: 0 auto; width: 75%;" src="https://user-images.githubusercontent.com/39013925/139337700-3216b58a-230b-4b47-a305-1de7525bafd5.png">
+   <img style="margin: 0 auto; width: 75%;" src="https://user-images.githubusercontent.com/39013925/139352818-714ccc11-1e08-4e19-bd82-b4f24610d082.png">
 <br>
 <br>
 <br>
