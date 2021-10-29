@@ -1158,6 +1158,10 @@ void ComboBox1_OnModify() {
             to = 'r';
             breaks;
         }
+        casesw(L"Border radius") {
+            to = 'b';
+            breaks;
+        }
     }
     if (to == selstep.prefix) {
         free(sel);
