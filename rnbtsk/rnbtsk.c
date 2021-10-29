@@ -5,6 +5,7 @@
 #pragma comment(lib, "Msimg32.lib")
 #pragma comment(lib, "Gdi32.lib")
 #pragma comment(lib, "Winmm.lib")
+#pragma comment(lib, "Shcore.lib")
 
 #include <windows.h>
 #include <synchapi.h>
@@ -18,6 +19,7 @@
 #include <shobjidl_core.h>
 #include <combaseapi.h>
 #include <shlwapi.h>
+#include <ShellScalingApi.h>
 
 
 #include "config.h"
@@ -546,9 +548,11 @@ void BorderRadius(LPVOID a) {
 
 	while (1) {
 		if (border_radius) {
+			double scale = (double)GetDpiForWindow(tsk) / 96.0;
+
 			RECT r;
 			GetWindowRect(tsk, &r);
-			HRGN rgn = CreateRoundRectRgn(0, 0, r.right - r.left + 1, r.bottom - r.top + 1, border_radius, border_radius);
+			HRGN rgn = CreateRoundRectRgn(0, 0, (r.right - r.left ) * scale + 1, (r.bottom - r.top) * scale + 1, border_radius, border_radius);
 			SetWindowRgn(tsk, rgn, TRUE);
 			DeleteObject(rgn);
 			rgn = CreateRectRgn(0, 0, 0, 0);
