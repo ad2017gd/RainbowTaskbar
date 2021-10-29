@@ -31,6 +31,7 @@ LRESULT CALLBACK WindowProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 DWORD WINAPI Thrd(void* data);
 
 HANDLE penzi;
+HANDLE corner, corner2;
 
 COLORREF current = 0;
 HWND winhwnd;
@@ -42,6 +43,8 @@ HWND hTaskBar2;
 void RnbTskWnd();
 
 void NewConf(rtcfg* nw) {
+	SetAccentColor(GetAccentColor());
+
 	memcpy(rcfg, nw, 2048 * sizeof(rtcfg_step));
 	TerminateThread(penzi, 0);
 	penzi = CreateThread(NULL,
@@ -150,10 +153,30 @@ void RnbTskWnd() {
 }
 
 void OnDestroy() {
+	TerminateThread(corner, 0);
+	if (hTaskBar2) TerminateThread(corner2, 0);
+	TerminateThread(penzi, 0);
+
+	Sleep(50);
+
 	SetAccentColor(GetAccentColor());
 	SetLayeredWindowAttributes(hTaskBar, 0, 255, LWA_ALPHA);
 	if (hTaskBar2) SetLayeredWindowAttributes(hTaskBar2, 0, 255, LWA_ALPHA);
 	RedrawWindow(hTaskBar, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
+	RECT r;
+	GetWindowRect(hTaskBar, &r);
+	HRGN rgn = CreateRectRgn(0, 0, 99999,99999);
+	SetWindowRgn(hTaskBar, rgn, TRUE);
+	DeleteObject(rgn);
+
+	if (hTaskBar2) {
+		GetWindowRect(hTaskBar2, &r);
+		rgn = CreateRectRgn(0, 0, 99999, 99999);
+		SetWindowRgn(hTaskBar2, rgn, TRUE);
+		DeleteObject(rgn);
+	}
+	exit(0);
 }
 
 HWND hwd_;
@@ -259,6 +282,7 @@ BYTE imagealpha;
 RECT imagesize;
 HBITMAP image;
 BITMAP _image;
+UINT border_radius = 0;
 char* imgloc;
 int rnba, tska = 0;
 
@@ -503,6 +527,9 @@ DWORD WINAPI Thrd(void* data) {
 			else if (step.prefix == 'r') {
 				randomize = TRUE;
 			}
+			else if (step.prefix == 'b') {
+				border_radius = step.time;
+			}
 		}
 
 		if (!slept)
@@ -512,8 +539,26 @@ DWORD WINAPI Thrd(void* data) {
 
 }
 
-void Experiment(COLORREF color) {
-	//SetAccentColor(color);
+
+void BorderRadius(LPVOID a) {
+	HWND tsk = (HWND)a;
+	HWND hwnd = tsk == hTaskBar ? winhwnd : winhwnd2;
+
+	while (1) {
+		if (border_radius) {
+			RECT r;
+			GetWindowRect(tsk, &r);
+			HRGN rgn = CreateRoundRectRgn(0, 0, r.right - r.left + 1, r.bottom - r.top + 1, border_radius, border_radius);
+			SetWindowRgn(tsk, rgn, TRUE);
+			DeleteObject(rgn);
+			rgn = CreateRectRgn(0, 0, 0, 0);
+			GetWindowRgn(tsk, rgn);
+			SetWindowRgn(hwnd, rgn, FALSE);
+			DeleteObject(rgn);
+		}
+		Sleep(12);
+	}
+	
 }
 
 PAINTSTRUCT ps;
@@ -523,11 +568,19 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 	switch (uMsg)
 	{
 	case WM_CREATE:
+	{
 		SetTimer(hwnd, 0, 6, NULL);
+		if (which == winhwnd) {
+			corner = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, which, 0, 0);
+		}
+		else {
+			corner2 = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, which, 0, 0);
+		}
 		//RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
 		//SetWindowPos(hTaskBar, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 		break;
+	}
 	case WM_TIMER:
 	{
 		RECT tr;

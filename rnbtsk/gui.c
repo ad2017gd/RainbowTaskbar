@@ -364,6 +364,7 @@ void InitWnd() {
     ComboBox_AddString(typepicker, L"Image");
     ComboBox_AddString(typepicker, L"Delay");
     ComboBox_AddString(typepicker, L"Randomize");
+    ComboBox_AddString(typepicker, L"Border radius");
 
     int helper0 = Control("label_helper0", WC_TEXT, L"- Unknown", 0, 170, 355, 0, 0);
 
@@ -391,6 +392,7 @@ void InitWnd() {
     ComboBox_AddString(alphapicker, L"RnbTsk");
     ComboBox_AddString(alphapicker, L"Both");
     ComboBox_AddString(alphapicker, L"Blur");
+    HWND radius = Control("slider_radius", TRACKBAR_CLASS, L"Radius", TBS_HORZ, 10, 380, 100, 25);
 
     int helper1 = Control("label_helper1", WC_TEXT, L"HELPER TEXT HERE!", 0, 120, 385, 0, 0);
     
@@ -545,6 +547,28 @@ void ConfView_OnSelect() {
             ComboBox_SelectString(picker, 0, L"Randomize");
             break;
         }
+        case 'b':
+        {
+            MapGetIdx(texts, "label_helper0", idx);
+            TextModify(idx, L"- Set taskbar border radius");
+
+            ComboBox_SelectString(picker, 0, L"Border radius");
+
+            HWND radius;
+            MapGet(controls, "slider_radius", radius);
+
+            SendMessage(radius, TBM_SETRANGEMIN, TRUE, 0);
+            SendMessage(radius, TBM_SETRANGEMAX, TRUE, 64);
+            SendMessage(radius, TBM_SETPOS, TRUE, selstep.time);
+
+            MapGetIdx(texts, "label_helper1", idx);
+            TextModify(idx, L"- Border radius in pixels");
+            EnableText(idx, TRUE);
+
+            EnableControl(radius, TRUE);
+
+            break;
+        }
         case 'w':
         {
             MapGetIdx(texts, "label_helper0", idx);
@@ -596,7 +620,6 @@ void ConfView_OnSelect() {
             EnableText(idx, TRUE);
             TextModify(idx, selstep.time == 4 ? L"- Enable or disable blur" : L"- Set opacity");
 
-            int test = SendMessage(slider, TBM_GETPOS, 0,0);
             SendMessage(slider, TBM_SETRANGEMIN, TRUE, 0);
             SendMessage(slider, TBM_SETRANGEMAX, TRUE, selstep.time == 4 ? 1 : 255);
             SendMessage(slider, TBM_SETPOS, TRUE, selstep.r);
@@ -863,6 +886,9 @@ void Config_MakeFullLine() {
             break;
         case 'r':
             sprintf(selstep.full_line, "r");
+            break;
+        case 'b':
+            sprintf(selstep.full_line, "b %i", selstep.time);
             break;
     }
     HWND confview;
@@ -1252,12 +1278,19 @@ void ColorPick2_OnClick() {
     RedrawWindow(mainn, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 void Slider1_OnModify() {
-    HWND slider;
-    MapGet(controls, "slider_alpha", slider);
-
-    int val = SendMessage(slider, TBM_GETPOS, 0, 0);
-
-    Config_Modify("r", &val);
+    if (selstep.prefix == 't') {
+        HWND slider;
+        MapGet(controls, "slider_alpha", slider);
+        int val = SendMessage(slider, TBM_GETPOS, 0, 0);
+        Config_Modify("r", &val);
+    }
+    else {
+        HWND slider;
+        MapGet(controls, "slider_radius", slider);
+        int val = SendMessage(slider, TBM_GETPOS, 0, 0);
+        Config_Modify("time", &val);
+    }
+    
 }
 void PickFile_OnClick() {
     LPWSTR path = malloc(257*sizeof(WCHAR));

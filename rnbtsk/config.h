@@ -3,7 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
 
-#define RNBVER "1.3.7"
+#define RNBVER "1.3.8"
 
 #if _WIN64
 #define RNBARCH 64
@@ -21,6 +21,7 @@ static const char *const _RNBDEFCONFIG = "\n\
 # w (ms) - wait N ms\n\
 # i (x) (y) (width, full = 0) (height, full = 0) (full path, without spaces) (alpha, opaque = 255) (image crop width, deprecated) (image crop height, deprecated)\n\
 # r - randomize next color effect (all color parameters will be ignored)\n\
+# b (border radius in pixels) - set taskbar border radius -> rounded taskbar corners\n\
 \n\
 # effects:\n\
 # none - solid color\n\
