@@ -28,6 +28,15 @@ typedef struct {
 	BYTE IGNORED;
 } COLOR;
 
+enum INTERP {
+	LINEAR,
+
+	SINE,
+	CUBIC,
+	EXPONENTIAL,
+	BACK
+};
+
 HRESULT(WINAPI* GetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceReload);
 HRESULT(WINAPI* SetUserColorPreference)(COLOR_PREF* cpPreference, BOOL fForceCommit);
 BOOL(WINAPI* SetWindowCompositionAttribute)(HWND, WINCOMPATTRDATA*);
@@ -38,4 +47,4 @@ void SetWindowABlur(HWND hWnd, DWORD att, COLORREF color);
 void LoadUX();
 COLORREF GetAccentColor();
 void SetAccentColor(COLORREF color);
-COLORREF clerp(unsigned int color1, unsigned int color2, double fraction);
+COLORREF interp(COLORREF color1, COLORREF color2, double fraction, enum INTERP which);

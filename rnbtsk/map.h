@@ -11,6 +11,15 @@
 
 int MAP_TEMP;
 
+// Reference a map in a header
+#define MapRef(name,type) \
+extern unsigned int __ ## name ## _len; \
+extern char* __ ## name ## _type; \
+extern type * __ ## name ## _values; \
+extern char** __ ## name ## _keys; \
+extern unsigned int __ ## name ## _size;\
+extern unsigned int __ ## name ## _sizeof;
+
 // Define a map.
 #define MapDef(name,type) \
 unsigned int __ ## name ## _len = 0; \

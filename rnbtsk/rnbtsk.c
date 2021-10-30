@@ -339,11 +339,9 @@ DWORD WINAPI Thrd(void* data) {
 						nw = RGB(step.r, step.g, step.b);
 					}
 					COLORREF last = current;
-					if (step.effect_2 <= 0)
-						step.effect_2 = step.effect_1 / 20;
-					while (j++ < step.effect_2) {
-						current = clerp(last, nw, (double)j / step.effect_2);
-						Sleep(step.effect_1 / step.effect_2);
+					while (j++ < (step.effect_1 / 20)) {
+						current = interp(last, nw, (double)j / (step.effect_1 / 20), step.effect_2);
+						Sleep(step.effect_1 / (step.effect_1 / 20));
 					}
 					Sleep(step.time);
 				}
@@ -405,11 +403,8 @@ DWORD WINAPI Thrd(void* data) {
 					}
 					int j = 1;
 
-					if (step.effect_5 <= 0)
-						step.effect_5 = step.effect_4 / 20;
-
-					while (j++ < step.effect_5) {
-						COLORREF interp1 = clerp(c1, nw1, (double)j / step.effect_5);
+					while (j++ < (step.effect_4 / 20)) {
+						COLORREF interp1 = interp(c1, nw1, (double)j / (step.effect_4 / 20), step.effect_5);
 						COLOR* rgb1 = (COLOR*)&interp1;
 						vertex[0].x = 0;
 						vertex[0].y = 0;
@@ -418,7 +413,7 @@ DWORD WINAPI Thrd(void* data) {
 						vertex[0].Blue = rgb1->B << 8;
 						vertex[0].Alpha = 0;
 
-						COLORREF interp2 = clerp(c2, nw2, (double)j / step.effect_5);
+						COLORREF interp2 = interp(c2, nw2, (double)j / (step.effect_4 / 20), step.effect_5);
 						COLOR* rgb2 = (COLOR*)&interp2;
 						vertex[1].Red = rgb2->R << 8;
 						vertex[1].Green = rgb2->G << 8;
@@ -427,7 +422,7 @@ DWORD WINAPI Thrd(void* data) {
 						gRect.UpperLeft = 1;
 						gRect.LowerRight = 0;
 						gradient = TRUE;
-						Sleep(step.effect_4 / step.effect_5);
+						Sleep(step.effect_4 / (step.effect_4 / 20));
 					}
 					Sleep(step.time);
 					gradient = FALSE;
@@ -562,6 +557,15 @@ float getScalingFactor()
 	return scale;
 }
 
+BOOL autohide() {
+	APPBARDATA ap;
+	ap.cbSize = sizeof(APPBARDATA);
+
+	UINT state = SHAppBarMessage(ABM_GETSTATE, &ap);
+
+	return state & ABS_AUTOHIDE;
+}
+
 void BorderRadius(LPVOID a) {
 	HWND tsk = (HWND)a;
 	HWND hwnd = tsk == hTaskBar ? winhwnd : winhwnd2;
@@ -577,18 +581,55 @@ void BorderRadius(LPVOID a) {
 
 			RECT r;
 			GetWindowRect(tsk, &r);
-			HRGN rgn = CreateRoundRectRgn(0, 0, (r.right - r.left ) * scale + 1, (r.bottom - r.top) * scale + 1, border_radius, border_radius);
-			SetWindowRgn(tsk, rgn, TRUE);
+			UINT w = (r.right - r.left) * scale;
+			UINT h = (r.bottom - r.top) * scale;
+
+			HRGN rgn = 0;
+			if (!autohide() && hTaskBar2) {
+
+				HRGN rgn = CreateRectRgn(0, 0, 0, 0);
+				HRGN secrgn = CreateRectRgn(0,0,0,0);
+				if (tsk == hTaskBar2) {
+					HRGN rgn2 = CreateRectRgn(0, 0, w / 2, h + 1);
+					HRGN rgn1 = CreateRoundRectRgn(w / 3, 0, w + 1, h + 1, border_radius, border_radius);
+					CombineRgn(rgn, rgn1, rgn2, RGN_OR);
+					SetWindowRgn(tsk, rgn, TRUE);
+
+					DeleteObject(rgn1);
+					DeleteObject(rgn2);
+				}
+				else {
+					HRGN rgn1 = CreateRoundRectRgn(0, 0, w + 1, h + 1, border_radius, border_radius);
+					HRGN rgn2 = CreateRectRgn(w / 2, 0, w + 1, h + 1);
+					CombineRgn(rgn, rgn1, rgn2, RGN_OR);
+					SetWindowRgn(tsk, rgn, TRUE);
+
+					DeleteObject(rgn1);
+					DeleteObject(rgn2);
+				}
+				
+
+				DeleteObject(secrgn);
+			}
+			else {
+				rgn = CreateRoundRectRgn(0, 0, w + 1, h + 1, border_radius, border_radius);
+				SetWindowRgn(tsk, rgn, TRUE);
+			}
+			
+
 			DeleteObject(rgn);
 			rgn = CreateRectRgn(0, 0, 0, 0);
 			GetWindowRgn(tsk, rgn);
 			SetWindowRgn(hwnd, rgn, FALSE);
 			DeleteObject(rgn);
 		}
-		Sleep(12);
+		Sleep(150);
 	}
 	
 }
+
+#define TIMER_MOVE 1
+#define TIMER_REPAINT 2
 
 PAINTSTRUCT ps;
 #define ARGB_ABGR(a,r,g,b) ( (r) | ( (g)<<8 ) | ( (b) <<16) | ( (a) <<24 ) ) 
@@ -598,33 +639,32 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 	{
 	case WM_CREATE:
 	{
-		SetTimer(hwnd, 0, 6, NULL);
-		if (which == winhwnd) {
+		SetTimer(hwnd, TIMER_MOVE, 2, NULL);
+		SetTimer(hwnd, TIMER_REPAINT, 10, NULL);
+		if (which == hTaskBar) {
 			corner = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, which, 0, 0);
 		}
-		else {
+		else if (which == hTaskBar2) {
 			corner2 = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, which, 0, 0);
 		}
-		//RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
-		//SetWindowPos(hTaskBar, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-
 		break;
 	}
 	case WM_TIMER:
 	{
-		RECT tr;
-		GetWindowRect(tsk, &tr);
-		SetWindowPos(hwnd, tsk, tr.left, tr.top, tr.right-tr.left, tr.bottom-tr.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
-		RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+		if (wParam == TIMER_MOVE) {
+			RECT tr;
+			GetWindowRect(tsk, &tr);
+			SetWindowPos(hwnd, tsk, tr.left, tr.top, tr.right - tr.left, tr.bottom - tr.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
+		}
+		else {
+			RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+		}
 		break;
 	}
 	case WM_PAINT:
 	{
 		hdc = BeginPaint(hwnd, &ps);
 		GetWindowRect(tsk, &tr);
-		if (which == 2) {
-			//MessageBox(NULL, " A MERS foarte bine 123213 3304 -3- =3 XYZ", "", 0);
-		}
 
 		HDC buffer = CreateCompatibleDC(hdc);
 		HBITMAP Membitmap = CreateCompatibleBitmap(hdc, tr.right, tr.bottom - tr.top);

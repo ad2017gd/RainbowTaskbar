@@ -3,7 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
 
-#define RNBVER "1.3.8.4"
+#define RNBVER "1.3.9"
 
 #if _WIN64
 #define RNBARCH 64
@@ -25,9 +25,9 @@ static const char *const _RNBDEFCONFIG = "\n\
 \n\
 # effects:\n\
 # none - solid color\n\
-# fade (ms) (steps, deprecated) - fade solid color\n\
+# fade (ms) (fade function, optional => 0 - linear, 1 - ease) - fade solid color\n\
 # grad (r2) (g2) (b2) - gradient\n\
-# fgrd (r2) (g2) (b2) (ms) (steps, deprecated) - fade gradient\n\
+# fgrd (r2) (g2) (b2) (ms) (fade function, optional => 0 - linear, 1 - ease) - fade gradient\n\
 \n\
 # fade : do not use a high amount of steps!the color interpolation function is not optimized,\n\
 #and the Win32 Sleep function is inaccurate at low values\n\
