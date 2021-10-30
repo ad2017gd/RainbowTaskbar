@@ -135,7 +135,7 @@ c 1 0 0 0 fgrd 0 0 0 1000
 ![image](https://user-images.githubusercontent.com/39013925/139097253-0e438d0e-f6e3-45e2-a5b0-d473c0b751cc.png)
 
 ### Rounded corners
-**Rounded corners** are defined using a border radius. The GUI border radius maximum value is set to 64 pixels. **The corners are not antialiased!**
+**Rounded corners** are defined using a border radius. The GUI border radius maximum value is set to 64 pixels. **Doesn't work on Windows 7 or Vista**
 ```
 b 20
 ```
