@@ -3,6 +3,7 @@
    <a href="LICENSE"><img src="https://img.shields.io/github/license/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="../../issues"><img src="https://img.shields.io/github/issues/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="../../releases"><img src="https://img.shields.io/github/v/release/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
+   <a href="https://paypal.me/ad2k17"><img src="https://img.shields.io/badge/donators-1-red?style=for-the-badge&logo=paypal"></a>   
    
    <h1>RainbowTaskbar</h1>
 <p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images, rounded corners and transparency. Tested on Windows 11, 10, 7 and even Vista!</p>
@@ -135,7 +136,7 @@ c 1 0 0 0 fgrd 0 0 0 1000
 ![image](https://user-images.githubusercontent.com/39013925/139097253-0e438d0e-f6e3-45e2-a5b0-d473c0b751cc.png)
 
 ### Rounded corners
-**Rounded corners** are defined using a border radius. The GUI border radius maximum value is set to 64 pixels. **The corners are not antialiased!**
+**Rounded corners** are defined using a border radius. The GUI border radius maximum value is set to 64 pixels. **Doesn't work on Windows 7 or Vista**
 ```
 b 20
 ```
