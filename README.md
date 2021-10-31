@@ -72,13 +72,20 @@ In the editor, they are previewed on the top.
 
 Supported color effects are:
 - Solid (none) - solid color
-- Fade (fade) - fade in color
+- Fade (fade) - fade in color, supports transitions
 - Gradient (grad) - 2 color gradient, along the width
-- Fade gradient (fgrd) - fade in gradient
+- Fade gradient (fgrd) - fade in gradient, supports transitions
+
+Supported transitions are:
+- Linear (no easing)
+- Sine
+- Cubic
+- Exponential
+- Back
 
 ```
-c 750 0 200 255 fgrd 255 0 180 400
-c 100 255 255 255 grad 255 255 255
+c 750 0 200 255 fgrd 255 0 180 400 2
+c 100 255 255 255 grad 255 255 255 2
 ```
 
 ![image](https://user-images.githubusercontent.com/39013925/137605831-1e4b7caa-61d0-4a7a-9609-a8b6891e6c53.png)
