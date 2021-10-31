@@ -55,7 +55,7 @@ You can click on it to bring the editor up, or right click to see the options.
 
 
 ## Editor
-![image](https://user-images.githubusercontent.com/39013925/139339695-dce24946-1092-4565-81fd-c0cbdbccfb14.png)
+![image](https://user-images.githubusercontent.com/39013925/139577731-3e66b256-96a9-46eb-941d-bf7c24c14b7f.png)
 
 This is the editor. It works by showing you all the config lines, and a helper GUI for them.
 
@@ -88,7 +88,7 @@ c 750 0 200 255 fgrd 255 0 180 400 2
 c 100 255 255 255 grad 255 255 255 2
 ```
 
-![image](https://user-images.githubusercontent.com/39013925/137605831-1e4b7caa-61d0-4a7a-9609-a8b6891e6c53.png)
+![image](https://user-images.githubusercontent.com/39013925/139577756-e4d60fa1-0f5c-48f2-8123-e9cdd5f5fa5f.png)
 
 
 ### Transparency
