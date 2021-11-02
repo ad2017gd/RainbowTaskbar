@@ -3,7 +3,7 @@
    <a href="LICENSE"><img src="https://img.shields.io/github/license/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="../../issues"><img src="https://img.shields.io/github/issues/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="../../releases"><img src="https://img.shields.io/github/v/release/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
-   <a href="https://paypal.me/ad2k17"><img src="https://img.shields.io/badge/donators-1-red?style=for-the-badge&logo=paypal"></a>   
+   <a href="https://paypal.me/ad2k17"><img src="https://img.shields.io/badge/donators-2-red?style=for-the-badge&logo=paypal"></a>   
    
    <h1>RainbowTaskbar</h1>
 <p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images, rounded corners and transparency. Tested on Windows 11, 10, 7 and even Vista!</p>
