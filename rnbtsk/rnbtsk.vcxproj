@@ -41,9 +41,7 @@
     <ResourceCompile Include="rnbtsk.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\downloads\bitmap2.bmp" />
-    <Image Include="..\..\..\Downloads\funny2.bmp" />
-    <Image Include="..\..\..\Downloads\icon.ico" />
+    <Image Include="bitmap1.bmp" />
     <Image Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -78,16 +78,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\Downloads\funny2.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\Downloads\icon.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\downloads\bitmap2.bmp">
+    <Image Include="bitmap1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
