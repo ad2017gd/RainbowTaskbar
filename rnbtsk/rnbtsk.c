@@ -26,7 +26,6 @@
 #include "accent.h"
 #include "gui.h"
 
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WindowProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void BorderRadius(LPVOID a);
@@ -48,7 +47,7 @@ void RnbTskWnd();
 
 void NewConf(rtcfg* nw) {
 	TerminateThread(corner, 0);
-	if(hTaskBar2) TerminateThread(corner2, 0);
+	if (hTaskBar2) TerminateThread(corner2, 0);
 	SetAccentColor(GetAccentColor());
 	old_border_radius = 0;
 
@@ -62,7 +61,7 @@ void NewConf(rtcfg* nw) {
 		NULL);
 
 	corner = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, hTaskBar, 0, 0);
-	if(hTaskBar2) {
+	if (hTaskBar2) {
 		corner2 = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)BorderRadius, hTaskBar2, 0, 0);
 	}
 }
@@ -129,8 +128,8 @@ void RnbTskWnd() {
 		WS_POPUP | WS_VISIBLE | CS_DROPSHADOW,
 		tr.left,
 		tr.top,
-		tr.right,
-		tr.bottom,
+		tr.right - tr.left,
+		tr.bottom - tr.top,
 		0,
 		NULL,
 		GetModuleHandleA(NULL),
@@ -144,10 +143,10 @@ void RnbTskWnd() {
 			CLASS_NAME2,
 			L"RainbowTaskbar",
 			WS_POPUP | WS_VISIBLE | CS_DROPSHADOW,
-			tr2.left,
-			tr2.top,
-			tr2.right,
-			tr2.bottom,
+			0,
+			0,
+			100,
+			100,
 			0,
 			NULL,
 			GetModuleHandleA(NULL),
@@ -178,7 +177,7 @@ void OnDestroy() {
 
 	RECT r;
 	GetWindowRect(hTaskBar, &r);
-	HRGN rgn = CreateRectRgn(0, 0, 99999,99999);
+	HRGN rgn = CreateRectRgn(0, 0, 99999, 99999);
 	SetWindowRgn(hTaskBar, rgn, TRUE);
 	DeleteObject(rgn);
 
@@ -195,12 +194,12 @@ HWND hwd_;
 int main(int argc, char* argv[]) {
 	FreeConsole();
 	LoadUX();
-	
+
 
 	TIMECAPS tc;
 	timeGetDevCaps(&tc, sizeof(tc));
 	timeBeginPeriod(tc.wPeriodMin);
-	srand (time(NULL));
+	srand(time(NULL));
 
 	if (hwd_ = FindWindow(L"RnbTskWnd", NULL)) {
 		DWORD procid;
@@ -233,7 +232,7 @@ int main(int argc, char* argv[]) {
 
 	}
 	fclose(fconfig);
-	STARTUP = ERROR_SUCCESS == RegGetValue(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 
+	STARTUP = ERROR_SUCCESS == RegGetValue(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
 		_T("RainbowTaskbar"), RRF_RT_REG_SZ, 0, 0, 0);
 
 
@@ -265,7 +264,7 @@ int main(int argc, char* argv[]) {
 	nidApp.uCallbackMessage = WM_USER_SHELLICON;
 	LoadString(GetModuleHandleA(NULL), IDS_APPTOOLTIP, nidApp.szTip, MAX_LOADSTRING);
 	*/
-	
+
 	MSG msg = { 0 };
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
@@ -373,7 +372,7 @@ DWORD WINAPI Thrd(void* data) {
 					vertex[0].Blue = b1;
 					vertex[0].Alpha = 0xFFFF;
 
-					vertex[1].x = tr.right;
+					vertex[1].x = tr.right - tr.left;
 					vertex[1].y = tr.bottom - tr.top;
 					vertex[1].Red = r2;
 					vertex[1].Green = g2;
@@ -588,7 +587,7 @@ void BorderRadius(LPVOID a) {
 			if (!autohide() && hTaskBar2) {
 
 				HRGN rgn = CreateRectRgn(0, 0, 0, 0);
-				HRGN secrgn = CreateRectRgn(0,0,0,0);
+				HRGN secrgn = CreateRectRgn(0, 0, 0, 0);
 				if (tsk == hTaskBar2) {
 					HRGN rgn2 = CreateRectRgn(0, 0, w / 2, h + 1);
 					HRGN rgn1 = CreateRoundRectRgn(w / 3, 0, w + 1, h + 1, border_radius, border_radius);
@@ -607,7 +606,7 @@ void BorderRadius(LPVOID a) {
 					DeleteObject(rgn1);
 					DeleteObject(rgn2);
 				}
-				
+
 
 				DeleteObject(secrgn);
 			}
@@ -615,7 +614,7 @@ void BorderRadius(LPVOID a) {
 				rgn = CreateRoundRectRgn(0, 0, w + 1, h + 1, border_radius, border_radius);
 				SetWindowRgn(tsk, rgn, TRUE);
 			}
-			
+
 
 			DeleteObject(rgn);
 			rgn = CreateRectRgn(0, 0, 0, 0);
@@ -625,7 +624,7 @@ void BorderRadius(LPVOID a) {
 		}
 		Sleep(150);
 	}
-	
+
 }
 
 #define TIMER_MOVE 1
@@ -654,10 +653,13 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 		if (wParam == TIMER_MOVE) {
 			RECT tr;
 			GetWindowRect(tsk, &tr);
+
 			SetWindowPos(hwnd, tsk, tr.left, tr.top, tr.right - tr.left, tr.bottom - tr.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
+			//MoveWindow(hwnd, tsk, tr.left, tr.top, tr.right, tr.bottom, TRUE);
 		}
 		else {
-			RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+			InvalidateRect(hwnd, NULL, 0);
+			UpdateWindow(hwnd);
 		}
 		break;
 	}
@@ -666,8 +668,10 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 		hdc = BeginPaint(hwnd, &ps);
 		GetWindowRect(tsk, &tr);
 
+		int WIDTH = tr.right - tr.left, HEIGHT = tr.bottom - tr.top;
+
 		HDC buffer = CreateCompatibleDC(hdc);
-		HBITMAP Membitmap = CreateCompatibleBitmap(hdc, tr.right, tr.bottom - tr.top);
+		HBITMAP Membitmap = CreateCompatibleBitmap(hdc, WIDTH, HEIGHT);
 		SelectObject(buffer, Membitmap);
 		if (!blur)
 			SetWindowBlur(tsk, 6);
@@ -684,8 +688,8 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 
 
 		if (gradient) {
-			vertex[1].x = tr.right;
-			vertex[1].y = tr.bottom - tr.top;
+			vertex[1].x = WIDTH;
+			vertex[1].y = HEIGHT;
 			GradientFill(buffer, vertex, 2, &gRect, 1, GRADIENT_FILL_RECT_H);
 		}
 		else {
@@ -694,8 +698,8 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 		if (img) {
 			HDC hdcMem = CreateCompatibleDC(buffer);
 			SelectBitmap(hdcMem, image);
-			int r = imagepos.right > 0 ? imagepos.right : tr.right;
-			int b = imagepos.bottom > 0 ? imagepos.bottom : tr.bottom - tr.top;
+			int r = imagepos.right > 0 ? imagepos.right : WIDTH;
+			int b = imagepos.bottom > 0 ? imagepos.bottom : HEIGHT;
 			BLENDFUNCTION bf = { 0, 0, imagealpha, 0 };
 
 			AlphaBlend(
@@ -703,18 +707,16 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 				hdcMem, 0, 0, _image.bmWidth, _image.bmHeight, bf);
 			DeleteDC(hdcMem);
 		}
-		BitBlt(hdc, 0, 0, tr.right, tr.bottom - tr.top, buffer, 0, 0, SRCCOPY);
+		BitBlt(hdc, 0, 0, WIDTH, HEIGHT, buffer, 0, 0, SRCCOPY);
 		DeleteObject(Membitmap);
 		DeleteDC(buffer);
 		DeleteDC(hdc);
 		DeleteObject(brush);
 
 
-		
+
 
 		EndPaint(hwnd, &ps);
-
-		RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
 		break;
 	}
 	case WM_CLOSE:
