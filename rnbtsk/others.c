@@ -36,7 +36,7 @@ void Class(wchar_t* name, HANDLE hInstance, WNDPROC proc) {
 
 }
 // pasted code from https://stackoverflow.com/questions/478898/how-do-i-execute-a-command-and-get-the-output-of-the-command-within-c-using-po
-char* ExecCmd(const wchar_t* cmd, char* buf)
+char* ExecCmd(LPWSTR cmd, char* buf)
 {
     char* strResult = NULL;
     HANDLE hPipeRead, hPipeWrite;
@@ -49,7 +49,8 @@ char* ExecCmd(const wchar_t* cmd, char* buf)
     if (!CreatePipe(&hPipeRead, &hPipeWrite, &saAttr, 0))
         return strResult;
 
-    STARTUPINFOW si = { sizeof(STARTUPINFOW) };
+    STARTUPINFOW si = { 0 };
+    si.cb = sizeof(STARTUPINFOW);
     si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
     si.hStdOutput = hPipeWrite;
     si.hStdError = hPipeWrite;
@@ -58,13 +59,9 @@ char* ExecCmd(const wchar_t* cmd, char* buf)
 
     PROCESS_INFORMATION pi = { 0 };
 
-    BOOL fSuccess = CreateProcessW(NULL, (LPWSTR)cmd, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
-    if (!fSuccess)
-    {
-        CloseHandle(hPipeWrite);
-        CloseHandle(hPipeRead);
-        return strResult;
-    }
+    LPWSTR temp = malloc(sizeof(WCHAR) * wcslen(cmd));
+    CreateProcessW(NULL, temp, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+
 
     BOOL bProcessEnded = FALSE;
     for (; !bProcessEnded;)
@@ -98,6 +95,7 @@ char* ExecCmd(const wchar_t* cmd, char* buf)
     CloseHandle(hPipeRead);
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
+    free(temp);
     return strResult;
 }
 
