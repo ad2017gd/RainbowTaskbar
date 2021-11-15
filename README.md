@@ -6,6 +6,7 @@
    <a href="https://paypal.me/ad2k17"><img src="https://img.shields.io/badge/donators-2-red?style=for-the-badge&logo=paypal"></a>   
    
    <h1>RainbowTaskbar</h1>
+   ![Banner](https://media.discordapp.net/attachments/817379791027699722/909887761694224404/standard3.gif)
 <p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images, rounded corners and transparency. Tested on Windows 11, 10, 7 and even Vista!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
