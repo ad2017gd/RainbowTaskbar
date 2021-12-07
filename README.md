@@ -37,7 +37,7 @@ RainbowTaskbar is a portable app, so there's no installing required.
 
 ![image](https://user-images.githubusercontent.com/39013925/139337115-ca6d6721-ba52-472b-ac32-8a96412995fe.png)
 
-This is an **one-time** prompt, only visible if there is no config file present. You can always toggle it under the system tray menu. If you change the location of the executable, make sure to **toggle the option in the menu**, and set it back on.
+This is a **one-time** prompt, only visible if there is no config file present. You can always toggle it under the system tray menu. If you change the location of the executable, make sure to **toggle the option in the menu**, and set it back on.
 
 ![image](https://user-images.githubusercontent.com/39013925/139337440-856fe46e-0068-439c-9702-d7798f879729.png)
 
