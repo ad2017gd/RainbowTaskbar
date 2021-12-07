@@ -60,14 +60,17 @@ char* ExecCmd(LPWSTR cmd, char* buf)
     PROCESS_INFORMATION pi = { 0 };
 
     LPWSTR temp = malloc(sizeof(WCHAR) * wcslen(cmd));
-    CreateProcessW(NULL, temp, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+    wcscpy(temp, cmd);
+    if (!CreateProcessW(NULL, temp, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
+        return NULL; // how to fix 20% cpu usage 
+    };
 
 
     BOOL bProcessEnded = FALSE;
     for (; !bProcessEnded;)
     {
         // Give some timeslice (50 ms), so we won't waste 100% CPU.
-        bProcessEnded = WaitForSingleObject(pi.hProcess, 50) == WAIT_OBJECT_0;
+        bProcessEnded = WaitForSingleObject(pi.hProcess, 50) == WAIT_TIMEOUT;
 
         // Even if process exited - we continue reading, if
         // there is some data available over pipe.
@@ -75,7 +78,6 @@ char* ExecCmd(LPWSTR cmd, char* buf)
         {
             DWORD dwRead = 0;
             DWORD dwAvail = 0;
-
             if (!PeekNamedPipe(hPipeRead, NULL, 0, NULL, &dwAvail, NULL))
                 break;
 

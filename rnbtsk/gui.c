@@ -18,7 +18,7 @@ COLORREF bgc = RGB(0x22, 0x22, 0x22);
 
 DWORD CheckUpdate() {
     char data[1024];
-    ExecCmd(L"cmd /c curl --help 1> nul 2> nul && echo %ERRORLEVEL%", data);
+    //ExecCmd(L"cmd /c curl --help 1> nul 2> nul && echo %ERRORLEVEL%", data);
     if (!memcmp(data, "9009", 4)) {
         return;
     }
