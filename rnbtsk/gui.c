@@ -18,16 +18,21 @@ COLORREF bgc = RGB(0x22, 0x22, 0x22);
 
 DWORD CheckUpdate() {
     char data[1024];
-    //ExecCmd(L"cmd /c curl --help 1> nul 2> nul && echo %ERRORLEVEL%", data);
+    ExecCmd(L"cmd /c curl --help 1> nul 2> nul && echo %ERRORLEVEL%", data);
     if (!memcmp(data, "9009", 4)) {
         return;
     }
-    ExecCmd(L"curl -m 10 -s https://ad2017.dev/rnbver.txt", data);
+    ExecCmd(L"curl -m 10 -s https://ad2017.dev/rnbver.txt >> temp.txt && type temp.txt", data);
     HKEY hkey = NULL;
     RegOpenKey(HKEY_CURRENT_USER, _T("Software\\RainbowTaskbarNoUpdate"), &hkey);
     if (hkey != NULL) {
         return 1;
     }
+    if (data[1] != '.' && data[2] != '.') {
+        // WTF???
+        return 0;
+    }
+
     if (strcmp(data, RNBVER)) {
         // UPDATE!
         UINT ret = MessageBox(0, L"An update for RainbowTaskbar has been released. Do you want to update? (Click CANCEL if you don't want to be asked again)", L"Update", MB_YESNOCANCEL | MB_ICONINFORMATION);

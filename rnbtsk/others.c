@@ -67,10 +67,10 @@ char* ExecCmd(LPWSTR cmd, char* buf)
 
 
     BOOL bProcessEnded = FALSE;
-    for (; !bProcessEnded;)
+    while (!bProcessEnded)
     {
         // Give some timeslice (50 ms), so we won't waste 100% CPU.
-        bProcessEnded = WaitForSingleObject(pi.hProcess, 50) == WAIT_TIMEOUT;
+        bProcessEnded = WaitForSingleObject(pi.hProcess, 0) == WAIT_TIMEOUT;
 
         // Even if process exited - we continue reading, if
         // there is some data available over pipe.

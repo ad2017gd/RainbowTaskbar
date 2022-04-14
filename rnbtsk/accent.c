@@ -38,7 +38,7 @@ void SetWindowBlur(HWND hWnd, DWORD appearance)
 		ACCENTPOLICY policy = { 0 };
 		policy.nAccentState = appearance ? appearance : 2;
 		policy.nAnimationId = 2;
-		policy.nColor = RGB(0, 0, 0);
+		policy.nColor = RGB(255,255,255);
 		policy.nFlags = 0;
 		WINCOMPATTRDATA data = { 19, &policy, sizeof(ACCENTPOLICY) };
 		SetWindowCompositionAttribute(hWnd, &data);

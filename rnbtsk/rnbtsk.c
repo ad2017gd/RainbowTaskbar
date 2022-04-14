@@ -674,9 +674,9 @@ LRESULT CALLBACK WndPrc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HWN
 		HBITMAP Membitmap = CreateCompatibleBitmap(hdc, WIDTH, HEIGHT);
 		SelectObject(buffer, Membitmap);
 		if (!blur)
-			SetWindowBlur(tsk, 6);
+			SetWindowBlur(tsk, 2);
 		else
-			SetWindowBlur(tsk, 3);
+			SetWindowBlur(tsk, 2);
 
 
 
