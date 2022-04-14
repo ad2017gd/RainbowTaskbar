@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="RainbowTaskbar.UserControls.BorderRadiusInstructionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RainbowTaskbar"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:NumericValidationRule x:Key="NumericValidationRule"/>
+        <local:DivideHalf x:Key="Half"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Slider Minimum="1" Maximum="50" Value="{Binding SelectedInstruction.Radius}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240"/>
+            <TextBox x:Name="SelectedTime" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap" BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=TimeUnit, Path=IsMouseOver}" Value="True">
+                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+                <TextBox.Text>
+                    <Binding Path="SelectedInstruction.Radius"
+                             Mode="TwoWay"
+                             UpdateSourceTrigger="PropertyChanged"
+                             ValidatesOnNotifyDataErrors="True"
+                             ValidatesOnDataErrors="True"
+                             NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <local:NumericValidationRule ValidationType="{x:Type s:Int32}"
+                                                         NumMinValue="0"
+                                                         NumMaxValue="80"
+                                                       ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBox x:Name="TimeUnit" Text="px" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Background="White" BorderThickness="0,1,1,1">
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsMouseOver}" Value="True">
+                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsFocused}" Value="True">
+                                <Setter Property="BorderBrush" Value="CornflowerBlue"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Canvas Margin="0,0,0,5" x:Name="Preview" Width="450" Height="40">
+                <Rectangle RadiusX="{Binding SelectedInstruction.Radius, Converter={StaticResource Half}}" RadiusY="{Binding SelectedInstruction.Radius, Converter={StaticResource Half}}" Canvas.Left="0" Canvas.Top="0" Width="450" Height="40">
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="LightGray"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Label Margin="150,0,0,0" Content="This is some text."></Label>
+                <Label Margin="150,12,0,0" Foreground="White" Content="Radius preview!"></Label>
+                <Rectangle RadiusX="{Binding SelectedInstruction.Radius, Converter={StaticResource Half}}" RadiusY="{Binding SelectedInstruction.Radius, Converter={StaticResource Half}}" Name="PreviewRectangle" Opacity="0.8" Fill="MediumPurple" Canvas.Left="0" Canvas.Top="0" Width="450" Height="40">
+
+                </Rectangle>
+
+                <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
+                <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="19" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
+                <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
+                <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="19" RadiusX="1" RadiusY="1"  Fill="#2af"></Rectangle>
+
+                <TextBlock Width="440" Height="20" TextAlignment="Right" Margin="0,12,0,0" Foreground="White" Text="22:11"></TextBlock>
+
+            </Canvas>
+        </StackPanel>
+    </Grid>
+</UserControl>
