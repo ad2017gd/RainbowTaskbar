@@ -33,7 +33,7 @@ on your taskbar.
 
 Have fun using RainbowTaskbar!
 
-# Getting started
+# Documentation
 Documentation has been moved to https://ad2017.dev/rnb/docs
 
 # License
