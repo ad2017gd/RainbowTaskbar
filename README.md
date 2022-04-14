@@ -16,11 +16,6 @@
 <br>
 </div>
 
-# Table of contents
-- [Getting started](#getting-started)
-- [Documentation](#documentation)
-- [License](#license)
-
 # Getting started
 First off, grab yourself the hottest new release at https://github.com/ad2017gd/RainbowTaskbar/releases.
 
