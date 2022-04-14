@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="RainbowTaskbar.UserControls.TextInstructionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RainbowTaskbar"
+             xmlns:instructions="clr-namespace:RainbowTaskbar.Configuration.Instructions"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:interp="clr-namespace:RainbowTaskbar.Interpolation"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:NumericValidationRule x:Key="NumericValidationRule"/>
+        <local:FloatToPercentageValueConverter x:Key="FloatToPercentage"/>
+        <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName"/>
+        <interp:ColorConverter x:Key="ColorConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <xctk:WatermarkTextBox Watermark="Content" Width="400" AcceptsReturn="True" Text="{Binding SelectedInstruction.Text}"></xctk:WatermarkTextBox>
+            </StackPanel>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"/>
+                <xctk:SingleUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="10" ClipValueToMinMax="True"></xctk:SingleUpDown>
+
+                <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0"/>
+                <xctk:SingleUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="10" ClipValueToMinMax="True"></xctk:SingleUpDown>
+            </StackPanel>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <xctk:WatermarkComboBox x:Name="FontComboBox" Watermark="Font" ItemsSource="{Binding InstalledFonts}" SelectedItem="{Binding SelectedInstruction.Font}">
+                    
+                </xctk:WatermarkComboBox>
+
+                <TextBlock FontSize="14" Text="Font size " Margin="15,0,5,0"/>
+                <xctk:SingleUpDown Value="{Binding SelectedInstruction.Size}" Width="50" FormatString="N0" Increment="1" Minimum="1" ClipValueToMinMax="True"></xctk:SingleUpDown>
+                <TextBlock FontSize="14" Text="Font color " Margin="15,0,5,0"/>
+                <xctk:ColorPicker SelectedColor="{Binding SelectedInstruction.Color, Converter={StaticResource ColorConverter}}"></xctk:ColorPicker>
+            
+            </StackPanel>
+            
+            
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
+            <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0"/>
+            <xctk:SingleUpDown Value="{Binding SelectedInstruction.Layer}" Width="75" FormatString="N0" Increment="1" Minimum="0" Maximum="15" ClipValueToMinMax="True"></xctk:SingleUpDown>
+        </StackPanel>
+    </Grid>
+</UserControl>

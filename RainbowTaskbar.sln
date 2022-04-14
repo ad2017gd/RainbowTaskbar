@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RainbowTaskbar", "RainbowTaskbar\RainbowTaskbar.csproj", "{03366AEB-0D3C-453B-BB5F-50DFB417D325}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{74523FEF-D276-4C1B-8589-13C1BD55B316}"
+	ProjectSection(SolutionItems) = preProject
+		RainbowTaskbar\App.xaml = RainbowTaskbar\App.xaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03366AEB-0D3C-453B-BB5F-50DFB417D325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03366AEB-0D3C-453B-BB5F-50DFB417D325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03366AEB-0D3C-453B-BB5F-50DFB417D325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03366AEB-0D3C-453B-BB5F-50DFB417D325}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4E67E8A-1256-45FB-8FC7-156FD12B1E62}
+	EndGlobalSection
+EndGlobal
