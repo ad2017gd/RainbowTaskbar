@@ -5,7 +5,7 @@
    <a href="../../releases"><img src="https://img.shields.io/github/v/release/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="https://paypal.me/ad2k17"><img src="https://img.shields.io/badge/donators-2-red?style=for-the-badge&logo=paypal"></a>   
    
-   <h1>RainbowTaskbar</h1>
+   <h1><a href="https://ad2017.dev/rnb">RainbowTaskbar</a></h1>
 <p>Lightweight utility for Windows taskbar customization. Supports color effects, transitions, blur, images, text, rounded corners, transparency and a new HTTP API. Now rewritten in .NET 6!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
