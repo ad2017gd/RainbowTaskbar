@@ -1,11 +1,13 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using RainbowTaskbar.Configuration.Instructions;
 
 namespace RainbowTaskbar.Configuration;
 
-internal class Presets {
-    public static Instruction[] Rainbow() =>
-        new Instruction[] {
+public static class DefaultPresets {
+    public static readonly InstructionPreset Rainbow = new() {
+        Name = "Rainbow",
+        Instructions = new BindingList<Instruction>(new Instruction[] {
             new BorderRadiusInstruction {
                 Radius = 20
             },
@@ -87,11 +89,13 @@ internal class Presets {
                 Effect = ColorInstruction.ColorInstructionEffect.FadeGradient,
                 Time2 = 500
             }
-        };
+        })
+    };
 
 
-    public static Instruction[] Chill() =>
-        new Instruction[] {
+    public static readonly InstructionPreset Chill = new() {
+        Name = "Chill",
+        Instructions = new BindingList<Instruction>(new Instruction[] {
             new TransparencyInstruction {
                 Type = TransparencyInstruction.TransparencyInstructionType.Style,
                 Style = TransparencyInstruction.TransparencyInstructionStyle.Blur
@@ -116,10 +120,12 @@ internal class Presets {
                 Transition = ColorInstruction.ColorInstructionTransition.Cubic,
                 Time2 = 3000
             }
-        };
+        })
+    };
 
-    public static Instruction[] Unknown() =>
-        new Instruction[] {
+    public static readonly InstructionPreset Unknown = new() {
+        Name = "Unknown",
+        Instructions = new BindingList<Instruction>(new Instruction[] {
             new TransparencyInstruction {
                 Type = TransparencyInstruction.TransparencyInstructionType.Style,
                 Style = TransparencyInstruction.TransparencyInstructionStyle.Transparent
@@ -135,5 +141,6 @@ internal class Presets {
                 Transition = ColorInstruction.ColorInstructionTransition.Linear,
                 Time2 = 1000
             }
-        };
+        })
+    };
 }

@@ -23,7 +23,11 @@
                 <xctk:WatermarkTextBox x:Name="ImagePathTextBox"
                                        Watermark="Path to image" Margin="5,0,0,0" Width="250">
                     <xctk:WatermarkTextBox.Text>
-                        <Binding Path="SelectedInstruction.Path" />
+                        <Binding Path="SelectedInstruction.Path">
+                            <Binding.ValidationRules>
+                                <local:FileExistsValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
                     </xctk:WatermarkTextBox.Text>
                 </xctk:WatermarkTextBox>
             </StackPanel>

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,12 +32,13 @@ public class TaskbarViewModel {
         window.taskbarHelper.UpdateRadius();
 
 
-        window.layers = new Layers(window);
-        window.layers.MainDrawRectangles = new[] {
-            window.RectLayer0, window.RectLayer1, window.RectLayer2, window.RectLayer3, window.RectLayer4,
-            window.RectLayer5, window.RectLayer6, window.RectLayer7, window.RectLayer8, window.RectLayer9,
-            window.RectLayer10, window.RectLayer11, window.RectLayer12, window.RectLayer13, window.RectLayer14,
-            window.RectLayer15
+        window.layers = new Layers(window) {
+            MainDrawRectangles = new[] {
+                window.RectLayer0, window.RectLayer1, window.RectLayer2, window.RectLayer3, window.RectLayer4,
+                window.RectLayer5, window.RectLayer6, window.RectLayer7, window.RectLayer8, window.RectLayer9,
+                window.RectLayer10, window.RectLayer11, window.RectLayer12, window.RectLayer13, window.RectLayer14,
+                window.RectLayer15
+            }
         };
 
         var Taskbar = window.taskbarHelper.GetRectangle();
@@ -80,7 +80,7 @@ public class TaskbarViewModel {
                         }
                         catch {
                             MessageBox.Show(
-                                $"The \"{new FormatInstructionNameValueConverter().Convert(App.Config.Instructions[ConfigStep].Name, typeof(string), null, CultureInfo.CurrentCulture)}\" instruction at index {ConfigStep} (starting from 0) threw an exception, it will be removed from the config.",
+                                $"The \"{App.Config.Instructions[ConfigStep].Name}\" instruction at index {ConfigStep} (starting from 0) threw an exception, it will be removed from the config.",
                                 "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Error);
                             Application.Current.Dispatcher.Invoke(() => {
                                 App.Config.Instructions.RemoveAt(ConfigStep);

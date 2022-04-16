@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Xml;
@@ -15,14 +16,28 @@ namespace RainbowTaskbar.Configuration;
 
 [DataContract]
 public class Config : INotifyPropertyChanged {
-    public static readonly string CONFIG_PATH = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
-    public static readonly string OLD_CONFIG_PATH = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.txt");
+    public static readonly string ConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
+    public static readonly string LegacyConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.txt");
+
+    public Config() {
+        Instructions = new BindingList<Instruction>();
+        Presets = new BindingList<InstructionPreset>(new[]
+            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown});
+
+        SetupPropertyChanged();
+    }
 
     [field: DataMember] public int ConfigFileVersion { get; set; } = 1;
 
     [field: DataMember] public bool CheckUpdate { get; set; } = true;
 
-    [field: DataMember] public BindingList<Instruction> Instructions { get; set; } = new();
+    [OnChangedMethod(nameof(SetupPropertyChanged))]
+    [field: DataMember]
+    public BindingList<Instruction> Instructions { get; set; }
+
+    [OnChangedMethod(nameof(SetupPropertyChanged))]
+    [field: DataMember]
+    public BindingList<InstructionPreset> Presets { get; set; }
 
     [field: DataMember]
     [OnChangedMethod(nameof(OnIsAPIEnabledChanged))]
@@ -33,6 +48,14 @@ public class Config : INotifyPropertyChanged {
     public int APIPort { get; set; } = 9093;
 
     public event PropertyChangedEventHandler PropertyChanged;
+
+    public void SetupPropertyChanged() {
+        Instructions.ListChanged += (_, _) => OnPropertyChanged(nameof(Instructions));
+        Presets.ListChanged += (_, _) => OnPropertyChanged(nameof(Presets));
+    }
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public void OnIsAPIEnabledChanged() {
         if (App.http is not null) {
@@ -59,13 +82,13 @@ public class Config : INotifyPropertyChanged {
     }
 
     public static Config FromFile() {
-        if (File.Exists(OLD_CONFIG_PATH)) {
+        if (File.Exists(LegacyConfigPath)) {
             var cfg = new Config();
 
             cfg.ToFile();
 
-            var conf = File.ReadAllLines(OLD_CONFIG_PATH);
-            foreach (var line in conf) {
+            var legacyCfg = File.ReadAllLines(LegacyConfigPath);
+            foreach (var line in legacyCfg) {
                 if (line.Length == 0 || line[0] == '#' || line[0] == '\r' || line[0] == '\n') continue;
                 // %c %i %i %i %i %s %i %i %i %i %i %i (%127s)
 
@@ -89,8 +112,9 @@ public class Config : INotifyPropertyChanged {
 
                 switch (prefix) {
                     case 'w':
-                        var w = new DelayInstruction();
-                        w.Time = time;
+                        var w = new DelayInstruction {
+                            Time = time
+                        };
                         cfg.Instructions.Add(w);
                         break;
                     case 't':
@@ -117,24 +141,27 @@ public class Config : INotifyPropertyChanged {
                         cfg.Instructions.Add(t);
                         break;
                     case 'b':
-                        var bd = new BorderRadiusInstruction();
-                        bd.Radius = time;
+                        var bd = new BorderRadiusInstruction {
+                            Radius = time
+                        };
                         cfg.Instructions.Add(bd);
                         break;
                     case 'i':
-                        var i = new ImageInstruction();
-                        i.Path = effect;
-                        i.X = time;
-                        i.Y = r;
-                        i.Width = g;
-                        i.Height = b;
-                        i.Opacity = ef1 / 255.0;
+                        var i = new ImageInstruction {
+                            Path = effect,
+                            X = time,
+                            Y = r,
+                            Width = g,
+                            Height = b,
+                            Opacity = ef1 / 255.0
+                        };
                         cfg.Instructions.Add(i);
                         break;
                     case 'c':
-                        var c = new ColorInstruction();
-                        c.Time = time;
-                        c.Color1 = Color.FromArgb(255, r, g, b);
+                        var c = new ColorInstruction {
+                            Time = time,
+                            Color1 = Color.FromArgb(255, r, g, b)
+                        };
 
                         switch (effect) {
                             case "none":
@@ -192,7 +219,6 @@ public class Config : INotifyPropertyChanged {
                                 break;
                         }
 
-
                         cfg.Instructions.Add(c);
                         break;
                 }
@@ -200,11 +226,11 @@ public class Config : INotifyPropertyChanged {
 
             cfg.ToFile();
 
-            File.Move(OLD_CONFIG_PATH, Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.bak.txt"), true);
+            File.Move(LegacyConfigPath, Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.bak.txt"), true);
         }
 
         try {
-            using var fileStream = new FileStream(CONFIG_PATH, FileMode.OpenOrCreate);
+            using var fileStream = new FileStream(ConfigPath, FileMode.OpenOrCreate);
             using var reader = XmlDictionaryReader.CreateTextReader(fileStream, new XmlDictionaryReaderQuotas());
 
             var serializerSettings = new DataContractSerializerSettings {
@@ -212,11 +238,14 @@ public class Config : INotifyPropertyChanged {
             };
 
             var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
-            return serializer.ReadObject(reader) as Config;
+            var cfg = serializer.ReadObject(reader) as Config;
+            cfg.SetupPropertyChanged();
+            return cfg;
         }
         catch {
-            var cfg = new Config();
-            cfg.Instructions = new BindingList<Instruction>(Presets.Rainbow());
+            var cfg = new Config {
+                Instructions = new BindingList<Instruction>(DefaultPresets.Rainbow.Instructions)
+            };
 
             cfg.ToFile();
             return cfg;
@@ -224,7 +253,7 @@ public class Config : INotifyPropertyChanged {
     }
 
     public void ToFile() {
-        using var fileStream = new FileStream(CONFIG_PATH, FileMode.Create);
+        using var fileStream = new FileStream(ConfigPath, FileMode.Create);
 
         var serializerSettings = new DataContractSerializerSettings {
             PreserveObjectReferences = true

@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
+using RainbowTaskbar.Helpers;
 using RainbowTaskbar.UserControls;
 using RainbowTaskbar.WebSocketServices;
 
@@ -22,6 +23,10 @@ public class EditorViewModel : INotifyPropertyChanged {
     public EditorViewModel() {
         AddInstructionCommandImpl = new AddInstructionCommand(this);
         RemoveInstructionCommandImpl = new RemoveInstructionCommand(this);
+
+        SetPresetCommandImpl = new SetPresetCommand(this);
+        DeletePresetCommandImpl = new DeletePresetCommand(this);
+        InstructionsToPresetCommandImpl = new InstructionsToPresetCommand(this);
     }
 
     public string[] InstalledFonts { get; set; } =
@@ -35,11 +40,15 @@ public class EditorViewModel : INotifyPropertyChanged {
     public ICommand AddInstructionCommandImpl { get; set; }
     public ICommand RemoveInstructionCommandImpl { get; set; }
 
+    public ICommand SetPresetCommandImpl { get; set; }
+    public ICommand DeletePresetCommandImpl { get; set; }
+    public ICommand InstructionsToPresetCommandImpl { get; set; }
+
     public Instruction SelectedInstruction { get; set; }
     public int? SelectedInstructionIndex { get; set; }
 
     [DependsOn("SelectedInstruction")]
-    public object SelectedInstructionControl {
+    public UserControl SelectedInstructionControl {
         get {
             if (SelectedInstruction is null) return null;
             switch (SelectedInstruction.Name) {
@@ -57,8 +66,8 @@ public class EditorViewModel : INotifyPropertyChanged {
     }
 
     public bool RunAtStartup {
-        get => Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run")
-            .GetValue("RainbowTaskbar") is not null;
+        get => (string?) Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run")
+            .GetValue("RainbowTaskbar") == Process.GetCurrentProcess().MainModule.FileName;
 
         set {
             var key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
@@ -67,18 +76,6 @@ public class EditorViewModel : INotifyPropertyChanged {
             else
                 key.DeleteValue("RainbowTaskbar");
         }
-    }
-
-    public bool EnableAPI {
-        get => App.Config.IsAPIEnabled;
-
-        set => App.Config.IsAPIEnabled = value;
-    }
-
-    public int APIPort {
-        get => App.Config.APIPort;
-
-        set => App.Config.APIPort = value;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -111,6 +108,13 @@ public class FloatToPercentageValueConverter : IValueConverter {
             return null;
         }
     }
+}
+
+public class DivideHalf : IValueConverter {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (int) value / 2;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        (double) value * 2;
 }
 
 public class NumericValidationRule : ValidationRule {
@@ -185,7 +189,7 @@ public class AddInstructionCommand : ICommand {
         remove => CommandManager.RequerySuggested -= value;
     }
 
-    public bool CanExecute(object parameter) => parameter as Type is not null;
+    public bool CanExecute(object parameter) => parameter is Type;
 
     public void Execute(object parameter) {
         var index = vm.SelectedInstructionIndex + 1 ?? 0;
@@ -216,24 +220,78 @@ public class RemoveInstructionCommand : ICommand {
     public bool CanExecute(object parameter) => vm.SelectedInstructionIndex > -1;
 
     public void Execute(object parameter) {
-        if (vm.SelectedInstructionIndex is int SelectedInstructionIndex && SelectedInstructionIndex != -1) {
-            var index = SelectedInstructionIndex;
-            var instruction = App.Config.Instructions[index];
+        if (vm.SelectedInstructionIndex is { } selectedInstructionIndex && selectedInstructionIndex != -1) {
+            var instruction = App.Config.Instructions[selectedInstructionIndex];
 
-            var data = new JObject();
-            data.Add("type", "InstructionRemoved");
-            data.Add("index", index);
-            data.Add("instruction", instruction.ToJSON());
+            var data = new JObject {
+                {"type", "InstructionRemoved"},
+                {"index", selectedInstructionIndex},
+                {"instruction", instruction.ToJSON()}
+            };
             WebSocketAPIServer.SendToSubscribed(data.ToString());
 
-            App.Config.Instructions.RemoveAt(index);
+            App.Config.Instructions.RemoveAt(selectedInstructionIndex);
         }
     }
 }
 
-public class DivideHalf : IValueConverter {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (int) value / 2;
+public class SetPresetCommand : ICommand {
+    private readonly EditorViewModel vm;
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-        (double) value * 2;
+    public SetPresetCommand(EditorViewModel vm) {
+        this.vm = vm;
+    }
+
+    public bool CanExecute(object parameter) => parameter is InstructionPreset;
+
+    public void Execute(object parameter) {
+        App.Config.Instructions = (parameter as InstructionPreset)!.Instructions.DeepClone();
+        App.ReloadTaskbars();
+    }
+
+    public event EventHandler CanExecuteChanged {
+        add => CommandManager.RequerySuggested += value;
+        remove => CommandManager.RequerySuggested -= value;
+    }
+}
+
+public class DeletePresetCommand : ICommand {
+    private readonly EditorViewModel vm;
+
+    public DeletePresetCommand(EditorViewModel vm) {
+        this.vm = vm;
+    }
+
+    public bool CanExecute(object parameter) => parameter is InstructionPreset;
+
+    public void Execute(object parameter) => App.Config.Presets.Remove(parameter as InstructionPreset);
+
+    public event EventHandler CanExecuteChanged {
+        add => CommandManager.RequerySuggested += value;
+        remove => CommandManager.RequerySuggested -= value;
+    }
+}
+
+public class InstructionsToPresetCommand : ICommand {
+    private readonly EditorViewModel vm;
+
+    public InstructionsToPresetCommand(EditorViewModel vm) {
+        this.vm = vm;
+    }
+
+    public bool CanExecute(object parameter) => App.Config.Instructions.Count > 0;
+
+    public void Execute(object parameter) {
+        var dialog = new PresetNameDialog();
+        if (dialog.ShowDialog() is true)
+            App.Config.Presets.Add(new InstructionPreset {
+                Name = dialog.NameTextBox.Text,
+                Instructions = App.Config.Instructions.DeepClone()
+            });
+    }
+
+    public event EventHandler CanExecuteChanged {
+        add => CommandManager.RequerySuggested += value;
+        remove => CommandManager.RequerySuggested -= value;
+    }
 }

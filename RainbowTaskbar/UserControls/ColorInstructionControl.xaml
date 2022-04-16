@@ -78,7 +78,7 @@
 
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                 <TextBlock FontSize="14" Text="Hold time" Margin="0,0,10,0" />
-                <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="5000"
+                <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="1" Maximum="5000"
                         Value="{Binding SelectedInstruction.Time}" HorizontalAlignment="Left" VerticalAlignment="Top"
                         Width="240" />
                 <TextBox x:Name="SelectedTime" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap"

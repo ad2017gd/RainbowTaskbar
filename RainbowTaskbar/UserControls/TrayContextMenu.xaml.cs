@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using RainbowTaskbar.Configuration;
 
 namespace RainbowTaskbar.UserControls;
 
@@ -35,22 +33,4 @@ public partial class TrayContextMenu : ContextMenu {
     }
 
     private void Exit_Click(object sender, RoutedEventArgs e) => App.Exit();
-
-    private void RainbowPreset_Click(object sender, RoutedEventArgs e) {
-        App.Config.Instructions = new BindingList<Instruction>(Configuration.Presets.Rainbow());
-        App.ReloadTaskbars();
-        App.Config.ToFile();
-    }
-
-    private void ChillPreset_Click(object sender, RoutedEventArgs e) {
-        App.Config.Instructions = new BindingList<Instruction>(Configuration.Presets.Chill());
-        App.ReloadTaskbars();
-        App.Config.ToFile();
-    }
-
-    private void UnknownPreset_Click(object sender, RoutedEventArgs e) {
-        App.Config.Instructions = new BindingList<Instruction>(Configuration.Presets.Unknown());
-        App.ReloadTaskbars();
-        App.Config.ToFile();
-    }
 }

@@ -54,6 +54,8 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Button MinWidth="180" Margin="0,3,0,0" Click="Button_Click" Content="Apply" />
+                        <Button MinWidth="180" Margin="0,3,0,0" Command="{Binding InstructionsToPresetCommandImpl}"
+                                Content="To preset" />
                     </StackPanel>
                     <Border BorderThickness="0.2" BorderBrush="Black" Grid.Column="1" Margin="10,0,0,0"
                             Padding="10,10,10,10">
@@ -80,13 +82,14 @@
 
                         <Label Content="HTTP API" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
                                FontSize="24" />
-                        <CheckBox IsChecked="{Binding EnableAPI}" Content="Enable server" HorizontalAlignment="Left"
+                        <CheckBox IsChecked="{Binding Config.IsAPIEnabled}" Content="Enable server"
+                                  HorizontalAlignment="Left"
                                   Margin="10,5,0,0" VerticalAlignment="Top" />
 
                         <StackPanel Orientation="Horizontal">
 
                             <Label Content="Port" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" />
-                            <xctk:IntegerUpDown Minimum="1" Maximum="65535" Value="{Binding APIPort}"
+                            <xctk:IntegerUpDown Minimum="1" Maximum="65535" Value="{Binding Config.APIPort}"
                                                 HorizontalAlignment="Left" Height="20" Width="60" />
                         </StackPanel>
 
@@ -153,7 +156,6 @@
             </TabItem>
 
         </TabControl>
-
 
     </Grid>
 
