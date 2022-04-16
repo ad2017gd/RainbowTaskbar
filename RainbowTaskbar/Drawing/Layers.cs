@@ -1,15 +1,13 @@
 ﻿using System.Windows;
+using System.Windows.Shapes;
 
-namespace RainbowTaskbar.Drawing
-{
-    public class Layers
-    {
-        public System.Windows.Shapes.Rectangle[] MainDrawRectangles;
-        public Window window;
+namespace RainbowTaskbar.Drawing;
 
-        public Layers(Window window)
-        {
-            this.window = window;
-        }
+public class Layers {
+    public Rectangle[] MainDrawRectangles;
+    public Window window;
+
+    public Layers(Window window) {
+        this.window = window;
     }
 }

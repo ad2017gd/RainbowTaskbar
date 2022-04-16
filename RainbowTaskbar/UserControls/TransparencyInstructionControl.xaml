@@ -1,60 +1,62 @@
 ﻿<UserControl x:Class="RainbowTaskbar.UserControls.TransparencyInstructionControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:RainbowTaskbar"
              xmlns:instructions="clr-namespace:RainbowTaskbar.Configuration.Instructions"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <local:NumericValidationRule x:Key="NumericValidationRule"/>
-        <local:FloatToPercentageValueConverter x:Key="FloatToPercentage"/>
-        <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName"/>
+        <local:FloatToPercentageValueConverter x:Key="FloatToPercentage" />
 
         <ObjectDataProvider x:Key="TransparencyInstructionType" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="instructions:TransparencyInstruction+TransparencyInstructionType"/>
+                <x:Type TypeName="instructions:TransparencyInstruction+TransparencyInstructionType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="TransparencyInstructionStyle" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="instructions:TransparencyInstruction+TransparencyInstructionStyle"/>
+                <x:Type TypeName="instructions:TransparencyInstruction+TransparencyInstructionStyle" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <xctk:WatermarkComboBox Watermark="Type" x:Name="SelectedType" SelectedItem="{Binding SelectedInstruction.Type}" ItemsSource="{Binding Source={StaticResource TransparencyInstructionType}}">
+            <xctk:WatermarkComboBox Watermark="Type" x:Name="SelectedType"
+                                    SelectedItem="{Binding SelectedInstruction.Type}"
+                                    ItemsSource="{Binding Source={StaticResource TransparencyInstructionType}}">
                 <xctk:WatermarkComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Label Content="{Binding Path=.}"/>
+                        <Label Content="{Binding Path=.}" />
                     </DataTemplate>
                 </xctk:WatermarkComboBox.ItemTemplate>
             </xctk:WatermarkComboBox>
-            <xctk:WatermarkComboBox Margin="5,0,0,0" SelectedItem="{Binding SelectedInstruction.Style}" Watermark="Style" ItemsSource="{Binding Source={StaticResource TransparencyInstructionStyle}}">
+            <xctk:WatermarkComboBox Margin="5,0,0,0" SelectedItem="{Binding SelectedInstruction.Style}"
+                                    Watermark="Style"
+                                    ItemsSource="{Binding Source={StaticResource TransparencyInstructionStyle}}">
                 <xctk:WatermarkComboBox.Style>
                     <Style>
-                        <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Hidden"/>
+                        <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Hidden" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=SelectedType, Path=SelectedItem}" Value="Style">
-                                <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible"/>
+                                <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </xctk:WatermarkComboBox.Style>
                 <xctk:WatermarkComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Label Content="{Binding Path=.}"/>
+                        <Label Content="{Binding Path=.}" />
                     </DataTemplate>
                 </xctk:WatermarkComboBox.ItemTemplate>
             </xctk:WatermarkComboBox>
@@ -62,23 +64,26 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,0">
             <StackPanel.Style>
                 <Style>
-                    <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                    <Setter Property="StackPanel.Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=SelectedType, Path=SelectedItem}" Value="Style">
-                            <Setter Property="StackPanel.Visibility" Value="Hidden"/>
+                            <Setter Property="StackPanel.Visibility" Value="Hidden" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
 
 
-            <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="100" Value="{Binding SelectedInstruction.Opacity, Converter={StaticResource FloatToPercentage}}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240"/>
-            <TextBox x:Name="SelectedTime" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap" BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
+            <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="100"
+                    Value="{Binding SelectedInstruction.Opacity, Converter={StaticResource FloatToPercentage}}"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" />
+            <TextBox x:Name="SelectedTime" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap"
+                     BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
                 <TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=TimeUnit, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
+                                <Setter Property="BorderBrush" Value="#7eb4ea" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -95,20 +100,21 @@
                             <local:NumericValidationRule ValidationType="{x:Type s:Int32}"
                                                          NumMinValue="0"
                                                          NumMaxValue="100"
-                                                       ValidatesOnTargetUpdated="True"/>
+                                                         ValidatesOnTargetUpdated="True" />
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <TextBox x:Name="TimeUnit" Text="Alpha%" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Background="White" BorderThickness="0,1,1,1">
+            <TextBox x:Name="TimeUnit" Text="Alpha%" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top"
+                     Width="Auto" Background="White" BorderThickness="0,1,1,1">
                 <TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
+                                <Setter Property="BorderBrush" Value="#7eb4ea" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsFocused}" Value="True">
-                                <Setter Property="BorderBrush" Value="CornflowerBlue"/>
+                                <Setter Property="BorderBrush" Value="CornflowerBlue" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -118,17 +124,18 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
             <StackPanel.Style>
                 <Style>
-                    <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                    <Setter Property="StackPanel.Visibility" Value="Collapsed" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=SelectedType, Path=SelectedItem}" Value="Layer">
-                            <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                            <Setter Property="StackPanel.Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
 
-            <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0"/>
-            <xctk:SingleUpDown Value="{Binding SelectedInstruction.Layer}" Width="75" FormatString="N0" Increment="1" Minimum="0" Maximum="15" ClipValueToMinMax="True"></xctk:SingleUpDown>
+            <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" />
+            <xctk:SingleUpDown Value="{Binding SelectedInstruction.Layer}" Width="75" FormatString="N0" Increment="1"
+                               Minimum="0" Maximum="15" ClipValueToMinMax="True" />
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Canvas Margin="0,0,0,5" x:Name="Preview" Width="450" Height="40">
@@ -136,24 +143,23 @@
                 <Grid>
                     <Grid.Style>
                         <Style>
-                            
+
                             <Style.Triggers>
 
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding SelectedInstruction.Type}" Value="Style"/>
-                                        <Condition Binding="{Binding SelectedInstruction.Style}" Value="Blur"/>
-                                        
+                                        <Condition Binding="{Binding SelectedInstruction.Type}" Value="Style" />
+                                        <Condition Binding="{Binding SelectedInstruction.Style}" Value="Blur" />
+
                                     </MultiDataTrigger.Conditions>
 
                                     <Setter Property="Grid.Effect">
                                         <Setter.Value>
-                                            <BlurEffect Radius="15"></BlurEffect>
+                                            <BlurEffect Radius="15" />
                                         </Setter.Value>
                                     </Setter>
                                 </MultiDataTrigger>
 
-                                
 
                             </Style.Triggers>
                         </Style>
@@ -161,46 +167,46 @@
 
 
                     <Rectangle Canvas.Left="0" Canvas.Top="0" Width="450" Height="40">
-                    <Rectangle.Fill>
-                        <SolidColorBrush Color="LightGray"/>
-                    </Rectangle.Fill>
-                </Rectangle>
-                <Label Margin="150,0,0,0" Content="This is some text."></Label>
-                <Label Margin="150,12,0,0" Foreground="White" Content="Transparency preview!"></Label>
-                 </Grid>
-                
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="LightGray" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Label Margin="150,0,0,0" Content="This is some text." />
+                    <Label Margin="150,12,0,0" Foreground="White" Content="Transparency preview!" />
+                </Grid>
+
                 <Rectangle Name="PreviewRectangle" Canvas.Left="0" Canvas.Top="0" Width="450" Height="40">
                     <Rectangle.Style>
                         <Style>
-                            <Setter Property="Rectangle.Fill" Value="MediumPurple"/>
+                            <Setter Property="Rectangle.Fill" Value="MediumPurple" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedInstruction.Type}" Value="RainbowTaskbar">
-                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}"/>
+                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding SelectedInstruction.Type}" Value="All">
-                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}"/>
+                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}" />
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding SelectedInstruction.Type}" Value="Style">
-                                    <Setter Property="Rectangle.Opacity" Value="0.6"/>
+                                    <Setter Property="Rectangle.Opacity" Value="0.6" />
                                 </DataTrigger>
-                                
+
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding SelectedInstruction.Type}" Value="Style"/>
-                                        <Condition Binding="{Binding SelectedInstruction.Style}" Value="Default"/>
+                                        <Condition Binding="{Binding SelectedInstruction.Type}" Value="Style" />
+                                        <Condition Binding="{Binding SelectedInstruction.Style}" Value="Default" />
 
                                     </MultiDataTrigger.Conditions>
 
-                                    <Setter Property="Rectangle.Opacity" Value="0.96"/>
+                                    <Setter Property="Rectangle.Opacity" Value="0.96" />
                                     <Setter Property="Rectangle.Fill">
                                         <Setter.Value>
-                                            <SolidColorBrush Color="#7489E7"/>
+                                            <SolidColorBrush Color="#7489E7" />
                                         </Setter.Value>
                                     </Setter>
                                     <Setter Property="Rectangle.Effect">
                                         <Setter.Value>
-                                            <BlurEffect Radius="2"/>
+                                            <BlurEffect Radius="2" />
                                         </Setter.Value>
                                     </Setter>
                                 </MultiDataTrigger>
@@ -214,21 +220,26 @@
                         <Style>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedInstruction.Type}" Value="Taskbar">
-                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}"/>
+                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding SelectedInstruction.Type}" Value="All">
-                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}"/>
+                                    <Setter Property="Rectangle.Opacity" Value="{Binding SelectedInstruction.Opacity}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Canvas.Style>
 
-                    <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
-                    <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="19" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
-                    <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
-                    <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="19" RadiusX="1" RadiusY="1"  Fill="#2af"></Rectangle>
+                    <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="8" RadiusX="1" RadiusY="1"
+                               Fill="#2af" />
+                    <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="19" RadiusX="1" RadiusY="1"
+                               Fill="#2af" />
+                    <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="8" RadiusX="1" RadiusY="1"
+                               Fill="#2af" />
+                    <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="19" RadiusX="1" RadiusY="1"
+                               Fill="#2af" />
 
-                    <TextBlock Width="440" Height="20" TextAlignment="Right" Margin="0,12,0,0" Foreground="White" Text="22:11"></TextBlock>
+                    <TextBlock Width="440" Height="20" TextAlignment="Right" Margin="0,12,0,0" Foreground="White"
+                               Text="22:11" />
                 </Canvas>
 
             </Canvas>

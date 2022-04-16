@@ -1,77 +1,110 @@
-﻿using Newtonsoft.Json.Linq;
-using RainbowTaskbar.Configuration;
-using RainbowTaskbar.WebSocketServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using WebSocketSharp.Server;
+using H.Pipes;
 using PropertyChanged;
-using System.Reflection;
+using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Helpers;
+using RainbowTaskbar.HTTPAPI;
+using RainbowTaskbar.WebSocketServices;
+using WebSocketSharp.Server;
 
-namespace RainbowTaskbar
-{
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-        public static WebSocketServer ws;
-        public static Random rnd = new Random();
-        public static HttpServer http;
-        public static List<Taskbar> taskbars = new List<Taskbar>();
-        public static List<string> APISubscribed = new List<string>();
+namespace RainbowTaskbar;
 
-        [OnChangedMethod(nameof(ReloadTaskbars))]
-        public static Config Config { get; set; }
+/// <summary>
+///     Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application {
+    public static WebSocketServer ws;
+    public static Random rnd = new();
+    public static HttpServer http;
+    public static List<Taskbar> taskbars = new();
+    public static List<string> APISubscribed = new();
+    public static Mutex mutex = new(true, "RainbowTaskbar Mutex");
 
-        public static void ReloadTaskbars()
-        {
-            App.Current.Dispatcher.Invoke(() =>
-            {
-                taskbars = taskbars.Select(taskbar => { taskbar.Close(); return new Taskbar(taskbar.Secondary); }).ToList();
-                taskbars.ForEach(taskbar => taskbar.Show());
+    public App() {
+        if (mutex.WaitOne(TimeSpan.Zero, true)) {
+            // First process
+            // todo: preset manager, multiple taskbar, refractor and clean up code
+            Task.Run(async () => {
+                await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
+                pipe.MessageReceived += (sender, args) => {
+                    if (args.Message == "OpenEditor")
+                        Current.Dispatcher.Invoke(() => {
+                            MainWindow.Show();
+                            MainWindow.WindowState = WindowState.Normal;
+                            MainWindow.Activate();
+                            MainWindow.BringIntoView();
+                            MainWindow.Focus();
+                            MainWindow.Topmost = true;
+                            MainWindow.Topmost = false;
+                        });
+                };
+                await pipe.StartAsync();
+                await Task.Delay(Timeout.InfiniteTimeSpan);
             });
-        }
 
-        public App()
-        {
-            
             Config = Config.FromFile();
-            if(Config.CheckUpdate) AutoUpdate.CheckForUpdate();
+            if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
             ConfigureServer();
-            if (Helpers.TaskbarHelper.FindWindow("Shell_SecondaryTrayWnd", null) != (IntPtr)0)
-            {
+            if (TaskbarHelper.FindWindow("Shell_SecondaryTrayWnd", null) != (IntPtr) 0) {
                 var newWindow = new Taskbar(true);
                 newWindow.Show();
 
-                App.taskbars.Add(newWindow);
+                taskbars.Add(newWindow);
             }
-
         }
-
-        public static void ConfigureServer()
-        {
-            if (http is not null)
-            {
-                http.Stop();
-            }
-
-            if (Config.APIPort > 0 && Config.APIPort < 65536) http = new HttpServer(Config.APIPort);
-            else http = new HttpServer(9093);
-
-            http.AddWebSocketService<WebSocketAPIServer>("/rnbws");
-            http.OnGet += HTTPAPI.HTTPAPIServer.Get;
-            http.OnPost += HTTPAPI.HTTPAPIServer.Post;
-            http.OnOptions += HTTPAPI.HTTPAPIServer.Options;
-            http.KeepClean = false;
-
-            if (Config.IsAPIEnabled) http.Start();
-            
+        else {
+            // Other processes
+            Task.Run(async () => {
+                await using var pipe = new PipeClient<string>("RainbowTaskbar Pipe");
+                await pipe.ConnectAsync();
+                await pipe.WriteAsync("OpenEditor");
+                Exit();
+            }).Wait();
         }
+    }
 
-        
+    [OnChangedMethod(nameof(ReloadTaskbars))]
+    public static Config Config { get; set; }
+
+    public static void ReloadTaskbars() =>
+        Current.Dispatcher.Invoke(() => {
+            taskbars = taskbars.Select(taskbar => {
+                taskbar.Close();
+                return new Taskbar(taskbar.Secondary);
+            }).ToList();
+            taskbars.ForEach(taskbar => taskbar.Show());
+        });
+
+    public static void ConfigureServer() {
+        http?.Stop();
+
+        http = Config.APIPort is > 0 and < 65536 ? new HttpServer(Config.APIPort) : new HttpServer(9093);
+
+        http.AddWebSocketService<WebSocketAPIServer>("/rnbws");
+        http.OnGet += HTTPAPIServer.Get;
+        http.OnPost += HTTPAPIServer.Post;
+        http.OnOptions += HTTPAPIServer.Options;
+        http.KeepClean = false;
+
+        if (Config.IsAPIEnabled) http.Start();
+    }
+
+    public new static void Exit() {
+        (Current.MainWindow as Editor)?.TrayIcon?.Dispose();
+
+        taskbars.ForEach(t => {
+            t.taskbarHelper.Radius = 0;
+            t.taskbarHelper.UpdateRadius();
+            t.Close();
+            TaskbarHelper.SendMessage(t.taskbarHelper.HWND, TaskbarHelper.WM_DWMCOMPOSITIONCHANGED, 1, null);
+            t.taskbarHelper.SetAlpha(1);
+        });
+
+        Current.Shutdown();
     }
 }

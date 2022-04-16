@@ -1,17 +1,15 @@
 ﻿<ContextMenu x:Class="RainbowTaskbar.UserControls.TrayContextMenu"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:RainbowTaskbar"
-             >
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <MenuItem x:Name="Open" Click="Open_Click" Header="Open"/>
+    <MenuItem x:Name="Open" Click="Open_Click" Header="Open" />
     <MenuItem x:Name="Presets" Header="Presets">
-        <MenuItem x:Name="RainbowPreset" Header="Rainbow" Click="RainbowPreset_Click"></MenuItem>
-        <MenuItem x:Name="ChillPreset" Header="Chill" Click="ChillPreset_Click"></MenuItem>
-        <MenuItem x:Name="UnknownPreset" Header="Unknown" Click="UnknownPreset_Click"></MenuItem>
+        <MenuItem x:Name="RainbowPreset" Header="Rainbow" Click="RainbowPreset_Click" />
+        <MenuItem x:Name="ChillPreset" Header="Chill" Click="ChillPreset_Click" />
+        <MenuItem x:Name="UnknownPreset" Header="Unknown" Click="UnknownPreset_Click" />
     </MenuItem>
-    <MenuItem x:Name="Donate" Click="Donate_Click" Header="Donate"/>
-    <MenuItem x:Name="ProjectPage" Click="ProjectPage_Click" Header="Visit project page"/>
-    <MenuItem x:Name="Exit" Click="Exit_Click" Header="Exit"/>
+    <MenuItem x:Name="Donate" Click="Donate_Click" Header="Donate" />
+    <MenuItem x:Name="ProjectPage" Click="ProjectPage_Click" Header="Visit project page" />
+    <MenuItem x:Name="Exit" Click="Exit_Click" Header="Exit" />
 
 </ContextMenu>

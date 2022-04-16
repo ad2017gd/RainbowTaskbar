@@ -1,42 +1,40 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using RainbowTaskbar.Drawing;
+using RainbowTaskbar.Helpers;
 
-namespace RainbowTaskbar
-{
-    /// <summary>
-    /// Interaction logic for Taskbar.xaml
-    /// </summary>
-    public partial class Taskbar : Window
-    {
-        public bool Secondary = false;
-        public Drawing.Layers layers;
-        public Helpers.TaskbarHelper taskbarHelper;
-        public Helpers.WindowHelper windowHelper;
-        public TaskbarViewModel viewModel;
+namespace RainbowTaskbar;
 
-        public Taskbar(bool secondary)
-        {
-            InitializeComponent();
-            Secondary = secondary;
+/// <summary>
+///     Interaction logic for Taskbar.xaml
+/// </summary>
+public partial class Taskbar : Window {
+    public Layers layers;
+    public bool Secondary;
+    public TaskbarHelper taskbarHelper;
+    public TaskbarViewModel viewModel;
+    public WindowHelper windowHelper;
 
-            viewModel = new TaskbarViewModel(this);
-            Closing += viewModel.OnWindowClosing;
-            DataContext = viewModel;
-        }
+    public Taskbar(bool secondary) {
+        InitializeComponent();
+        Secondary = secondary;
+
+        viewModel = new TaskbarViewModel(this);
+        Closing += viewModel.OnWindowClosing;
+        DataContext = viewModel;
+    }
 
 
-        public Taskbar()
-        {
-            InitializeComponent();
+    public Taskbar() {
+        InitializeComponent();
 
-            viewModel = new TaskbarViewModel(this);
-            Closing += viewModel.OnWindowClosing;
-            DataContext = viewModel;
-        }
+        viewModel = new TaskbarViewModel(this);
+        Closing += viewModel.OnWindowClosing;
+        DataContext = viewModel;
+    }
 
-        private void RainbowTaskbar_Closed(object sender, System.EventArgs e)
-        {
-            taskbarHelper.Style = Helpers.TaskbarHelper.TaskbarStyle.ForceDefault;
-            taskbarHelper.SetBlur();
-        }
+    private void RainbowTaskbar_Closed(object sender, EventArgs e) {
+        taskbarHelper.Style = TaskbarHelper.TaskbarStyle.ForceDefault;
+        taskbarHelper.SetBlur();
     }
 }

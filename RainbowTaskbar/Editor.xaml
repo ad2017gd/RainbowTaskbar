@@ -1,56 +1,64 @@
 ﻿<Window x:Class="RainbowTaskbar.Editor"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:RainbowTaskbar"
         xmlns:config="clr-namespace:RainbowTaskbar.Configuration"
-        xmlns:instructions="clr-namespace:RainbowTaskbar.Configuration.Instructions"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:dd="urn:gong-wpf-dragdrop"
         Closing="Window_Closing"
         Closed="Window_Closed"
-        Title="Editor" Height="450" Width="800" Background="#FF333242">
+        Title="Editor" Height="450" Width="800">
     <Window.Resources>
-        <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName"/>
+        <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
     </Window.Resources>
     <Grid>
         <tb:TaskbarIcon Name="TrayIcon"
-                  IconSource="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
-                  ToolTipText="RainbowTaskbar" />
+                        IconSource="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
+                        ToolTipText="RainbowTaskbar" />
         <TabControl>
             <TabItem Header="Editor">
                 <Grid Margin="5,5,5,5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
                         <WrapPanel Orientation="Horizontal">
-                            <xctk:WatermarkComboBox x:Name="SelectedInstructionType" ItemsSource="{Binding Source={x:Static config:Instruction.DisplayableInstructionTypes}}" Watermark="Instruction type">
+                            <xctk:WatermarkComboBox x:Name="SelectedInstructionType"
+                                                    ItemsSource="{Binding Source={x:Static config:Instruction.DisplayableInstructionTypes}}"
+                                                    Watermark="Instruction type">
                                 <xctk:WatermarkComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding Name, Converter={StaticResource FormatInstructionName}}"></Label>
+                                        <Label
+                                            Content="{Binding Name, Converter={StaticResource FormatInstructionName}}" />
                                     </DataTemplate>
                                 </xctk:WatermarkComboBox.ItemTemplate>
                             </xctk:WatermarkComboBox>
 
-                            <Button Margin="5,0,0,0" Content=" Add " Command="{Binding AddInstructionCommandImpl}" CommandParameter="{Binding ElementName=SelectedInstructionType, Path=SelectedItem}"/>
-                            <Button Margin="5,0,0,0" Content=" Remove " Command="{Binding RemoveInstructionCommandImpl}"/>
+                            <Button Margin="5,0,0,0" Content=" Add " Command="{Binding AddInstructionCommandImpl}"
+                                    CommandParameter="{Binding ElementName=SelectedInstructionType, Path=SelectedItem}" />
+                            <Button Margin="5,0,0,0" Content=" Remove "
+                                    Command="{Binding RemoveInstructionCommandImpl}" />
                         </WrapPanel>
-                        <ListBox Grid.Column="0" Margin="0,5,0,0" MaxHeight="300" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DragHandler="{Binding}" ItemsSource="{Binding Config.Instructions}" SelectedItem="{Binding SelectedInstruction}" SelectedIndex="{Binding SelectedInstructionIndex, Mode=OneWayToSource}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListBox Margin="0,5,0,0" MaxHeight="300" dd:DragDrop.IsDragSource="True"
+                                 dd:DragDrop.IsDropTarget="True" dd:DragDrop.DragHandler="{Binding}"
+                                 ItemsSource="{Binding Config.Instructions}"
+                                 SelectedItem="{Binding SelectedInstruction}"
+                                 SelectedIndex="{Binding SelectedInstructionIndex, Mode=OneWayToSource}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Visible">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding Name}"/>
+                                    <Label Content="{Binding Name}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button MinWidth="180" Margin="0,3,0,0" Click="Button_Click" Content="Apply"></Button>
+                        <Button MinWidth="180" Margin="0,3,0,0" Click="Button_Click" Content="Apply" />
                     </StackPanel>
-                    <Border BorderThickness="0.2" BorderBrush="Black" Grid.Column="1" Margin="10,0,0,0" Padding="10,10,10,10">
+                    <Border BorderThickness="0.2" BorderBrush="Black" Grid.Column="1" Margin="10,0,0,0"
+                            Padding="10,10,10,10">
                         <ScrollViewer>
-                            <ContentPresenter Content="{Binding SelectedInstructionControl}"/>
+                            <ContentPresenter Content="{Binding SelectedInstructionControl}" />
                         </ScrollViewer>
                     </Border>
                 </Grid>
@@ -58,73 +66,88 @@
             <TabItem Header="Settings">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Vertical">
-                        <Label Content="General" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" FontSize="24"/>
-                        <CheckBox IsChecked="{Binding RunAtStartup}" Content="Run at system startup" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
-                        <CheckBox IsChecked="{Binding Config.CheckUpdate}" Content="Check for updates" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                        <Label Content="General" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
+                               FontSize="24" />
+                        <CheckBox IsChecked="{Binding RunAtStartup}" Content="Run at system startup"
+                                  HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
+                        <CheckBox IsChecked="{Binding Config.CheckUpdate}" Content="Check for updates"
+                                  HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
 
-                        <Label Content="HTTP API" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" FontSize="24"/>
-                        <CheckBox IsChecked="{Binding EnableAPI}" Content="Enable server" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                        <Label Content="HTTP API" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
+                               FontSize="24" />
+                        <CheckBox IsChecked="{Binding EnableAPI}" Content="Enable server" HorizontalAlignment="Left"
+                                  Margin="10,5,0,0" VerticalAlignment="Top" />
 
                         <StackPanel Orientation="Horizontal">
 
-                            <Label Content="Port" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top"/>
-                            <xctk:IntegerUpDown Minimum="1" Maximum="65535" Value="{Binding APIPort}" HorizontalAlignment="Left" Height="20" Width="60"/>
+                            <Label Content="Port" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" />
+                            <xctk:IntegerUpDown Minimum="1" Maximum="65535" Value="{Binding APIPort}"
+                                                HorizontalAlignment="Left" Height="20" Width="60" />
                         </StackPanel>
 
 
                     </StackPanel>
-                    <Button HorizontalAlignment="Left" Grid.Row="2" Width="180" Margin="5,5" Click="Button_Click" Content="Save"></Button>
+                    <Button HorizontalAlignment="Left" Grid.Row="2" Width="180" Margin="5,5" Click="Button_Click"
+                            Content="Save" />
                 </Grid>
             </TabItem>
             <TabItem Header="About">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
                     <StackPanel>
-                        <Label Content="About" Margin="5,5,0,10" VerticalAlignment="Top" FontSize="24"/>
-                        <Label HorizontalContentAlignment="Center" Content="RainbowTaskbar is a tool that allows you to greatly customize the appearance of your taskbar."/>
-                        <Label HorizontalContentAlignment="Center" Content="It is completely free to use, but donations are well appreciated!"/>
+                        <Label Content="About" Margin="5,5,0,10" VerticalAlignment="Top" FontSize="24" />
+                        <Label HorizontalContentAlignment="Center"
+                               Content="RainbowTaskbar is a tool that allows you to greatly customize the appearance of your taskbar." />
+                        <Label HorizontalContentAlignment="Center"
+                               Content="It is completely free to use, but donations are well appreciated!" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,150,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                <Image MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="https://nano.org/" Source="pack://application:,,,/Resources/Nano.png" Width="125" Height="125"/>
-                                <Image VerticalAlignment="Center" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="https://paypal.me/ad2k17" Height="100" Width="211" Source="pack://application:,,,/Resources/Paypal.png"/>
+                                <Image MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="https://nano.org/"
+                                       Source="pack://application:,,,/Resources/Nano.png" Width="125" Height="125" />
+                                <Image VerticalAlignment="Center" MouseLeftButtonDown="Image_MouseLeftButtonDown"
+                                       Tag="https://paypal.me/ad2k17" Height="100" Width="211"
+                                       Source="pack://application:,,,/Resources/Paypal.png" />
                             </StackPanel>
-                            <TextBox Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" IsReadOnly="True" Text="nano_3t4meg4caykeb4a835jufsewo3zo18ow1fxwxbx9c1h69jyaxhs4yn184871" Grid.RowSpan="2" FontSize="10"/>
-
+                            <TextBox Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" IsReadOnly="True"
+                                     Text="nano_3t4meg4caykeb4a835jufsewo3zo18ow1fxwxbx9c1h69jyaxhs4yn184871"
+                                     Grid.RowSpan="2" FontSize="10" />
 
 
                         </Grid>
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                        </StackPanel>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" />
                     </StackPanel>
-                   
+
                     <TextBlock Margin="5,0" Grid.Row="1" FontSize="14">
                         RainbowTaskbar is
                         <Hyperlink NavigateUri="https://ad2017.dev/rnb" RequestNavigate="Hyperlink_RequestNavigate">
                             free software
-                        </Hyperlink>.
+                        </Hyperlink>
+                        .
                         <LineBreak />
-                        Made by 
+                        Made by
                         <Hyperlink NavigateUri="https://github.com/ad2017" RequestNavigate="Hyperlink_RequestNavigate">
                             ad2017
-                        </Hyperlink>, with the help of 
+                        </Hyperlink>
+                        , with the help of
                         <Hyperlink NavigateUri="https://github.com/zCri" RequestNavigate="Hyperlink_RequestNavigate">
                             zCri
-                        </Hyperlink>.
+                        </Hyperlink>
+                        .
                     </TextBlock>
                 </Grid>
             </TabItem>

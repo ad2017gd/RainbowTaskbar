@@ -1,103 +1,101 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <Version>2.0</Version>
-    <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
-    <Description>gay taskbar</Description>
-    <Authors>Ad2017, zCri</Authors>
-    <PackageIcon>icon.ico</PackageIcon>
-    <PackageIconUrl />
-    <RepositoryUrl>https://github.com/ad2017gd/RainbowTaskbar</RepositoryUrl>
-    <RepositoryType>GitHub</RepositoryType>
-    <Company>LovesCock</Company>
-    <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes />
-    <AnalysisLevel>latest</AnalysisLevel>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <Version>2.0.1</Version>
+        <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
+        <Description>gay taskbar</Description>
+        <Authors>Ad2017, zCri</Authors>
+        <PackageIcon>icon.ico</PackageIcon>
+        <PackageIconUrl/>
+        <RepositoryUrl>https://github.com/ad2017gd/RainbowTaskbar</RepositoryUrl>
+        <RepositoryType>GitHub</RepositoryType>
+        <Company>LovesCock</Company>
+        <NeutralLanguage>en</NeutralLanguage>
+        <PackageReleaseNotes/>
+        <AnalysisLevel>latest</AnalysisLevel>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <Optimize>False</Optimize>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <Optimize>False</Optimize>
+    </PropertyGroup>
 
-
-  <ItemGroup>
-    <None Remove="Nano.png" />
-    <None Remove="Resources\icon.ico" />
-    <None Remove="Resources\Nano.png" />
-    <None Remove="Resources\Paypal.png" />
-    <None Include="Resources\icon.ico">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="Nano.png"/>
+        <None Remove="Resources\icon.ico"/>
+        <None Remove="Resources\Nano.png"/>
+        <None Remove="Resources\Paypal.png"/>
+        <None Include="Resources\icon.ico">
+            <Pack>True</Pack>
+        </None>
+    </ItemGroup>
 
 
-  <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
-    <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0">
-	  </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    
-    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
+    <ItemGroup>
+        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0"/>
+        <PackageReference Include="FastMember" Version="1.5.0"/>
+        <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1"/>
+        <PackageReference Include="H.Pipes" Version="2.0.35"/>
+        <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0">
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+
+        <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
             <PrivateAssets>all</PrivateAssets>
             <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
-    
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    
-    <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
-  </ItemGroup>
+        </PackageReference>
+
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0"/>
+
+        <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11"/>
+    </ItemGroup>
 
 
-  <ItemGroup>
-    <Resource Include="Nano.png" />
-    <Resource Include="Resources\icon.ico">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Nano.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Paypal.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Resources\icon.ico">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\Nano.png">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\Paypal.png">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+    </ItemGroup>
 
 
-  <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="App.xaml.cs">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Compile>
+        <Compile Update="Properties\Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Properties\Settings.Designer.cs">
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Settings.settings</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
 
 
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="Properties\Settings.settings">
+            <Generator>SettingsSingleFileGenerator</Generator>
+            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
 
 </Project>

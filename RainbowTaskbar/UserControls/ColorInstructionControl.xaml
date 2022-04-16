@@ -1,256 +1,282 @@
 ﻿<UserControl x:Class="RainbowTaskbar.UserControls.ColorInstructionControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:instructions="clr-namespace:RainbowTaskbar.Configuration.Instructions"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:RainbowTaskbar"
              xmlns:interp="clr-namespace:RainbowTaskbar.Interpolation"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <local:NumericValidationRule x:Key="NumericValidationRule"/>
-        <local:FloatToPercentageValueConverter x:Key="FloatToPercentage"/>
-        <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName"/>
-        <interp:ColorConverter x:Key="ColorConverter"/>
+        <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
+        <interp:ColorConverter x:Key="ColorConverter" />
 
         <ObjectDataProvider x:Key="ColorInstructionEffect" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="instructions:ColorInstruction+ColorInstructionEffect"/>
+                <x:Type TypeName="instructions:ColorInstruction+ColorInstructionEffect" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
         <ObjectDataProvider x:Key="ColorInstructionTransition" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="instructions:ColorInstruction+ColorInstructionTransition"/>
+                <x:Type TypeName="instructions:ColorInstruction+ColorInstructionTransition" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-            <xctk:WatermarkComboBox Watermark="Effect" x:Name="SelectedEffect" SelectedItem="{Binding SelectedInstruction.Effect}" ItemsSource="{Binding Source={StaticResource ColorInstructionEffect}}">
-                <xctk:WatermarkComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}"/>
-                    </DataTemplate>
-                </xctk:WatermarkComboBox.ItemTemplate>
-            </xctk:WatermarkComboBox>
+                <xctk:WatermarkComboBox Watermark="Effect" x:Name="SelectedEffect"
+                                        SelectedItem="{Binding SelectedInstruction.Effect}"
+                                        ItemsSource="{Binding Source={StaticResource ColorInstructionEffect}}">
+                    <xctk:WatermarkComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}" />
+                        </DataTemplate>
+                    </xctk:WatermarkComboBox.ItemTemplate>
+                </xctk:WatermarkComboBox>
 
-            <xctk:WatermarkComboBox Margin="5,0,0,0" Watermark="Effect" x:Name="SelectedTransition" SelectedItem="{Binding SelectedInstruction.Transition}" ItemsSource="{Binding Source={StaticResource ColorInstructionTransition}}">
-                <xctk:WatermarkComboBox.Style>
-                    <Style>
-                            <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="Gradient">
-                                <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible"/>
-                            </DataTrigger>
+                <xctk:WatermarkComboBox Margin="5,0,0,0" Watermark="Effect" x:Name="SelectedTransition"
+                                        SelectedItem="{Binding SelectedInstruction.Transition}"
+                                        ItemsSource="{Binding Source={StaticResource ColorInstructionTransition}}">
+                    <xctk:WatermarkComboBox.Style>
+                        <Style>
+                            <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
+                                             Value="Gradient">
+                                    <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible" />
+                                </DataTrigger>
 
-                            <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="FadeGradient">
-                                <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </xctk:WatermarkComboBox.Style>
-                
-                <xctk:WatermarkComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}"/>
-                    </DataTemplate>
-                </xctk:WatermarkComboBox.ItemTemplate>
-            </xctk:WatermarkComboBox>
+                                <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
+                                             Value="FadeGradient">
+                                    <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </xctk:WatermarkComboBox.Style>
 
-                <CheckBox Checked="Randomize_Checked" Unchecked="Randomize_Checked" x:Name="Randomize" Margin="10,0,0,0" VerticalAlignment="Center" Content="Randomize colors" IsChecked="{Binding SelectedInstruction.Randomize}"></CheckBox>
+                    <xctk:WatermarkComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}" />
+                        </DataTemplate>
+                    </xctk:WatermarkComboBox.ItemTemplate>
+                </xctk:WatermarkComboBox>
+
+                <CheckBox Checked="Randomize_Checked" Unchecked="Randomize_Checked" x:Name="Randomize"
+                          Margin="10,0,0,0" VerticalAlignment="Center" Content="Randomize colors"
+                          IsChecked="{Binding SelectedInstruction.Randomize}" />
             </StackPanel>
-        
-        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-            <TextBlock FontSize="14" Text="Hold time" Margin="0,0,10,0"/>
-            <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="5000" Value="{Binding SelectedInstruction.Time}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240"/>
-            <TextBox x:Name="SelectedTime" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap" BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=TimeUnit, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-                <TextBox.Text>
-                    <Binding Path="SelectedInstruction.Time"
-                             Mode="TwoWay"
-                             UpdateSourceTrigger="PropertyChanged"
-                             ValidatesOnNotifyDataErrors="True"
-                             ValidatesOnDataErrors="True"
-                             NotifyOnValidationError="True">
-                        <Binding.ValidationRules>
-                            <local:NumericValidationRule ValidationType="{x:Type s:Int32}"
-                                                         NumMinValue="1"
-                                                       ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
-            <TextBox x:Name="TimeUnit" Text="ms" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Background="White" BorderThickness="0,1,1,1">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsFocused}" Value="True">
-                                <Setter Property="BorderBrush" Value="CornflowerBlue"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
-        </StackPanel>
-        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-            <xctk:ColorPicker x:Name="ColorPicker1" SelectedColorChanged="ColorPicker1_SelectedColorChanged"  UsingAlphaChannel="False" Margin="0,0,5,0" Width="75" SelectedColor="{Binding SelectedInstruction.Color1, Converter={StaticResource ColorConverter}}"></xctk:ColorPicker>
 
-                <xctk:ColorPicker x:Name="ColorPicker2" SelectedColorChanged="ColorPicker1_SelectedColorChanged" UsingAlphaChannel="False" Width="75" SelectedColor="{Binding SelectedInstruction.Color2, Converter={StaticResource ColorConverter}}">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <TextBlock FontSize="14" Text="Hold time" Margin="0,0,10,0" />
+                <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="5000"
+                        Value="{Binding SelectedInstruction.Time}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Width="240" />
+                <TextBox x:Name="SelectedTime" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap"
+                         BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
+                    <TextBox.Style>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=TimeUnit, Path=IsMouseOver}" Value="True">
+                                    <Setter Property="BorderBrush" Value="#7eb4ea" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                    <TextBox.Text>
+                        <Binding Path="SelectedInstruction.Time"
+                                 Mode="TwoWay"
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnNotifyDataErrors="True"
+                                 ValidatesOnDataErrors="True"
+                                 NotifyOnValidationError="True">
+                            <Binding.ValidationRules>
+                                <local:NumericValidationRule ValidationType="{x:Type s:Int32}"
+                                                             NumMinValue="1"
+                                                             ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox x:Name="TimeUnit" Text="ms" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top"
+                         Width="Auto" Background="White" BorderThickness="0,1,1,1">
+                    <TextBox.Style>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsMouseOver}"
+                                             Value="True">
+                                    <Setter Property="BorderBrush" Value="#7eb4ea" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsFocused}" Value="True">
+                                    <Setter Property="BorderBrush" Value="CornflowerBlue" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </StackPanel>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <xctk:ColorPicker x:Name="ColorPicker1" SelectedColorChanged="ColorPicker1_SelectedColorChanged"
+                                  UsingAlphaChannel="False" Margin="0,0,5,0" Width="75"
+                                  SelectedColor="{Binding SelectedInstruction.Color1, Converter={StaticResource ColorConverter}}" />
 
-                <xctk:ColorPicker.Style>
-                    <Style>
-                            <Setter Property="xctk:ColorPicker.Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="Gradient">
-                                <Setter Property="xctk:ColorPicker.Visibility" Value="Visible"/>
-                            </DataTrigger>
+                <xctk:ColorPicker x:Name="ColorPicker2" SelectedColorChanged="ColorPicker1_SelectedColorChanged"
+                                  UsingAlphaChannel="False" Width="75"
+                                  SelectedColor="{Binding SelectedInstruction.Color2, Converter={StaticResource ColorConverter}}">
 
-                            <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="FadeGradient">
-                                <Setter Property="xctk:ColorPicker.Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </xctk:ColorPicker.Style>
-            </xctk:ColorPicker>
+                    <xctk:ColorPicker.Style>
+                        <Style>
+                            <Setter Property="xctk:ColorPicker.Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
+                                             Value="Gradient">
+                                    <Setter Property="xctk:ColorPicker.Visibility" Value="Visible" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
+                                             Value="FadeGradient">
+                                    <Setter Property="xctk:ColorPicker.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </xctk:ColorPicker.Style>
+                </xctk:ColorPicker>
 
                 <StackPanel.Style>
                     <Style>
-                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                        <Setter Property="StackPanel.Visibility" Value="Visible" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=Randomize, Path=IsChecked}" Value="True">
-                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
             </StackPanel>
-        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-            <StackPanel.Style>
-                <Style>
-                        <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="FadeGradient">
-                            <Setter Property="StackPanel.Visibility" Value="Visible"/>
-                        </DataTrigger>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
+                                         Value="FadeGradient">
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="Fade">
-                                <Setter Property="StackPanel.Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-            <TextBlock FontSize="14" Text="Fade time" Margin="0,0,10,0"/>
-            <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="5000" Value="{Binding SelectedInstruction.Time2}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240"/>
-            <TextBox x:Name="SelectedTime2" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap" BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=TimeUnit2, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBox.Style>
-                <TextBox.Text>
-                    <Binding Path="SelectedInstruction.Time2"
-                             Mode="TwoWay"
-                             UpdateSourceTrigger="PropertyChanged"
-                             ValidatesOnNotifyDataErrors="True"
-                             ValidatesOnDataErrors="True"
-                             NotifyOnValidationError="True">
-                        <Binding.ValidationRules>
-                            <local:NumericValidationRule ValidationType="{x:Type s:Int32}"
-                                                         NumMinValue="1"
-                                                       ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-            </TextBox>
-            <TextBox x:Name="TimeUnit2" Text="ms" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top" Width="Auto" Background="White" BorderThickness="0,1,1,1">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
+                </StackPanel.Style>
+                <TextBlock FontSize="14" Text="Fade time" Margin="0,0,10,0" />
+                <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="5000"
+                        Value="{Binding SelectedInstruction.Time2}" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Width="240" />
+                <TextBox x:Name="SelectedTime2" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap"
+                         BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
+                    <TextBox.Style>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=TimeUnit2, Path=IsMouseOver}" Value="True">
+                                    <Setter Property="BorderBrush" Value="#7eb4ea" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                    <TextBox.Text>
+                        <Binding Path="SelectedInstruction.Time2"
+                                 Mode="TwoWay"
+                                 UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnNotifyDataErrors="True"
+                                 ValidatesOnDataErrors="True"
+                                 NotifyOnValidationError="True">
+                            <Binding.ValidationRules>
+                                <local:NumericValidationRule ValidationType="{x:Type s:Int32}"
+                                                             NumMinValue="1"
+                                                             ValidatesOnTargetUpdated="True" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBox x:Name="TimeUnit2" Text="ms" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top"
+                         Width="Auto" Background="White" BorderThickness="0,1,1,1">
+                    <TextBox.Style>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=SelectedTime2, Path=IsMouseOver}"
+                                             Value="True">
+                                    <Setter Property="BorderBrush" Value="#7eb4ea" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=SelectedTime2, Path=IsFocused}" Value="True">
+                                    <Setter Property="BorderBrush" Value="CornflowerBlue" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+            </StackPanel>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <StackPanel.Style>
+                    <Style>
+                        <Setter Property="StackPanel.Visibility" Value="Collapsed" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=SelectedTime2, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea"/>
+                            <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
+                                         Value="Gradient">
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding ElementName=SelectedTime2, Path=IsFocused}" Value="True">
-                                <Setter Property="BorderBrush" Value="CornflowerBlue"/>
+
+                            <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
+                                         Value="FadeGradient">
+                                <Setter Property="StackPanel.Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBox.Style>
-            </TextBox>
+                </StackPanel.Style>
 
-        </StackPanel>
-        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-            <StackPanel.Style>
-                <Style>
-                        <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="Gradient">
-                            <Setter Property="StackPanel.Visibility" Value="Visible"/>
-                        </DataTrigger>
+                <TextBlock FontSize="14" Text="Gradient angle °" Margin="0,0,10,0" />
+                <xctk:SingleUpDown Value="{Binding SelectedInstruction.Angle}" Width="75" FormatString="F"
+                                   Increment="5" Minimum="0" Maximum="360" ClipValueToMinMax="True" />
+            </StackPanel>
 
-                        <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}" Value="FadeGradient">
-                            <Setter Property="StackPanel.Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-
-            <TextBlock FontSize="14" Text="Gradient angle °" Margin="0,0,10,0"/>
-            <xctk:SingleUpDown Value="{Binding SelectedInstruction.Angle}" Width="75" FormatString="F" Increment="5" Minimum="0" Maximum="360" ClipValueToMinMax="True"></xctk:SingleUpDown>
-        </StackPanel>
-            
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Grid.Row="2" Orientation="Vertical" Margin="0,5,0,0">
             <StackPanel Margin="0,10" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0"/>
-                <xctk:SingleUpDown Value="{Binding SelectedInstruction.Layer}" Width="75" FormatString="N0" Increment="1" Minimum="0" Maximum="15" ClipValueToMinMax="True"></xctk:SingleUpDown>
+                <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" />
+                <xctk:SingleUpDown Value="{Binding SelectedInstruction.Layer}" Width="75" FormatString="N0"
+                                   Increment="1" Minimum="0" Maximum="15" ClipValueToMinMax="True" />
 
             </StackPanel>
-            
+
             <Canvas Margin="0,0,0,5" x:Name="Preview" Width="450" Height="40">
                 <Rectangle Canvas.Left="0" Canvas.Top="0" Width="450" Height="40">
                     <Rectangle.Fill>
-                        <SolidColorBrush Color="LightGray"/>
+                        <SolidColorBrush Color="LightGray" />
                     </Rectangle.Fill>
                 </Rectangle>
-                <Label Margin="150,0,0,0" Content="This is some text."></Label>
-                <Label Margin="150,12,0,0" Foreground="White" Content="Color preview!"></Label>
-                <Rectangle Name="PreviewRectangle" Opacity="0.8" Canvas.Left="0" Canvas.Top="0" Width="450" Height="40">
-                    
-                </Rectangle>
+                <Label Margin="150,0,0,0" Content="This is some text." />
+                <Label Margin="150,12,0,0" Foreground="White" Content="Color preview!" />
+                <Rectangle Name="PreviewRectangle" Opacity="0.8" Canvas.Left="0" Canvas.Top="0" Width="450" Height="40" />
 
-                <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
-                <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="19" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
-                <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af"></Rectangle>
-                <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="19" RadiusX="1" RadiusY="1"  Fill="#2af"></Rectangle>
+                <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af" />
+                <Rectangle Width="10" Height="10" Canvas.Top="10" Canvas.Left="19" RadiusX="1" RadiusY="1" Fill="#2af" />
+                <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="8" RadiusX="1" RadiusY="1" Fill="#2af" />
+                <Rectangle Width="10" Height="10" Canvas.Top="21" Canvas.Left="19" RadiusX="1" RadiusY="1" Fill="#2af" />
 
-                <TextBlock Width="440" Height="20" TextAlignment="Right" Margin="0,12,0,0" Foreground="White" Text="22:11"></TextBlock>
-            
+                <TextBlock Width="440" Height="20" TextAlignment="Right" Margin="0,12,0,0" Foreground="White"
+                           Text="22:11" />
+
             </Canvas>
-            
+
         </StackPanel>
     </Grid>
 </UserControl>
