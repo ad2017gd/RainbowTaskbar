@@ -12,7 +12,6 @@ namespace RainbowTaskbar.HTTPAPI;
 
 public static class HTTPAPIServer {
     public static void Get(object sender, HttpRequestEventArgs args) {
-        var http = (HttpServer) sender;
         var req = args.Request;
         var res = args.Response;
 

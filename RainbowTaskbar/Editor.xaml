@@ -53,9 +53,23 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button MinWidth="180" Margin="0,3,0,0" Click="Button_Click" Content="Apply" />
-                        <Button MinWidth="180" Margin="0,3,0,0" Command="{Binding InstructionsToPresetCommandImpl}"
-                                Content="To preset" />
+                        <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Row="0" Grid.Column="0" MinWidth="90" Click="Button_Click" Content="Apply" />
+                            <Button Grid.Row="0" Grid.Column="1" MinWidth="90" Click="ButtonBase_OnClick"
+                                    Margin="5,0,0,0" Content="Apply &amp; Save" />
+                            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="180" Margin="0,3,0,0"
+                                    Command="{Binding InstructionsToPresetCommandImpl}"
+                                    Content="To preset" />
+                        </Grid>
+
                     </StackPanel>
                     <Border BorderThickness="0.2" BorderBrush="Black" Grid.Column="1" Margin="10,0,0,0"
                             Padding="10,10,10,10">

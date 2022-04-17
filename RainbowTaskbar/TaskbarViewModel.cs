@@ -8,6 +8,7 @@ using System.Windows.Media;
 using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
+using RainbowTaskbar.HTTPAPI;
 using RainbowTaskbar.WebSocketServices;
 
 namespace RainbowTaskbar;
@@ -68,7 +69,7 @@ public class TaskbarViewModel {
                     for (ConfigStep = 0;
                          ConfigStep < App.Config.Instructions.Count && !token.IsCancellationRequested;
                          ConfigStep++) {
-                        if (App.APISubscribed.Count > 0) {
+                        if (API.APISubscribed.Count > 0) {
                             var data = new JObject();
                             data.Add("type", "InstructionStep");
                             data.Add("index", ConfigStep);

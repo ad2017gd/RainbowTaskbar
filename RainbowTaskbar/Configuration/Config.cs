@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Dynamic;
@@ -12,6 +11,7 @@ using System.Xml;
 using Newtonsoft.Json.Linq;
 using PropertyChanged;
 using RainbowTaskbar.Configuration.Instructions;
+using RainbowTaskbar.HTTPAPI;
 
 namespace RainbowTaskbar.Configuration;
 
@@ -20,15 +20,15 @@ public class Config : INotifyPropertyChanged {
     public static readonly string ConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
     public static readonly string LegacyConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.txt");
 
+    private static readonly int SupportedConfigVersion = 2;
+
     public Config() {
         Instructions = new BindingList<Instruction>();
-        Presets = new BindingList<InstructionPreset>()
+        Presets = new BindingList<InstructionPreset>
             {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
 
         SetupPropertyChanged();
     }
-
-    static int SupportedConfigVersion = 2;
 
     [field: DataMember] public int ConfigFileVersion { get; set; } = SupportedConfigVersion;
 
@@ -61,14 +61,14 @@ public class Config : INotifyPropertyChanged {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public void OnIsAPIEnabledChanged() {
-        if (App.http is not null) {
-            if (IsAPIEnabled) App.ConfigureServer();
+        if (API.http is not null) {
+            if (IsAPIEnabled) API.Start();
             else
-                App.http.Stop();
+                API.Stop();
         }
     }
 
-    public void OnAPIPortChanged() => App.ConfigureServer();
+    public void OnAPIPortChanged() => API.Start();
 
     public JObject ToJSON() {
         dynamic data = new ExpandoObject();
@@ -242,15 +242,15 @@ public class Config : INotifyPropertyChanged {
 
             var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
             var cfg = serializer.ReadObject(reader) as Config;
-            if(cfg.ConfigFileVersion != SupportedConfigVersion) {
-                switch(cfg.ConfigFileVersion) {
+            if (cfg.ConfigFileVersion != SupportedConfigVersion)
+                switch (cfg.ConfigFileVersion) {
                     case 1:
-                        cfg.Presets = new BindingList<InstructionPreset>() 
+                        cfg.Presets = new BindingList<InstructionPreset>
                             {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
                         cfg.ConfigFileVersion = SupportedConfigVersion;
                         break;
                 }
-            }
+
             cfg.SetupPropertyChanged();
             return cfg;
         }
