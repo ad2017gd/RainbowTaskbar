@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Dynamic;
@@ -21,13 +22,15 @@ public class Config : INotifyPropertyChanged {
 
     public Config() {
         Instructions = new BindingList<Instruction>();
-        Presets = new BindingList<InstructionPreset>(new[]
-            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown});
+        Presets = new BindingList<InstructionPreset>()
+            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
 
         SetupPropertyChanged();
     }
 
-    [field: DataMember] public int ConfigFileVersion { get; set; } = 1;
+    static int SupportedConfigVersion = 2;
+
+    [field: DataMember] public int ConfigFileVersion { get; set; } = SupportedConfigVersion;
 
     [field: DataMember] public bool CheckUpdate { get; set; } = true;
 
@@ -239,6 +242,15 @@ public class Config : INotifyPropertyChanged {
 
             var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
             var cfg = serializer.ReadObject(reader) as Config;
+            if(cfg.ConfigFileVersion != SupportedConfigVersion) {
+                switch(cfg.ConfigFileVersion) {
+                    case 1:
+                        cfg.Presets = new BindingList<InstructionPreset>() 
+                            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
+                        cfg.ConfigFileVersion = SupportedConfigVersion;
+                        break;
+                }
+            }
             cfg.SetupPropertyChanged();
             return cfg;
         }
