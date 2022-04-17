@@ -101,10 +101,20 @@ public partial class App : Application {
             t.taskbarHelper.Radius = 0;
             t.taskbarHelper.UpdateRadius();
             t.Close();
-            TaskbarHelper.SendMessage(t.taskbarHelper.HWND, TaskbarHelper.WM_DWMCOMPOSITIONCHANGED, 1, null);
-            t.taskbarHelper.SetAlpha(1);
+            Task.Run(() => {
+                t.viewModel.ZThread.Join();
+                t.viewModel.DrawThread.Join();
+
+                t.taskbarHelper.SetAlpha(1);
+                TaskbarHelper.SendMessage(t.taskbarHelper.HWND, TaskbarHelper.WM_DWMCOMPOSITIONCHANGED, 1, null);
+
+                Current.Dispatcher.Invoke(() => {
+                    Current.Shutdown();
+                });
+            });
+            
         });
 
-        Current.Shutdown();
+        
     }
 }

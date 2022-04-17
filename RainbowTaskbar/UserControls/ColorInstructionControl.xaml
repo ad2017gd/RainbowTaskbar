@@ -52,7 +52,7 @@
                             <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Collapsed" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=SelectedEffect, Path=SelectedItem}"
-                                             Value="Gradient">
+                                             Value="Fade">
                                     <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible" />
                                 </DataTrigger>
 

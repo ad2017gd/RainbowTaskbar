@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ public class TaskbarViewModel {
     private readonly CancellationTokenSource cts;
     private readonly Taskbar Window;
     public int ConfigStep;
-    private Thread DrawThread;
-    private Thread ZThread;
+    public Thread DrawThread;
+    public Thread ZThread;
 
     public TaskbarViewModel(Taskbar window) {
         Window = window;
@@ -78,9 +79,9 @@ public class TaskbarViewModel {
                         try {
                             if (App.Config.Instructions[ConfigStep].Execute(window, token)) slept = true;
                         }
-                        catch {
+                        catch (Exception e) {
                             MessageBox.Show(
-                                $"The \"{App.Config.Instructions[ConfigStep].Name}\" instruction at index {ConfigStep} (starting from 0) threw an exception, it will be removed from the config.",
+                                $"The \"{App.Config.Instructions[ConfigStep].Name}\" instruction at index {ConfigStep} (starting from 0) threw an exception, it will be removed from the config.\n${e.Message}",
                                 "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Error);
                             Application.Current.Dispatcher.Invoke(() => {
                                 App.Config.Instructions.RemoveAt(ConfigStep);
