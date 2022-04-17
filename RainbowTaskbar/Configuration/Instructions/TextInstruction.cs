@@ -41,26 +41,9 @@ internal class TextInstruction : Instruction {
     }
 
     public override bool Execute(Taskbar window, CancellationToken _) {
-        window.Dispatcher.Invoke(() => {
-            var cvs = (Canvas) window.layers.MainDrawRectangles[Layer].Parent;
-
-            var text = new Label();
-            text.Content = Text;
-            text.Foreground = new SolidColorBrush(Color.ToMediaColor());
-            text.FontSize = Size;
-            text.FontFamily = new FontFamily(Font);
-
-            foreach (UIElement elem in cvs.Children)
-                if (elem is Label) {
-                    var tlab = (Label) elem;
-                    if (Y == Canvas.GetTop(elem) && X == Canvas.GetLeft(elem) && (string) tlab.Content == Text)
-                        return;
-                }
-
-            cvs.Children.Add(text);
-            Canvas.SetTop(text, Y);
-            Canvas.SetLeft(text, X);
-        });
+        window.Dispatcher.Invoke( () => 
+            window.layers.DrawText(Layer, Text, X, Y, Size, "Arial", new SolidColorBrush(Color.ToMediaColor()))
+        );
         return false;
     }
 }

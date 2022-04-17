@@ -59,6 +59,7 @@ public class EditorViewModel : INotifyPropertyChanged {
                 case "Clear Layer": return new ClearLayerInstructionControl();
                 case "Image": return new ImageInstructionControl();
                 case "Text": return new TextInstructionControl();
+                case "Shape": return new ShapeInstructionControl();
             }
 
             return null;

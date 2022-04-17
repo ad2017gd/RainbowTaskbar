@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Drawing;
@@ -19,6 +21,7 @@ public class TaskbarViewModel {
     public Thread DrawThread;
     public Thread ZThread;
 
+
     public TaskbarViewModel(Taskbar window) {
         Window = window;
         window.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
@@ -32,28 +35,19 @@ public class TaskbarViewModel {
         window.taskbarHelper.PositionChangedHook();
         window.taskbarHelper.UpdateRadius();
 
-
-        window.layers = new Layers(window) {
-            MainDrawRectangles = new[] {
-                window.RectLayer0, window.RectLayer1, window.RectLayer2, window.RectLayer3, window.RectLayer4,
-                window.RectLayer5, window.RectLayer6, window.RectLayer7, window.RectLayer8, window.RectLayer9,
-                window.RectLayer10, window.RectLayer11, window.RectLayer12, window.RectLayer13, window.RectLayer14,
-                window.RectLayer15
-            }
-        };
-
         var Taskbar = window.taskbarHelper.GetRectangle();
 
         window.Width = Taskbar.Width - Taskbar.X;
         window.Height = Taskbar.Height - Taskbar.Y;
 
-        foreach (var rect in window.layers.MainDrawRectangles) {
-            rect.Width = Taskbar.Width - Taskbar.X;
-            rect.Height = Taskbar.Height - Taskbar.Y;
-        }
+        window.layers = new Layers(window, new Canvas[] {
+                window.Layer0, window.Layer1, window.Layer2, window.Layer3, window.Layer4, window.Layer5,
+                window.Layer6, window.Layer7, window.Layer8, window.Layer9, window.Layer10, window.Layer11,
+                window.Layer12, window.Layer13, window.Layer14, window.Layer15
+            });
 
-        foreach (var layer in window.layers.MainDrawRectangles)
-            layer.Fill = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+        foreach (var layer in window.layers.canvases)
+            layer.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
         cts = new CancellationTokenSource();
         LoadConfig(window);

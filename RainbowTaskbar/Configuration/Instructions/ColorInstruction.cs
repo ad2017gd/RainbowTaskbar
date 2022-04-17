@@ -61,6 +61,7 @@ internal class ColorInstruction : Instruction {
     }
 
     public override bool Execute(Taskbar window, CancellationToken token) {
+        Brush OldBrush = window.layers.brushes[Layer];
         if (Randomize) {
             Color1 = Color.FromArgb(255, App.rnd.Next(0, 255), App.rnd.Next(0, 255), App.rnd.Next(0, 255));
             Color2 = Color.FromArgb(255, App.rnd.Next(0, 255), App.rnd.Next(0, 255), App.rnd.Next(0, 255));
@@ -69,24 +70,20 @@ internal class ColorInstruction : Instruction {
         switch (Effect) {
             case ColorInstructionEffect.Solid:
                 window.Dispatcher.Invoke(() => {
-                    window.layers.MainDrawRectangles[Layer].Fill = new SolidColorBrush(Color1.ToMediaColor());
+                    var Brush = new SolidColorBrush(Color1.ToMediaColor());
+                    window.layers.DrawRect(Layer, Brush);
                 });
                 token.WaitHandle.WaitOne(Time);
                 break;
             case ColorInstructionEffect.Gradient:
                 window.Dispatcher.Invoke(() => {
-                    window.layers.MainDrawRectangles[Layer].Fill =
-                        new LinearGradientBrush(Color1.ToMediaColor(), Color2.ToMediaColor(), Angle);
+                    var Brush = new LinearGradientBrush(Color1.ToMediaColor(), Color2.ToMediaColor(), Angle);
+                    window.layers.DrawRect(Layer, Brush);
                 });
                 token.WaitHandle.WaitOne(Time);
                 break;
 
             case ColorInstructionEffect.FadeGradient:
-
-
-                Brush OldBrush = null;
-                window.Dispatcher.Invoke(() => { OldBrush = window.layers.MainDrawRectangles[Layer].Fill; });
-
 
                 if (OldBrush is SolidColorBrush) {
                     var Brush = (SolidColorBrush) OldBrush;
@@ -104,9 +101,9 @@ internal class ColorInstruction : Instruction {
 
 
                         window.Dispatcher.Invoke(() => {
-                            var brush = new LinearGradientBrush(Color1Interpolated.ToMediaColor(),
+                            var Brush = new LinearGradientBrush(Color1Interpolated.ToMediaColor(),
                                 Color2Interpolated.ToMediaColor(), Angle);
-                            window.layers.MainDrawRectangles[Layer].Fill = brush;
+                            window.layers.DrawRect(Layer, Brush);
                         });
 
                         token.WaitHandle.WaitOne(Time2 / (Time2 / 25));
@@ -132,9 +129,9 @@ internal class ColorInstruction : Instruction {
 
 
                         window.Dispatcher.Invoke(() => {
-                            var brush = new LinearGradientBrush(Color1Interpolated.ToMediaColor(),
+                            var Brush = new LinearGradientBrush(Color1Interpolated.ToMediaColor(),
                                 Color2Interpolated.ToMediaColor(), Angle);
-                            window.layers.MainDrawRectangles[Layer].Fill = brush;
+                            window.layers.DrawRect(Layer, Brush);
                         });
 
 
@@ -146,11 +143,6 @@ internal class ColorInstruction : Instruction {
                 break;
 
             case ColorInstructionEffect.Fade:
-
-
-                OldBrush = null;
-                window.Dispatcher.Invoke(() => { OldBrush = window.layers.MainDrawRectangles[Layer].Fill; });
-
 
                 if (OldBrush is SolidColorBrush) {
                     var Brush = (SolidColorBrush) OldBrush;
@@ -165,8 +157,8 @@ internal class ColorInstruction : Instruction {
                             (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
 
                         window.Dispatcher.Invoke(() => {
-                            var brush = new SolidColorBrush(Color1Interpolated.ToMediaColor());
-                            window.layers.MainDrawRectangles[Layer].Fill = brush;
+                            var Brush = new SolidColorBrush(Color1Interpolated.ToMediaColor());
+                            window.layers.DrawRect(Layer, Brush);
                         });
 
 
@@ -191,8 +183,8 @@ internal class ColorInstruction : Instruction {
                             (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
 
                         window.Dispatcher.Invoke(() => {
-                            var brush = new SolidColorBrush(Color1Interpolated.ToMediaColor());
-                            window.layers.MainDrawRectangles[Layer].Fill = brush;
+                            var Brush = new SolidColorBrush(Color1Interpolated.ToMediaColor());
+                            window.layers.DrawRect(Layer, Brush);
                         });
 
 

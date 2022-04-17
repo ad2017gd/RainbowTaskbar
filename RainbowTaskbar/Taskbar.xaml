@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:drawing="clr-namespace:RainbowTaskbar.Drawing"
         mc:Ignorable="d"
         AllowsTransparency="True"
         ShowInTaskbar="False"
@@ -14,54 +15,23 @@
             <ColumnDefinition Width="31*" />
             <ColumnDefinition Width="169*" />
         </Grid.ColumnDefinitions>
-        <Canvas Name="Layer0" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer0" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer1" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer1" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer2" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer2" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer3" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer3" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer4" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer4" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer5" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer5" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer6" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer6" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer7" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer7" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer8" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer8" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer9" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer9" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer10" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer10" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer11" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer11" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer12" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer12" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer13" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer13" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer14" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer14" Height="100" Width="800" />
-        </Canvas>
-        <Canvas Name="Layer15" Grid.ColumnSpan="2">
-            <Rectangle Name="RectLayer15" Height="100" Width="800" />
-        </Canvas>
+        <Canvas x:Name="Layer0"/>
+        <Canvas x:Name="Layer1"/>
+        <Canvas x:Name="Layer2"/>
+        <Canvas x:Name="Layer3"/>
+        <Canvas x:Name="Layer4"/>
+        <Canvas x:Name="Layer5"/>
+        <Canvas x:Name="Layer6"/>
+        <Canvas x:Name="Layer7"/>
+        <Canvas x:Name="Layer8"/>
+        <Canvas x:Name="Layer9"/>
+        <Canvas x:Name="Layer10"/>
+        <Canvas x:Name="Layer11"/>
+        <Canvas x:Name="Layer12"/>
+        <Canvas x:Name="Layer13"/>
+        <Canvas x:Name="Layer14"/>
+        <Canvas x:Name="Layer15"/>
+
 
 
     </Grid>

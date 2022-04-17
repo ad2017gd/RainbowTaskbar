@@ -7,6 +7,7 @@ using System.Windows;
 using H.Pipes;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
+using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
 using RainbowTaskbar.WebSocketServices;
@@ -78,6 +79,12 @@ public partial class App : Application {
                 return new Taskbar(taskbar.Secondary);
             }).ToList();
             taskbars.ForEach(taskbar => taskbar.Show());
+
+            new List<Instruction>(Config.Instructions).ForEach((i) => {
+                if (i is ImageInstruction) {
+                    ((ImageInstruction) i).drawn = false;
+                }
+            });
         });
 
     public static void ConfigureServer() {

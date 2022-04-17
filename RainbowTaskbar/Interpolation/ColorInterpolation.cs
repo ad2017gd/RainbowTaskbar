@@ -88,8 +88,8 @@ internal static class ColorExtension {
 
 public class ColorConverter : IValueConverter {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-        ((Color) value).ToMediaColor();
+        value is not null ? ((Color) value).ToMediaColor() : null;
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-        ((System.Windows.Media.Color) value).ToDrawingColor();
+        value is not null ? ((System.Windows.Media.Color) value).ToDrawingColor() : null;
 }

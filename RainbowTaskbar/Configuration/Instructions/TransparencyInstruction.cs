@@ -81,7 +81,8 @@ public class TransparencyInstruction : Instruction {
 
             case TransparencyInstructionType.Layer:
                 window.Dispatcher.Invoke(() =>
-                    ((Canvas) window.layers.MainDrawRectangles[Layer].Parent).Opacity = Opacity);
+                    window.layers.canvases[Layer].Opacity = Opacity
+                    );
                 break;
         }
 
