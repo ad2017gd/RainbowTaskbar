@@ -95,7 +95,7 @@
 
 
                     </StackPanel>
-                    <Button HorizontalAlignment="Left" Grid.Row="2" Width="180" Margin="5,5" Click="Button_Click"
+                    <Button HorizontalAlignment="Left" Grid.Row="1" Width="180" Margin="5,5" Click="Button_Click"
                             Content="Save" />
                 </Grid>
             </TabItem>
@@ -113,7 +113,7 @@
                         <Label HorizontalContentAlignment="Center"
                                Content="It is completely free to use, but donations are well appreciated!" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,150,0,0">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,150,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -128,7 +128,7 @@
                             </StackPanel>
                             <TextBox Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" IsReadOnly="True"
                                      Text="nano_3t4meg4caykeb4a835jufsewo3zo18ow1fxwxbx9c1h69jyaxhs4yn184871"
-                                     Grid.RowSpan="2" FontSize="10" />
+                                     FontSize="10" />
 
 
                         </Grid>
