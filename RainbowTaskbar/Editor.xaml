@@ -53,9 +53,23 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button MinWidth="180" Margin="0,3,0,0" Click="Button_Click" Content="Apply" />
-                        <Button MinWidth="180" Margin="0,3,0,0" Command="{Binding InstructionsToPresetCommandImpl}"
-                                Content="To preset" />
+                        <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Row="0" Grid.Column="0" MinWidth="90" Click="Button_Click" Content="Apply" />
+                            <Button Grid.Row="0" Grid.Column="1" MinWidth="90" Click="ButtonBase_OnClick"
+                                    Margin="5,0,0,0" Content="Apply &amp; Save" />
+                            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="180" Margin="0,3,0,0"
+                                    Command="{Binding InstructionsToPresetCommandImpl}"
+                                    Content="To preset" />
+                        </Grid>
+
                     </StackPanel>
                     <Border BorderThickness="0.2" BorderBrush="Black" Grid.Column="1" Margin="10,0,0,0"
                             Padding="10,10,10,10">
@@ -95,7 +109,7 @@
 
 
                     </StackPanel>
-                    <Button HorizontalAlignment="Left" Grid.Row="2" Width="180" Margin="5,5" Click="Button_Click"
+                    <Button HorizontalAlignment="Left" Grid.Row="1" Width="180" Margin="5,5" Click="Button_Click"
                             Content="Save" />
                 </Grid>
             </TabItem>
@@ -113,7 +127,7 @@
                         <Label HorizontalContentAlignment="Center"
                                Content="It is completely free to use, but donations are well appreciated!" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,150,0,0">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,150,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -128,7 +142,7 @@
                             </StackPanel>
                             <TextBox Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" IsReadOnly="True"
                                      Text="nano_3t4meg4caykeb4a835jufsewo3zo18ow1fxwxbx9c1h69jyaxhs4yn184871"
-                                     Grid.RowSpan="2" FontSize="10" />
+                                     FontSize="10" />
 
 
                         </Grid>

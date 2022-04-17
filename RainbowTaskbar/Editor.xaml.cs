@@ -54,10 +54,7 @@ public partial class Editor : Window {
         e.Handled = true;
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e) {
-        App.ReloadTaskbars();
-        App.Config.ToFile();
-    }
+    private void Button_Click(object sender, RoutedEventArgs e) => App.ReloadTaskbars();
 
     private void Window_Closing(object sender, CancelEventArgs e) {
         e.Cancel = true;
@@ -65,4 +62,9 @@ public partial class Editor : Window {
     }
 
     private void Window_Closed(object sender, EventArgs e) => TrayIcon.Dispose();
+
+    private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
+        App.ReloadTaskbars();
+        App.Config.ToFile();
+    }
 }

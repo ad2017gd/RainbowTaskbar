@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using RainbowTaskbar.HTTPAPI;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -9,7 +10,7 @@ namespace RainbowTaskbar.WebSocketServices;
 
 internal class WebSocketAPIServer : WebSocketBehavior {
     public static void SendToSubscribed(string msg) {
-        foreach (var ID in App.APISubscribed) App.http.WebSocketServices["/rnbws"].Sessions.SendTo(msg, ID);
+        foreach (var id in API.APISubscribed) API.http.WebSocketServices["/rnbws"].Sessions.SendTo(msg, id);
     }
 
     protected override void OnMessage(MessageEventArgs e) {
@@ -30,18 +31,20 @@ internal class WebSocketAPIServer : WebSocketBehavior {
                 return;
             }
 
-            string CommandName = parsed.command;
+            string commandName = parsed.command;
 
-            if (CommandName is not null)
-                switch (CommandName.ToLower()) {
+            if (commandName is not null)
+                switch (commandName.ToLower()) {
                     case "subscribe":
                         if (parsed.value is null || (bool) parsed.value)
-                            App.APISubscribed.Add(ID);
+                            API.APISubscribed.Add(ID);
                         else
-                            App.APISubscribed.Remove(ID);
+                            API.APISubscribed.Remove(ID);
 
                         break;
                 }
         }
     }
+
+    protected override void OnClose(CloseEventArgs e) => API.APISubscribed.Remove(ID);
 }

@@ -63,7 +63,7 @@
                                     <TextBlock x:Name="menuGestureText" Grid.Column="4"
                                                Margin="{TemplateBinding Padding}" Opacity="0.7"
                                                Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center" />
-                                    <ToggleButton IsThreeState="True" Grid.Column="6" Margin="2">
+                                    <ToggleButton MinWidth="75" IsThreeState="True" Grid.Column="6" Margin="2">
                                         <ToggleButton.Style>
                                             <Style>
                                                 <Style.Triggers>
