@@ -9,7 +9,6 @@ using PropertyChanged;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Helpers;
-using RainbowTaskbar.HTTPAPI;
 
 namespace RainbowTaskbar;
 
@@ -28,7 +27,7 @@ public partial class App : Application {
     public App() {
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
             // First process
-            // todo: multiple taskbar, refractor and clean up code, newtonsoft.json to datacontract json
+            // todo: multiple taskbar, refractor and clean up code
             Task.Run(async () => {
                 await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
                 pipe.MessageReceived += (sender, args) => {
@@ -49,7 +48,7 @@ public partial class App : Application {
 
             Config = Config.FromFile();
             if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
-            API.Start();
+            API.API.Start();
             if (TaskbarHelper.FindWindow("Shell_SecondaryTrayWnd", null) != (IntPtr) 0) {
                 var newWindow = new Taskbar(true);
                 newWindow.Show();
@@ -79,10 +78,8 @@ public partial class App : Application {
             }).ToList();
             taskbars.ForEach(taskbar => taskbar.Show());
 
-            new List<Instruction>(Config.Instructions).ForEach((i) => {
-                if (i is ImageInstruction) {
-                    ((ImageInstruction) i).drawn = false;
-                }
+            new List<Instruction>(Config.Instructions).ForEach(i => {
+                if (i is ImageInstruction) ((ImageInstruction) i).drawn = false;
             });
         });
 

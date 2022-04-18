@@ -1,23 +1,16 @@
 ﻿using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Newtonsoft.Json.Linq;
 
 namespace RainbowTaskbar.Configuration.Instructions;
 
 [DataContract]
 internal class ImageInstruction : Instruction {
-
-    public bool drawn = false;
+    public bool drawn;
 
     [field: DataMember] public int Layer { get; set; } = 0;
 
@@ -34,21 +27,6 @@ internal class ImageInstruction : Instruction {
     [field: DataMember] public double Opacity { get; set; } = 1;
 
     [field: DataMember] public bool DrawOnce { get; set; } = false;
-
-    public override JObject ToJSON() {
-        dynamic data = new ExpandoObject();
-
-        data.Name = GetType().Name;
-        data.Layer = Layer;
-        data.Path = Path;
-        data.X = X;
-        data.Y = Y;
-        data.Width = Width;
-        data.Height = Height;
-        data.Opacity = Opacity;
-
-        return JObject.FromObject(data);
-    }
 
     public override bool Execute(Taskbar window, CancellationToken _) {
         if (Path is null) return false;
@@ -67,14 +45,12 @@ internal class ImageInstruction : Instruction {
             image.StreamSource = ms;
             image.EndInit();
 
-            window.layers.DrawImage(Layer, new Rect(X, Y, Width == 0 ? bmp.Width : Width, Height == 0 ? bmp.Height : Height), image);
+            window.layers.DrawImage(Layer,
+                new Rect(X, Y, Width == 0 ? bmp.Width : Width, Height == 0 ? bmp.Height : Height), image);
         });
 
-        if(DrawOnce) {
-            drawn = true;
-        }
+        if (DrawOnce) drawn = true;
 
         return false;
     }
-
 }

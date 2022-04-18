@@ -244,7 +244,8 @@
                 </StackPanel.Style>
 
                 <TextBlock FontSize="14" Text="Gradient angle °" Margin="0,0,10,0" />
-                <xctk:SingleUpDown Name="AnglePicker" Value="{Binding SelectedInstruction.Angle}" Width="75" FormatString="F"
+                <xctk:SingleUpDown Name="AnglePicker" Value="{Binding SelectedInstruction.Angle}" Width="75"
+                                   FormatString="F"
                                    Increment="5" Minimum="0" Maximum="360" ClipValueToMinMax="True" />
             </StackPanel>
 

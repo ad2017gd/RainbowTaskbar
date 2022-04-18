@@ -10,12 +10,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Microsoft.Win32;
-using Newtonsoft.Json.Linq;
 using PropertyChanged;
+using RainbowTaskbar.API.WebSocket;
+using RainbowTaskbar.API.WebSocket.Events;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.UserControls;
-using RainbowTaskbar.WebSocketServices;
 
 namespace RainbowTaskbar;
 
@@ -198,11 +198,7 @@ public class AddInstructionCommand : ICommand {
 
         App.Config.Instructions.Insert(index, instruction);
 
-        var data = new JObject();
-        data.Add("type", "InstructionAdded");
-        data.Add("index", index);
-        data.Add("instruction", instruction.ToJSON());
-        WebSocketAPIServer.SendToSubscribed(data.ToString());
+        WebSocketAPIServer.SendToSubscribed(new InstructionAddedEvent(instruction, index));
     }
 }
 
@@ -224,12 +220,7 @@ public class RemoveInstructionCommand : ICommand {
         if (vm.SelectedInstructionIndex is { } selectedInstructionIndex && selectedInstructionIndex != -1) {
             var instruction = App.Config.Instructions[selectedInstructionIndex];
 
-            var data = new JObject {
-                {"type", "InstructionRemoved"},
-                {"index", selectedInstructionIndex},
-                {"instruction", instruction.ToJSON()}
-            };
-            WebSocketAPIServer.SendToSubscribed(data.ToString());
+            WebSocketAPIServer.SendToSubscribed(new InstructionRemovedEvent(instruction, selectedInstructionIndex));
 
             App.Config.Instructions.RemoveAt(selectedInstructionIndex);
         }
