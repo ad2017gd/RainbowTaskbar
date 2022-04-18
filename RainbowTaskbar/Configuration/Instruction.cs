@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using FastMember;
+using Newtonsoft.Json.Linq;
 
 namespace RainbowTaskbar.Configuration;
 
@@ -25,7 +28,7 @@ public abstract class Instruction : INotifyPropertyChanged {
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    //todo: maybe skip 1 here as well? to test
+
     public static IEnumerable<Type> GetKnownInstructionTypes() {
         if (InstructionTypes == null)
             InstructionTypes = Assembly.GetExecutingAssembly().GetTypes()
@@ -37,4 +40,22 @@ public abstract class Instruction : INotifyPropertyChanged {
     public bool Execute(Taskbar window) => Execute(window, CancellationToken.None);
 
     public abstract bool Execute(Taskbar window, CancellationToken token);
+
+    public abstract JObject ToJSON();
+
+    public static Instruction FromJSON(Type type, JObject json) {
+        dynamic inst = type.GetConstructor(Array.Empty<Type>()).Invoke(null) as Instruction;
+
+
+        foreach (var prop in json.Properties())
+            if (prop.Name != "Name" && prop.Name != "Position") {
+                var wrapped = ObjectAccessor.Create(inst);
+                if (prop.Name.StartsWith("Color"))
+                    wrapped[prop.Name] = ColorTranslator.FromHtml(prop.Value.Value<string>());
+                else
+                    wrapped[prop.Name] = Convert.ChangeType(prop.Value, wrapped[prop.Name].GetType());
+            }
+
+        return inst;
+    }
 }

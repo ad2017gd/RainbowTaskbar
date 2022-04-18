@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:drawing="clr-namespace:RainbowTaskbar.Drawing"
         mc:Ignorable="d"
         AllowsTransparency="True"
         ShowInTaskbar="False"
@@ -14,22 +15,23 @@
             <ColumnDefinition Width="31*" />
             <ColumnDefinition Width="169*" />
         </Grid.ColumnDefinitions>
-        <Canvas x:Name="Layer0" />
-        <Canvas x:Name="Layer1" />
-        <Canvas x:Name="Layer2" />
-        <Canvas x:Name="Layer3" />
-        <Canvas x:Name="Layer4" />
-        <Canvas x:Name="Layer5" />
-        <Canvas x:Name="Layer6" />
-        <Canvas x:Name="Layer7" />
-        <Canvas x:Name="Layer8" />
-        <Canvas x:Name="Layer9" />
-        <Canvas x:Name="Layer10" />
-        <Canvas x:Name="Layer11" />
-        <Canvas x:Name="Layer12" />
-        <Canvas x:Name="Layer13" />
-        <Canvas x:Name="Layer14" />
-        <Canvas x:Name="Layer15" />
+        <Canvas x:Name="Layer0"/>
+        <Canvas x:Name="Layer1"/>
+        <Canvas x:Name="Layer2"/>
+        <Canvas x:Name="Layer3"/>
+        <Canvas x:Name="Layer4"/>
+        <Canvas x:Name="Layer5"/>
+        <Canvas x:Name="Layer6"/>
+        <Canvas x:Name="Layer7"/>
+        <Canvas x:Name="Layer8"/>
+        <Canvas x:Name="Layer9"/>
+        <Canvas x:Name="Layer10"/>
+        <Canvas x:Name="Layer11"/>
+        <Canvas x:Name="Layer12"/>
+        <Canvas x:Name="Layer13"/>
+        <Canvas x:Name="Layer14"/>
+        <Canvas x:Name="Layer15"/>
+
 
 
     </Grid>

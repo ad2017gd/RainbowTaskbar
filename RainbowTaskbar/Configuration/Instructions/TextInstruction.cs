@@ -1,6 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Dynamic;
+using System.Runtime.Serialization;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Interpolation;
 using Color = System.Drawing.Color;
 
@@ -22,8 +26,22 @@ internal class TextInstruction : Instruction {
 
     [field: DataMember] public Color Color { get; set; } = Color.Black;
 
+    public override JObject ToJSON() {
+        dynamic data = new ExpandoObject();
+        data.Name = GetType().Name;
+        data.Layer = Layer;
+        data.Text = Text;
+        data.X = X;
+        data.Y = Y;
+        data.Font = Font;
+        data.Size = Size;
+        data.Color = ColorExtension.HexConverter(Color);
+
+        return JObject.FromObject(data);
+    }
+
     public override bool Execute(Taskbar window, CancellationToken _) {
-        window.Dispatcher.Invoke(() =>
+        window.Dispatcher.Invoke( () => 
             window.layers.DrawText(Layer, Text, X, Y, Size, "Arial", new SolidColorBrush(Color.ToMediaColor()))
         );
         return false;

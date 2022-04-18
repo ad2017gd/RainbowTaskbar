@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
-using RainbowTaskbar.API.WebSocket;
-using RainbowTaskbar.API.WebSocket.Events;
+using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
+using RainbowTaskbar.HTTPAPI;
+using RainbowTaskbar.WebSocketServices;
 
 namespace RainbowTaskbar;
 
@@ -38,11 +41,11 @@ public class TaskbarViewModel {
         window.Width = Taskbar.Width - Taskbar.X;
         window.Height = Taskbar.Height - Taskbar.Y;
 
-        window.layers = new Layers(window, new[] {
-            window.Layer0, window.Layer1, window.Layer2, window.Layer3, window.Layer4, window.Layer5,
-            window.Layer6, window.Layer7, window.Layer8, window.Layer9, window.Layer10, window.Layer11,
-            window.Layer12, window.Layer13, window.Layer14, window.Layer15
-        });
+        window.layers = new Layers(window, new Canvas[] {
+                window.Layer0, window.Layer1, window.Layer2, window.Layer3, window.Layer4, window.Layer5,
+                window.Layer6, window.Layer7, window.Layer8, window.Layer9, window.Layer10, window.Layer11,
+                window.Layer12, window.Layer13, window.Layer14, window.Layer15
+            });
 
         foreach (var layer in window.layers.canvases)
             layer.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
@@ -60,9 +63,13 @@ public class TaskbarViewModel {
                     for (ConfigStep = 0;
                          ConfigStep < App.Config.Instructions.Count && !token.IsCancellationRequested;
                          ConfigStep++) {
-                        if (API.API.APISubscribed.Count > 0)
-                            WebSocketAPIServer.SendToSubscribed(
-                                new InstructionExecutedEvent(App.Config.Instructions[ConfigStep], ConfigStep));
+                        if (API.APISubscribed.Count > 0) {
+                            var data = new JObject();
+                            data.Add("type", "InstructionStep");
+                            data.Add("index", ConfigStep);
+                            data.Add("instruction", App.Config.Instructions[ConfigStep].ToJSON());
+                            WebSocketAPIServer.SendToSubscribed(data.ToString());
+                        }
 
                         try {
                             if (App.Config.Instructions[ConfigStep].Execute(window, token)) slept = true;
