@@ -41,7 +41,7 @@
         <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0">
         </PackageReference>
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-        <PackageReference Include="O9d.Json.Formatting" Version="0.1.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 
         <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
             <PrivateAssets>all</PrivateAssets>

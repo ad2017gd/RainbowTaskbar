@@ -10,7 +10,7 @@ public class InstructionAddedEvent : WebSocketAPIEvent {
         Index = index;
     }
 
-     public int Index { get; }
+    [DataMember(Name = "index")] public int Index { get; }
 
-     public Instruction Instruction { get; }
+    [DataMember(Name = "instruction")] public Instruction Instruction { get; }
 }

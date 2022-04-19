@@ -1,10 +1,10 @@
 ﻿using System.Dynamic;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Interpolation;
 using Color = System.Drawing.Color;
 
@@ -13,7 +13,6 @@ namespace RainbowTaskbar.Configuration.Instructions;
 [DataContract]
 internal class TextInstruction : Instruction {
 
-    [JsonIgnore]
     public bool drawn = false;
 
     [field: DataMember] public int Layer { get; set; } = 1;
@@ -31,7 +30,22 @@ internal class TextInstruction : Instruction {
     [field: DataMember] public bool DrawOnce { get; set; } = false;
 
     [field: DataMember] public Color Color { get; set; } = Color.Black;
-    
+
+    public override JObject ToJSON() {
+        dynamic data = new ExpandoObject();
+        data.Name = GetType().Name;
+        data.Layer = Layer;
+        data.Text = Text;
+        data.X = X;
+        data.Y = Y;
+        data.Font = Font;
+        data.Size = Size;
+        data.Color = ColorExtension.HexConverter(Color);
+        data.DrawOnce = DrawOnce;
+
+        return JObject.FromObject(data);
+    }
+
     public override bool Execute(Taskbar window, CancellationToken _) {
         if(drawn && DrawOnce) {
             return false;

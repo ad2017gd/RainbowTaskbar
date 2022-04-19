@@ -1,12 +1,12 @@
 ﻿using System.Dynamic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Interpolation;
 
 namespace RainbowTaskbar.Configuration.Instructions;
@@ -14,8 +14,7 @@ namespace RainbowTaskbar.Configuration.Instructions;
 [DataContract]
 public class ShapeInstruction : Instruction {
 
-    [JsonIgnore]
-    public bool drawn;
+    public bool drawn = false;
 
     [field: DataMember] 
     public int Layer { get; set; } = 0;
@@ -86,5 +85,24 @@ public class ShapeInstruction : Instruction {
         Line,
         Rectangle,
         Ellipse
+    }
+
+    public override JObject ToJSON() {
+        dynamic data = new ExpandoObject();
+
+        data.Name = GetType().Name;
+        data.Layer = Layer;
+        data.Shape = Shape;
+        data.X = X;
+        data.Y = Y;
+        data.X2 = X2;
+        data.Y2 = Y2;
+        data.Fill = ColorExtension.HexConverter(Fill);
+        data.Line = ColorExtension.HexConverter(Line);
+        data.LineSize = LineSize;
+        data.DrawOnce = DrawOnce;
+
+        return JObject.FromObject(data);
+        return null;
     }
 }

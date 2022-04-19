@@ -9,6 +9,7 @@ using PropertyChanged;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Helpers;
+using RainbowTaskbar.HTTPAPI;
 
 namespace RainbowTaskbar;
 
@@ -79,14 +80,14 @@ public partial class App : Application {
             taskbars.ForEach(taskbar => taskbar.Show());
 
             new List<Instruction>(Config.Instructions).ForEach((i) => {
-                if (i is ImageInstruction imageInstruction) {
-                    imageInstruction.drawn = false;
+                if (i is ImageInstruction) {
+                    ((ImageInstruction) i).drawn = false;
                 }
-                if (i is ShapeInstruction shapeInstruction) {
-                    shapeInstruction.drawn = false;
+                if (i is ShapeInstruction) {
+                    ((ShapeInstruction) i).drawn = false;
                 }
-                if (i is TextInstruction textInstruction) {
-                    textInstruction.drawn = false;
+                if (i is TextInstruction) {
+                    ((TextInstruction) i).drawn = false;
                 }
             });
         });

@@ -7,18 +7,12 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using O9d.Json.Formatting;
 
 namespace RainbowTaskbar.Helpers;
 
 internal static class AutoUpdate {
-    private static readonly JsonSerializerOptions SnakeCase = new() {
-        PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy()
-    };
-    
     public static void CheckForUpdate() =>
         Task.Run(async () => {
             using var http = new HttpClient();
@@ -26,8 +20,9 @@ internal static class AutoUpdate {
             http.DefaultRequestHeaders.Add("User-Agent", "RainbowTaskbar");
             var content =
                 await http.GetStreamAsync("https://api.github.com/repos/ad2017gd/RainbowTaskbar/releases/latest");
-            
-            var response = JsonSerializer.Deserialize<GitHubAPIResponse>(content, SnakeCase);
+
+            var ser = new DataContractJsonSerializer(typeof(GitHubAPIResponse));
+            var response = ser.ReadObject(content) as GitHubAPIResponse;
             if (Assembly.GetExecutingAssembly().GetName().Version.CompareTo(Version.Parse(response.TagName)) < 0) {
                 // Outdated version
                 var res = MessageBox.Show("A new RainbowTaskbar update has released. Would you like to update?",
@@ -53,19 +48,22 @@ internal static class AutoUpdate {
             }
         });
 
+    [DataContract]
     public class Asset {
-        public string Name { get; set; }
+        [DataMember(Name = "name")] public string Name { get; set; }
 
-        public string Label { get; set; }
-        
+        [DataMember(Name = "label")] public string Label { get; set; }
+
+        [DataMember(Name = "browser_download_url")]
         public string BrowserDownloadUrl { get; set; }
     }
-    
+
+    [DataContract]
     public class GitHubAPIResponse {
-        public string TagName { get; set; }
+        [DataMember(Name = "tag_name")] public string TagName { get; set; }
 
-        public string Name { get; set; }
+        [DataMember(Name = "name")] public string Name { get; set; }
 
-        public List<Asset> Assets { get; set; }
+        [DataMember(Name = "assets")] public List<Asset> Assets { get; set; }
     }
 }

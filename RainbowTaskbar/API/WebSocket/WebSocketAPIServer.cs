@@ -1,30 +1,24 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
-using O9d.Json.Formatting;
-using RainbowTaskbar.Configuration;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace RainbowTaskbar.API.WebSocket;
 
 internal class WebSocketAPIServer : WebSocketBehavior {
-    private static readonly JsonSerializerOptions JsonOptions = new() {
-        Converters = { new TypeDiscriminatorConverter<WebSocketAPIEvent>(), new TypeDiscriminatorConverter<Instruction>() },
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-    
     public static void SendToSubscribed(string msg) {
         foreach (var id in API.APISubscribed) API.http.WebSocketServices["/rnbws"].Sessions.SendTo(msg, id);
     }
 
     public static void SendToSubscribed(WebSocketAPIEvent @event) {
-        SendToSubscribed(JsonSerializer.Serialize(@event, JsonOptions));
+        var ser = new DataContractJsonSerializer(@event.GetType());
+        var mem = new MemoryStream();
+        ser.WriteObject(mem, @event);
+        SendToSubscribed(Encoding.ASCII.GetString(mem.ToArray()));
     }
 
     protected override void OnMessage(MessageEventArgs e) {

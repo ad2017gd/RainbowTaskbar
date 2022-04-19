@@ -5,7 +5,7 @@ namespace RainbowTaskbar.Configuration.Instructions;
 
 [DataContract]
 internal class BorderRadiusInstruction : Instruction {
-    [field: DataMember] public int Radius { get; set; }
+    [field: DataMember] public int Radius { get; set; } = 0;
 
     public override bool Execute(Taskbar window, CancellationToken _) {
         window.taskbarHelper.Radius = Radius;
