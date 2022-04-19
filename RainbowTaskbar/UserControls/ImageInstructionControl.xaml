@@ -30,8 +30,7 @@
                         </Binding>
                     </xctk:WatermarkTextBox.Text>
                 </xctk:WatermarkTextBox>
-                <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0"
-                          IsChecked="{Binding SelectedInstruction.DrawOnce}" />
+                <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" />

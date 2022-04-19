@@ -1,12 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Windows;
 using System.Xml;
+using Newtonsoft.Json.Linq;
 using PropertyChanged;
 using RainbowTaskbar.Configuration.Instructions;
+using RainbowTaskbar.HTTPAPI;
 
 namespace RainbowTaskbar.Configuration;
 
@@ -53,14 +58,28 @@ public class Config : INotifyPropertyChanged {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public void OnIsAPIEnabledChanged() {
-        if (API.API.http is not null) {
-            if (IsAPIEnabled) API.API.Start();
+        if (API.http is not null) {
+            if (IsAPIEnabled) API.Start();
             else
-                API.API.Stop();
+                API.Stop();
         }
     }
 
-    public void OnAPIPortChanged() => API.API.Start();
+    public void OnAPIPortChanged() => API.Start();
+
+    public JObject ToJSON() {
+        dynamic data = new ExpandoObject();
+        data.ConfigFileVersion = ConfigFileVersion;
+        data.IsAPIEnabled = IsAPIEnabled;
+        data.APIPort = APIPort;
+        Application.Current.Dispatcher.Invoke(() => {
+            data.RunAtStartup = ((Editor) Application.Current.MainWindow).viewModel.RunAtStartup;
+        });
+
+        data.Instructions = Instructions.Select(i => i.ToJSON());
+
+        return JObject.FromObject(data);
+    }
 
     public static Config FromFile() {
         if (File.Exists(LegacyConfigPath)) {

@@ -1,6 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Dynamic;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows.Media;
+using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Interpolation;
 using Color = System.Drawing.Color;
 
@@ -41,8 +43,25 @@ internal class ColorInstruction : Instruction {
 
     [field: DataMember] public bool Randomize { get; set; } = false;
 
+    public override JObject ToJSON() {
+        dynamic data = new ExpandoObject();
+        data.Name = GetType().Name;
+        data.Time = Time;
+        data.Effect = Effect;
+        data.Transition = Transition;
+        data.Time2 = Time2;
+        data.Angle = Angle;
+        data.Layer = Layer;
+        data.Randomize = Randomize;
+        data.Color1 = ColorExtension.HexConverter(Color1);
+        data.Color2 = ColorExtension.HexConverter(Color2);
+
+
+        return JObject.FromObject(data);
+    }
+
     public override bool Execute(Taskbar window, CancellationToken token) {
-        var OldBrush = window.layers.brushes[Layer];
+        Brush OldBrush = window.layers.brushes[Layer];
         if (Randomize) {
             Color1 = Color.FromArgb(255, App.rnd.Next(0, 255), App.rnd.Next(0, 255), App.rnd.Next(0, 255));
             Color2 = Color.FromArgb(255, App.rnd.Next(0, 255), App.rnd.Next(0, 255), App.rnd.Next(0, 255));

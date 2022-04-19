@@ -68,11 +68,12 @@ internal class ImageInstruction : Instruction {
             image.StreamSource = ms;
             image.EndInit();
 
-            window.layers.DrawImage(Layer,
-                new Rect(X, Y, Width == 0 ? bmp.Width : Width, Height == 0 ? bmp.Height : Height), image);
+            window.layers.DrawImage(Layer, new Rect(X, Y, Width == 0 ? bmp.Width : Width, Height == 0 ? bmp.Height : Height), image);
         });
 
-        if (DrawOnce) drawn = true;
+        if(DrawOnce) {
+            drawn = true;
+        }
 
         return false;
     }

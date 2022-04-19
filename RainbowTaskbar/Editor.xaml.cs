@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -6,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using RainbowTaskbar.Configuration;
+using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.UserControls;
 
 namespace RainbowTaskbar;
