@@ -28,7 +28,7 @@ public partial class App : Application {
     public App() {
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
             // First process
-            // todo: multiple taskbar, refractor and clean up code, newtonsoft.json to datacontract json
+            // todo: multiple taskbar, refractor and clean up code
             Task.Run(async () => {
                 await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
                 pipe.MessageReceived += (sender, args) => {
@@ -82,6 +82,12 @@ public partial class App : Application {
             new List<Instruction>(Config.Instructions).ForEach((i) => {
                 if (i is ImageInstruction) {
                     ((ImageInstruction) i).drawn = false;
+                }
+                if (i is ShapeInstruction) {
+                    ((ShapeInstruction) i).drawn = false;
+                }
+                if (i is TextInstruction) {
+                    ((TextInstruction) i).drawn = false;
                 }
             });
         });

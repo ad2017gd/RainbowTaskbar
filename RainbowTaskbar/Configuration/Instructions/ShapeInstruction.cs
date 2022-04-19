@@ -14,6 +14,8 @@ namespace RainbowTaskbar.Configuration.Instructions;
 [DataContract]
 public class ShapeInstruction : Instruction {
 
+    public bool drawn = false;
+
     [field: DataMember] 
     public int Layer { get; set; } = 0;
 
@@ -28,6 +30,8 @@ public class ShapeInstruction : Instruction {
 
     [field: DataMember] public int Y2 { get; set; } = 0;
 
+    [field: DataMember] public bool DrawOnce { get; set; } = false;
+
     [field: DataMember]
     public System.Drawing.Color Fill { get; set; } = System.Drawing.Color.FromArgb(255, 0, 0, 0);
 
@@ -37,11 +41,12 @@ public class ShapeInstruction : Instruction {
     [field: DataMember]
     public int LineSize { get; set; } = 1;
 
-
-
-
-
     public override bool Execute(Taskbar window, CancellationToken _) {
+
+        if(DrawOnce && drawn) {
+            return false;
+        }
+
         switch(Shape) {
             case ShapeInstructionShapes.Line: {
                     var geometry = new LineGeometry(new Point(X,Y), new Point(X2,Y2));
@@ -69,6 +74,10 @@ public class ShapeInstruction : Instruction {
                 }
         }
 
+        if(DrawOnce) {
+            drawn = true;
+        }
+
         return false;
     }
 
@@ -79,7 +88,21 @@ public class ShapeInstruction : Instruction {
     }
 
     public override JObject ToJSON() {
-        // wont even
+        dynamic data = new ExpandoObject();
+
+        data.Name = GetType().Name;
+        data.Layer = Layer;
+        data.Shape = Shape;
+        data.X = X;
+        data.Y = Y;
+        data.X2 = X2;
+        data.Y2 = Y2;
+        data.Fill = ColorExtension.HexConverter(Fill);
+        data.Line = ColorExtension.HexConverter(Line);
+        data.LineSize = LineSize;
+        data.DrawOnce = DrawOnce;
+
+        return JObject.FromObject(data);
         return null;
     }
 }

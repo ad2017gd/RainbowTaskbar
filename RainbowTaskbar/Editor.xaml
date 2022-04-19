@@ -41,7 +41,7 @@
                             <Button Margin="5,0,0,0" Content=" Remove "
                                     Command="{Binding RemoveInstructionCommandImpl}" />
                         </WrapPanel>
-                        <ListBox Margin="0,5,0,0" MaxHeight="300" dd:DragDrop.IsDragSource="True"
+                        <ListBox Margin="0,5,0,0" MaxHeight="280" dd:DragDrop.IsDragSource="True"
                                  dd:DragDrop.IsDropTarget="True" dd:DragDrop.DragHandler="{Binding}"
                                  ItemsSource="{Binding Config.Instructions}"
                                  SelectedItem="{Binding SelectedInstruction}"

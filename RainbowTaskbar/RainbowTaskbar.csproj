@@ -4,17 +4,17 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>2.0.1</Version>
+        <Version>2.1</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>gay taskbar</Description>
         <Authors>Ad2017, zCri</Authors>
         <PackageIcon>icon.ico</PackageIcon>
-        <PackageIconUrl/>
+        <PackageIconUrl />
         <RepositoryUrl>https://github.com/ad2017gd/RainbowTaskbar</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
         <Company>LovesCock</Company>
         <NeutralLanguage>en</NeutralLanguage>
-        <PackageReleaseNotes/>
+        <PackageReleaseNotes />
         <AnalysisLevel>latest</AnalysisLevel>
     </PropertyGroup>
 
@@ -23,10 +23,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Nano.png"/>
-        <None Remove="Resources\icon.ico"/>
-        <None Remove="Resources\Nano.png"/>
-        <None Remove="Resources\Paypal.png"/>
+        <None Remove="Nano.png" />
+        <None Remove="Resources\icon.ico" />
+        <None Remove="Resources\Nano.png" />
+        <None Remove="Resources\Paypal.png" />
         <None Include="Resources\icon.ico">
             <Pack>True</Pack>
         </None>
@@ -34,23 +34,23 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0"/>
-        <PackageReference Include="FastMember" Version="1.5.0"/>
-        <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1"/>
-        <PackageReference Include="H.Pipes" Version="2.0.35"/>
+        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
+        <PackageReference Include="FastMember" Version="1.5.0" />
+        <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
+        <PackageReference Include="H.Pipes" Version="2.0.35" />
         <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0">
         </PackageReference>
-        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 
         <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
             <PrivateAssets>all</PrivateAssets>
             <ExcludeAssets>runtime</ExcludeAssets>
         </PackageReference>
 
-        <PackageReference Include="System.Drawing.Common" Version="6.0.0"/>
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 
-        <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11"/>
+        <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
     </ItemGroup>
 
 

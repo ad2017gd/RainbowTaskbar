@@ -9,6 +9,9 @@
         AllowsTransparency="True"
         ShowInTaskbar="False"
         WindowStyle="None"
+        MouseMove="RainbowTaskbar_MouseMove"
+        MouseDown="RainbowTaskbar_MouseDown"
+        MouseUp="RainbowTaskbar_MouseUp"
         Title="Taskbar" Height="450" Width="800">
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>

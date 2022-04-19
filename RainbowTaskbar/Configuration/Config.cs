@@ -23,10 +23,6 @@ public class Config : INotifyPropertyChanged {
     private static readonly int SupportedConfigVersion = 2;
 
     public Config() {
-        Instructions = new BindingList<Instruction>();
-        Presets = new BindingList<InstructionPreset>
-            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
-
         SetupPropertyChanged();
     }
 
@@ -36,11 +32,12 @@ public class Config : INotifyPropertyChanged {
 
     [OnChangedMethod(nameof(SetupPropertyChanged))]
     [field: DataMember]
-    public BindingList<Instruction> Instructions { get; set; }
+    public BindingList<Instruction> Instructions { get; set; } = new BindingList<Instruction>();
 
     [OnChangedMethod(nameof(SetupPropertyChanged))]
     [field: DataMember]
-    public BindingList<InstructionPreset> Presets { get; set; }
+    public BindingList<InstructionPreset> Presets { get; set; } = new BindingList<InstructionPreset>
+            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
 
     [field: DataMember]
     [OnChangedMethod(nameof(OnIsAPIEnabledChanged))]

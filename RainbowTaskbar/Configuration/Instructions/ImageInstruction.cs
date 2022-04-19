@@ -46,6 +46,7 @@ internal class ImageInstruction : Instruction {
         data.Width = Width;
         data.Height = Height;
         data.Opacity = Opacity;
+        data.DrawOnce = DrawOnce;
 
         return JObject.FromObject(data);
     }

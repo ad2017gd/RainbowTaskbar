@@ -27,6 +27,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
+            
             <xctk:WatermarkComboBox Grid.Row="0" Watermark="Type" x:Name="SelectedType"
                                     SelectedItem="{Binding SelectedInstruction.Shape}"
                                     ItemsSource="{Binding Source={StaticResource Shapes}}">
@@ -36,6 +37,7 @@
                     </DataTemplate>
                 </xctk:WatermarkComboBox.ItemTemplate>
             </xctk:WatermarkComboBox>
+            <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             

@@ -12,6 +12,9 @@ namespace RainbowTaskbar.Configuration.Instructions;
 
 [DataContract]
 internal class TextInstruction : Instruction {
+
+    public bool drawn = false;
+
     [field: DataMember] public int Layer { get; set; } = 1;
 
     [field: DataMember] public string Text { get; set; }
@@ -23,6 +26,8 @@ internal class TextInstruction : Instruction {
     [field: DataMember] public string Font { get; set; } = "Arial";
 
     [field: DataMember] public int Size { get; set; } = 32;
+
+    [field: DataMember] public bool DrawOnce { get; set; } = false;
 
     [field: DataMember] public Color Color { get; set; } = Color.Black;
 
@@ -36,14 +41,22 @@ internal class TextInstruction : Instruction {
         data.Font = Font;
         data.Size = Size;
         data.Color = ColorExtension.HexConverter(Color);
+        data.DrawOnce = DrawOnce;
 
         return JObject.FromObject(data);
     }
 
     public override bool Execute(Taskbar window, CancellationToken _) {
+        if(drawn && DrawOnce) {
+            return false;
+        }
+
         window.Dispatcher.Invoke( () => 
             window.layers.DrawText(Layer, Text, X, Y, Size, "Arial", new SolidColorBrush(Color.ToMediaColor()))
         );
+
+        if (DrawOnce) drawn = true;
+
         return false;
     }
 }
