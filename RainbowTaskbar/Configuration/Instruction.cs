@@ -18,6 +18,7 @@ public abstract class Instruction : INotifyPropertyChanged {
         get => InstructionTypes.Skip(1);
     }
 
+
     public string Name {
         get => Regex.Replace(GetType().Name.Replace("Instruction", ""), @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))",
             " $0").TrimStart();

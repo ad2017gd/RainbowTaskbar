@@ -23,23 +23,23 @@ internal class ColorInstruction : Instruction {
         Back
     }
 
-    [field: DataMember] public int Time { get; set; } = 1;
+    [DataMember] public int Time { get; set; } = 1;
 
-    [field: DataMember] public Color Color1 { get; set; }
+    [DataMember] public Color Color1 { get; set; }
 
-    [field: DataMember] public ColorInstructionEffect Effect { get; set; }
+    [DataMember] public ColorInstructionEffect Effect { get; set; }
 
-    [field: DataMember] public Color Color2 { get; set; }
+    [DataMember] public Color Color2 { get; set; }
 
-    [field: DataMember] public int Time2 { get; set; } = 1;
+    [DataMember] public int Time2 { get; set; } = 1;
 
-    [field: DataMember] public ColorInstructionTransition Transition { get; set; }
+    [DataMember] public ColorInstructionTransition Transition { get; set; }
 
-    [field: DataMember] public double Angle { get; set; } = 0;
+    [DataMember] public double Angle { get; set; } = 0;
 
-    [field: DataMember] public int Layer { get; set; } = 0;
+    [DataMember] public int Layer { get; set; } = 0;
 
-    [field: DataMember] public bool Randomize { get; set; } = false;
+    [DataMember] public bool Randomize { get; set; } = false;
 
     public override bool Execute(Taskbar window, CancellationToken token) {
         var OldBrush = window.layers.brushes[Layer];

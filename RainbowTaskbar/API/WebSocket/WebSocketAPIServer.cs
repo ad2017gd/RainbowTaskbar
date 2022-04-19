@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using Dahomey.Json;
 using O9d.Json.Formatting;
 using RainbowTaskbar.Configuration;
 using WebSocketSharp;
@@ -14,10 +15,9 @@ using WebSocketSharp.Server;
 namespace RainbowTaskbar.API.WebSocket;
 
 internal class WebSocketAPIServer : WebSocketBehavior {
-    private static readonly JsonSerializerOptions JsonOptions = new() {
-        Converters = { new TypeDiscriminatorConverter<WebSocketAPIEvent>(), new TypeDiscriminatorConverter<Instruction>() },
+    public static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions() {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
+    }.SetupExtensions();
     
     public static void SendToSubscribed(string msg) {
         foreach (var id in API.APISubscribed) API.http.WebSocketServices["/rnbws"].Sessions.SendTo(msg, id);
@@ -38,7 +38,7 @@ internal class WebSocketAPIServer : WebSocketBehavior {
             var jsonData = match.Groups.Count > 1 ? match.Groups.Values.ElementAt(1).Value : null;
 
             try {
-                var json = JsonNode.Parse(jsonData!);
+                var json = System.Text.Json.Nodes.JsonNode.Parse(jsonData!);
 
                 if (json?["command"] != null)
                     switch (json["command"].ToString().ToLower()) {

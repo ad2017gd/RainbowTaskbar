@@ -5,7 +5,7 @@ namespace RainbowTaskbar.Configuration.Instructions;
 
 [DataContract]
 internal class DelayInstruction : Instruction {
-    [field: DataMember] public int Time { get; set; } = 1;
+    [DataMember] public int Time { get; set; } = 1;
 
     public override bool Execute(Taskbar window, CancellationToken token) {
         token.WaitHandle.WaitOne(Time);
