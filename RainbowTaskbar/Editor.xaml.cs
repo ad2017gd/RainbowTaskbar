@@ -56,6 +56,8 @@ public partial class Editor : Window {
 
     private void Button_Click(object sender, RoutedEventArgs e) => App.ReloadTaskbars();
 
+    private void Save_Click(object sender, RoutedEventArgs e) => App.Config.ToFile();
+
     private void Window_Closing(object sender, CancelEventArgs e) {
         e.Cancel = true;
         Hide();
