@@ -2,17 +2,26 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Xml;
 using PropertyChanged;
+using RainbowTaskbar.API.WebSocket;
 using RainbowTaskbar.Configuration.Instructions;
 
 namespace RainbowTaskbar.Configuration;
 
 [DataContract]
 public class Config : INotifyPropertyChanged {
-    public static readonly string ConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
+    private static readonly JsonSerializerOptions JsonOptions = new() {
+        Converters = { new TypeDiscriminatorConverter<Instruction>() },
+    };
+    
+    public static readonly string ConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.json");
+    public static readonly string OldConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
     public static readonly string LegacyConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.txt");
 
     private static readonly int SupportedConfigVersion = 2;
@@ -211,26 +220,31 @@ public class Config : INotifyPropertyChanged {
         }
 
         try {
+            if (File.Exists(OldConfigPath)) {
+                using var oldFileStream = new FileStream(OldConfigPath, FileMode.OpenOrCreate);
+                using var reader = XmlDictionaryReader.CreateTextReader(oldFileStream, new XmlDictionaryReaderQuotas());
+
+                var serializerSettings = new DataContractSerializerSettings {
+                    PreserveObjectReferences = true
+                };
+
+                var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
+                var cfg = serializer.ReadObject(reader) as Config;
+                if (cfg.ConfigFileVersion != SupportedConfigVersion)
+                    switch (cfg.ConfigFileVersion) {
+                        case 1:
+                            cfg.Presets = new BindingList<InstructionPreset>
+                                {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
+                            cfg.ConfigFileVersion = SupportedConfigVersion;
+                            break;
+                    }
+
+                cfg.SetupPropertyChanged();
+                return cfg;
+            }
+            
             using var fileStream = new FileStream(ConfigPath, FileMode.OpenOrCreate);
-            using var reader = XmlDictionaryReader.CreateTextReader(fileStream, new XmlDictionaryReaderQuotas());
-
-            var serializerSettings = new DataContractSerializerSettings {
-                PreserveObjectReferences = true
-            };
-
-            var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
-            var cfg = serializer.ReadObject(reader) as Config;
-            if (cfg.ConfigFileVersion != SupportedConfigVersion)
-                switch (cfg.ConfigFileVersion) {
-                    case 1:
-                        cfg.Presets = new BindingList<InstructionPreset>
-                            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
-                        cfg.ConfigFileVersion = SupportedConfigVersion;
-                        break;
-                }
-
-            cfg.SetupPropertyChanged();
-            return cfg;
+            return JsonSerializer.Deserialize<Config>(fileStream, JsonOptions);
         }
         catch {
             var cfg = new Config {
@@ -244,12 +258,6 @@ public class Config : INotifyPropertyChanged {
 
     public void ToFile() {
         using var fileStream = new FileStream(ConfigPath, FileMode.Create);
-
-        var serializerSettings = new DataContractSerializerSettings {
-            PreserveObjectReferences = true
-        };
-
-        var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
-        serializer.WriteObject(fileStream, this);
+        JsonSerializer.Serialize(fileStream, this);
     }
 }

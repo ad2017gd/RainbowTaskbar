@@ -5,18 +5,19 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Newtonsoft.Json.Linq;
 
 namespace RainbowTaskbar.Configuration.Instructions;
 
 [DataContract]
 internal class ImageInstruction : Instruction {
 
+    [JsonIgnore]
     public bool drawn = false;
 
     [field: DataMember] public int Layer { get; set; } = 0;
@@ -34,22 +35,6 @@ internal class ImageInstruction : Instruction {
     [field: DataMember] public double Opacity { get; set; } = 1;
 
     [field: DataMember] public bool DrawOnce { get; set; } = false;
-
-    public override JObject ToJSON() {
-        dynamic data = new ExpandoObject();
-
-        data.Name = GetType().Name;
-        data.Layer = Layer;
-        data.Path = Path;
-        data.X = X;
-        data.Y = Y;
-        data.Width = Width;
-        data.Height = Height;
-        data.Opacity = Opacity;
-        data.DrawOnce = DrawOnce;
-
-        return JObject.FromObject(data);
-    }
 
     public override bool Execute(Taskbar window, CancellationToken _) {
         if (Path is null) return false;

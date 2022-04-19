@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using Newtonsoft.Json.Linq;
+using RainbowTaskbar.API.WebSocket;
+using RainbowTaskbar.API.WebSocket.Events;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
-using RainbowTaskbar.HTTPAPI;
-using RainbowTaskbar.WebSocketServices;
 
 namespace RainbowTaskbar;
 
@@ -42,43 +41,27 @@ public partial class Taskbar : Window {
         taskbarHelper.SetBlur();
     }
 
-    private void RainbowTaskbar_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-        if (API.APISubscribed.Count > 0) {
-            var data = new JObject();
-            data.Add("type", "MouseMove");
-            data.Add("x", e.GetPosition(this).X);
-            data.Add("y", e.GetPosition(this).Y);
-            WebSocketAPIServer.SendToSubscribed(data.ToString());
+    private void RainbowTaskbar_MouseMove(object sender, MouseEventArgs e) {
+        if (API.API.APISubscribed.Count > 0) {
+            WebSocketAPIServer.SendToSubscribed(new MouseMoveEvent(e.GetPosition(this).X, e.GetPosition(this).Y));
         }
     }
 
-    private void RainbowTaskbar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-        if (API.APISubscribed.Count > 0) {
-            var data = new JObject();
-            data.Add("type", "MouseDown");
-            data.Add("x", e.GetPosition(this).X);
-            data.Add("y", e.GetPosition(this).Y);
-            var states = new JObject();
-            states.Add("left", JToken.FromObject(e.LeftButton));
-            states.Add("right", JToken.FromObject(e.RightButton));
-            states.Add("middle", JToken.FromObject(e.MiddleButton));
-            data.Add("button_states", states);
-            WebSocketAPIServer.SendToSubscribed(data.ToString());
+    private void RainbowTaskbar_MouseDown(object sender, MouseButtonEventArgs e) {
+        if (API.API.APISubscribed.Count > 0) {
+            var @event = new MouseDownEvent(e.GetPosition(this).X, e.GetPosition(this).Y,
+                new MouseStates(e.LeftButton == MouseButtonState.Pressed, e.RightButton == MouseButtonState.Pressed,
+                    e.MiddleButton == MouseButtonState.Pressed));
+            WebSocketAPIServer.SendToSubscribed(@event);
         }
     }
 
     private void RainbowTaskbar_MouseUp(object sender, MouseButtonEventArgs e) {
-        if (API.APISubscribed.Count > 0) {
-            var data = new JObject();
-            data.Add("type", "MouseUp");
-            data.Add("x", e.GetPosition(this).X);
-            data.Add("y", e.GetPosition(this).Y);
-            var states = new JObject();
-            states.Add("left", JToken.FromObject(e.LeftButton));
-            states.Add("right", JToken.FromObject(e.RightButton));
-            states.Add("middle", JToken.FromObject(e.MiddleButton));
-            data.Add("button_states", states);
-            WebSocketAPIServer.SendToSubscribed(data.ToString());
+        if (API.API.APISubscribed.Count > 0) {
+            var @event = new MouseUpEvent(e.GetPosition(this).X, e.GetPosition(this).Y,
+                new MouseStates(e.LeftButton == MouseButtonState.Pressed, e.RightButton == MouseButtonState.Pressed,
+                    e.MiddleButton == MouseButtonState.Pressed));
+            WebSocketAPIServer.SendToSubscribed(@event);
         }
     }
 }

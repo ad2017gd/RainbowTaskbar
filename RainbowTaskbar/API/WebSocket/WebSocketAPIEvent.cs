@@ -8,5 +8,5 @@ public abstract class WebSocketAPIEvent {
         Name = name;
     }
 
-    [DataMember(Name = "name")] public string Name { get; }
+     public string Name { get; }
 }

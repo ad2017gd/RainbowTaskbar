@@ -34,6 +34,7 @@
 
 
     <ItemGroup>
+        <PackageReference Include="Dahomey.Json" Version="1.12.2" />
         <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
         <PackageReference Include="FastMember" Version="1.5.0" />
         <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
@@ -41,7 +42,7 @@
         <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0">
         </PackageReference>
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="O9d.Json.Formatting" Version="0.1.0" />
 
         <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
             <PrivateAssets>all</PrivateAssets>

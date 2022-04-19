@@ -2,11 +2,14 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Web;
 using System.Windows;
+using O9d.Json.Formatting;
 using RainbowTaskbar.API.HTTP.Responses;
 using RainbowTaskbar.Configuration;
 using WebSocketSharp.Server;
@@ -14,6 +17,11 @@ using WebSocketSharp.Server;
 namespace RainbowTaskbar.API.HTTP;
 
 public static class HTTPAPIServer {
+    private static readonly JsonSerializerOptions JsonOptions = new() {
+        Converters = { new TypeDiscriminatorConverter<HTTPAPIResponse>(), new TypeDiscriminatorConverter<Instruction>() },
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+    
     private static Instruction instruction;
 
     public static void Get(object sender, HttpRequestEventArgs args) {
@@ -60,8 +68,9 @@ public static class HTTPAPIServer {
             response = new ErrorResponse(e.Message.Replace("\"", "'"));
         }
 
-        var ser = new DataContractJsonSerializer(typeof(HTTPAPIResponse));
-        ser.WriteObject(res.OutputStream, response);
+        var json = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response, JsonOptions));
+        res.ContentLength64 = json.Length;
+        res.OutputStream.Write(json);
         res.Close();
     }
 
@@ -195,7 +204,9 @@ public static class HTTPAPIServer {
             response = new ErrorResponse(e.Message.Replace("\"", "'"));
         }
 
-        var ser = new DataContractJsonSerializer(typeof(HTTPAPIResponse));
-        ser.WriteObject(res.OutputStream, response);
+        var json = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response, JsonOptions));
+        res.ContentLength64 = json.Length;
+        res.OutputStream.Write(json);
+        res.Close();
     }
 }

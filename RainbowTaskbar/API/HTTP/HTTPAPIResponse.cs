@@ -8,7 +8,7 @@ public abstract class HTTPAPIResponse {
         Success = success;
     }
 
-    [DataMember(Name = "success")] public bool Success { get; }
+     public bool Success { get; }
 
-    [DataMember(Name = "data")] public abstract object Data { get; }
+     public abstract object Data { get; }
 }
