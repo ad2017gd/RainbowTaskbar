@@ -20,13 +20,13 @@ public class TransparencyInstruction : Instruction {
         Layer
     }
 
-    [DataMember] public TransparencyInstructionType Type { get; set; }
+    [field: DataMember] public TransparencyInstructionType Type { get; set; }
 
-    [DataMember] public double Opacity { get; set; } = 1;
+    [field: DataMember] public double Opacity { get; set; } = 1;
 
-    [DataMember] public TransparencyInstructionStyle Style { get; set; }
+    [field: DataMember] public TransparencyInstructionStyle Style { get; set; }
 
-    [DataMember] public int Layer { get; set; }
+    [field: DataMember] public int Layer { get; set; }
 
     public override bool Execute(Taskbar window, CancellationToken _) {
         switch (Type) {

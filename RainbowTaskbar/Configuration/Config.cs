@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -9,8 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Xml;
-using Dahomey.Json;
-using Dahomey.Json.Serialization.Conventions;
 using PropertyChanged;
 using RainbowTaskbar.API.WebSocket;
 using RainbowTaskbar.Configuration.Instructions;
@@ -19,9 +16,9 @@ namespace RainbowTaskbar.Configuration;
 
 [DataContract]
 public class Config : INotifyPropertyChanged {
-    public static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions() {
-
-    }.SetupExtensions();
+    private static readonly JsonSerializerOptions JsonOptions = new() {
+        Converters = { new TypeDiscriminatorConverter<Instruction>() },
+    };
     
     public static readonly string ConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.json");
     public static readonly string OldConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
@@ -30,29 +27,27 @@ public class Config : INotifyPropertyChanged {
     private static readonly int SupportedConfigVersion = 2;
 
     public Config() {
-
-
         SetupPropertyChanged();
     }
 
-    [DataMember] public int ConfigFileVersion { get; set; } = SupportedConfigVersion;
+    [field: DataMember] public int ConfigFileVersion { get; set; } = SupportedConfigVersion;
 
-    [DataMember] public bool CheckUpdate { get; set; } = true;
+    [field: DataMember] public bool CheckUpdate { get; set; } = true;
 
     [OnChangedMethod(nameof(SetupPropertyChanged))]
-    [DataMember]
+    [field: DataMember]
     public BindingList<Instruction> Instructions { get; set; } = new BindingList<Instruction>();
 
     [OnChangedMethod(nameof(SetupPropertyChanged))]
-    [DataMember]
+    [field: DataMember]
     public BindingList<InstructionPreset> Presets { get; set; } = new BindingList<InstructionPreset>
             {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
 
-    [DataMember]
+    [field: DataMember]
     [OnChangedMethod(nameof(OnIsAPIEnabledChanged))]
     public bool IsAPIEnabled { get; set; } = false;
 
-    [DataMember]
+    [field: DataMember]
     [OnChangedMethod(nameof(OnAPIPortChanged))]
     public int APIPort { get; set; } = 9093;
 
@@ -263,6 +258,6 @@ public class Config : INotifyPropertyChanged {
 
     public void ToFile() {
         using var fileStream = new FileStream(ConfigPath, FileMode.Create);
-        JsonSerializer.Serialize(fileStream, this, JsonOptions);
+        JsonSerializer.Serialize(fileStream, this);
     }
 }

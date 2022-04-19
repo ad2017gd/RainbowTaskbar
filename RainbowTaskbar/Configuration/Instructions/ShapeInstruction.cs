@@ -17,29 +17,29 @@ public class ShapeInstruction : Instruction {
     [JsonIgnore]
     public bool drawn;
 
-    [DataMember] 
+    [field: DataMember] 
     public int Layer { get; set; } = 0;
 
-    [DataMember]
+    [field: DataMember]
     public ShapeInstructionShapes Shape { get; set; } = ShapeInstructionShapes.Line;
 
-    [DataMember] public int X { get; set; } = 0;
+    [field: DataMember] public int X { get; set; } = 0;
 
-    [DataMember] public int Y { get; set; } = 0;
+    [field: DataMember] public int Y { get; set; } = 0;
 
-    [DataMember] public int X2 { get; set; } = 0;
+    [field: DataMember] public int X2 { get; set; } = 0;
 
-    [DataMember] public int Y2 { get; set; } = 0;
+    [field: DataMember] public int Y2 { get; set; } = 0;
 
-    [DataMember] public bool DrawOnce { get; set; } = false;
+    [field: DataMember] public bool DrawOnce { get; set; } = false;
 
-    [DataMember]
+    [field: DataMember]
     public System.Drawing.Color Fill { get; set; } = System.Drawing.Color.FromArgb(255, 0, 0, 0);
 
-    [DataMember]
+    [field: DataMember]
     public System.Drawing.Color Line { get; set; } = System.Drawing.Color.FromArgb(255, 0, 0, 0);
 
-    [DataMember]
+    [field: DataMember]
     public int LineSize { get; set; } = 1;
 
     public override bool Execute(Taskbar window, CancellationToken _) {

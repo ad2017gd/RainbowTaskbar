@@ -4,9 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Dahomey.Json;
-using Dahomey.Json.Attributes;
-using Dahomey.Json.Serialization.Conventions;
 using H.Pipes;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
@@ -49,28 +46,8 @@ public partial class App : Application {
                 await Task.Delay(Timeout.InfiniteTimeSpan);
             });
 
-
-            DiscriminatorConventionRegistry registry = Config.JsonOptions.GetDiscriminatorConventionRegistry();
-            registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(Config.JsonOptions, "Name"));
-            registry.DiscriminatorPolicy = DiscriminatorPolicy.Always;
-            foreach (Type t in Instruction.GetKnownInstructionTypes().Skip(1)) registry.RegisterType(t);
-
-
-            DiscriminatorConventionRegistry httpapiregistry = API.HTTP.HTTPAPIServer.JsonOptions.GetDiscriminatorConventionRegistry();
-            registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(API.HTTP.HTTPAPIServer.JsonOptions, "Name"));
-            registry.DiscriminatorPolicy = DiscriminatorPolicy.Always;
-            foreach (Type t in API.HTTP.HTTPAPIResponse.GetKnownResponseTypes().Skip(1)) registry.RegisterType(t);
-
-
-            DiscriminatorConventionRegistry websocketapiregistry = API.WebSocket.WebSocketAPIServer.JsonOptions.GetDiscriminatorConventionRegistry();            
-            registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(API.WebSocket.WebSocketAPIServer.JsonOptions, "Name"));
-            registry.DiscriminatorPolicy = DiscriminatorPolicy.Always;
-            foreach (Type t in API.WebSocket.WebSocketAPIEvent.GetKnownEventTypes().Skip(1)) registry.RegisterType(t);
-
             Config = Config.FromFile();
             if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
-
-
             API.API.Start();
             if (TaskbarHelper.FindWindow("Shell_SecondaryTrayWnd", null) != (IntPtr) 0) {
                 var newWindow = new Taskbar(true);

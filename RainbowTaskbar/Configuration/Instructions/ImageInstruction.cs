@@ -20,21 +20,21 @@ internal class ImageInstruction : Instruction {
     [JsonIgnore]
     public bool drawn = false;
 
-    [DataMember] public int Layer { get; set; } = 0;
+    [field: DataMember] public int Layer { get; set; } = 0;
 
-    [DataMember] public string Path { get; set; }
+    [field: DataMember] public string Path { get; set; }
 
-    [DataMember] public int X { get; set; } = 0;
+    [field: DataMember] public int X { get; set; } = 0;
 
-    [DataMember] public int Y { get; set; } = 0;
+    [field: DataMember] public int Y { get; set; } = 0;
 
-    [DataMember] public int Width { get; set; } = 0;
+    [field: DataMember] public int Width { get; set; } = 0;
 
-    [DataMember] public int Height { get; set; } = 0;
+    [field: DataMember] public int Height { get; set; } = 0;
 
-    [DataMember] public double Opacity { get; set; } = 1;
+    [field: DataMember] public double Opacity { get; set; } = 1;
 
-    [DataMember] public bool DrawOnce { get; set; } = false;
+    [field: DataMember] public bool DrawOnce { get; set; } = false;
 
     public override bool Execute(Taskbar window, CancellationToken _) {
         if (Path is null) return false;
