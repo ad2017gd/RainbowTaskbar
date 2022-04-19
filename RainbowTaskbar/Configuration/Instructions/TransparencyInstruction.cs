@@ -1,8 +1,5 @@
-﻿using System.Dynamic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Threading;
-using System.Windows.Controls;
-using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Helpers;
 
 namespace RainbowTaskbar.Configuration.Instructions;
@@ -30,17 +27,6 @@ public class TransparencyInstruction : Instruction {
     [field: DataMember] public TransparencyInstructionStyle Style { get; set; }
 
     [field: DataMember] public int Layer { get; set; }
-
-    public override JObject ToJSON() {
-        dynamic data = new ExpandoObject();
-        data.Name = GetType().Name;
-        data.Opacity = Opacity;
-        data.Layer = Layer;
-        data.Style = Style;
-        data.Type = Type;
-
-        return JObject.FromObject(data);
-    }
 
     public override bool Execute(Taskbar window, CancellationToken _) {
         switch (Type) {
@@ -82,7 +68,7 @@ public class TransparencyInstruction : Instruction {
             case TransparencyInstructionType.Layer:
                 window.Dispatcher.Invoke(() =>
                     window.layers.canvases[Layer].Opacity = Opacity
-                    );
+                );
                 break;
         }
 

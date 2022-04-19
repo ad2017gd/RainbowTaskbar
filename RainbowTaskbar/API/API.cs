@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using RainbowTaskbar.WebSocketServices;
+using RainbowTaskbar.API.HTTP;
+using RainbowTaskbar.API.WebSocket;
 using WebSocketSharp.Server;
 
-namespace RainbowTaskbar.HTTPAPI;
+namespace RainbowTaskbar.API;
 
 public static class API {
     public static List<string> APISubscribed = new();
