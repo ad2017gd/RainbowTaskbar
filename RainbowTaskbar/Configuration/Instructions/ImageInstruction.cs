@@ -21,7 +21,7 @@ internal class ImageInstruction : Instruction {
 
     [field: DataMember] public int Layer { get; set; } = 0;
 
-    [field: DataMember] public string Path { get; set; }
+    [field: DataMember] public string Path { get; set; } = "";
 
     [field: DataMember] public int X { get; set; } = 0;
 
@@ -52,7 +52,7 @@ internal class ImageInstruction : Instruction {
     }
 
     public override bool Execute(Taskbar window, CancellationToken _) {
-        if (Path is null) return false;
+        if (Path == "") return false;
 
         if (DrawOnce && drawn) return false;
 

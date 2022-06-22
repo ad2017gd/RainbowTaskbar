@@ -53,7 +53,10 @@ public abstract class Instruction : INotifyPropertyChanged {
                 if (prop.Name.StartsWith("Color"))
                     wrapped[prop.Name] = ColorTranslator.FromHtml(prop.Value.Value<string>());
                 else
-                    wrapped[prop.Name] = Convert.ChangeType(prop.Value, wrapped[prop.Name].GetType());
+                    if(wrapped[prop.Name] is not null)
+                        wrapped[prop.Name] = Convert.ChangeType(prop.Value, wrapped[prop.Name].GetType());
+                    else
+                        wrapped[prop.Name] = prop.Value;
             }
 
         return inst;

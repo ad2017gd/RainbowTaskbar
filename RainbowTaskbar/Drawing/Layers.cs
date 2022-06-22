@@ -28,6 +28,7 @@ public class Layers {
             img.Name = $"{c.Name}Image";
             img.Width = c.Width;
             img.Height = c.Height;
+            img.SnapsToDevicePixels = true;
 
             var target = new RenderTargetBitmap((int) c.Width, (int) c.Height, 96, 96, PixelFormats.Pbgra32);
             renderTargets.Add(target);

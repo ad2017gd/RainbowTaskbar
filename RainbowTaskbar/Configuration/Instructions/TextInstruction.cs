@@ -17,7 +17,7 @@ internal class TextInstruction : Instruction {
 
     [field: DataMember] public int Layer { get; set; } = 1;
 
-    [field: DataMember] public string Text { get; set; }
+    [field: DataMember] public string Text { get; set; } = "";
 
     [field: DataMember] public int X { get; set; } = 0;
 

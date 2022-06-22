@@ -98,7 +98,7 @@ public static class DefaultPresets {
         Instructions = new BindingList<Instruction>(new Instruction[] {
             new TransparencyInstruction {
                 Type = TransparencyInstruction.TransparencyInstructionType.Style,
-                Style = TransparencyInstruction.TransparencyInstructionStyle.Blur
+                Style = TransparencyInstruction.TransparencyInstructionStyle.Transparent
             },
             new TransparencyInstruction {
                 Type = TransparencyInstruction.TransparencyInstructionType.RainbowTaskbar,
