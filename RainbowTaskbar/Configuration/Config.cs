@@ -133,7 +133,7 @@ public class Config : INotifyPropertyChanged {
                                 t.Type = TransparencyInstruction.TransparencyInstructionType.Style;
                                 t.Style = r > 0
                                     ? TransparencyInstruction.TransparencyInstructionStyle.Blur
-                                    : TransparencyInstruction.TransparencyInstructionStyle.Default;
+                                    : TransparencyInstruction.TransparencyInstructionStyle.Transparent;
                                 break;
                         }
 
