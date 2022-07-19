@@ -346,7 +346,7 @@ public class Config : INotifyPropertyChanged {
                         goto case 2;
                     case 2:
                         cfg.InterpolationQuality = 25;
-                        //cfg.SeparateTaskbarGraphics = false;
+                        cfg.GraphicsRepeat = true;
                         cfg.SameRadiusOnEach = false;
                         cfg.ConfigFileVersion = SupportedConfigVersion;
                         break;
