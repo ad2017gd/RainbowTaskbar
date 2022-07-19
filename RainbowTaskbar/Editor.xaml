@@ -7,6 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:dd="urn:gong-wpf-dragdrop"
         Closing="Window_Closing"
+        Icon="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
         Title="Editor" Height="450" Width="800">
     <Window.Resources>
         <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
