@@ -332,7 +332,7 @@ public class TaskbarHelper {
             var w = (int) ((r.Width - r.Left) * scale);
             var h = (int) ((r.Height - r.Top) * scale);
 
-            if (!autoHide && WindowHelper.Count > 1) {
+            if (!autoHide && App.taskbars.Count > 1 && !App.Config.SameRadiusOnEach) {
                 rgn = CreateRectRgn(0, 0, 0, 0);
                 if (last) {
                     var rgn2 = CreateRectRgn(0, 0, w / 2, h + 1);

@@ -108,7 +108,7 @@
                                FontSize="24" />
                         <CheckBox IsChecked="{Binding Config.GraphicsRepeat}" Content="Repeat graphics"
                                   HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
-                        <CheckBox IsChecked="{Binding Config.GraphicsRepeat}" Content="Border radius only on first and last"
+                            <CheckBox IsChecked="{Binding Config.SameRadiusOnEach}" Content="Use same border radius"
                                   HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
 
                         <Label Content="Graphics" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
