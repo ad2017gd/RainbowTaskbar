@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
 using H.Pipes;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
@@ -25,6 +26,7 @@ public partial class App : Application {
 
     [DllImport("KERNEL32.DLL", EntryPoint = "GetCurrentProcess", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
     public static extern IntPtr GetCurrentProcess();
+
 
 
     public static Random rnd = new();
@@ -123,6 +125,8 @@ public partial class App : Application {
         taskbars.MaxBy(t => t.Left).taskbarHelper.last = true;
         taskbars.ForEach(t => {
             t.taskbarHelper.UpdateRadius();
+            int fals = 1;
+            TaskbarHelper.DwmSetWindowAttribute(new WindowInteropHelper(t).EnsureHandle(), TaskbarHelper.DWMWINDOWATTRIBUTE.ExcludedFromPeek, ref fals, sizeof(int));
         });
 
         if (Config.GraphicsRepeat) {
