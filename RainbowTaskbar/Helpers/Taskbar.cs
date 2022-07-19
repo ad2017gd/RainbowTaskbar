@@ -225,7 +225,7 @@ public class TaskbarHelper {
         }
 
         ;
-        accent.AccentFlags = 2;
+        accent.AccentFlags = 0;
         accent.AnimationId = 2;
 
         var accentStructSize = Marshal.SizeOf(accent);
