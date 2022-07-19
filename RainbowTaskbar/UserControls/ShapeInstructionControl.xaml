@@ -100,7 +100,7 @@
                 </Style>
             </StackPanel.Style>
 
-            <xctk:ColorPicker SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="False" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
+            <xctk:ColorPicker SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
             
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <xctk:ColorPicker SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="False" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>

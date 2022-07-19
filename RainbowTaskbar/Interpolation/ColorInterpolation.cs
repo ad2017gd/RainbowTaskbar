@@ -77,11 +77,11 @@ internal class ColorInterpolation {
 }
 
 internal static class ColorExtension {
-    public static Color ToDrawingColor(this System.Windows.Media.Color color, byte Alpha = 255) =>
-        Color.FromArgb(Alpha, color.R, color.G, color.B);
+    public static Color ToDrawingColor(this System.Windows.Media.Color color) =>
+        Color.FromArgb(color.A, color.R, color.G, color.B);
 
     public static System.Windows.Media.Color ToMediaColor(this Color color) =>
-        System.Windows.Media.Color.FromRgb(color.R, color.G, color.B);
+        System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
 
     public static string HexConverter(Color c) => "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
 }

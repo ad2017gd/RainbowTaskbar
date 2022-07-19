@@ -12,7 +12,7 @@ internal class BorderRadiusInstruction : Instruction {
     public override bool Execute(Taskbar window, CancellationToken _) {
         window.taskbarHelper.Radius = Radius;
         window.windowHelper.Radius = Radius;
-
+        window.taskbarHelper.UpdateRadius();
         return false;
     }
 

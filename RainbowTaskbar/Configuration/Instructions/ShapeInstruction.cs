@@ -41,7 +41,7 @@ public class ShapeInstruction : Instruction {
     [field: DataMember]
     public int LineSize { get; set; } = 1;
 
-    public override bool Execute(Taskbar window, CancellationToken _) {
+    public override bool Execute(Taskbar window, CancellationToken token) {
 
         if(DrawOnce && drawn) {
             return false;
@@ -52,24 +52,24 @@ public class ShapeInstruction : Instruction {
                     var geometry = new LineGeometry(new Point(X,Y), new Point(X2,Y2));
                     geometry.Freeze();
                     window.Dispatcher.Invoke(() =>
-                        window.layers.DrawShape(Layer, geometry, null, new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
-                    );
+                        window.canvasManager.layers.DrawShape(Layer, geometry, null, new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
+                    , System.Windows.Threading.DispatcherPriority.Normal, token);
                     break;
                 }
             case ShapeInstructionShapes.Rectangle: {
                     var geometry = new RectangleGeometry(new Rect(new Point(X, Y), new Point(X2, Y2)));
                     geometry.Freeze();
                     window.Dispatcher.Invoke(() =>
-                        window.layers.DrawShape(Layer, geometry, new SolidColorBrush(Fill.ToMediaColor()), new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
-                    );
+                        window.canvasManager.layers.DrawShape(Layer, geometry, new SolidColorBrush(Fill.ToMediaColor()), new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
+                    , System.Windows.Threading.DispatcherPriority.Normal, token);
                     break;
                 }
             case ShapeInstructionShapes.Ellipse: {
                     var geometry = new EllipseGeometry(new Rect(new Point(X, Y), new Point(X2, Y2)));
                     geometry.Freeze();
                     window.Dispatcher.Invoke(() =>
-                        window.layers.DrawShape(Layer, geometry, new SolidColorBrush(Fill.ToMediaColor()), new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
-                    );
+                        window.canvasManager.layers.DrawShape(Layer, geometry, new SolidColorBrush(Fill.ToMediaColor()), new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
+                    , System.Windows.Threading.DispatcherPriority.Normal, token);
                     break;
                 }
         }
@@ -103,6 +103,5 @@ public class ShapeInstruction : Instruction {
         data.DrawOnce = DrawOnce;
 
         return JObject.FromObject(data);
-        return null;
     }
 }

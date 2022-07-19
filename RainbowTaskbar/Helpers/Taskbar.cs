@@ -41,6 +41,9 @@ public class TaskbarHelper {
 
     public bool autoHide = IsAutoHide();
 
+    public bool first = false;
+    public bool last = false;
+
     private IntPtr hhook;
 
     public IntPtr HWND = (IntPtr) 0;
@@ -77,6 +80,10 @@ public class TaskbarHelper {
 
     [DllImport("user32.dll", SetLastError = true)]
     public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr hWndChildAfter, string className, string windowTitle);
+
 
     [DllImport("user32.dll")]
     private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
@@ -293,7 +300,7 @@ public class TaskbarHelper {
 
             if (!autoHide && WindowHelper.Count > 1) {
                 rgn = CreateRectRgn(0, 0, 0, 0);
-                if (Secondary) {
+                if (last) {
                     var rgn2 = CreateRectRgn(0, 0, w / 2, h + 1);
                     var rgn1 = CreateRoundRectRgn(w / 3, 0, w + 1, h + 1, Radius, Radius);
                     CombineRgn(rgn, rgn1, rgn2, CombineRgnStyles.RGN_OR);
@@ -302,7 +309,7 @@ public class TaskbarHelper {
                     DeleteObject(rgn1);
                     DeleteObject(rgn2);
                 }
-                else {
+                else if (first){
                     var rgn1 = CreateRoundRectRgn(0, 0, w + 1, h + 1, Radius, Radius);
                     var rgn2 = CreateRectRgn(w / 2, 0, w + 1, h + 1);
                     CombineRgn(rgn, rgn1, rgn2, CombineRgnStyles.RGN_OR);

@@ -17,30 +17,20 @@ namespace RainbowTaskbar;
 ///     Interaction logic for Editor.xaml
 /// </summary>
 public partial class Editor : Window {
-    private readonly Taskbar taskbar;
     public EditorViewModel viewModel;
 
     public Editor() {
-        viewModel = new EditorViewModel();
-        DataContext = viewModel;
-        taskbar = new Taskbar();
-        //TODO: multiple taskbar support
-        App.taskbars.Add(taskbar);
-        taskbar.Show();
+        viewModel = App.editorViewModel;
+        DataContext = App.editorViewModel;
         InitializeComponent();
-        Hide();
-
-        TrayIcon.TrayMouseDoubleClick += TrayIcon_TrayMouseDoubleClick;
-        TrayIcon.ToolTipText = $"RainbowTaskbar {Assembly.GetExecutingAssembly().GetName().Version?.ToString()}";
-        TrayIcon.ContextMenu = new TrayContextMenu(this);
-    }
-
-    private void TrayIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e) {
         Show();
-        WindowState = WindowState.Normal;
-        Activate();
-        BringIntoView();
-        Focus();
+        
+
+        //TrayIcon.TrayMouseDoubleClick += TrayIcon_TrayMouseDoubleClick;
+        //TrayIcon.ToolTipText = $"RainbowTaskbar {Assembly.GetExecutingAssembly().GetName().Version?.ToString()}";
+        //TrayIcon.ContextMenu = new TrayContextMenu(this);
+
+        
     }
 
 
@@ -59,11 +49,10 @@ public partial class Editor : Window {
     private void Save_Click(object sender, RoutedEventArgs e) => App.Config.ToFile();
 
     private void Window_Closing(object sender, CancelEventArgs e) {
-        e.Cancel = true;
-        Hide();
+        //e.Cancel = true;
+        //Hide();
+        App.editor = null;
     }
-
-    private void Window_Closed(object sender, EventArgs e) => TrayIcon.Dispose();
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
         App.ReloadTaskbars();

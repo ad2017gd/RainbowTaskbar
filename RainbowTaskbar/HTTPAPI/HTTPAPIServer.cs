@@ -132,13 +132,11 @@ public static class HTTPAPIServer {
                     break;
                 }
                 case "/addinstruction": {
-                    byte[] data;
                     var position = 0;
 
                     if (body["Position"] is not null && (!int.TryParse((string) body["Position"], out position) ||
                                                          position < 0 || position >= App.Config.Instructions.Count)) {
                         throw new Exception("Position out of bounds");
-                        break;
                     }
 
                     if (Type.GetType("RainbowTaskbar.Configuration.Instructions." + body["Name"]) is null)
@@ -180,7 +178,7 @@ public static class HTTPAPIServer {
                                                          position >= App.Config.Instructions.Count))
                         throw new Exception("Position out of bounds");
 
-                    App.taskbars.ForEach(taskbar => taskbar.viewModel.ConfigStep = position);
+                    App.taskbars.ForEach(taskbar => App.Config.configStep = position);
 
                     data = Encoding.UTF8.GetBytes("{\"success\": \"true\"}");
                     res.ContentLength64 = data.Length;

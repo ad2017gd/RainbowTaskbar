@@ -46,14 +46,14 @@ internal class TextInstruction : Instruction {
         return JObject.FromObject(data);
     }
 
-    public override bool Execute(Taskbar window, CancellationToken _) {
+    public override bool Execute(Taskbar window, CancellationToken token) {
         if(drawn && DrawOnce) {
             return false;
         }
 
-        window.Dispatcher.Invoke( () => 
-            window.layers.DrawText(Layer, Text, X, Y, Size, "Arial", new SolidColorBrush(Color.ToMediaColor()))
-        );
+        window.Dispatcher.Invoke( () =>
+            window.canvasManager.layers.DrawText(Layer, Text, X, Y, Size, "Arial", new SolidColorBrush(Color.ToMediaColor()))
+        , System.Windows.Threading.DispatcherPriority.Normal, token);
 
         if (DrawOnce) drawn = true;
 

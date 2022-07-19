@@ -12,7 +12,7 @@
         MouseMove="RainbowTaskbar_MouseMove"
         MouseDown="RainbowTaskbar_MouseDown"
         MouseUp="RainbowTaskbar_MouseUp"
-        Title="Taskbar" Height="450" Width="800">
+        Title="Taskbar" Height="1" Width="1">
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="31*" />

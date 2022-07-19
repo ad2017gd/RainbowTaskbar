@@ -61,7 +61,7 @@ internal class ColorInstruction : Instruction {
     }
 
     public override bool Execute(Taskbar window, CancellationToken token) {
-        Brush OldBrush = window.layers.brushes[Layer];
+        Brush OldBrush = window.canvasManager.layers.brushes[Layer];
         if (Randomize) {
             Color1 = Color.FromArgb(255, App.rnd.Next(0, 255), App.rnd.Next(0, 255), App.rnd.Next(0, 255));
             Color2 = Color.FromArgb(255, App.rnd.Next(0, 255), App.rnd.Next(0, 255), App.rnd.Next(0, 255));
@@ -71,15 +71,15 @@ internal class ColorInstruction : Instruction {
             case ColorInstructionEffect.Solid:
                 window.Dispatcher.Invoke(() => {
                     var Brush = new SolidColorBrush(Color1.ToMediaColor());
-                    window.layers.DrawRect(Layer, Brush);
-                });
+                    window.canvasManager.layers.DrawRect(Layer, Brush);
+                }, System.Windows.Threading.DispatcherPriority.Normal, token);
                 token.WaitHandle.WaitOne(Time);
                 break;
             case ColorInstructionEffect.Gradient:
                 window.Dispatcher.Invoke(() => {
                     var Brush = new LinearGradientBrush(Color1.ToMediaColor(), Color2.ToMediaColor(), Angle);
-                    window.layers.DrawRect(Layer, Brush);
-                });
+                    window.canvasManager.layers.DrawRect(Layer, Brush);
+                }, System.Windows.Threading.DispatcherPriority.Normal, token);
                 token.WaitHandle.WaitOne(Time);
                 break;
 
@@ -89,24 +89,24 @@ internal class ColorInstruction : Instruction {
                     var Brush = (SolidColorBrush) OldBrush;
 
                     System.Windows.Media.Color OColor;
-                    window.Dispatcher.Invoke(() => { OColor = Brush.Color; });
+                    window.Dispatcher.Invoke(() => { OColor = Brush.Color; }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
                     var j = 1;
 
-                    while (j++ < Time2 / 25) {
+                    while (j++ < Time2 / App.Config.InterpolationQuality) {
                         var Color1Interpolated = ColorInterpolation.Interpolate(OColor.ToDrawingColor(), Color1,
-                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
+                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
                         var Color2Interpolated = ColorInterpolation.Interpolate(OColor.ToDrawingColor(), Color2,
-                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
+                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
 
 
                         window.Dispatcher.Invoke(() => {
                             var Brush = new LinearGradientBrush(Color1Interpolated.ToMediaColor(),
                                 Color2Interpolated.ToMediaColor(), Angle);
-                            window.layers.DrawRect(Layer, Brush);
-                        });
+                            window.canvasManager.layers.DrawRect(Layer, Brush);
+                        }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
-                        token.WaitHandle.WaitOne(Time2 / (Time2 / 25));
+                        token.WaitHandle.WaitOne(Time2 / (Time2 / App.Config.InterpolationQuality));
                     }
                 }
                 else {
@@ -117,25 +117,25 @@ internal class ColorInstruction : Instruction {
                     window.Dispatcher.Invoke(() => {
                         OColor1 = Brush.GradientStops[0].Color;
                         OColor2 = Brush.GradientStops[1].Color;
-                    });
+                    }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
                     var j = 1;
 
-                    while (j++ < Time2 / 25) {
+                    while (j++ < Time2 / App.Config.InterpolationQuality) {
                         var Color1Interpolated = ColorInterpolation.Interpolate(OColor1.ToDrawingColor(), Color1,
-                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
+                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
                         var Color2Interpolated = ColorInterpolation.Interpolate(OColor2.ToDrawingColor(), Color2,
-                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
+                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
 
 
                         window.Dispatcher.Invoke(() => {
                             var Brush = new LinearGradientBrush(Color1Interpolated.ToMediaColor(),
                                 Color2Interpolated.ToMediaColor(), Angle);
-                            window.layers.DrawRect(Layer, Brush);
-                        });
+                            window.canvasManager.layers.DrawRect(Layer, Brush);
+                        }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
 
-                        token.WaitHandle.WaitOne(Time2 / (Time2 / 25));
+                        token.WaitHandle.WaitOne(Time2 / (Time2 / App.Config.InterpolationQuality));
                     }
                 }
 
@@ -148,21 +148,21 @@ internal class ColorInstruction : Instruction {
                     var Brush = (SolidColorBrush) OldBrush;
 
                     System.Windows.Media.Color OColor;
-                    window.Dispatcher.Invoke(() => { OColor = Brush.Color; });
+                    window.Dispatcher.Invoke(() => { OColor = Brush.Color; }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
                     var j = 1;
 
-                    while (j++ < Time2 / 25) {
+                    while (j++ < Time2 / App.Config.InterpolationQuality) {
                         var Color1Interpolated = ColorInterpolation.Interpolate(OColor.ToDrawingColor(), Color1,
-                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
+                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
 
                         window.Dispatcher.Invoke(() => {
                             var Brush = new SolidColorBrush(Color1Interpolated.ToMediaColor());
-                            window.layers.DrawRect(Layer, Brush);
-                        });
+                            window.canvasManager.layers.DrawRect(Layer, Brush);
+                        }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
 
-                        token.WaitHandle.WaitOne(Time2 / (Time2 / 25));
+                        token.WaitHandle.WaitOne(Time2 / (Time2 / App.Config.InterpolationQuality));
                     }
                 }
                 else {
@@ -174,21 +174,21 @@ internal class ColorInstruction : Instruction {
                             (byte) ((Brush.GradientStops[0].Color.R + Brush.GradientStops[1].Color.R) / 2),
                             (byte) (Brush.GradientStops[0].Color.G + Brush.GradientStops[1].Color.G / 2),
                             (byte) (Brush.GradientStops[0].Color.B + Brush.GradientStops[1].Color.B / 2));
-                    });
+                    }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
                     var j = 1;
 
-                    while (j++ < Time2 / 25) {
+                    while (j++ < Time2 / App.Config.InterpolationQuality) {
                         var Color1Interpolated = ColorInterpolation.Interpolate(OColor.ToDrawingColor(), Color1,
-                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / 25));
+                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
 
                         window.Dispatcher.Invoke(() => {
                             var Brush = new SolidColorBrush(Color1Interpolated.ToMediaColor());
-                            window.layers.DrawRect(Layer, Brush);
-                        });
+                            window.canvasManager.layers.DrawRect(Layer, Brush);
+                        }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
 
-                        token.WaitHandle.WaitOne(Time2 / (Time2 / 25));
+                        token.WaitHandle.WaitOne(Time2 / (Time2 / App.Config.InterpolationQuality));
                     }
                 }
 

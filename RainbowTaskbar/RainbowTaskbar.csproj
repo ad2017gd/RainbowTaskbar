@@ -6,7 +6,7 @@
         <UseWPF>true</UseWPF>
         <Version>2.1</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
-        <Description>gay taskbar</Description>
+        <Description>rainbow taskbar</Description>
         <Authors>Ad2017, zCri</Authors>
         <PackageIcon>icon.ico</PackageIcon>
         <PackageIconUrl />
@@ -16,6 +16,9 @@
         <NeutralLanguage>en</NeutralLanguage>
         <PackageReleaseNotes />
         <AnalysisLevel>latest</AnalysisLevel>
+        <PlatformTarget>x64</PlatformTarget>
+        <Nullable>disable</Nullable>
+        <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

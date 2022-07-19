@@ -42,7 +42,7 @@ public class TransparencyInstruction : Instruction {
         return JObject.FromObject(data);
     }
 
-    public override bool Execute(Taskbar window, CancellationToken _) {
+    public override bool Execute(Taskbar window, CancellationToken token) {
         switch (Type) {
             case TransparencyInstructionType.Taskbar:
 
@@ -52,13 +52,13 @@ public class TransparencyInstruction : Instruction {
             case TransparencyInstructionType.RainbowTaskbar:
                 window.Dispatcher.Invoke(() => {
                     if (window.Opacity != Opacity) window.Opacity = Opacity;
-                });
+                }, System.Windows.Threading.DispatcherPriority.Normal, token);
                 break;
 
             case TransparencyInstructionType.All:
                 window.Dispatcher.Invoke(() => {
                     if (window.Opacity != Opacity) window.Opacity = Opacity;
-                });
+                }, System.Windows.Threading.DispatcherPriority.Normal, token);
                 window.taskbarHelper.SetAlpha(Opacity);
                 break;
 
@@ -81,8 +81,8 @@ public class TransparencyInstruction : Instruction {
 
             case TransparencyInstructionType.Layer:
                 window.Dispatcher.Invoke(() =>
-                    window.layers.canvases[Layer].Opacity = Opacity
-                    );
+                    window.canvasManager.canvases[Layer].Opacity = Opacity
+                    , System.Windows.Threading.DispatcherPriority.Normal, token);
                 break;
         }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -8,6 +10,7 @@ using H.Pipes;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Configuration.Instructions;
+using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
 
@@ -17,15 +20,49 @@ namespace RainbowTaskbar;
 ///     Interaction logic for App.xaml
 /// </summary>
 public partial class App : Application {
+    [DllImport("KERNEL32.DLL", EntryPoint = "SetProcessWorkingSetSize", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+    public static extern bool SetProcessWorkingSetSize(IntPtr pProcess, int dwMinimumWorkingSetSize, int dwMaximumWorkingSetSize);
+
+    [DllImport("KERNEL32.DLL", EntryPoint = "GetCurrentProcess", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+    public static extern IntPtr GetCurrentProcess();
+
+
     public static Random rnd = new();
 
     //public static HttpServer http;
     public static List<Taskbar> taskbars = new();
 
+    public static Editor editor = null;
+
+    public static TrayWindow trayWindow = (TrayWindow) Current.MainWindow;
+
+    public static EditorViewModel editorViewModel = null;
+
+    public static LayerManager layers = null;
+
     //public static List<string> APISubscribed = new();
     public static Mutex mutex = new(true, "RainbowTaskbar Mutex");
 
+    public static List<Taskbar> FindAllTaskbars() {
+        List<Taskbar> tsk = new List<Taskbar>();
+
+        var nw = new Taskbar(TaskbarHelper.FindWindow("Shell_TrayWnd", null));
+        nw.Show();
+        tsk.Add(nw);
+        IntPtr next = IntPtr.Zero;
+        while (true) {
+            next = TaskbarHelper.FindWindowEx(IntPtr.Zero, next, "Shell_SecondaryTrayWnd", null);
+            if (next == IntPtr.Zero) break;
+            var newWindow = new Taskbar(next, true);
+            newWindow.Show();
+            tsk.Add(newWindow);
+        }
+
+        return tsk;
+    }
+    
     public App() {
+        
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
             // First process
             // todo: multiple taskbar, refractor and clean up code
@@ -34,28 +71,38 @@ public partial class App : Application {
                 pipe.MessageReceived += (sender, args) => {
                     if (args.Message == "OpenEditor")
                         Current.Dispatcher.Invoke(() => {
-                            MainWindow.Show();
-                            MainWindow.WindowState = WindowState.Normal;
-                            MainWindow.Activate();
-                            MainWindow.BringIntoView();
-                            MainWindow.Focus();
-                            MainWindow.Topmost = true;
-                            MainWindow.Topmost = false;
+                            if (editor == null) {
+                                editor = new Editor();
+                            }
+                            editor.Show();
+                            editor.WindowState = WindowState.Normal;
+                            editor.Activate();
+                            editor.BringIntoView();
+                            editor.Focus();
+                            editor.Topmost = true;
+                            editor.Topmost = false;
                         });
                 };
                 await pipe.StartAsync();
                 await Task.Delay(Timeout.InfiniteTimeSpan);
             });
 
+            
+
+            editorViewModel = new EditorViewModel();
+
+
+
+
             Config = Config.FromFile();
             if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
-            API.Start();
-            if (TaskbarHelper.FindWindow("Shell_SecondaryTrayWnd", null) != (IntPtr) 0) {
-                var newWindow = new Taskbar(true);
-                newWindow.Show();
 
-                taskbars.Add(newWindow);
-            }
+            taskbars = FindAllTaskbars();
+
+            SetupTaskbars();
+
+            App.Config.StartThread();
+            API.Start();
         }
         else {
             // Other processes
@@ -71,13 +118,36 @@ public partial class App : Application {
     [OnChangedMethod(nameof(ReloadTaskbars))]
     public static Config Config { get; set; }
 
+    public static void SetupTaskbars() {
+        taskbars.MinBy(t => t.Left).taskbarHelper.first = true;
+        taskbars.MaxBy(t => t.Left).taskbarHelper.last = true;
+        taskbars.ForEach(t => {
+            t.taskbarHelper.UpdateRadius();
+        });
+
+        if (Config.GraphicsRepeat) {
+            taskbars.ForEach(t => {
+                t.canvasManager.layers = new LayerManager(t);
+            });
+        }
+        else {
+            App.layers = new LayerManager();
+            App.layers.width = (int) taskbars.Sum(t => t.Width);
+            App.layers.height = (int) taskbars[0].Height;
+        }
+    }
+
     public static void ReloadTaskbars() =>
         Current.Dispatcher.Invoke(() => {
-            taskbars = taskbars.Select(taskbar => {
+
+            taskbars.ForEach(taskbar => {
                 taskbar.Close();
-                return new Taskbar(taskbar.Secondary);
-            }).ToList();
-            taskbars.ForEach(taskbar => taskbar.Show());
+            });
+
+            taskbars = App.FindAllTaskbars();
+
+            SetupTaskbars();
+
 
             new List<Instruction>(Config.Instructions).ForEach((i) => {
                 if (i is ImageInstruction) {
@@ -90,24 +160,22 @@ public partial class App : Application {
                     ((TextInstruction) i).drawn = false;
                 }
             });
+            App.Config.StopThread();
+            Config.configStep = -1;
+            App.Config.StartThread();
         });
 
     public new static void Exit() {
-        (Current.MainWindow as Editor)?.TrayIcon?.Dispose();
+        trayWindow.TrayIcon.Dispose();
 
         taskbars.ForEach(t => {
             t.taskbarHelper.Radius = 0;
             t.taskbarHelper.UpdateRadius();
+
             t.Close();
-            Task.Run(() => {
-                t.viewModel.ZThread.Join();
-                t.viewModel.DrawThread.Join();
-
-                t.taskbarHelper.SetAlpha(1);
-                TaskbarHelper.SendMessage(t.taskbarHelper.HWND, TaskbarHelper.WM_DWMCOMPOSITIONCHANGED, 1, null);
-
-                Current.Dispatcher.Invoke(() => { Current.Shutdown(); });
-            });
+            t.taskbarHelper.SetAlpha(1);
+            TaskbarHelper.SendMessage(t.taskbarHelper.HWND, TaskbarHelper.WM_DWMCOMPOSITIONCHANGED, 1, null);
         });
+        Current.Dispatcher.Invoke(() => { Current.Shutdown(); });
     }
 }

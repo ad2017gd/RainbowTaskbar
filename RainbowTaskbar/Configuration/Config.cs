@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Dynamic;
@@ -6,12 +7,15 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using Newtonsoft.Json.Linq;
 using PropertyChanged;
 using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.HTTPAPI;
+using RainbowTaskbar.WebSocketServices;
 
 namespace RainbowTaskbar.Configuration;
 
@@ -20,7 +24,7 @@ public class Config : INotifyPropertyChanged {
     public static readonly string ConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
     public static readonly string LegacyConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.txt");
 
-    private static readonly int SupportedConfigVersion = 2;
+    private static readonly int SupportedConfigVersion = 3;
 
     public Config() {
         SetupPropertyChanged();
@@ -47,6 +51,17 @@ public class Config : INotifyPropertyChanged {
     [OnChangedMethod(nameof(OnAPIPortChanged))]
     public int APIPort { get; set; } = 9093;
 
+    [field: DataMember]
+    public int InterpolationQuality { get; set; } = 25;
+
+    [field: DataMember]
+    [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
+    public bool GraphicsRepeat { get; set; } = true;
+
+    [field: DataMember]
+    [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
+    public bool SameRadiusOnEach { get; set; } = false;
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     public void SetupPropertyChanged() {
@@ -54,18 +69,29 @@ public class Config : INotifyPropertyChanged {
         Presets.ListChanged += (_, _) => OnPropertyChanged(nameof(Presets));
     }
 
+    public void OnTaskbarBehaviourChanged() {
+        App.ReloadTaskbars();
+    }
+
+    public CancellationTokenSource cts = new CancellationTokenSource();
+    public Thread thread = null;
+    public int configStep = 0;
+
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public void OnIsAPIEnabledChanged() {
-        if (API.http is not null) {
+        if (API.http is not null && App.Config is not null) {
             if (IsAPIEnabled) API.Start();
             else
                 API.Stop();
         }
     }
 
-    public void OnAPIPortChanged() => API.Start();
+    public void OnAPIPortChanged() {
+        if(App.Config is not null) 
+            API.Start();
+    }
 
     public JObject ToJSON() {
         dynamic data = new ExpandoObject();
@@ -73,12 +99,84 @@ public class Config : INotifyPropertyChanged {
         data.IsAPIEnabled = IsAPIEnabled;
         data.APIPort = APIPort;
         Application.Current.Dispatcher.Invoke(() => {
-            data.RunAtStartup = ((Editor) Application.Current.MainWindow).viewModel.RunAtStartup;
+            data.RunAtStartup = App.editorViewModel.RunAtStartup;
         });
 
         data.Instructions = Instructions.Select(i => i.ToJSON());
 
         return JObject.FromObject(data);
+    }
+
+    public void ConfigThread(CancellationToken token) {
+        while (!token.IsCancellationRequested) {
+            var slept = false;
+
+            for (App.Config.configStep = 0;
+                 App.Config.configStep < App.Config.Instructions.Count && !token.IsCancellationRequested;
+                 App.Config.configStep++) {
+                if (API.APISubscribed.Count > 0) {
+                    var data = new JObject();
+                    data.Add("type", "InstructionStep");
+                    data.Add("index", App.Config.configStep);
+                    data.Add("instruction", App.Config.Instructions[App.Config.configStep].ToJSON());
+                    WebSocketAPIServer.SendToSubscribed(data.ToString());
+                }
+
+                try {
+
+
+                    IntPtr pHandle = App.GetCurrentProcess();
+                    App.SetProcessWorkingSetSize(pHandle, -1, -1);
+
+
+                    var tasks = new List<Task>();
+                    App.taskbars.ForEach(taskbar => {
+                        tasks.Add(Task.Run(() => {
+                            if (App.Config.Instructions[App.Config.configStep].Execute(taskbar, token)) slept = true; 
+                        }));
+                    });
+                    Task.WaitAll(tasks.ToArray(), token);
+                    
+                }
+                catch (Exception e) {
+                    if (e.GetType() == typeof(System.OperationCanceledException) || (e.InnerException is not null && e.InnerException.GetType() == typeof(System.Threading.Tasks.TaskCanceledException))) {
+                        return;
+                    }
+                    MessageBox.Show(
+                        $"The \"{App.Config.Instructions[App.Config.configStep].Name}\" instruction at index {App.Config.configStep} (starting from 0) threw an exception, it will be removed from the config.\n${e.Message}",
+                        "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Application.Current.Dispatcher.Invoke(() => {
+                        App.Config.Instructions.RemoveAt(App.Config.configStep);
+                        App.Config.ToFile();
+                        App.ReloadTaskbars();
+                    });
+                    return;
+                }
+            }
+
+            if (!slept) break;
+        }
+    }
+
+    public void StopThread() {
+        cts.Cancel();
+        thread.Join();
+        cts.Dispose();
+        thread = null;
+    }
+
+    public void StartThread() {
+        if (thread != null && thread.ThreadState != ThreadState.Stopped) {
+            cts.Cancel();
+            thread.Join();
+            cts.Dispose();
+
+        }
+        
+        cts = new CancellationTokenSource();
+        
+        thread = new Thread(() => { ConfigThread(cts.Token); });
+        thread.Start();
     }
 
     public static Config FromFile() {
@@ -239,14 +337,22 @@ public class Config : INotifyPropertyChanged {
 
             var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
             var cfg = serializer.ReadObject(reader) as Config;
-            if (cfg.ConfigFileVersion != SupportedConfigVersion)
+            if (cfg.ConfigFileVersion != SupportedConfigVersion) {
                 switch (cfg.ConfigFileVersion) {
                     case 1:
                         cfg.Presets = new BindingList<InstructionPreset>
                             {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
                         cfg.ConfigFileVersion = SupportedConfigVersion;
+                        goto case 2;
+                    case 2:
+                        cfg.InterpolationQuality = 25;
+                        //cfg.SeparateTaskbarGraphics = false;
+                        cfg.SameRadiusOnEach = false;
+                        cfg.ConfigFileVersion = SupportedConfigVersion;
                         break;
                 }
+                cfg.ToFile();
+            }
 
             cfg.SetupPropertyChanged();
             return cfg;

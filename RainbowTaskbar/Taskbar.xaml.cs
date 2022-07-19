@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
@@ -13,29 +14,61 @@ namespace RainbowTaskbar;
 ///     Interaction logic for Taskbar.xaml
 /// </summary>
 public partial class Taskbar : Window {
-    public Layers layers;
-    public bool Secondary;
+    public CanvasManager canvasManager;
+    public bool secondary;
     public TaskbarHelper taskbarHelper;
     public TaskbarViewModel viewModel;
     public WindowHelper windowHelper;
 
-    public Taskbar(bool secondary) {
+    public Taskbar(IntPtr HWND, bool secondary) {
         InitializeComponent();
-        Secondary = secondary;
+        this.secondary = secondary;
 
-        viewModel = new TaskbarViewModel(this);
+        viewModel = new TaskbarViewModel(this, HWND);
         Closing += viewModel.OnWindowClosing;
         DataContext = viewModel;
     }
 
 
-    public Taskbar() {
+    public Taskbar(IntPtr HWND) {
         InitializeComponent();
 
-        viewModel = new TaskbarViewModel(this);
+        viewModel = new TaskbarViewModel(this, HWND);
         Closing += viewModel.OnWindowClosing;
         DataContext = viewModel;
     }
+
+    #region Ugly win32 message handler
+    
+    public IntPtr hwndInsertAfter = IntPtr.Zero;
+    public struct WINDOWPOS {
+        public IntPtr hwnd;
+        public IntPtr hwndInsertAfter;
+        public int x;
+        public int y;
+        public int cx;
+        public int cy;
+        public uint flags;
+    }
+    public const int WM_WINDOWPOSCHANGING = 0x46;
+    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
+        if(msg == WM_WINDOWPOSCHANGING) {
+            WINDOWPOS wp = (WINDOWPOS) System.Runtime.InteropServices.Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
+            if (wp.hwndInsertAfter != hwndInsertAfter) {
+                taskbarHelper.SetWindowZUnder(this);
+                taskbarHelper.SetBlur();
+                hwndInsertAfter = taskbarHelper.HWND;
+            }
+        }
+            return IntPtr.Zero;
+    }
+
+    protected override void OnSourceInitialized(EventArgs e) {
+        base.OnSourceInitialized(e);
+        HwndSource source = (HwndSource) HwndSource.FromHwnd(new WindowInteropHelper(this).EnsureHandle());
+        source.AddHook(WndProc);
+    }
+    #endregion
 
     private void RainbowTaskbar_Closed(object sender, EventArgs e) {
         taskbarHelper.Style = TaskbarHelper.TaskbarStyle.ForceDefault;

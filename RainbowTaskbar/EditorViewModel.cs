@@ -247,6 +247,7 @@ public class SetPresetCommand : ICommand {
 
     public void Execute(object parameter) {
         App.Config.Instructions = (parameter as InstructionPreset)!.Instructions.DeepClone();
+        App.Config.ToFile();
         App.ReloadTaskbars();
     }
 
@@ -265,7 +266,11 @@ public class DeletePresetCommand : ICommand {
 
     public bool CanExecute(object parameter) => parameter is InstructionPreset;
 
-    public void Execute(object parameter) => App.Config.Presets.Remove(parameter as InstructionPreset);
+    public void Execute(object parameter) {
+        App.Config.Presets.Remove(parameter as InstructionPreset);
+        
+        App.Config.ToFile();
+    }
 
     public event EventHandler CanExecuteChanged {
         add => CommandManager.RequerySuggested += value;
@@ -289,6 +294,7 @@ public class InstructionsToPresetCommand : ICommand {
                 Name = dialog.NameTextBox.Text,
                 Instructions = App.Config.Instructions.DeepClone()
             });
+        App.Config.ToFile();
     }
 
     public event EventHandler CanExecuteChanged {

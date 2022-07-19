@@ -51,7 +51,7 @@ internal class ImageInstruction : Instruction {
         return JObject.FromObject(data);
     }
 
-    public override bool Execute(Taskbar window, CancellationToken _) {
+    public override bool Execute(Taskbar window, CancellationToken token) {
         if (Path == "") return false;
 
         if (DrawOnce && drawn) return false;
@@ -68,8 +68,8 @@ internal class ImageInstruction : Instruction {
             image.StreamSource = ms;
             image.EndInit();
 
-            window.layers.DrawImage(Layer, new Rect(X, Y, Width == 0 ? bmp.Width : Width, Height == 0 ? bmp.Height : Height), image);
-        });
+            window.canvasManager.layers.DrawImage(Layer, new Rect(X, Y, Width == 0 ? bmp.Width : Width, Height == 0 ? bmp.Height : Height), image);
+        }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
         if(DrawOnce) {
             drawn = true;

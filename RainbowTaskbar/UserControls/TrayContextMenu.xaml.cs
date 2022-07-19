@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using RainbowTaskbar.Configuration;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace RainbowTaskbar.UserControls;
 
@@ -8,18 +10,26 @@ namespace RainbowTaskbar.UserControls;
 ///     Interaction logic for TrayContextMenu.xaml
 /// </summary>
 public partial class TrayContextMenu : ContextMenu {
-    private readonly Editor parent;
+    private readonly TrayWindow parent;
 
-    public TrayContextMenu(Editor editor) {
-        parent = editor;
+    public Config Config {
+        get => App.Config;
+        set => App.Config = value;
+    }
+
+    public TrayContextMenu(TrayWindow wnd) {
+        parent = wnd;
+        DataContext = App.editorViewModel;
         InitializeComponent();
     }
 
-    private void Open_Click(object sender, RoutedEventArgs e) {
-        parent.Show();
-        parent.WindowState = WindowState.Normal;
-        parent.BringIntoView();
-        parent.Focus();
+    public void Open_Click(object sender, RoutedEventArgs e) {
+        if(App.editor == null) App.editor = new Editor();
+        App.editor.Show();
+        App.editor.WindowState = WindowState.Normal;
+        App.editor.BringIntoView();
+        App.editor.Focus();
+        
     }
 
     private void Donate_Click(object sender, RoutedEventArgs e) {

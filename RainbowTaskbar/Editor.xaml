@@ -7,15 +7,11 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:dd="urn:gong-wpf-dragdrop"
         Closing="Window_Closing"
-        Closed="Window_Closed"
         Title="Editor" Height="450" Width="800">
     <Window.Resources>
         <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
     </Window.Resources>
     <Grid>
-        <tb:TaskbarIcon Name="TrayIcon"
-                        IconSource="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
-                        ToolTipText="RainbowTaskbar" />
         <TabControl>
             <TabItem Header="Editor">
                 <Grid Margin="5,5,5,5">
@@ -79,14 +75,14 @@
                     </Border>
                 </Grid>
             </TabItem>
-            <TabItem Header="Settings">
+            <TabItem Header="Settings" Height="22" Margin="-2,0,-2,0" VerticalAlignment="Bottom">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-
-                    <StackPanel Orientation="Vertical">
+                    <ScrollViewer>
+                        <StackPanel Orientation="Vertical" Margin="5,0,0,20">
                         <Label Content="General" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
                                FontSize="24" />
                         <CheckBox IsChecked="{Binding RunAtStartup}" Content="Run at system startup"
@@ -94,7 +90,7 @@
                         <CheckBox IsChecked="{Binding Config.CheckUpdate}" Content="Check for updates"
                                   HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
 
-                        <Label Content="HTTP API" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
+                        <Label Content="HTTP API" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
                                FontSize="24" />
                         <CheckBox IsChecked="{Binding Config.IsAPIEnabled}" Content="Enable server"
                                   HorizontalAlignment="Left"
@@ -107,8 +103,25 @@
                                                 HorizontalAlignment="Left" Height="20" Width="60" />
                         </StackPanel>
 
+                        <Label Content="Multiple taskbars" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
+                               FontSize="24" />
+                        <CheckBox IsChecked="{Binding Config.GraphicsRepeat}" Content="Repeat graphics"
+                                  HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
+                        <CheckBox IsChecked="{Binding Config.GraphicsRepeat}" Content="Border radius only on first and last"
+                                  HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
+
+                        <Label Content="Graphics" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
+                               FontSize="24" />
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <Label Content="Interpolation quality (smaller better)" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" />
+                            <xctk:IntegerUpDown Minimum="5" Maximum="50" Value="{Binding Config.InterpolationQuality}"
+                                                HorizontalAlignment="Left" Height="20" Width="60" />
+                        </StackPanel>
 
                     </StackPanel>
+                    </ScrollViewer>
                     <Button HorizontalAlignment="Left" Grid.Row="1" Width="180" Margin="5,5" Click="Save_Click"
                             Content="Save" />
                 </Grid>
