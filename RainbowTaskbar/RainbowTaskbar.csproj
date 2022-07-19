@@ -16,7 +16,6 @@
         <NeutralLanguage>en</NeutralLanguage>
         <PackageReleaseNotes />
         <AnalysisLevel>latest</AnalysisLevel>
-        <PlatformTarget>x64</PlatformTarget>
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
