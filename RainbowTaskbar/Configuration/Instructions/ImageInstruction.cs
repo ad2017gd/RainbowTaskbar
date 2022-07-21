@@ -35,6 +35,12 @@ internal class ImageInstruction : Instruction {
 
     [field: DataMember] public bool DrawOnce { get; set; } = false;
 
+    public override string Name {
+        get {
+            return $"Image - " + System.IO.Path.GetFileName(Path);
+        }
+    }
+
     public override JObject ToJSON() {
         dynamic data = new ExpandoObject();
 

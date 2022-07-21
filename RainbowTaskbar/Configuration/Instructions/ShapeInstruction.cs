@@ -41,6 +41,12 @@ public class ShapeInstruction : Instruction {
     [field: DataMember]
     public int LineSize { get; set; } = 1;
 
+    public override string Name {
+        get {
+            return $"Shape - {Shape.ToString()}";
+        }
+    }
+
     public override bool Execute(Taskbar window, CancellationToken token) {
 
         if(DrawOnce && drawn) {

@@ -9,6 +9,10 @@ namespace RainbowTaskbar.Configuration.Instructions;
 internal class BorderRadiusInstruction : Instruction {
     [field: DataMember] public int Radius { get; set; } = 0;
 
+    public override string Name { get {
+            return $"Border Radius - {Radius}px";
+        } }
+
     public override bool Execute(Taskbar window, CancellationToken _) {
         window.taskbarHelper.Radius = Radius;
         window.windowHelper.Radius = Radius;

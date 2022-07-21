@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System;
+using System.Dynamic;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows.Controls;
@@ -30,6 +31,15 @@ public class TransparencyInstruction : Instruction {
     [field: DataMember] public TransparencyInstructionStyle Style { get; set; }
 
     [field: DataMember] public int Layer { get; set; }
+
+    public override string Name {
+        get {
+            return Type == TransparencyInstructionType.Style ? $"Style - {Style.ToString()}" :
+                (Type == TransparencyInstructionType.Layer ? $"Layer {Layer} - {Math.Round(Opacity * 100)}% opacity" :
+                $"{Type.ToString()} - {Math.Round(Opacity * 100)}% opacity");
+                
+        }
+    }
 
     public override JObject ToJSON() {
         dynamic data = new ExpandoObject();

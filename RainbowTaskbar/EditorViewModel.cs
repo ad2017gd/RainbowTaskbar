@@ -51,15 +51,15 @@ public class EditorViewModel : INotifyPropertyChanged {
     public UserControl SelectedInstructionControl {
         get {
             if (SelectedInstruction is null) return null;
-            switch (SelectedInstruction.Name) {
-                case "Delay": return new DelayInstructionControl();
-                case "Transparency": return new TransparencyInstructionControl();
-                case "Color": return new ColorInstructionControl();
-                case "Border Radius": return new BorderRadiusInstructionControl();
-                case "Clear Layer": return new ClearLayerInstructionControl();
-                case "Image": return new ImageInstructionControl();
-                case "Text": return new TextInstructionControl();
-                case "Shape": return new ShapeInstructionControl();
+            switch (SelectedInstruction.GetType().Name) {
+                case "DelayInstruction": return new DelayInstructionControl();
+                case "TransparencyInstruction": return new TransparencyInstructionControl();
+                case "ColorInstruction": return new ColorInstructionControl();
+                case "BorderRadiusInstruction": return new BorderRadiusInstructionControl();
+                case "ClearLayerInstruction": return new ClearLayerInstructionControl();
+                case "ImageInstruction": return new ImageInstructionControl();
+                case "TextInstruction": return new TextInstructionControl();
+                case "ShapeInstruction": return new ShapeInstructionControl();
             }
 
             return null;

@@ -31,6 +31,12 @@ internal class TextInstruction : Instruction {
 
     [field: DataMember] public Color Color { get; set; } = Color.Black;
 
+    public override string Name {
+        get {
+            return $"Text - {Text}";
+        }
+    }
+
     public override JObject ToJSON() {
         dynamic data = new ExpandoObject();
         data.Name = GetType().Name;

@@ -67,21 +67,21 @@
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X2}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X2}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y2}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y2}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
             </StackPanel>
         </StackPanel>
@@ -112,21 +112,21 @@
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X2}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X2}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y2}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y2}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
             </StackPanel>
         </StackPanel>
@@ -157,21 +157,21 @@
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X2}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.X2}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0" />
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y2}" Width="50" FormatString="N0" Increment="10"
+                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.Y2}" Width="50" FormatString="N0" Increment="1"
                                    ClipValueToMinMax="True" />
             </StackPanel>
         </StackPanel>

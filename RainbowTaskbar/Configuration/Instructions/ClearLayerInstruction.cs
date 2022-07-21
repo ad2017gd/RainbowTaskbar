@@ -14,6 +14,12 @@ namespace RainbowTaskbar.Configuration.Instructions;
 internal class ClearLayerInstruction : Instruction {
     [field: DataMember] public int Layer { get; set; } = 0;
 
+    public override string Name {
+        get {
+            return "Clear Layer - " + Layer;
+        }
+    }
+
     public override bool Execute(Taskbar window, CancellationToken token) {
         window.Dispatcher.Invoke(() => {
             window.canvasManager.layers.renderTargets[Layer].Clear();
