@@ -66,8 +66,6 @@ public partial class App : Application {
     public App() {
         
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
-            // First process
-            // todo: multiple taskbar, refractor and clean up code
             Task.Run(async () => {
                 await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
                 pipe.MessageReceived += (sender, args) => {

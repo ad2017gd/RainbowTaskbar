@@ -3,11 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
         FocusManager.FocusedElement="{Binding ElementName=NameTextBox}"
         Title="Enter preset name" SizeToContent="WidthAndHeight" ResizeMode="NoResize" ShowInTaskbar="False"
-        WindowStartupLocation="CenterOwner">
-    <Grid Margin="10">
+        Width="300"
+        Height="95"
+        WindowStartupLocation="CenterOwner" d:DesignHeight="95" d:DesignWidth="300">
+    <Grid Width="300" Margin="10">
         <Grid.Resources>
             <Style TargetType="{x:Type Label}">
                 <Setter Property="Margin" Value="0,3,5,5" />
@@ -33,7 +36,7 @@
         <Label Grid.Row="0" Grid.Column="0">Name:</Label>
         <TextBox Grid.Row="0" Grid.Column="1" x:Name="NameTextBox" />
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button IsDefault="True" Click="OkButton_OnClick">Ok</Button>
+            <Button IsDefault="True" Click="OkButton_OnClick">OK</Button>
             <Button IsCancel="True" Click="CancelButton_OnClick">Cancel</Button>
         </StackPanel>
     </Grid>

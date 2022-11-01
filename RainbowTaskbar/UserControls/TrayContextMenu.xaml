@@ -2,10 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
+    <ContextMenu.Style>
+        <Style TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource DefaultContextMenuStyle}">
+            
+        </Style>
+    </ContextMenu.Style>
     <MenuItem x:Name="Open" Click="Open_Click" Header="Open" />
     <MenuItem x:Name="Presets" Header="Presets" ItemsSource="{Binding Config.Presets}">
         <MenuItem.Style>
-            <Style>
+            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource DefaultMenuItemStyle}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Config.Presets.Count}" Value="0">
                         <Setter Property="MenuItem.IsEnabled" Value="False" />
@@ -17,7 +22,7 @@
             </Style>
         </MenuItem.Style>
         <MenuItem.ItemContainerStyle>
-            <Style>
+            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource DefaultMenuItemStyle}">
                 <Setter Property="MenuItem.Header" Value="{Binding Name}" />
                 <Setter Property="MenuItem.Command"
                         Value="{Binding Path=DataContext.SetPresetCommandImpl, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
@@ -65,7 +70,7 @@
                                                Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center" />
                                     <ToggleButton MinWidth="75" IsThreeState="True" Grid.Column="6" Margin="2">
                                         <ToggleButton.Style>
-                                            <Style>
+                                            <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource DefaultToggleButtonStyle}">
                                                 <Style.Triggers>
                                                     <Trigger Property="ToggleButton.IsChecked" Value="False">
                                                         <Setter Property="ToggleButton.Content" Value="Delete" />

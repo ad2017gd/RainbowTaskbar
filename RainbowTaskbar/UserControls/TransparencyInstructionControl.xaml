@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:RainbowTaskbar"
              xmlns:instructions="clr-namespace:RainbowTaskbar.Configuration.Instructions"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -32,34 +33,33 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <xctk:WatermarkComboBox Watermark="Type" x:Name="SelectedType"
+            <ComboBox x:Name="SelectedType"
                                     SelectedItem="{Binding SelectedInstruction.Type}"
                                     ItemsSource="{Binding Source={StaticResource TransparencyInstructionType}}">
-                <xctk:WatermarkComboBox.ItemTemplate>
+                <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding Path=.}" />
                     </DataTemplate>
-                </xctk:WatermarkComboBox.ItemTemplate>
-            </xctk:WatermarkComboBox>
-            <xctk:WatermarkComboBox Margin="5,0,0,0" SelectedItem="{Binding SelectedInstruction.Style}"
-                                    Watermark="Style"
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox Margin="5,0,0,0" SelectedItem="{Binding SelectedInstruction.Style}"
                                     ItemsSource="{Binding Source={StaticResource TransparencyInstructionStyle}}">
-                <xctk:WatermarkComboBox.Style>
-                    <Style>
-                        <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Hidden" />
+                <ComboBox.Style>
+                    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource DefaultComboBoxStyle}">
+                        <Setter Property="ComboBox.Visibility" Value="Hidden" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=SelectedType, Path=SelectedItem}" Value="Style">
-                                <Setter Property="xctk:WatermarkComboBox.Visibility" Value="Visible" />
+                                <Setter Property="ComboBox.Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </xctk:WatermarkComboBox.Style>
-                <xctk:WatermarkComboBox.ItemTemplate>
+                </ComboBox.Style>
+                <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Label Content="{Binding Path=.}" />
                     </DataTemplate>
-                </xctk:WatermarkComboBox.ItemTemplate>
-            </xctk:WatermarkComboBox>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,0">
             <StackPanel.Style>
@@ -78,16 +78,7 @@
                     Value="{Binding SelectedInstruction.Opacity, Converter={StaticResource FloatToPercentage}}"
                     HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" />
             <TextBox x:Name="SelectedTime" Margin="5,0,0,0" HorizontalAlignment="Left" TextWrapping="NoWrap"
-                     BorderThickness="1,1,0,1" VerticalAlignment="Top" Width="100">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=TimeUnit, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
+                      VerticalAlignment="Top" Width="100">
                 <TextBox.Text>
                     <Binding Path="SelectedInstruction.Opacity"
                              Converter="{StaticResource FloatToPercentage}"
@@ -105,21 +96,7 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <TextBox x:Name="TimeUnit" Text="Alpha%" Focusable="False" TextWrapping="Wrap" VerticalAlignment="Top"
-                     Width="Auto" Background="White" BorderThickness="0,1,1,1">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsMouseOver}" Value="True">
-                                <Setter Property="BorderBrush" Value="#7eb4ea" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ElementName=SelectedTime, Path=IsFocused}" Value="True">
-                                <Setter Property="BorderBrush" Value="CornflowerBlue" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            <TextBlock FontSize="14" Text="Alpha%" Margin="0,0,10,0" VerticalAlignment="Center" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
             <StackPanel.Style>
@@ -134,8 +111,7 @@
             </StackPanel.Style>
 
             <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" />
-            <xctk:SingleUpDown Value="{Binding SelectedInstruction.Layer}" Width="75" FormatString="N0" Increment="1"
-                               Minimum="0" Maximum="15" ClipValueToMinMax="True" />
+            <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Width="75" Minimum="0" Maximum="15" />
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Canvas Margin="0,0,0,5" x:Name="Preview" Width="450" Height="40">

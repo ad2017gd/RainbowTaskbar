@@ -20,7 +20,7 @@ public partial class ColorInstructionControl : UserControl {
                 instructionEffect == ColorInstructionEffect.FadeGradient)
                 if (ColorPicker1.SelectedColor.HasValue && ColorPicker2.SelectedColor.HasValue)
                     PreviewRectangle.Fill = new LinearGradientBrush(ColorPicker1.SelectedColor.Value,
-                        ColorPicker2.SelectedColor.Value, AnglePicker.Value ?? 0);
+                        ColorPicker2.SelectedColor.Value, AnglePicker.Value);
             if (instructionEffect == ColorInstructionEffect.Fade || instructionEffect == ColorInstructionEffect.Solid)
                 if (ColorPicker1.SelectedColor.HasValue)
                     PreviewRectangle.Fill = new SolidColorBrush(ColorPicker1.SelectedColor.Value);
@@ -35,7 +35,7 @@ public partial class ColorInstructionControl : UserControl {
             if (SelectedEffect.SelectedItem is ColorInstructionEffect instructionEffect) {
                 if (instructionEffect == ColorInstructionEffect.Gradient ||
                     instructionEffect == ColorInstructionEffect.FadeGradient)
-                    PreviewRectangle.Fill = new LinearGradientBrush(Color1, Color2, AnglePicker.Value ?? 0);
+                    PreviewRectangle.Fill = new LinearGradientBrush(Color1, Color2, AnglePicker.Value);
                 if (instructionEffect == ColorInstructionEffect.Fade ||
                     instructionEffect == ColorInstructionEffect.Solid)
                     PreviewRectangle.Fill = new SolidColorBrush(Color1);

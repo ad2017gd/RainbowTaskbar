@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:interp="clr-namespace:RainbowTaskbar.Interpolation"
+             
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -19,28 +21,31 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <xctk:WatermarkTextBox Watermark="Content" Width="400" AcceptsReturn="True"
+                <TextBox Width="400" AcceptsReturn="True"
                                        Text="{Binding SelectedInstruction.Text}" />
                 <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" />
-                <xctk:SingleUpDown Value="{Binding SelectedInstruction.X}" Width="50" FormatString="N0" Increment="1"
-                                   ClipValueToMinMax="True" />
+                <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <ui:NumberBox Value="{Binding SelectedInstruction.X}" Width="50"/>
 
-                <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0" />
-                <xctk:SingleUpDown Value="{Binding SelectedInstruction.Y}" Width="50" FormatString="N0" Increment="1"
-                                   ClipValueToMinMax="True" />
+                <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0" VerticalAlignment="Center"/>
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" Width="50" />
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <xctk:WatermarkComboBox x:Name="FontComboBox" Watermark="Font" ItemsSource="{Binding InstalledFonts}"
+                <ComboBox x:Name="FontComboBox" ItemsSource="{Binding InstalledFonts}"
                                         SelectedItem="{Binding SelectedInstruction.Font}" />
 
-                <TextBlock FontSize="14" Text="Font size " Margin="15,0,5,0" />
-                <xctk:SingleUpDown Value="{Binding SelectedInstruction.Size}" Width="50" FormatString="N0"
-                                   Increment="1" Minimum="1" ClipValueToMinMax="True" />
-                <TextBlock FontSize="14" Text="Font color " Margin="15,0,5,0" />
+                <TextBlock FontSize="14" Text="Font size " Margin="15,0,5,0" VerticalAlignment="Center"/>
+                <ui:NumberBox Value="{Binding SelectedInstruction.Size}" Width="50" Minimum="1"  />
+                <TextBlock FontSize="14" Text="Font color " Margin="15,0,5,0" VerticalAlignment="Center"/>
                 <xctk:ColorPicker
+                    
+                    DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
+                ShowTabHeaders="False"
+                ColorMode="ColorCanvas"
+                Background="{DynamicResource ComboBoxItemBackground}"
+                    
                     SelectedColor="{Binding SelectedInstruction.Color, Converter={StaticResource ColorConverter}}" />
 
             </StackPanel>
