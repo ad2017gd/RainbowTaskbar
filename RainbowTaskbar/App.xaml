@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ui="http://schemas.modernwpf.com/2019"
              
             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-              xmlns:dialog="clr-namespace:Egorozh.ColorPicker.Dialog;assembly=Egorozh.ColorPicker.Avalonia.Dialog"
              StartupUri="TrayWindow.xaml">
     <Application.Resources>
 
