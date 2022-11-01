@@ -19,7 +19,7 @@
 # Getting started
 First off, grab yourself the hottest new release at https://github.com/ad2017gd/RainbowTaskbar/releases.
 
-RainbowTaskbar is a portable app, so there's no installing required. If not already installed, you will be prompted to install the **.NET 6** runtime ([x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.4-windows-x64-installer); [x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.4-windows-x86-installer)).
+RainbowTaskbar is a portable app, so there's no installing required. If not already installed, you will be prompted to install the **.NET 6** runtime ([x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.7-windows-x64-installer); [x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.7-windows-x86-installer)).
 
 After launching the app for the first time, you will automatically get the Rainbow preset. To open the editor/change your preset, locate the tray icon
 on your taskbar.
