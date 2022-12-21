@@ -93,32 +93,6 @@ public partial class App : Application {
             });
 
 
-            JsonPolymorphismOptions poptions = new() {
-                TypeDiscriminatorPropertyName = "__type",
-
-            };
-            Instruction.GetKnownInstructionTypes().FirstOrDefault(a => { poptions.DerivedTypes.Add(new JsonDerivedType(a)); return false; });
-        
-        jsonSerializerOptions = new JsonSerializerOptions {
-                TypeInfoResolver = new DefaultJsonTypeInfoResolver {
-                    Modifiers =
-        {
-            typeInfo =>
-            {
-                if (typeInfo.Type != typeof(Instruction))
-                    return;
-
-                typeInfo.PolymorphismOptions = poptions;
-            }
-        }
-                }
-            };
-
-            
-
-
-
-
             editorViewModel = new EditorViewModel();
 
 
