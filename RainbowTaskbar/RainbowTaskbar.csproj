@@ -4,7 +4,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>2.2.2</Version>
+        <Version>2.2.3</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>rainbow taskbar</Description>
         <Authors>Ad2017, zCri</Authors>
@@ -12,14 +12,14 @@
         <PackageIconUrl />
         <RepositoryUrl>https://github.com/ad2017gd/RainbowTaskbar</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
-        <Company>LovesCock</Company>
+        <Company></Company>
         <NeutralLanguage>en</NeutralLanguage>
         <PackageReleaseNotes />
         <AnalysisLevel>latest</AnalysisLevel>
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
-        <AssemblyVersion>2.2.2</AssemblyVersion>
-        <FileVersion>2.2.2</FileVersion>
+        <AssemblyVersion>2.2.3</AssemblyVersion>
+        <FileVersion>2.2.3</FileVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
