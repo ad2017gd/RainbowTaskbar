@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +16,7 @@ using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace RainbowTaskbar;
 
@@ -41,6 +44,8 @@ public partial class App : Application {
     public static EditorViewModel editorViewModel = null;
 
     public static LayerManager layers = null;
+
+    public JsonSerializerOptions jsonSerializerOptions = null;
 
     //public static List<string> APISubscribed = new();
     public static Mutex mutex = new(true, "RainbowTaskbar Mutex");
@@ -87,7 +92,32 @@ public partial class App : Application {
                 await Task.Delay(Timeout.InfiniteTimeSpan);
             });
 
+
+            JsonPolymorphismOptions poptions = new() {
+                TypeDiscriminatorPropertyName = "__type",
+
+            };
+            Instruction.GetKnownInstructionTypes().FirstOrDefault(a => { poptions.DerivedTypes.Add(new JsonDerivedType(a)); return false; });
+        
+        jsonSerializerOptions = new JsonSerializerOptions {
+                TypeInfoResolver = new DefaultJsonTypeInfoResolver {
+                    Modifiers =
+        {
+            typeInfo =>
+            {
+                if (typeInfo.Type != typeof(Instruction))
+                    return;
+
+                typeInfo.PolymorphismOptions = poptions;
+            }
+        }
+                }
+            };
+
             
+
+
+
 
             editorViewModel = new EditorViewModel();
 

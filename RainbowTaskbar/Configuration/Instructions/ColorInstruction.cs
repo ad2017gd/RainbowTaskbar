@@ -39,11 +39,11 @@ internal class ColorInstruction : Instruction {
 
     [field: DataMember] public int Time { get; set; } = 1;
 
-    [field: DataMember] public Color Color1 { get; set; }
+    [field: DataMember] public Color Color1 { get; set; } = Color.FromArgb(0, 0, 0);
 
     [field: DataMember] public ColorInstructionEffect Effect { get; set; }
 
-    [field: DataMember] public Color Color2 { get; set; }
+    [field: DataMember] public Color Color2 { get; set; } = Color.FromArgb(0, 0, 0);
 
     [field: DataMember] public int Time2 { get; set; } = 1;
 

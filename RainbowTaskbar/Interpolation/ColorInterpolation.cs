@@ -16,8 +16,6 @@ internal class ColorInterpolation {
         Back
     }
 
-    private static double Linear(double x) => x;
-
     private static double Cubic(double x) => x < 0.5 ? 4 * x * x * x : 1 - Math.Pow(-2 * x + 2, 3) / 2;
 
     private static double Back(double x) {

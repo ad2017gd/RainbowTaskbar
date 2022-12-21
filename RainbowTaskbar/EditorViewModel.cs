@@ -91,6 +91,15 @@ public class FormatInstructionNameValueConverter : IValueConverter {
         throw new NotImplementedException();
 }
 
+public class TransparencyStyleNameValueConverter : IValueConverter {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (value.ToString() != "Style" ? 
+        (value.ToString() == "All" ? "Both transparencies" : value.ToString() + " transparency") : 
+        "Taskbar style");
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
+}
+
 public class FloatToPercentageValueConverter : IValueConverter {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
         try {
@@ -198,10 +207,11 @@ public class AddInstructionCommand : ICommand {
 
         App.Config.Instructions.Insert(index, instruction);
 
-        var data = new JObject();
-        data.Add("type", "InstructionAdded");
-        data.Add("index", index);
-        data.Add("instruction", instruction.ToJSON());
+        var data = new JObject {
+            { "type", "InstructionAdded" },
+            { "index", index },
+            { "instruction", instruction.ToJSON() }
+        };
         WebSocketAPIServer.SendToSubscribed(data.ToString());
     }
 }

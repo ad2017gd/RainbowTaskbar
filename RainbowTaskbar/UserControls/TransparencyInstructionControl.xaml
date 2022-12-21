@@ -11,6 +11,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <local:TransparencyStyleNameValueConverter x:Key="TransparencyStyleName"/>
         <local:FloatToPercentageValueConverter x:Key="FloatToPercentage" />
 
         <ObjectDataProvider x:Key="TransparencyInstructionType" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
@@ -33,15 +34,31 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <ComboBox x:Name="SelectedType"
+            <StackPanel Orientation="Horizontal">
+                <Label VerticalAlignment="Center">Change</Label>
+                <ComboBox Margin="5,0,0,0" x:Name="SelectedType"
                                     SelectedItem="{Binding SelectedInstruction.Type}"
                                     ItemsSource="{Binding Source={StaticResource TransparencyInstructionType}}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding Path=.}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Path=.,Converter={StaticResource TransparencyStyleName}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    
+                </ComboBox>
+                <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="to">
+                    <Label.Style>
+                        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource DefaultLabelStyle}">
+                            <Setter Property="ComboBox.Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=SelectedType, Path=SelectedItem}" Value="Style">
+                                    <Setter Property="ComboBox.Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </StackPanel>
             <ComboBox Margin="5,0,0,0" SelectedItem="{Binding SelectedInstruction.Style}"
                                     ItemsSource="{Binding Source={StaticResource TransparencyInstructionStyle}}">
                 <ComboBox.Style>

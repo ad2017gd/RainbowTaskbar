@@ -42,6 +42,18 @@
                                         SelectedItem="{Binding SelectedInstruction.Effect}"
                           
                                         ItemsSource="{Binding Source={StaticResource ColorInstructionEffect}}">
+                    
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <ComboBox Margin="5,0,0,0" x:Name="SelectedTransition"
+                                        SelectedItem="{Binding SelectedInstruction.Transition}"
+                                        ItemsSource="{Binding Source={StaticResource ColorInstructionTransition}}">
+
                     <ComboBox.Style>
                         <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource DefaultComboBoxStyle}">
                             <Setter Property="ComboBox.Visibility" Value="Collapsed" />
@@ -58,18 +70,6 @@
                             </Style.Triggers>
                         </Style>
                     </ComboBox.Style>
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-                <ComboBox Margin="5,0,0,0" x:Name="SelectedTransition"
-                                        SelectedItem="{Binding SelectedInstruction.Transition}"
-                                        ItemsSource="{Binding Source={StaticResource ColorInstructionTransition}}">
-
-
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}" />
@@ -102,12 +102,12 @@
                                   ColorMode="ColorCanvas"
                                   Background="{DynamicResource ComboBoxItemBackground}"
                                   
-                                  UsingAlphaChannel="False" Margin="0,0,5,0" Width="75"
+                                  UsingAlphaChannel="True" Margin="0,0,5,0" Width="75"
                                   SelectedColor="{Binding SelectedInstruction.Color1, Converter={StaticResource ColorConverter}}" >
                 </xctk:ColorPicker>
 
                 <xctk:ColorPicker x:Name="ColorPicker2" SelectedColorChanged="ColorPicker1_SelectedColorChanged"
-                                  UsingAlphaChannel="False" Width="75"
+                                  UsingAlphaChannel="True" Width="75"
                                   DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                                   ShowTabHeaders="False"
                                   ColorMode="ColorCanvas"
@@ -197,6 +197,7 @@
                 <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" VerticalAlignment="Center" />
                 <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Width="75"
                                    Minimum="0" Maximum="15" />
+                
 
             </StackPanel>
 

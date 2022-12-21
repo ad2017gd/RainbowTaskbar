@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using ModernWpf.Controls;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.UserControls;
@@ -57,5 +58,11 @@ public partial class Editor : Window {
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
         App.ReloadTaskbars();
         App.Config.ToFile();
+    }
+
+    private void AppBarButton_Click(object sender, RoutedEventArgs e) {
+        var contextMenu = (sender as AppBarButton).ContextMenu;
+        contextMenu.PlacementTarget = (sender as AppBarButton);
+        contextMenu.IsOpen = true;
     }
 }

@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:RainbowTaskbar"
         xmlns:config="clr-namespace:RainbowTaskbar.Configuration"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:dd="urn:gong-wpf-dragdrop" 
+        xmlns:usercontrols="clr-namespace:RainbowTaskbar.UserControls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         Closing="Window_Closing"
         ui:TitleBar.Background="{DynamicResource ButtonBackground}"
         Icon="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
@@ -15,41 +16,59 @@
     <Window.Resources>
         <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
 
-        
     </Window.Resources>
     <Grid>
+        
         <TabControl>
+
             <TabItem Header="Editor">
-                <Grid Margin="5,5,5,5">
+                <Grid Margin="0,0,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="90" />
+                        <ColumnDefinition Width="Auto" MinWidth="90"/>
                         <ColumnDefinition Width="175"/>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
-                        <WrapPanel Orientation="Horizontal">
-                            <ComboBox x:Name="SelectedInstructionType"
-                                                    ItemsSource="{Binding Source={x:Static config:Instruction.DisplayableInstructionTypes}}"
-                                                    >
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label
-                                            Content="{Binding Name, Converter={StaticResource FormatInstructionName}}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-
-                            <Button Margin="5,0,0,0" Content=" Add " Command="{Binding AddInstructionCommandImpl}"
-                                    CommandParameter="{Binding ElementName=SelectedInstructionType, Path=SelectedItem}" />
-                            <Button Margin="5,0,0,0" Content=" Remove "
+                    <ui:ThemeShadowChrome Grid.Column="0" Grid.ColumnSpan="2">
+                        <StackPanel Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                        
+                            <StackPanel Margin="5,5" >
+                        <ui:CommandBar FlowDirection="RightToLeft">
+                                    <ui:AppBarButton Label="Remove" Icon="Delete"
                                     Command="{Binding RemoveInstructionCommandImpl}" />
-                        </WrapPanel>
+
+                                    <ui:AppBarButton Label="Add" Icon="Add" Click="AppBarButton_Click">
+                                        <ui:AppBarButton.ContextMenu>
+                                            <ContextMenu ItemsSource="{Binding Source={x:Static config:Instruction.DisplayableInstructionTypes}}">
+                                                <ContextMenu.ItemContainerStyle>
+                                                    <Style TargetType="MenuItem" BasedOn="{StaticResource DefaultMenuItemStyle}">
+                                                        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, 
+AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
+                                                        <Setter Property="CommandParameter" Value="{Binding Path=.}"/>
+                                                    </Style>
+                                                </ContextMenu.ItemContainerStyle>
+
+                                                <ContextMenu.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Label
+                                            Content="{Binding Name, Converter={StaticResource FormatInstructionName}}"/>
+                                                    </DataTemplate>
+                                                </ContextMenu.ItemTemplate>
+                                            </ContextMenu>
+                                        </ui:AppBarButton.ContextMenu>
+                                    </ui:AppBarButton>
+
+                                </ui:CommandBar>
+                                
                         <ListBox Margin="0,5,0,0" MaxHeight="280" Width="245" dd:DragDrop.IsDragSource="True"
                                  dd:DragDrop.IsDropTarget="True" dd:DragDrop.DragHandler="{Binding}"
                                  ItemsSource="{Binding Config.Instructions}"
                                  SelectedItem="{Binding SelectedInstruction}"
                                  SelectedIndex="{Binding SelectedInstructionIndex, Mode=OneWayToSource}"
+                                 Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
                                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <ListBox.ContextMenu>
+                                <usercontrols:InstructionContextMenu></usercontrols:InstructionContextMenu>
+                            </ListBox.ContextMenu>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding Name}" />
@@ -74,6 +93,9 @@
                         </Grid>
 
                     </StackPanel>
+                        
+                    </StackPanel>
+                    </ui:ThemeShadowChrome>
                     <Border BorderThickness="0.2" BorderBrush="Black" Grid.Column="2" Margin="10,0,0,0"
                             Padding="10,10,10,10">
                         <ScrollViewer>

@@ -8,7 +8,7 @@
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:interp="clr-namespace:RainbowTaskbar.Interpolation"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:ui="http://schemas.modernwpf.com/2019" d:DataContext="{d:DesignInstance Type=local:EditorViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -66,27 +66,27 @@
                 Background="{DynamicResource ComboBoxItemBackground}"
                                   
                 
-                SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="False" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
+                SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
 
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="Thickness" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" Width="50"  />
+                <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}"  />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X}" Width="50"/>
+                <ui:NumberBox Value="{Binding SelectedInstruction.X}"/>
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" />
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" />
             </StackPanel>
         </StackPanel>
         <!-- Rectangle StackPanel  -->
@@ -120,26 +120,26 @@
                 ColorMode="ColorCanvas"
                 Background="{DynamicResource ComboBoxItemBackground}"
                     
-                    SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="False" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
+                    SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
 
                 <TextBlock FontSize="14" Text="Thickness" Margin="5,0,5,0" />
-                <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" Width="50"/>
+                <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X}" Width="50"  />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X}" />
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" />
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0" VerticalAlignment="Center" />
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}"  />
             </StackPanel>
         </StackPanel>
         <!-- Ellipse StackPanel  -->
@@ -160,9 +160,10 @@
             <xctk:ColorPicker 
                 DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
+                UsingAlphaChannel="True"
                 ColorMode="ColorCanvas"
                 Background="{DynamicResource ComboBoxItemBackground}"
-                SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="False" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
+                SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
             
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <xctk:ColorPicker 
@@ -170,33 +171,32 @@
                 ShowTabHeaders="False"
                 ColorMode="ColorCanvas"
                 Background="{DynamicResource ComboBoxItemBackground}"
-                    SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="False" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
+                    SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
 
                 <TextBlock FontSize="14" Text="Thickness" Margin="5,0,5,0"  VerticalAlignment="Center"/>
-                <xctk:IntegerUpDown Value="{Binding SelectedInstruction.LineSize}" Width="50" FormatString="N0" Increment="1"
-                                   ClipValueToMinMax="True" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X}"  />
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y}"  />
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X2}"/>
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" />
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,5,0,0">
             <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" VerticalAlignment="Center"/>
-            <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Width="75" Minimum="0" Maximum="15"/>
+            <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Minimum="0" Maximum="15"/>
         </StackPanel>
     </Grid>
 </UserControl>

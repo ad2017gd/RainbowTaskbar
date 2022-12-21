@@ -221,7 +221,7 @@ public class TaskbarHelper {
         }
 
         unchecked {
-            accent.GradientColor = 0x01ffffff;
+            accent.GradientColor = 0x01000000;
         }
 
         ;
