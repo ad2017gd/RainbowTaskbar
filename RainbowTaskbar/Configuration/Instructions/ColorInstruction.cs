@@ -180,22 +180,25 @@ internal class ColorInstruction : Instruction {
                 else {
                     var Brush = (LinearGradientBrush) OldBrush;
 
-                    System.Windows.Media.Color OColor;
+                    System.Windows.Media.Color OColor1;
+                    System.Windows.Media.Color OColor2;
                     window.Dispatcher.Invoke(() => {
-                        OColor = System.Windows.Media.Color.FromRgb(
-                            (byte) ((Brush.GradientStops[0].Color.R + Brush.GradientStops[1].Color.R) / 2),
-                            (byte) (Brush.GradientStops[0].Color.G + Brush.GradientStops[1].Color.G / 2),
-                            (byte) (Brush.GradientStops[0].Color.B + Brush.GradientStops[1].Color.B / 2));
+                        OColor1 = Brush.GradientStops[0].Color;
+                        OColor2 = Brush.GradientStops[1].Color;
                     }, System.Windows.Threading.DispatcherPriority.Normal, token);
 
                     var j = 1;
 
                     while (j++ < Time2 / App.Config.InterpolationQuality) {
-                        var Color1Interpolated = ColorInterpolation.Interpolate(OColor.ToDrawingColor(), Color1,
+                        var Color1Interpolated = ColorInterpolation.Interpolate(OColor1.ToDrawingColor(), Color1,
+                            (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
+                        var Color2Interpolated = ColorInterpolation.Interpolate(OColor2.ToDrawingColor(), Color1,
                             (ColorInterpolation.INTERPOLATE_FUNCTION) Transition, (double) j / (Time2 / App.Config.InterpolationQuality));
 
+
                         window.Dispatcher.Invoke(() => {
-                            var Brush = new SolidColorBrush(Color1Interpolated.ToMediaColor());
+                            var Brush = new LinearGradientBrush(Color1Interpolated.ToMediaColor(),
+                                Color2Interpolated.ToMediaColor(), Angle);
                             window.canvasManager.layers.DrawRect(Layer, Brush);
                         }, System.Windows.Threading.DispatcherPriority.Normal, token);
 

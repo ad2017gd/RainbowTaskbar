@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RainbowTaskbar.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -75,7 +76,7 @@ namespace RainbowTaskbar.Drawing
             ctx.Close();
             renderTargets[layer].Render(visual);
         }
-        public void DrawText(int layer, string content, int x = 0, int y = 0, int size = 32, string font = "Arial", System.Windows.Media.Brush fill = null) {
+        public void DrawText(int layer, string content, int x = 0, int y = 0, int size = 32, string font = "Arial", System.Windows.Media.Brush fill = null, bool Center = false) {
             MakeIfNeeded(layer);
 
             var visual = new DrawingVisual();
@@ -86,9 +87,10 @@ namespace RainbowTaskbar.Drawing
                 FlowDirection.LeftToRight,
                 new Typeface(font),
                 size,
-                fill
+                fill,
+                TaskbarHelper.GetSystemDpi() / 96.0
                 );
-            ctx.DrawText(ftext, new System.Windows.Point(x, y));
+            ctx.DrawText(ftext, new System.Windows.Point(Center ? width/2 - ftext.Width/2 : x, y));
             ctx.Close();
             renderTargets[layer].Render(visual);
         }

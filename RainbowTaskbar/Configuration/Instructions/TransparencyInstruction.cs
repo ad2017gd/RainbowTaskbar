@@ -34,7 +34,7 @@ public class TransparencyInstruction : Instruction {
 
     public override string Name {
         get {
-            return Type == TransparencyInstructionType.Style ? $"Style - {Style.ToString()}" :
+            return Type == TransparencyInstructionType.Style ? $"Taskbar style - {Style.ToString()}" :
                 (Type == TransparencyInstructionType.Layer ? $"Layer {Layer} - {Math.Round(Opacity * 100)}% opacity" :
                 $"{Type.ToString()} - {Math.Round(Opacity * 100)}% opacity");
                 

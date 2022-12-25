@@ -143,4 +143,27 @@ public static class DefaultPresets {
             }
         })
     };
+
+    public static readonly InstructionPreset HighContrast = new() {
+        Name = "High contrast",
+        Instructions = new BindingList<Instruction>(new Instruction[] {
+            new TransparencyInstruction {
+                Type = TransparencyInstruction.TransparencyInstructionType.Style,
+                Style = TransparencyInstruction.TransparencyInstructionStyle.Transparent
+            },
+            new ShapeInstruction {
+                Shape = ShapeInstruction.ShapeInstructionShapes.Rectangle,
+                Fill = Color.Transparent,
+                Line = Color.FromArgb(0, 255, 0),
+                Layer = 1,
+                LineSize = 4,
+                FitTaskbars = true
+            },
+            new ColorInstruction {
+                Time = 1001,
+                Color1 = Color.Black,
+                Effect = ColorInstruction.ColorInstructionEffect.Solid,
+            }
+        })
+    };
 }

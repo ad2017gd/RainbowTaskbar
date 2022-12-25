@@ -311,6 +311,18 @@ public class TaskbarHelper {
     [DllImport("user32.dll")]
     private static extern int GetWindowRgn(IntPtr hWnd, IntPtr hRgn);
 
+    public static int GetSystemDpi() {
+        using (Graphics screen = Graphics.FromHwnd(IntPtr.Zero)) {
+            IntPtr hdc = screen.GetHdc();
+
+            int virtualWidth = GetDeviceCaps(hdc, 8);
+            int physicalWidth = GetDeviceCaps(hdc,118);
+            screen.ReleaseHdc(hdc);
+
+            return (int) (96f * physicalWidth / virtualWidth);
+        }
+    }
+
     private static float GetScalingFactor() {
         var desktop = GetDC(IntPtr.Zero);
         var real = GetDeviceCaps(desktop, 10);
@@ -321,7 +333,7 @@ public class TaskbarHelper {
         return scale;
     }
 
-    public IntPtr UpdateRadius() {
+    public bool UpdateRadius() {
         if (old_radius != Radius) {
             old_radius = Radius;
 
@@ -361,9 +373,11 @@ public class TaskbarHelper {
             rgn = CreateRectRgn(0, 0, 0, 0);
             GetWindowRgn(HWND, rgn);
             SetWindowRgn(window.windowHelper.HWND, rgn, true);
+
+            return true;
         }
 
-        return rgn;
+        return false;
     }
 
     [StructLayout(LayoutKind.Sequential)]

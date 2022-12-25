@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Newtonsoft.Json.Linq;
+using RainbowTaskbar.Configuration;
+using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
@@ -85,6 +89,7 @@ public partial class Taskbar : Window {
         }
     }
 
+    // TODO: fix by using mouse hook on real taskbar (?)
     private void RainbowTaskbar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
         if (API.APISubscribed.Count > 0) {
             var data = new JObject();
@@ -100,6 +105,7 @@ public partial class Taskbar : Window {
         }
     }
 
+    // TODO: fix by using mouse hook on real taskbar (?)
     private void RainbowTaskbar_MouseUp(object sender, MouseButtonEventArgs e) {
         if (API.APISubscribed.Count > 0) {
             var data = new JObject();
@@ -113,5 +119,39 @@ public partial class Taskbar : Window {
             data.Add("button_states", states);
             WebSocketAPIServer.SendToSubscribed(data.ToString());
         }
+    }
+
+    public static void SetupLayers() {
+        App.Current.Dispatcher.Invoke(() => {
+            if (App.Config.GraphicsRepeat) {
+                App.taskbars.ForEach(t => {
+                    t.canvasManager.layers = new LayerManager(t);
+                });
+            }
+            else {
+                App.layers = new LayerManager();
+                App.layers.width = (int) App.taskbars.Sum(t => t.Width);
+                App.layers.height = (int) App.taskbars[0].Height;
+            }
+        });
+    }
+
+    public static void SoftReset() {
+        SetupLayers();
+        new List<Instruction>(App.Config.Instructions).ForEach((i) => {
+            if (i is ImageInstruction) {
+                ((ImageInstruction) i).drawn = false;
+            }
+            if (i is ShapeInstruction) {
+                ((ShapeInstruction) i).drawn = false;
+            }
+            if (i is TextInstruction) {
+                ((TextInstruction) i).drawn = false;
+            }
+        });
+
+        App.Config.StopThread();
+        App.Config.configStep = -1;
+        App.Config.StartThread();
     }
 }

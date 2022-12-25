@@ -30,6 +30,27 @@ public class ShapeInstruction : Instruction {
 
     [field: DataMember] public int Y2 { get; set; } = 0;
 
+    private Taskbar _tsk;
+    private int x2 { get {
+            if(FitTaskbars) {
+                return App.Config.GraphicsRepeat ? _tsk.canvasManager.layers.width : App.layers.width;
+            } else {
+                return X2;
+            }
+        } 
+    }
+
+    private int y2 {
+        get {
+            if (FitTaskbars) {
+                return App.Config.GraphicsRepeat ? _tsk.canvasManager.layers.height : App.layers.height;
+            }
+            else {
+                return X2;
+            }
+        }
+    }
+
     [field: DataMember] public bool DrawOnce { get; set; } = false;
 
     [field: DataMember]
@@ -41,21 +62,36 @@ public class ShapeInstruction : Instruction {
     [field: DataMember]
     public int LineSize { get; set; } = 1;
 
+    [field: DataMember]
+    public int Radius { get; set; } = 0;
+
+    private int radius { get {
+            if(FitTaskbars) {
+                return _tsk.taskbarHelper.Radius+1;
+            } else {
+                return Radius;
+            }
+        } }
+
+    [field: DataMember]
+    public bool FitTaskbars { get; set; } = false;
+
     public override string Name {
         get {
-            return $"Shape - {Shape.ToString()}";
+            var name = Shape == ShapeInstructionShapes.Rectangle && Radius > 0 ? "Rounded rectangle" : Shape.ToString();
+            return $"Shape - {name}";
         }
     }
 
     public override bool Execute(Taskbar window, CancellationToken token) {
-
+        _tsk = window;
         if(DrawOnce && drawn) {
             return false;
         }
 
         switch(Shape) {
             case ShapeInstructionShapes.Line: {
-                    var geometry = new LineGeometry(new Point(X,Y), new Point(X2,Y2));
+                    var geometry = new LineGeometry(new Point(X,Y), new Point(x2,y2));
                     geometry.Freeze();
                     window.Dispatcher.Invoke(() =>
                         window.canvasManager.layers.DrawShape(Layer, geometry, null, new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
@@ -63,7 +99,8 @@ public class ShapeInstruction : Instruction {
                     break;
                 }
             case ShapeInstructionShapes.Rectangle: {
-                    var geometry = new RectangleGeometry(new Rect(new Point(X, Y), new Point(X2, Y2)));
+                    var geometry = new RectangleGeometry(new Rect(new Point(X, Y), new Point(x2, y2)));
+                    geometry.RadiusX = radius/2.0; geometry.RadiusY = radius/2.0;
                     geometry.Freeze();
                     window.Dispatcher.Invoke(() =>
                         window.canvasManager.layers.DrawShape(Layer, geometry, new SolidColorBrush(Fill.ToMediaColor()), new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
@@ -71,7 +108,7 @@ public class ShapeInstruction : Instruction {
                     break;
                 }
             case ShapeInstructionShapes.Ellipse: {
-                    var geometry = new EllipseGeometry(new Rect(new Point(X, Y), new Point(X2, Y2)));
+                    var geometry = new EllipseGeometry(new Rect(new Point(X, Y), new Point(x2, y2)));
                     geometry.Freeze();
                     window.Dispatcher.Invoke(() =>
                         window.canvasManager.layers.DrawShape(Layer, geometry, new SolidColorBrush(Fill.ToMediaColor()), new Pen(new SolidColorBrush(Line.ToMediaColor()), LineSize))
@@ -103,6 +140,7 @@ public class ShapeInstruction : Instruction {
         data.Y = Y;
         data.X2 = X2;
         data.Y2 = Y2;
+        data.FitTaskbars = FitTaskbars;
         data.Fill = ColorExtension.HexConverter(Fill);
         data.Line = ColorExtension.HexConverter(Line);
         data.LineSize = LineSize;

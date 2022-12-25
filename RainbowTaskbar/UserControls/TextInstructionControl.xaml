@@ -26,18 +26,33 @@
                 <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X}" Width="50"/>
+                <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" VerticalAlignment="Center">
+                    
+                </TextBlock>
+                <ui:NumberBox Value="{Binding SelectedInstruction.X}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Setter Property="IsEnabled" Value="True"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.Center}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0" VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" Width="50" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y}"  />
+
+                <CheckBox Content="Center X" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.Center}"></CheckBox>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <ComboBox x:Name="FontComboBox" ItemsSource="{Binding InstalledFonts}"
                                         SelectedItem="{Binding SelectedInstruction.Font}" />
 
                 <TextBlock FontSize="14" Text="Font size " Margin="15,0,5,0" VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Size}" Width="50" Minimum="1"  />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Size}" Minimum="1"  />
                 <TextBlock FontSize="14" Text="Font color " Margin="15,0,5,0" VerticalAlignment="Center"/>
                 <xctk:ColorPicker
                     
@@ -55,8 +70,8 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
             <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" />
-            <xctk:SingleUpDown Value="{Binding SelectedInstruction.Layer}" Width="75" FormatString="N0" Increment="1"
-                               Minimum="0" Maximum="15" ClipValueToMinMax="True" />
+            <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Width="75" 
+                               Minimum="0" Maximum="15"  />
         </StackPanel>
     </Grid>
 </UserControl>

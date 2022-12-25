@@ -105,6 +105,8 @@ public partial class App : Application {
 
             SetupTaskbars();
 
+            Taskbar.SetupLayers();
+
             App.Config.StartThread();
             API.Start();
         }
@@ -131,20 +133,12 @@ public partial class App : Application {
             TaskbarHelper.DwmSetWindowAttribute(new WindowInteropHelper(t).EnsureHandle(), TaskbarHelper.DWMWINDOWATTRIBUTE.ExcludedFromPeek, ref fals, sizeof(int));
         });
 
-        if (Config.GraphicsRepeat) {
-            taskbars.ForEach(t => {
-                t.canvasManager.layers = new LayerManager(t);
-            });
-        }
-        else {
-            App.layers = new LayerManager();
-            App.layers.width = (int) taskbars.Sum(t => t.Width);
-            App.layers.height = (int) taskbars[0].Height;
-        }
+
     }
 
     public static void ReloadTaskbars() =>
         Current.Dispatcher.Invoke(() => {
+
 
             taskbars.ForEach(taskbar => {
                 taskbar.Close();
@@ -154,21 +148,10 @@ public partial class App : Application {
 
             SetupTaskbars();
 
+            Taskbar.SoftReset();
 
-            new List<Instruction>(Config.Instructions).ForEach((i) => {
-                if (i is ImageInstruction) {
-                    ((ImageInstruction) i).drawn = false;
-                }
-                if (i is ShapeInstruction) {
-                    ((ShapeInstruction) i).drawn = false;
-                }
-                if (i is TextInstruction) {
-                    ((TextInstruction) i).drawn = false;
-                }
-            });
-            App.Config.StopThread();
-            Config.configStep = -1;
-            App.Config.StartThread();
+
+            
         });
 
     public new static void Exit() {

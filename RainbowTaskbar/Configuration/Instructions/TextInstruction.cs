@@ -31,6 +31,8 @@ internal class TextInstruction : Instruction {
 
     [field: DataMember] public Color Color { get; set; } = Color.Black;
 
+    [field: DataMember] public bool Center { get; set; } = false;
+
     public override string Name {
         get {
             return $"Text - {Text}";
@@ -48,6 +50,7 @@ internal class TextInstruction : Instruction {
         data.Size = Size;
         data.Color = ColorExtension.HexConverter(Color);
         data.DrawOnce = DrawOnce;
+        data.Center = Center;
 
         return JObject.FromObject(data);
     }
@@ -58,7 +61,7 @@ internal class TextInstruction : Instruction {
         }
 
         window.Dispatcher.Invoke( () =>
-            window.canvasManager.layers.DrawText(Layer, Text, X, Y, Size, "Arial", new SolidColorBrush(Color.ToMediaColor()))
+            window.canvasManager.layers.DrawText(Layer, Text, X, Y, Size, Font, new SolidColorBrush(Color.ToMediaColor()), Center)
         , System.Windows.Threading.DispatcherPriority.Normal, token);
 
         if (DrawOnce) drawn = true;

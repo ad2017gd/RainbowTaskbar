@@ -57,21 +57,23 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            
-            <xctk:ColorPicker 
-                
+
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="Stroke color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <xctk:ColorPicker 
                 DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
                 ColorMode="ColorCanvas"
                 Background="{DynamicResource ComboBoxItemBackground}"
-                                  
                 
                 SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
-
+            </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="Thickness" Margin="0,0,5,0" VerticalAlignment="Center"/>
                 <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}"  />
             </StackPanel>
+
+            <StackPanel Margin="0,10,0,10"></StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
@@ -103,16 +105,18 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-
-            <xctk:ColorPicker 
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="Fill color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <xctk:ColorPicker 
                 DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
                 ColorMode="ColorCanvas"
                 Background="{DynamicResource ComboBoxItemBackground}"
                 
                 SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
-            
+            </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="Stroke color" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <xctk:ColorPicker 
                     
                     DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
@@ -121,25 +125,96 @@
                 Background="{DynamicResource ComboBoxItemBackground}"
                     
                     SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
-
-                <TextBlock FontSize="14" Text="Thickness" Margin="5,0,5,0" />
-                <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" />
             </StackPanel>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="Thickness" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" />
 
+                <TextBlock FontSize="14" Text="Border radius" Margin="5,0,5,0" VerticalAlignment="Center" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Radius}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
+            </StackPanel>
+            <StackPanel Margin="0,10,0,10"/>
+            <CheckBox Content="Fit to taskbar" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.FitTaskbars}"></CheckBox>
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
+
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X}" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0" VerticalAlignment="Center" />
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}"  />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
             </StackPanel>
         </StackPanel>
         <!-- Ellipse StackPanel  -->
@@ -157,40 +232,103 @@
                 </Style>
             </StackPanel.Style>
 
-            <xctk:ColorPicker 
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="Fill color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <xctk:ColorPicker 
                 DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
-                UsingAlphaChannel="True"
                 ColorMode="ColorCanvas"
                 Background="{DynamicResource ComboBoxItemBackground}"
-                SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
-            
+                
+                SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
+            </StackPanel>
+
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="Stroke color" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <xctk:ColorPicker 
+                    
                     DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
                 ColorMode="ColorCanvas"
                 Background="{DynamicResource ComboBoxItemBackground}"
+                    
                     SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
+            </StackPanel>
 
-                <TextBlock FontSize="14" Text="Thickness" Margin="5,0,5,0"  VerticalAlignment="Center"/>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <TextBlock FontSize="14" Text="Thickness" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" />
             </StackPanel>
 
+            <StackPanel Margin="0,10,0,10"></StackPanel>
+            <CheckBox Content="Fit to taskbar" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.FitTaskbars}"></CheckBox>
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
+
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X}"  />
+                <ui:NumberBox Value="{Binding SelectedInstruction.X}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
 
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y}"  />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X2" Margin="0,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.X2}"/>
+                <ui:NumberBox Value="{Binding SelectedInstruction.X2}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
 
                 <TextBlock FontSize="14" Text="Y2" Margin="15,0,5,0"  VerticalAlignment="Center"/>
-                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" />
+                <ui:NumberBox Value="{Binding SelectedInstruction.Y2}" >
+                    <ui:NumberBox.Style>
+                        <Style TargetType="ui:NumberBox">
+                            <Style.Setters>
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedInstruction.FitTaskbars}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:NumberBox.Style>
+                </ui:NumberBox>
             </StackPanel>
         </StackPanel>
 
