@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Text;
@@ -14,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Helpers;
+using RainbowTaskbar.Languages;
 using RainbowTaskbar.UserControls;
 using RainbowTaskbar.WebSocketServices;
 
@@ -35,6 +37,10 @@ public class EditorViewModel : INotifyPropertyChanged {
     public Config Config {
         get => App.Config;
         set => App.Config = value;
+    }
+
+    public List<string> Languages {
+        get => Localization.languages;
     }
 
     public ICommand AddInstructionCommandImpl { get; set; }

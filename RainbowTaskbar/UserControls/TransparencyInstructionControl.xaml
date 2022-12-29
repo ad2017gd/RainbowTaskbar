@@ -7,12 +7,14 @@
              xmlns:instructions="clr-namespace:RainbowTaskbar.Configuration.Instructions"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:loc="clr-namespace:RainbowTaskbar.Languages"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:TransparencyStyleNameValueConverter x:Key="TransparencyStyleName"/>
         <local:FloatToPercentageValueConverter x:Key="FloatToPercentage" />
+        <loc:EnumTranslator x:Key="EnumTranslator" />
 
         <ObjectDataProvider x:Key="TransparencyInstructionType" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
             <ObjectDataProvider.MethodParameters>
@@ -35,18 +37,18 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <StackPanel Orientation="Horizontal">
-                <Label VerticalAlignment="Center">Change</Label>
+                <Label VerticalAlignment="Center" Content="{DynamicResource change}"></Label>
                 <ComboBox Margin="5,0,0,0" x:Name="SelectedType"
                                     SelectedItem="{Binding SelectedInstruction.Type}"
                                     ItemsSource="{Binding Source={StaticResource TransparencyInstructionType}}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding Path=.,Converter={StaticResource TransparencyStyleName}}" />
+                            <Label Content="{Binding Path=.,Converter={StaticResource EnumTranslator}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                     
                 </ComboBox>
-                <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="to">
+                <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="{DynamicResource to}">
                     <Label.Style>
                         <Style TargetType="{x:Type Label}" BasedOn="{StaticResource DefaultLabelStyle}">
                             <Setter Property="ComboBox.Visibility" Value="Hidden" />
@@ -73,7 +75,7 @@
                 </ComboBox.Style>
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Label Content="{Binding Path=.}" />
+                        <Label Content="{Binding Path=., Converter={StaticResource EnumTranslator}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -113,7 +115,7 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <TextBlock FontSize="14" Text="Alpha%" Margin="0,0,10,0" VerticalAlignment="Center" />
+            <TextBlock FontSize="14" Text="%" Margin="0,0,10,0" VerticalAlignment="Center" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
             <StackPanel.Style>
@@ -127,7 +129,7 @@
                 </Style>
             </StackPanel.Style>
 
-            <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" />
+            <TextBlock FontSize="14" Text="{DynamicResource layer}" Margin="0,0,10,0" />
             <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Width="75" Minimum="0" Maximum="15" />
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">

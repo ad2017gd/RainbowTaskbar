@@ -8,11 +8,13 @@
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:interp="clr-namespace:RainbowTaskbar.Interpolation"
+             xmlns:loc="clr-namespace:RainbowTaskbar.Languages"
              xmlns:ui="http://schemas.modernwpf.com/2019" d:DataContext="{d:DesignInstance Type=local:EditorViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <interp:ColorConverter x:Key="ColorConverter" />
+        <loc:EnumTranslator x:Key="EnumTranslator" />
         <ObjectDataProvider x:Key="Shapes" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="instructions:ShapeInstruction+ShapeInstructionShapes" />
@@ -34,11 +36,11 @@
                                     ItemsSource="{Binding Source={StaticResource Shapes}}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Label Content="{Binding}" />
+                        <Label Content="{Binding Path=., Converter={StaticResource EnumTranslator}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
+            <CheckBox Content="{DynamicResource drawonce}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             
@@ -59,7 +61,7 @@
             </StackPanel.Style>
 
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Stroke color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource strokecolor}" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <xctk:ColorPicker 
                 DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
@@ -69,7 +71,7 @@
                 SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Thickness" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource thickness}" Margin="0,0,5,0" VerticalAlignment="Center"/>
                 <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}"  />
             </StackPanel>
 
@@ -106,7 +108,7 @@
                 </Style>
             </StackPanel.Style>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Fill color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource fillcolor}" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <xctk:ColorPicker 
                 DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
@@ -116,7 +118,7 @@
                 SelectedColor="{Binding SelectedInstruction.Fill, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Stroke color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource strokecolor}" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <xctk:ColorPicker 
                     
                     DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
@@ -127,10 +129,10 @@
                     SelectedColor="{Binding SelectedInstruction.Line, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Left" UsingAlphaChannel="True" Margin="0,0,0,0" Width="75"></xctk:ColorPicker>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Thickness" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource thickness}" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" />
 
-                <TextBlock FontSize="14" Text="Border radius" Margin="5,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource radius}" Margin="5,0,5,0" VerticalAlignment="Center" />
                 <ui:NumberBox Value="{Binding SelectedInstruction.Radius}" >
                     <ui:NumberBox.Style>
                         <Style TargetType="ui:NumberBox">
@@ -147,7 +149,7 @@
                 </ui:NumberBox>
             </StackPanel>
             <StackPanel Margin="0,10,0,10"/>
-            <CheckBox Content="Fit to taskbar" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.FitTaskbars}"></CheckBox>
+            <CheckBox Content="{DynamicResource fittaskbars}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.FitTaskbars}"></CheckBox>
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
 
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
@@ -233,7 +235,7 @@
             </StackPanel.Style>
 
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Fill color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource fillcolor}" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <xctk:ColorPicker 
                 DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
                 ShowTabHeaders="False"
@@ -244,7 +246,7 @@
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Stroke color" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource strokecolor}" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <xctk:ColorPicker 
                     
                     DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
@@ -256,12 +258,12 @@
             </StackPanel>
 
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Thickness" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource thickness}" Margin="0,0,5,0" VerticalAlignment="Center" />
                 <ui:NumberBox Value="{Binding SelectedInstruction.LineSize}" />
             </StackPanel>
 
             <StackPanel Margin="0,10,0,10"></StackPanel>
-            <CheckBox Content="Fit to taskbar" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.FitTaskbars}"></CheckBox>
+            <CheckBox Content="{DynamicResource fittaskbars}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.FitTaskbars}"></CheckBox>
             <StackPanel Margin="0,5,0,0" Grid.Row="1" Orientation="Horizontal">
 
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0"  VerticalAlignment="Center"/>
@@ -333,7 +335,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,5,0,0">
-            <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" VerticalAlignment="Center"/>
+            <TextBlock FontSize="14" Text="{DynamicResource layer}" Margin="0,0,10,0" VerticalAlignment="Center"/>
             <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Minimum="0" Maximum="15"/>
         </StackPanel>
     </Grid>

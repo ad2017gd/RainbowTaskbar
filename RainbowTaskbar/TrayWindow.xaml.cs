@@ -28,12 +28,15 @@ namespace RainbowTaskbar {
             TrayIcon.TrayMouseDoubleClick += TrayIcon_TrayMouseDoubleClick;
             TrayIcon.ToolTipText = $"RainbowTaskbar {Assembly.GetExecutingAssembly().GetName().Version?.ToString()}";
             TrayIcon.ContextMenu = new TrayContextMenu(this);
+            App.localization.Enable(TrayIcon.ContextMenu.Resources.MergedDictionaries);
             App.trayWindow = this;
+
 
 
         }
 
         private void TrayIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e) {
+
             (TrayIcon.ContextMenu as TrayContextMenu).Open_Click(null, null);
         }
 

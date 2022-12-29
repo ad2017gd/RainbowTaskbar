@@ -35,9 +35,9 @@ internal class ImageInstruction : Instruction {
 
     [field: DataMember] public bool DrawOnce { get; set; } = false;
 
-    public override string Name {
+    public override string Description {
         get {
-            return $"Image - " + System.IO.Path.GetFileName(Path);
+            return App.localization.Format(this, System.IO.Path.GetFileName(Path));
         }
     }
 

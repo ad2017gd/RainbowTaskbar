@@ -23,6 +23,8 @@ public partial class TrayContextMenu : ContextMenu {
         InitializeComponent();
     }
 
+
+
     public void Open_Click(object sender, RoutedEventArgs e) {
         if(App.editor == null) App.editor = new Editor();
         App.editor.Show();
@@ -43,4 +45,13 @@ public partial class TrayContextMenu : ContextMenu {
     }
 
     private void Exit_Click(object sender, RoutedEventArgs e) => App.Exit();
+
+    private void IssueOrRequest_Click(object sender, RoutedEventArgs e) {
+        Process.Start(new ProcessStartInfo("https://github.com/ad2017gd/RainbowTaskbar/issues/new") { UseShellExecute = true });
+        e.Handled = true;
+    }
+
+    private void ContextMenu_Opened(object sender, RoutedEventArgs e) {
+        App.localization.Enable(this.Resources.MergedDictionaries);
+    }
 }

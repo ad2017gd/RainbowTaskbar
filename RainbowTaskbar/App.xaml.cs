@@ -16,7 +16,8 @@ using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
-using static System.Windows.Forms.Design.AxImporter;
+using RainbowTaskbar.Languages;
+using Localization = RainbowTaskbar.Languages.Localization;
 
 namespace RainbowTaskbar;
 
@@ -50,6 +51,8 @@ public partial class App : Application {
     //public static List<string> APISubscribed = new();
     public static Mutex mutex = new(true, "RainbowTaskbar Mutex");
 
+    public static Localization localization;
+
     public static List<Taskbar> FindAllTaskbars() {
         List<Taskbar> tsk = new List<Taskbar>();
 
@@ -69,7 +72,9 @@ public partial class App : Application {
     }
     
     public App() {
+        localization = new Localization();
         
+
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
             Task.Run(async () => {
                 await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");

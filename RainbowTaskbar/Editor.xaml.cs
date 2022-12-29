@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Navigation;
 using ModernWpf.Controls;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Configuration.Instructions;
+using RainbowTaskbar.Languages;
 using RainbowTaskbar.UserControls;
 
 namespace RainbowTaskbar;
@@ -21,9 +23,14 @@ public partial class Editor : Window {
     public EditorViewModel viewModel;
 
     public Editor() {
+        
+        //
+
         viewModel = App.editorViewModel;
         DataContext = App.editorViewModel;
         InitializeComponent();
+
+        App.localization.Enable(Resources.MergedDictionaries);
         Show();
         
 

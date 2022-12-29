@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Controls;
 using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Helpers;
+using RainbowTaskbar.Languages;
 
 namespace RainbowTaskbar.Configuration.Instructions;
 
@@ -32,11 +33,18 @@ public class TransparencyInstruction : Instruction {
 
     [field: DataMember] public int Layer { get; set; }
 
-    public override string Name {
+    public override string Description {
         get {
-            return Type == TransparencyInstructionType.Style ? $"Taskbar style - {Style.ToString()}" :
+            /*return Type == TransparencyInstructionType.Style ? $"Taskbar style - {Style.ToString()}" :
                 (Type == TransparencyInstructionType.Layer ? $"Layer {Layer} - {Math.Round(Opacity * 100)}% opacity" :
-                $"{Type.ToString()} - {Math.Round(Opacity * 100)}% opacity");
+                $"{Type.ToString()} - {Math.Round(Opacity * 100)}% opacity");*/
+            if(Type == TransparencyInstructionType.Style) {
+                return App.localization.FormatSuffix(this, "style", Style.ToStringLocalized());
+            } else if (Type == TransparencyInstructionType.Layer) {
+                return App.localization.FormatSuffix(this, "layer", Layer, Math.Round(Opacity * 100));
+            } else {
+                return App.localization.FormatSuffix(this, "opacity", Type.ToStringLocalized(), Math.Round(Opacity * 100));
+            }
                 
         }
     }

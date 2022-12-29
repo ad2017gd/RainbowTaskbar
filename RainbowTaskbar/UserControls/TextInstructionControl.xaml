@@ -23,7 +23,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBox Width="400" AcceptsReturn="True"
                                        Text="{Binding SelectedInstruction.Text}" />
-                <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
+                <CheckBox Content="{DynamicResource drawonce}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" VerticalAlignment="Center">
@@ -45,15 +45,15 @@
                 <TextBlock FontSize="14" Text="Y" Margin="15,0,5,0" VerticalAlignment="Center"/>
                 <ui:NumberBox Value="{Binding SelectedInstruction.Y}"  />
 
-                <CheckBox Content="Center X" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.Center}"></CheckBox>
+                <CheckBox Content="{DynamicResource centerx}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.Center}"></CheckBox>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <ComboBox x:Name="FontComboBox" ItemsSource="{Binding InstalledFonts}"
                                         SelectedItem="{Binding SelectedInstruction.Font}" />
 
-                <TextBlock FontSize="14" Text="Font size " Margin="15,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource fontsize}" Margin="15,0,5,0" VerticalAlignment="Center"/>
                 <ui:NumberBox Value="{Binding SelectedInstruction.Size}" Minimum="1"  />
-                <TextBlock FontSize="14" Text="Font color " Margin="15,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource fontcolor}" Margin="15,0,5,0" VerticalAlignment="Center"/>
                 <xctk:ColorPicker
                     
                     DropDownBackground="{DynamicResource SystemControlAcrylicElementBrush}"
@@ -69,7 +69,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
-            <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" />
+            <TextBlock FontSize="14" Text="{DynamicResource layer}" VerticalAlignment="Center" Margin="0,0,10,0" />
             <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Width="75" 
                                Minimum="0" Maximum="15"  />
         </StackPanel>

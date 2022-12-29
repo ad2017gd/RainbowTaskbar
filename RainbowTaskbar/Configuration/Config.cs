@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -26,8 +27,13 @@ public class Config : INotifyPropertyChanged {
 
     private static readonly int SupportedConfigVersion = 3;
 
-    public Config() {
+    protected void Init() {
         SetupPropertyChanged();
+        App.localization.Switch(language);
+    }
+
+    public Config() {
+        Init();
     }
 
     [field: DataMember] public int ConfigFileVersion { get; set; } = SupportedConfigVersion;
@@ -62,6 +68,14 @@ public class Config : INotifyPropertyChanged {
     [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
     public bool SameRadiusOnEach { get; set; } = false;
 
+    [field: DataMember]
+    [OnChangedMethod(nameof(OnLanguageChanged))]
+    public string Language { get; set; } = "SystemDefault";
+
+    public string language { get {
+            return Language == "SystemDefault" ? CultureInfo.CurrentUICulture.Name : Language;
+        } }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     public void SetupPropertyChanged() {
@@ -71,6 +85,12 @@ public class Config : INotifyPropertyChanged {
 
     public void OnTaskbarBehaviourChanged() {
         App.ReloadTaskbars();
+    }
+
+    public void OnLanguageChanged() {
+        App.localization.Switch(language);
+        App.editor.Close();
+        App.editor = new Editor();
     }
 
     public CancellationTokenSource cts = new CancellationTokenSource();
@@ -143,7 +163,7 @@ public class Config : INotifyPropertyChanged {
                         return;
                     }
                     MessageBox.Show(
-                        $"The \"{App.Config.Instructions[App.Config.configStep].Name}\" instruction at index {App.Config.configStep} (starting from 0) threw an exception, it will be removed from the config.\n${e.Message}",
+                        $"The \"{App.Config.Instructions[App.Config.configStep].Description}\" instruction at index {App.Config.configStep} (starting from 0) threw an exception, it will be removed from the config.\n${e.Message}",
                         "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Error);
                     Application.Current.Dispatcher.Invoke(() => {
                         App.Config.Instructions.RemoveAt(App.Config.configStep);
@@ -337,6 +357,7 @@ public class Config : INotifyPropertyChanged {
 
             var serializer = new DataContractSerializer(typeof(Config), serializerSettings);
             var cfg = serializer.ReadObject(reader) as Config;
+            
             if (cfg.ConfigFileVersion != SupportedConfigVersion) {
                 switch (cfg.ConfigFileVersion) {
                     case 1:
@@ -349,12 +370,16 @@ public class Config : INotifyPropertyChanged {
                         cfg.GraphicsRepeat = true;
                         cfg.SameRadiusOnEach = false;
                         cfg.ConfigFileVersion = SupportedConfigVersion;
+                        goto case 3;
+                    case 3:
+                        cfg.Language = CultureInfo.InstalledUICulture.Name;
                         break;
+
                 }
                 cfg.ToFile();
             }
 
-            cfg.SetupPropertyChanged();
+            cfg.Init();
             return cfg;
         }
         catch {

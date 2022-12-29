@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <Button Click="Button_Click" Content="Choose image" />
+                <Button Click="Button_Click" Content="{DynamicResource chooseimg}" />
                 <TextBox x:Name="ImagePathTextBox" Margin="5,0,0,0" Width="250">
                     <TextBox.Text>
                         <Binding Path="SelectedInstruction.Path">
@@ -30,7 +30,7 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <CheckBox Content="Draw once" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
+                <CheckBox Content="{DynamicResource drawonce}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding SelectedInstruction.DrawOnce}"></CheckBox>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <TextBlock FontSize="14" Text="X" Margin="0,0,5,0" VerticalAlignment="Center"/>
@@ -40,17 +40,17 @@
                 <ui:NumberBox Value="{Binding SelectedInstruction.Y}" />
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Width" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource width}" Margin="0,0,5,0" VerticalAlignment="Center"/>
                 <ui:NumberBox Value="{Binding SelectedInstruction.Width}" Minimum="0" />
 
-                <TextBlock FontSize="14" Text="Height" Margin="15,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource height}" Margin="15,0,5,0" VerticalAlignment="Center"/>
                 <ui:NumberBox Value="{Binding SelectedInstruction.Height}"  Minimum="0" />
             </StackPanel>
             
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,0">
 
-            <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" VerticalAlignment="Center"/>
+            <TextBlock FontSize="14" Text="{DynamicResource layer}" Margin="0,0,10,0" VerticalAlignment="Center"/>
             <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" MinWidth="75" Minimum="0" Maximum="15"/>
         </StackPanel>
     </Grid>

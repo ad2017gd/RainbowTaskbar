@@ -14,9 +14,9 @@ namespace RainbowTaskbar.Configuration.Instructions;
 internal class ClearLayerInstruction : Instruction {
     [field: DataMember] public int Layer { get; set; } = 0;
 
-    public override string Name {
+    public override string Description {
         get {
-            return "Clear Layer - " + Layer;
+            return App.localization.Format(this, Layer);
         }
     }
 

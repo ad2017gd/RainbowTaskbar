@@ -8,18 +8,23 @@ using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Interpolation;
 using Color = System.Drawing.Color;
 using Brush = System.Windows.Media.Brush;
+using RainbowTaskbar.Languages;
 
 namespace RainbowTaskbar.Configuration.Instructions;
 
 [DataContract]
 internal class ColorInstruction : Instruction {
 
-    public override string Name {
+    public override string Description {
         get {
-            return Randomize ? $"{Effect.ToString()} - Randomized" :
-
-                $"{Effect.ToString()} - {ColorTranslator.ToHtml(Color1)}" +
-                ((Effect == ColorInstructionEffect.Gradient || Effect == ColorInstructionEffect.FadeGradient) ? $" to {ColorTranslator.ToHtml(Color2)}" : "");
+            //ColorTranslator.ToHtml(Color1)
+            if(Randomize) {
+                return App.localization.FormatSuffix(this, "randomized", Effect.ToStringLocalized());
+            } else if ((Effect == ColorInstructionEffect.Gradient || Effect == ColorInstructionEffect.FadeGradient)) {
+                return App.localization.FormatSuffix(this, "gradient", Effect.ToStringLocalized(), ColorTranslator.ToHtml(Color1), ColorTranslator.ToHtml(Color2));
+            } else {
+                return App.localization.FormatSuffix(this, "solid", Effect.ToStringLocalized(), ColorTranslator.ToHtml(Color1));
+            }
         }
     }
     public enum ColorInstructionEffect {

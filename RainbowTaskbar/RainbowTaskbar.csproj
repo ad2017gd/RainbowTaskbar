@@ -76,6 +76,12 @@
         <Compile Update="App.xaml.cs">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Compile>
+        <Compile Update="Languages\ja_JP.xaml.cs">
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Languages\ro_RO.xaml.cs">
+          <SubType>Code</SubType>
+        </Compile>
         <Compile Update="Properties\Resources.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>

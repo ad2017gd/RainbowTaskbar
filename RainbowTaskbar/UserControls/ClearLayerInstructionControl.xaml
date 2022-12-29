@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
             <StackPanel Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource layer}" Margin="0,0,10,0" VerticalAlignment="Center"/>
                 <TextBox Text="{Binding SelectedInstruction.Layer}" Width="75"/>
             </StackPanel>
         </StackPanel>

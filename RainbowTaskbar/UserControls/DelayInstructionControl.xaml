@@ -23,7 +23,7 @@
                 
                 
             </ui:NumberBox>
-            <TextBlock FontSize="14" Text="ms" Margin="5,0,10,0" VerticalAlignment="Center" />
+            <TextBlock FontSize="14" Text="{DynamicResource milliseconds}" Margin="5,0,10,0" VerticalAlignment="Center" />
         </StackPanel>
 
 

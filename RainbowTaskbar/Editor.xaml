@@ -6,22 +6,33 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:RainbowTaskbar"
         xmlns:config="clr-namespace:RainbowTaskbar.Configuration"
+        xmlns:loc="clr-namespace:RainbowTaskbar.Languages"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:dd="urn:gong-wpf-dragdrop" 
-        xmlns:usercontrols="clr-namespace:RainbowTaskbar.UserControls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:usercontrols="clr-namespace:RainbowTaskbar.UserControls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:languages="clr-namespace:RainbowTaskbar.Languages"
         Closing="Window_Closing"
+        Title="{DynamicResource editor}"
         ui:TitleBar.Background="{DynamicResource ButtonBackground}"
         Icon="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
-        Title="Editor" Height="500" Width="800">
+        Height="500" Width="800">
     <Window.Resources>
-        <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Languages/en_US.xaml" />
 
+            </ResourceDictionary.MergedDictionaries>
+            <loc:InstructionTranslator x:Key="InstructionTranslator" />
+            <loc:LanguageConverter x:Key="LanguageConverter" />
+            <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
+        </ResourceDictionary>
+        
+        
     </Window.Resources>
     <Grid>
         
         <TabControl>
 
-            <TabItem Header="Editor">
+            <TabItem Header="{DynamicResource editor}">
                 <Grid Margin="0,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" MinWidth="90"/>
@@ -33,10 +44,10 @@
                         
                             <StackPanel Margin="5,5" >
                         <ui:CommandBar FlowDirection="RightToLeft">
-                                    <ui:AppBarButton Label="Remove" Icon="Delete"
+                                    <ui:AppBarButton Label="{DynamicResource remove}" Icon="Delete"
                                     Command="{Binding RemoveInstructionCommandImpl}" />
 
-                                    <ui:AppBarButton Label="Add" Icon="Add" Click="AppBarButton_Click">
+                                    <ui:AppBarButton Label="{DynamicResource add}" Icon="Add" Click="AppBarButton_Click">
                                         <ui:AppBarButton.ContextMenu>
                                             <ContextMenu ItemsSource="{Binding Source={x:Static config:Instruction.DisplayableInstructionTypes}}">
                                                 <ContextMenu.ItemContainerStyle>
@@ -46,11 +57,11 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                                                         <Setter Property="CommandParameter" Value="{Binding Path=.}"/>
                                                     </Style>
                                                 </ContextMenu.ItemContainerStyle>
-
+                                                
                                                 <ContextMenu.ItemTemplate>
                                                     <DataTemplate>
                                                         <Label
-                                            Content="{Binding Name, Converter={StaticResource FormatInstructionName}}"/>
+                                            Content="{Binding Name, Converter={StaticResource InstructionTranslator}}"/>
                                                     </DataTemplate>
                                                 </ContextMenu.ItemTemplate>
                                             </ContextMenu>
@@ -71,7 +82,7 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                             </ListBox.ContextMenu>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding Name}" />
+                                    <Label FontSize="12" Content="{Binding Description}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -84,12 +95,12 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Row="0" Grid.Column="0" MinWidth="90" Click="Button_Click" Content="Apply" />
+                                    <Button Grid.Row="0" Grid.Column="0" MinWidth="90" Click="Button_Click" Content="{DynamicResource apply}" />
                             <Button Grid.Row="0" Grid.Column="1" MinWidth="90" Click="ButtonBase_OnClick"
-                                    Margin="5,0,0,0" Content="Apply &amp; Save" />
+                                    Margin="5,0,0,0" Content="{DynamicResource applyandsave}" />
                             <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="180" Margin="0,3,0,0"
                                     Command="{Binding InstructionsToPresetCommandImpl}"
-                                    Content="To preset" />
+                                    Content="{DynamicResource topreset}" />
                         </Grid>
 
                     </StackPanel>
@@ -104,7 +115,7 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                     </Border>
                 </Grid>
             </TabItem>
-            <TabItem Header="Settings" VerticalAlignment="Bottom">
+            <TabItem Header="{DynamicResource settings}" VerticalAlignment="Bottom">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -112,39 +123,51 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                     </Grid.RowDefinitions>
                     <ScrollViewer>
                         <StackPanel Orientation="Vertical" Margin="5,0,0,20">
-                            <Label Content="General" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
+                            <Label Content="{DynamicResource general}" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"
                                FontSize="24" />
-                            <CheckBox IsChecked="{Binding RunAtStartup}" Content="Run at system startup"
+                            <CheckBox IsChecked="{Binding RunAtStartup}" Content="{DynamicResource sstartup}"
                                   HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
-                            <CheckBox IsChecked="{Binding Config.CheckUpdate}" Content="Check for updates"
+                            <CheckBox IsChecked="{Binding Config.CheckUpdate}" Content="{DynamicResource supdates}"
                                   HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{DynamicResource suilanguage}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" />
+                                <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Languages}" SelectedValue="{Binding Config.Language, Mode=TwoWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Label FontSize="12" Content="{Binding Path=., Converter={StaticResource LanguageConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                            </StackPanel>
 
-                            <Label Content="HTTP API" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
+                            <Label Content="{DynamicResource httpapi}" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
                                FontSize="24" />
-                            <CheckBox IsChecked="{Binding Config.IsAPIEnabled}" Content="Enable server"
+                            <CheckBox IsChecked="{Binding Config.IsAPIEnabled}" Content="{DynamicResource senableserver}"
                                   HorizontalAlignment="Left"
                                   Margin="10,5,0,0" VerticalAlignment="Top" />
 
                             <StackPanel Orientation="Horizontal">
-
-                                <Label Content="Port" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" />
+                                <Label Content="{DynamicResource sserverport}" HorizontalAlignment="Left" Margin="10,5,0,5" VerticalAlignment="Center" />
                                 <ui:NumberBox Margin="5,0,0,0" Minimum="1" Maximum="65535" Value="{Binding Config.APIPort}"
                                                 HorizontalAlignment="Left" />
+                                
+                                
                             </StackPanel>
 
-                            <Label Content="Multiple taskbars" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
+                            <Label Content="{DynamicResource multipletaskbars}" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
                                FontSize="24" />
-                            <CheckBox IsChecked="{Binding Config.GraphicsRepeat}" Content="Repeat graphics"
+                            <CheckBox IsChecked="{Binding Config.GraphicsRepeat}" Content="{DynamicResource srepeatgraphics}"
                                   HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
-                            <CheckBox IsChecked="{Binding Config.SameRadiusOnEach}" Content="Use same border radius"
+                            <CheckBox IsChecked="{Binding Config.SameRadiusOnEach}" Content="{DynamicResource ssameradius}"
                                   HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" />
 
-                            <Label Content="Graphics" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
+                            <Label Content="{DynamicResource graphics}" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
                                FontSize="24" />
 
                             <StackPanel Orientation="Horizontal">
 
-                                <Label Content="Interpolation quality (smaller better)" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" />
+                                <Label Content="{DynamicResource sinterpolationquality}" HorizontalAlignment="Left" Margin="5,5,0,5" VerticalAlignment="Top" />
                                 <ui:NumberBox Margin="5,0,0,0" Minimum="5" Maximum="50" Value="{Binding Config.InterpolationQuality}"
                                                 HorizontalAlignment="Left" />
                             </StackPanel>
@@ -152,10 +175,10 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                         </StackPanel>
                     </ScrollViewer>
                     <Button HorizontalAlignment="Left" Grid.Row="1" Width="180" Margin="5,5" Click="Save_Click"
-                            Content="Save" />
+                            Content="{DynamicResource save}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="About">
+            <TabItem Header="{DynamicResource about}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -163,11 +186,11 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                         <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
                     <StackPanel>
-                        <Label Content="About" Margin="5,5,0,10" VerticalAlignment="Top" FontSize="24" />
+                        <Label Content="{DynamicResource about}" Margin="5,5,0,10" VerticalAlignment="Top" FontSize="24" />
                         <Label HorizontalContentAlignment="Center"
-                               Content="RainbowTaskbar is a tool that allows you to greatly customize the appearance of your taskbar." />
+                               Content="{DynamicResource description}" />
                         <Label HorizontalContentAlignment="Center"
-                               Content="It is completely free to use, but donations are well appreciated!" />
+                               Content="{DynamicResource donations}" />
                     </StackPanel>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,150,0,0">
                         <Grid>
@@ -191,7 +214,10 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <TextBlock Margin="5,0" Grid.Row="1" FontSize="14">
+                    <StackPanel Margin="5,0" Grid.Row="1">
+                        <Label FontSize="14" Content="{DynamicResource langcredits}"></Label>
+                    <TextBlock FontSize="14">
+                        
                         RainbowTaskbar is
                         <Hyperlink NavigateUri="https://ad2017.dev/rnb" RequestNavigate="Hyperlink_RequestNavigate">
                             free software
@@ -208,6 +234,7 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                         </Hyperlink>
                         .
                     </TextBlock>
+                    </StackPanel>
                 </Grid>
             </TabItem>
 

@@ -9,9 +9,9 @@ namespace RainbowTaskbar.Configuration.Instructions;
 internal class DelayInstruction : Instruction {
     [field: DataMember] public int Time { get; set; } = 1;
 
-    public override string Name {
+    public override string Description {
         get {
-            return $"Sleep - " + Time + "ms";
+            return App.localization.Format(this, Time);
         }
     }
     public override bool Execute(Taskbar window, CancellationToken token) {

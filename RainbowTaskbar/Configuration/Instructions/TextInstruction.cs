@@ -33,9 +33,9 @@ internal class TextInstruction : Instruction {
 
     [field: DataMember] public bool Center { get; set; } = false;
 
-    public override string Name {
+    public override string Description {
         get {
-            return $"Text - {Text}";
+            return App.localization.Format(this, Text);
         }
     }
 

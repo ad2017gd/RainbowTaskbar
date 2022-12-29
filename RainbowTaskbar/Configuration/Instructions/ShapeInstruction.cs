@@ -1,13 +1,18 @@
-﻿using System.Dynamic;
+﻿
+using System;
+using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Newtonsoft.Json.Linq;
 using RainbowTaskbar.Interpolation;
+using RainbowTaskbar.Languages;
 
 namespace RainbowTaskbar.Configuration.Instructions;
 
@@ -76,10 +81,10 @@ public class ShapeInstruction : Instruction {
     [field: DataMember]
     public bool FitTaskbars { get; set; } = false;
 
-    public override string Name {
+    public override string Description {
         get {
-            var name = Shape == ShapeInstructionShapes.Rectangle && Radius > 0 ? "Rounded rectangle" : Shape.ToString();
-            return $"Shape - {name}";
+            var name = Shape == ShapeInstructionShapes.Rectangle && Radius > 0 ? App.localization.Get("enum_roundedrect") : Shape.ToStringLocalized();
+            return App.localization.Format(this, name);
         }
     }
 

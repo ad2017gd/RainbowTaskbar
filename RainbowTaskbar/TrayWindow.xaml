@@ -7,9 +7,19 @@
         mc:Ignorable="d"
         Title="TrayWindow" Height="0" Width="0"
         Visibility="Hidden">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Languages/en_US.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+
+    </Window.Resources>
     <Grid>
         <tb:TaskbarIcon Name="TrayIcon"
                         IconSource="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
-                        ToolTipText="RainbowTaskbar" />
+                        ToolTipText="{DynamicResource name}" />
     </Grid>
 </Window>

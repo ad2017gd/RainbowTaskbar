@@ -10,6 +10,6 @@
 
         </Style>
     </ContextMenu.Style>
-    <MenuItem x:Name="Duplicate" Click="Duplicate_Click" Header="Duplicate" />
-    <MenuItem x:Name="Delete" Click="Delete_Click" Header="Delete" />
+    <MenuItem x:Name="Duplicate" Click="Duplicate_Click" Header="{DynamicResource duplicate}" />
+    <MenuItem x:Name="Delete" Click="Delete_Click" Header="{DynamicResource delete}" />
 </ContextMenu>

@@ -7,7 +7,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
         FocusManager.FocusedElement="{Binding ElementName=NameTextBox}"
-        Title="Enter preset name" ShowInTaskbar="False"
+        Title="{DynamicResource enterpresetname}" ShowInTaskbar="False"
         Width="400"
         Height="130"
         WindowStartupLocation="CenterOwner" d:DesignHeight="130" d:DesignWidth="400">
@@ -33,7 +33,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0">Name:</Label>
+        <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource presetname}"></Label>
         <TextBox Grid.Row="0" Grid.Column="1" x:Name="NameTextBox" />
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button IsDefault="True" Click="OkButton_OnClick">OK</Button>

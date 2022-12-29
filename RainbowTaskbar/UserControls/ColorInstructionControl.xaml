@@ -8,6 +8,7 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:RainbowTaskbar"
              xmlns:interp="clr-namespace:RainbowTaskbar.Interpolation"
+             xmlns:loc="clr-namespace:RainbowTaskbar.Languages"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -16,6 +17,7 @@
     <UserControl.Resources>
         <local:FormatInstructionNameValueConverter x:Key="FormatInstructionName" />
         <interp:ColorConverter x:Key="ColorConverter" />
+        <loc:EnumTranslator x:Key="EnumTranslator" />
 
         <ObjectDataProvider x:Key="ColorInstructionEffect" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
             <ObjectDataProvider.MethodParameters>
@@ -45,7 +47,7 @@
                     
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}" />
+                            <Label Content="{Binding Path=., Converter={StaticResource EnumTranslator}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -72,18 +74,18 @@
                     </ComboBox.Style>
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding Path=., Converter={StaticResource FormatInstructionName}}" />
+                            <Label Content="{Binding Path=., Converter={StaticResource EnumTranslator}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
                 <CheckBox Checked="Randomize_Checked" Unchecked="Randomize_Checked" x:Name="Randomize"
-                          Margin="10,0,0,0" VerticalAlignment="Center" Content="Randomize colors"
+                          Margin="10,0,0,0" VerticalAlignment="Center" Content="{DynamicResource randomize}"
                           IsChecked="{Binding SelectedInstruction.Randomize}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <TextBlock FontSize="14" Text="Hold time" Margin="0,0,10,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource holdtime}" Margin="0,0,10,0" VerticalAlignment="Center" />
                 <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="1" Maximum="5000"
                         Value="{Binding SelectedInstruction.Time}" HorizontalAlignment="Left" VerticalAlignment="Top"
                         Width="240" />
@@ -92,7 +94,7 @@
 
 
                 </ui:NumberBox>
-                <TextBlock FontSize="14" Text="ms" Margin="5,0,10,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource milliseconds}" Margin="5,0,10,0" VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <xctk:ColorPicker x:Name="ColorPicker1" SelectedColorChanged="ColorPicker1_SelectedColorChanged" 
@@ -158,7 +160,7 @@
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
-                <TextBlock FontSize="14" Text="Fade time" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource fadetime}" Margin="0,0,10,0" VerticalAlignment="Center"/>
                 <Slider IsSnapToTickEnabled="True" TickFrequency="1" Minimum="0" Maximum="5000"
                         Value="{Binding SelectedInstruction.Time2}" HorizontalAlignment="Left" VerticalAlignment="Top"
                         Width="240" />
@@ -167,7 +169,7 @@
                     
                     
                 </ui:NumberBox>
-                <TextBlock FontSize="14" Text="ms" Margin="5,0,10,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14" Text="{DynamicResource milliseconds}" Margin="5,0,10,0" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <StackPanel.Style>
@@ -187,14 +189,14 @@
                     </Style>
                 </StackPanel.Style>
 
-                <TextBlock FontSize="14" Text="Gradient angle °" Margin="0,0,10,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource gradientangle}" Margin="0,0,10,0" VerticalAlignment="Center" />
                 <ui:NumberBox Name="AnglePicker" Value="{Binding SelectedInstruction.Angle}" Width="75"  Minimum="0" Maximum="360" />
             </StackPanel>
 
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Grid.Row="2" Orientation="Vertical" Margin="0,5,0,0">
             <StackPanel Margin="0,10" Orientation="Horizontal">
-                <TextBlock FontSize="14" Text="Layer " Margin="0,0,10,0" VerticalAlignment="Center" />
+                <TextBlock FontSize="14" Text="{DynamicResource layer}" Margin="0,0,10,0" VerticalAlignment="Center" />
                 <ui:NumberBox Value="{Binding SelectedInstruction.Layer}" Width="75"
                                    Minimum="0" Maximum="15" />
                 
