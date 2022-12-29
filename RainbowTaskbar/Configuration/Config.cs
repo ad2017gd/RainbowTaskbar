@@ -372,6 +372,7 @@ public class Config : INotifyPropertyChanged {
                         cfg.ConfigFileVersion = SupportedConfigVersion;
                         goto case 3;
                     case 3:
+                        if(!cfg.Presets.Contains(DefaultPresets.HighContrast)) cfg.Presets.Add(DefaultPresets.HighContrast);
                         cfg.Language = CultureInfo.InstalledUICulture.Name;
                         break;
 
