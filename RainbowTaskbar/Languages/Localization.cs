@@ -28,7 +28,7 @@ namespace RainbowTaskbar.Languages
                     dictionary = new ro_RO();
                     (dictionary as ro_RO).InitializeComponent();
                     break;
-                case "jp":
+                case "ja":
                 case "ja_JP":
                     dictionary = new ja_JP();
                     (dictionary as ja_JP).InitializeComponent();
