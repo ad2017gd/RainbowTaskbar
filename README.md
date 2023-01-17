@@ -32,4 +32,4 @@ Have fun using RainbowTaskbar!
 Documentation has been moved to https://ad2017.dev/rnb/docs
 
 # License
-The app is distributed under the MIT License. See `LICENSE` for more information.
+See `LICENSE` for more information.
