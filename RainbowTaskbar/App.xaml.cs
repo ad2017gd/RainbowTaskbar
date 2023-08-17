@@ -112,8 +112,12 @@ public partial class App : Application {
 
             Taskbar.SetupLayers();
 
+            if(taskbars.Count > 0)
+                ExplorerTAP.ExplorerTAP.TryInject();
+
             App.Config.StartThread();
             API.Start();
+
         }
         else {
             // Other processes
@@ -138,6 +142,18 @@ public partial class App : Application {
             TaskbarHelper.DwmSetWindowAttribute(new WindowInteropHelper(t).EnsureHandle(), TaskbarHelper.DWMWINDOWATTRIBUTE.ExcludedFromPeek, ref fals, sizeof(int));
         });
 
+        Task.Factory.StartNew(() => {
+            while(TaskbarHelper.IsWindow(taskbars.First(x => !x.secondary).taskbarHelper.HWND)) {
+                Thread.Sleep(1000);
+            }
+            while (TaskbarHelper.FindWindow("Shell_TrayWnd", null) == IntPtr.Zero) {
+                Thread.Sleep(1000);
+            }
+            Thread.Sleep(2500);
+
+            ReloadTaskbars();
+        }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
 
     }
 
@@ -160,7 +176,7 @@ public partial class App : Application {
         });
 
     public new static void Exit() {
-        trayWindow.TrayIcon.Dispose();
+        if(trayWindow is not null) trayWindow.TrayIcon.Dispose();
 
         taskbars.ForEach(t => {
             t.taskbarHelper.Radius = 0;
@@ -169,6 +185,10 @@ public partial class App : Application {
             t.Close();
             t.taskbarHelper.SetAlpha(1);
             TaskbarHelper.SendMessage(t.taskbarHelper.HWND, TaskbarHelper.WM_DWMCOMPOSITIONCHANGED, 1, null);
+            t.taskbarHelper.Style = TaskbarHelper.TaskbarStyle.ForceDefault;
+            t.taskbarHelper.SetBlur();
+            // win11 fix
+            ExplorerTAP.ExplorerTAP.Reset();
         });
         Current.Dispatcher.Invoke(() => { Current.Shutdown(); });
     }

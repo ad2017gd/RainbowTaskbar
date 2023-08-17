@@ -200,6 +200,10 @@ public class TaskbarHelper {
     public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, uint wParam,
         [MarshalAs(UnmanagedType.LPWStr)] string lParam);
 
+    [DllImport("user32.dll")]
+    public static extern bool IsWindow(IntPtr hWnd);
+
+
     public void SetBlur() {
         var accent = new AccentPolicy();
         switch (Style) {

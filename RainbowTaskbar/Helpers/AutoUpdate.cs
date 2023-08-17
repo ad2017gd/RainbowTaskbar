@@ -39,7 +39,7 @@ internal static class AutoUpdate {
                     var proc = Process.Start(
                         new ProcessStartInfo {
                             Arguments =
-                                $"/C taskkill /f /im {oldfile} > nul && timeout /t 1 /nobreak > nul && move /y {newfile} {oldfile} > nul && start {oldfile}",
+                                $"/C taskkill /f /im \"{oldfile}\" > nul && timeout /t 1 /nobreak > nul && move /y \"{newfile}\" \"{oldfile}\" > nul && start \"{oldfile}\"",
                             FileName = "cmd",
                             WindowStyle = ProcessWindowStyle.Hidden
                         }

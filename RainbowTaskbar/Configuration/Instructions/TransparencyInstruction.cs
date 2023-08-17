@@ -95,6 +95,8 @@ public class TransparencyInstruction : Instruction {
                         break;
                 }
 
+                ExplorerTAP.ExplorerTAP.SetAppearanceType(Style);
+
                 break;
 
             case TransparencyInstructionType.Layer:

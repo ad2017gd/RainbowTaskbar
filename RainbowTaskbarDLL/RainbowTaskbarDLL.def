@@ -1,0 +1,5 @@
+﻿EXPORTS
+DllGetClassObject PRIVATE
+DllCanUnloadNow PRIVATE
+SetAppearanceTypeDLL
+CloseDLL

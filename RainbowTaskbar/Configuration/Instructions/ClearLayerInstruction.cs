@@ -22,7 +22,11 @@ internal class ClearLayerInstruction : Instruction {
 
     public override bool Execute(Taskbar window, CancellationToken token) {
         window.Dispatcher.Invoke(() => {
-            window.canvasManager.layers.renderTargets[Layer].Clear();
+            try {
+                window.canvasManager.layers.renderTargets[Layer].Clear();
+            } catch {
+                window.canvasManager.layers.MakeIfNeeded(Layer);
+            }
         }, System.Windows.Threading.DispatcherPriority.Normal, token);
         return false;
     }
