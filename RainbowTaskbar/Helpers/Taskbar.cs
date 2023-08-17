@@ -186,11 +186,15 @@ public class TaskbarHelper {
             SetWindowLong(HWND, GWL_EXSTYLE, (uint) GetWindowLong(HWND, GWL_EXSTYLE).ToInt32() | WS_EX_LAYERED);
             layered = true;
         }
-
+        // I have no idea what the reasoning behind this is, but it probably meant something when i first did it so we're keeping it!
         if (_alpha != (byte) (alpha * 255)) {
             SetLayeredWindowAttributes(HWND, 0, (byte) (alpha * 255), LWA_ALPHA);
             _alpha = (byte) (alpha * 255);
+        } else {
+            SetLayeredWindowAttributes(HWND, 0, 254, LWA_ALPHA);
+            _alpha = 254;
         }
+        
     }
 
     [DllImport("user32")]
