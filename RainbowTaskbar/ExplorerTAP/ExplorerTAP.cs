@@ -51,16 +51,23 @@ namespace RainbowTaskbar.ExplorerTAP
         public static int tries = 0;
 
         public static bool IsInjected { get; set; } = false;
+        public static bool IsInjecting { get; set; } = false;
+
+        public static bool NeedsTAP() {
+            var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
+            return
+                taskbarHWND != IntPtr.Zero &&
+                TaskbarHelper.FindWindowEx(taskbarHWND, IntPtr.Zero, "Windows.UI.Composition.DesktopWindowContentBridge", null) != IntPtr.Zero &&
+                TaskbarHelper.FindWindowEx(taskbarHWND, IntPtr.Zero, "WorkerW", null) == IntPtr.Zero;
+                
+        }
 
         public static void TryInject() {
 
             var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
 
-            if (
-                taskbarHWND != IntPtr.Zero &&
-                TaskbarHelper.FindWindowEx(taskbarHWND, IntPtr.Zero, "Windows.UI.Composition.DesktopWindowContentBridge", null) != IntPtr.Zero &&
-                TaskbarHelper.FindWindowEx(taskbarHWND, IntPtr.Zero, "WorkerW", null) == IntPtr.Zero
-                ) {
+            if (NeedsTAP()) {
+                IsInjecting = true;
                 // We re on win11 with new taskbar
 
                 string dllPath = Environment.GetEnvironmentVariable("temp") + "\\RainbowTaskbarDLL.dll";
@@ -103,9 +110,8 @@ namespace RainbowTaskbar.ExplorerTAP
                 // too lazy to make an event, this shall work
                 Task.Delay(1250).Wait();
 
-                
+                IsInjecting = false;
                 IsInjected = true;
-                tries = 0;
             }
 
         }
@@ -117,16 +123,21 @@ namespace RainbowTaskbar.ExplorerTAP
         }
 
         public static void SetAppearanceType(TransparencyInstruction.TransparencyInstructionStyle type) {
-            var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
-            if (!IsInjected || taskbarHWND == IntPtr.Zero) return;
-            int hres = SetAppearanceTypeDLL((uint) type);
-            if (unchecked((uint)hres) != 0 && tries++ < 5) { // MK_E_UNAVAILABLE or other errors?
-                TryInject();
-                if (tries >= 5) {
+            if (!NeedsTAP() || IsInjecting) return;
+            uint hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
+            if (hres == 0) tries = 0;
+            if (hres != 0 && tries < 5) { // MK_E_UNAVAILABLE or other errors?
+                while(hres != 0 && tries++ < 5) {
+                    TryInject();
+                    hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
+                }
+                if (hres != 0 && tries >= 5) {
                     MessageBox.Show(
-                        $"0x{hres.ToString("X8")} : {Marshal.GetExceptionForHR(hres)?.Message}\n\nThere seems to be an issue with the RainbowTaskbar DLL injected into explorer.exe. This process is very experimental, so please open up an issue on GitHub (Right-click RainbowTaskbar on system tray -> Submit an issue or request) to try and debug the problem. Make sure to also include any other errors you might have encountered.", "RainbowTaskbar Error", MessageBoxButton.OK, MessageBoxImage.Warning
+                        $"0x{hres.ToString("X8")} : {Marshal.GetExceptionForHR(unchecked((int)hres))?.Message}\n\nThere seems to be an issue with the RainbowTaskbar DLL injected into explorer.exe. This process is very experimental, so please open up an issue on GitHub (Right-click RainbowTaskbar on system tray -> Submit an issue or request) to try and debug the problem. Make sure to also include any other errors you might have encountered.", "RainbowTaskbar Error", MessageBoxButton.OK, MessageBoxImage.Warning
                         );
                 }
+
+
             }
         }
     }
