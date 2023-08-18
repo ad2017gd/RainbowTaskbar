@@ -126,12 +126,12 @@ namespace RainbowTaskbar.ExplorerTAP
             if (!NeedsTAP() || IsInjecting) return;
             uint hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
             if (hres == 0) tries = 0;
-            if (hres != 0 && tries < 5) { // MK_E_UNAVAILABLE or other errors?
-                while(hres != 0 && tries++ < 5) {
+            if (hres != 0 && tries < 3) { // MK_E_UNAVAILABLE or other errors?
+                while(hres != 0 && tries++ < 3) {
                     TryInject();
                     hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
                 }
-                if (hres != 0 && tries >= 5) {
+                if (hres != 0 && tries >= 3) {
                     MessageBox.Show(
                         $"0x{hres.ToString("X8")} : {Marshal.GetExceptionForHR(unchecked((int)hres))?.Message}\n\nThere seems to be an issue with the RainbowTaskbar DLL injected into explorer.exe. This process is very experimental, so please open up an issue on GitHub (Right-click RainbowTaskbar on system tray -> Submit an issue or request) to try and debug the problem. Make sure to also include any other errors you might have encountered.", "RainbowTaskbar Error", MessageBoxButton.OK, MessageBoxImage.Warning
                         );
