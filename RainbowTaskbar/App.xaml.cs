@@ -121,12 +121,11 @@ public partial class App : Application {
         }
         else {
             // Other processes
-            Task.Run(async () => {
-                await using var pipe = new PipeClient<string>("RainbowTaskbar Pipe");
-                await pipe.ConnectAsync();
-                await pipe.WriteAsync("OpenEditor");
-                Exit();
-            }).Wait();
+            var pipe = new PipeClient<string>("RainbowTaskbar Pipe");
+            pipe.ConnectAsync().Wait();
+            pipe.WriteAsync("OpenEditor").Wait();
+            pipe.DisconnectAsync().Wait();
+            Environment.Exit(0);
         }
     }
 
