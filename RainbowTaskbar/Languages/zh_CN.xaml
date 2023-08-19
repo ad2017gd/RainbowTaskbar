@@ -139,6 +139,6 @@
     <s:String x:Key="confirm">确认?</s:String>
 
     <!-- Fill with "Translated by ..." -->
-    <s:String x:Key="langcredits">‎</s:String>
+    <s:String x:Key="langcredits">大眼仔~旭</s:String>
 
 </ResourceDictionary>
