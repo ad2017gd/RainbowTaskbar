@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -20,7 +22,7 @@ internal static class AutoUpdate {
             http.DefaultRequestHeaders.Add("User-Agent", "RainbowTaskbar");
             var content =
                 await http.GetStreamAsync("https://api.github.com/repos/ad2017gd/RainbowTaskbar/releases/latest");
-
+            
             var ser = new DataContractJsonSerializer(typeof(GitHubAPIResponse));
             var response = ser.ReadObject(content) as GitHubAPIResponse;
             if (Assembly.GetExecutingAssembly().GetName().Version.CompareTo(Version.Parse(response.TagName)) < 0) {

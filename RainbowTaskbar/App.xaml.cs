@@ -103,6 +103,8 @@ public partial class App : Application {
             editorViewModel = new EditorViewModel();
 
             Config = Config.FromFile();
+            Config.MagicCookie++;
+            Config.ToFile();
             if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
 
 

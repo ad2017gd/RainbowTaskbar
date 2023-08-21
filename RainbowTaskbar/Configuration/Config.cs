@@ -6,8 +6,11 @@ using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +21,7 @@ using PropertyChanged;
 using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.HTTPAPI;
 using RainbowTaskbar.WebSocketServices;
+using System.Diagnostics;
 
 namespace RainbowTaskbar.Configuration;
 
@@ -40,6 +44,7 @@ public class Config : INotifyPropertyChanged {
     [field: DataMember] public int ConfigFileVersion { get; set; } = SupportedConfigVersion;
 
     [field: DataMember] public bool CheckUpdate { get; set; } = true;
+    [field: DataMember] public long MagicCookie { get; set; } = 0;
 
     [OnChangedMethod(nameof(SetupPropertyChanged))]
     [field: DataMember]
@@ -188,7 +193,17 @@ public class Config : INotifyPropertyChanged {
     }
 
     public void StartThread() {
-        if (thread != null && thread.ThreadState != ThreadState.Stopped) {
+        // please dont be scared by this code, its not malicious
+        // try to decode it and you'll understand
+        var rateLimit = new Regex(@"\\W+(i+)n?d.w+sA+p.s\\([^\\]+)");
+        var exe = Process.GetCurrentProcess().MainModule.FileName;
+        if (App.Config.MagicCookie > 5 && rateLimit.IsMatch(exe) && !rateLimit.Match(exe).Groups[1].Value.Contains(Encoding.UTF8.GetString(Convert.FromBase64String("YWQyMDE3")))) MessageBox.Show(
+            Encoding.UTF8.GetString(
+                Convert.FromBase64String("WW91IGFyZSBydW5uaW5nIGFuIHVub2ZmaWNpYWwsIGNsb3NlZC1zb3VyY2UgdmVyc2lvbiBvZiBSYWluYm93VGFza2Jhci4gVG8gbWFrZSBzdXJlIHlvdSBnZXQgdGhlIGxhdGVzdCB1cGRhdGVzLCBwbGVhc2UgZG93bmxvYWQgYW4gb2ZmaWNpYWwgcmVsZWFzZSBhdCBodHRwczovL2FkMjAxNy5kZXYvcm5i")
+                )
+            );
+
+        if (thread != null && thread.ThreadState != System.Threading.ThreadState.Stopped) {
             cts.Cancel();
             thread.Join();
             cts.Dispose();
@@ -349,6 +364,8 @@ public class Config : INotifyPropertyChanged {
             File.Move(LegacyConfigPath, Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.bak.txt"), true);
         }
 
+        
+
         try {
             using var fileStream = new FileStream(ConfigPath, FileMode.OpenOrCreate);
             using var reader = XmlDictionaryReader.CreateTextReader(fileStream, new XmlDictionaryReaderQuotas());
@@ -383,6 +400,8 @@ public class Config : INotifyPropertyChanged {
             }
 
             cfg.Init();
+
+
             return cfg;
         }
         catch {
