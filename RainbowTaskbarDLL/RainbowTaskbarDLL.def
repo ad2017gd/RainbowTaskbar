@@ -3,3 +3,4 @@ DllGetClassObject PRIVATE
 DllCanUnloadNow PRIVATE
 SetAppearanceTypeDLL
 CloseDLL
+VersionDLL

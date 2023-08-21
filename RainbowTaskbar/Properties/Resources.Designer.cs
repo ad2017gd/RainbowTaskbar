@@ -92,9 +92,19 @@ namespace RainbowTaskbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] RainbowTaskbarDLL {
+        public static byte[] RainbowTaskbarDLL_Win32 {
             get {
-                object obj = ResourceManager.GetObject("RainbowTaskbarDLL", resourceCulture);
+                object obj = ResourceManager.GetObject("RainbowTaskbarDLL_Win32", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] RainbowTaskbarDLL_x64 {
+            get {
+                object obj = ResourceManager.GetObject("RainbowTaskbarDLL_x64", resourceCulture);
                 return ((byte[])(obj));
             }
         }

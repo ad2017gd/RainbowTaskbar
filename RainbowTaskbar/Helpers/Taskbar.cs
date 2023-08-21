@@ -182,6 +182,7 @@ public class TaskbarHelper {
     public void PositionChangedUnhook() => UnhookWinEvent(hhook);
 
     public void SetAlpha(double alpha) {
+        if (!IsWindow(HWND)) return;
         if (!layered) {
             SetWindowLong(HWND, GWL_EXSTYLE, (uint) GetWindowLong(HWND, GWL_EXSTYLE).ToInt32() | WS_EX_LAYERED);
             layered = true;
@@ -209,6 +210,7 @@ public class TaskbarHelper {
 
 
     public void SetBlur() {
+        if (!IsWindow(HWND)) return;
         var accent = new AccentPolicy();
         switch (Style) {
             case TaskbarStyle.Default:
@@ -255,6 +257,7 @@ public class TaskbarHelper {
     }
 
     public Point GetPoint() {
+        if (!IsWindow(HWND)) return new Point(0,0);
         RECT rc;
         GetWindowRect(HWND, out rc);
 
@@ -262,6 +265,7 @@ public class TaskbarHelper {
     }
 
     public Rectangle GetRectangle() {
+        if (!IsWindow(HWND)) return new Rectangle(0, 0, 0, 0);
         RECT rc;
         GetWindowRect(HWND, out rc);
 
@@ -269,6 +273,8 @@ public class TaskbarHelper {
     }
 
     public void PlaceWindowUnder(Taskbar window) {
+        if (!IsWindow(HWND)) return;
+
         UpdateRadius();
         var rect = GetRectangle();
 
@@ -276,8 +282,11 @@ public class TaskbarHelper {
             SWP.NOACTIVATE | SWP.SHOWWINDOW);
     }
 
-    public void SetWindowZUnder(Taskbar window) => SetWindowPos(window.windowHelper.HWND, HWND, 0, 0, 0, 0,
+    public void SetWindowZUnder(Taskbar window) {
+        if (!IsWindow(HWND)) return;
+        SetWindowPos(window.windowHelper.HWND, HWND, 0, 0, 0, 0,
         SWP.NOREDRAW | SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOREPOSITION | SWP.NOMOVE | SWP.NOSIZE);
+    }
 
     //SetWindowLong(HWND, GWL_EXSTYLE, (uint)((int)GetWindowLong(HWND, GWL_EXSTYLE) | WS_EX_LAYERED));
     [DllImport("shell32.dll")]
@@ -342,6 +351,7 @@ public class TaskbarHelper {
     }
 
     public bool UpdateRadius() {
+        if (!IsWindow(HWND)) return false;
         if (old_radius != Radius) {
             old_radius = Radius;
 

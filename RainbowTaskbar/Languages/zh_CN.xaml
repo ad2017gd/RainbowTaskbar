@@ -138,6 +138,15 @@
     <s:String x:Key="exit">退出</s:String>
     <s:String x:Key="confirm">确认?</s:String>
 
+    <!-- Dialog boxes -->
+    <s:String x:Key="msgbox_baddll">There seems to be an issue with the RainbowTaskbar DLL injected into explorer.exe. 
+        This process is very experimental, so please open up an issue on GitHub (Right-click RainbowTaskbar on system tray -> Submit an issue or request) 
+        to try and debug the problem. Make sure to also include any other errors you might have encountered.</s:String>
+    <s:String x:Key="msgbox_olddll">To enable transparency effects, RainbowTaskbar must restart the explorer.exe process.
+        Do you wish to proceed?</s:String>
+    <s:String x:Key="msgbox_badarch">Your processor architecture (x64) is incompatible with this executable (x86). 
+        Please download the correct executable (rnbtsk-x64.exe / setup-x64.exe) from GitHub releases.</s:String>
+
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">大眼仔~旭</s:String>
 

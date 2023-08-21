@@ -11,6 +11,7 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Animation;
 using System.Xml;
 using Newtonsoft.Json.Linq;
 using PropertyChanged;
@@ -179,6 +180,7 @@ public class Config : INotifyPropertyChanged {
     }
 
     public void StopThread() {
+        if (cts is null || thread is null) return;
         cts.Cancel();
         thread.Join();
         cts.Dispose();

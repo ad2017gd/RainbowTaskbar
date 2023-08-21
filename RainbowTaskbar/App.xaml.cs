@@ -74,6 +74,7 @@ public partial class App : Application {
     public App() {
         localization = new Localization();
         
+        
 
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
             Task.Run(async () => {
@@ -98,25 +99,29 @@ public partial class App : Application {
             });
 
 
+
             editorViewModel = new EditorViewModel();
-
-
-
 
             Config = Config.FromFile();
             if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
 
-            taskbars = FindAllTaskbars();
 
-            SetupTaskbars();
-
-            Taskbar.SetupLayers();
-
-            if(taskbars.Count > 0)
+            Task.Run(() => {
                 ExplorerTAP.ExplorerTAP.TryInject();
 
-            App.Config.StartThread();
-            API.Start();
+                App.Current.Dispatcher.Invoke(() => {
+                    taskbars = FindAllTaskbars();
+                    SetupTaskbars();
+
+                    Taskbar.SetupLayers();
+
+                    App.Config.StartThread();
+                    API.Start();
+                });
+
+                
+            });
+            
 
         }
         else {

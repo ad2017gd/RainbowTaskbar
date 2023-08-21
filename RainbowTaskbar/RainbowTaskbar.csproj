@@ -4,7 +4,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>2.3.1.1</Version>
+        <Version>2.3.2</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>RainbowTaskbar is a Windows utility to customize the shell taskbar.</Description>
         <Authors>Ad2017, zCri</Authors>
@@ -18,8 +18,8 @@
         <AnalysisLevel>latest</AnalysisLevel>
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
-        <AssemblyVersion>2.3.1.1</AssemblyVersion>
-        <FileVersion>2.3.1.1</FileVersion>
+        <AssemblyVersion>2.3.2</AssemblyVersion>
+        <FileVersion>2.3.2</FileVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,6 +30,12 @@
         <None Remove="Resources\Nano.png" />
         <None Remove="Resources\Paypal.png" />
         <None Remove="..\x64\Release\RainbowTaskbarDLL.dll" Link="Resources\RainbowTaskbarDLL.dll" />
+        <Resource Include="..\x64\Release\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="..\Release\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
         <None Include="Resources\icon.ico">
             <Pack>True</Pack>
         </None>
@@ -73,9 +79,6 @@
         <Resource Include="Resources\Paypal.png">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
-		<Resource Include="..\x64\Release\RainbowTaskbarDLL.dll" Link="rainbowtaskbardll.dll">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</Resource>
     </ItemGroup>
 
 

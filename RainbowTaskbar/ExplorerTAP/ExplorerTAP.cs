@@ -3,6 +3,7 @@ using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -40,12 +41,17 @@ namespace RainbowTaskbar.ExplorerTAP
         [DllImport("Windows.UI.Xaml.dll", CharSet = CharSet.Unicode)]
         public static extern int InitializeXamlDiagnosticsEx(string endPointName, uint pid, string xamlDiagDll, string TAPDllName, GUID clsID, string numiPASA);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool PostMessage(IntPtr hWnd, [MarshalAs(UnmanagedType.U4)] uint Msg, IntPtr wParam, IntPtr lParam);
+
 
         public delegate int SetAppearanceTypeDelegate(uint type);
         public delegate int CloseDelegate();
+        public delegate int VersionDelegate();
 
         public static SetAppearanceTypeDelegate SetAppearanceTypeDLL;
         public static CloseDelegate CloseDLL;
+        public static VersionDelegate VersionDLL;
 
         public static IntPtr library;
         public static int tries = 0;
@@ -62,54 +68,118 @@ namespace RainbowTaskbar.ExplorerTAP
                 
         }
 
+        public const int TAPVERSION = 1;
+
+       
+        private static void StartExplorer() {
+            string explorer = string.Format("{0}\\{1}", Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+            Process process = new Process();
+            process.StartInfo.FileName = explorer;
+            process.StartInfo.UseShellExecute = true;
+            process.Start();
+            do {
+                Thread.Sleep(100);
+            } while (!NeedsTAP());
+        }
+
         public static void TryInject() {
 
             var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
 
-            if (NeedsTAP()) {
+            if (NeedsTAP() && !IsInjecting) {
+                if(Environment.Is64BitOperatingSystem && !Environment.Is64BitProcess) {
+                    MessageBox.Show(App.localization["msgbox_badarch"], "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    IsInjecting = true;
+                    return;
+                }
+
+
                 IsInjecting = true;
+                var inject = true;
                 // We re on win11 with new taskbar
 
                 string dllPath = Environment.GetEnvironmentVariable("temp") + "\\RainbowTaskbarDLL.dll";
 
                 if(File.Exists(dllPath)) {
-                    library = LoadLibrary(dllPath);
-                    CloseDLL = Marshal.GetDelegateForFunctionPointer<CloseDelegate>(GetProcAddress(library, "CloseDLL"));
-                    uint hres = unchecked((uint)CloseDLL());
-                    if (hres != 0x800401E3) Thread.Sleep(200);
-                }
+                    bool deleted = false;
+                    try {
+                        File.Delete(dllPath);
+                        deleted = true;
+                    }
+                    catch { }
 
+                    if (!deleted) {
+                        library = LoadLibrary(dllPath);
+                        IntPtr VersionDLLPtr = GetProcAddress(library, "VersionDLL");
+                        int version = 0;
+                        if (VersionDLLPtr != IntPtr.Zero) {
+                            VersionDLL = Marshal.GetDelegateForFunctionPointer<VersionDelegate>(VersionDLLPtr);
+                            version = VersionDLL();
+                        }
+                        FreeLibrary(library);
+                        if (VersionDLLPtr == IntPtr.Zero || version < TAPVERSION) {
+                            var result = MessageBox.Show(
+                                App.localization["msgbox_olddll"], "RainbowTaskbar", MessageBoxButton.YesNoCancel, MessageBoxImage.Information
+                            );
+                            if (result == MessageBoxResult.Yes) {
+                                Process.Start("cmd", $"/c taskkill /f /im explorer.exe && del /q \"{dllPath}\"");
+                                
+                                do {
+                                    Thread.Sleep(500);
+                                } while (TaskbarHelper.FindWindow("Shell_TrayWnd", null) != IntPtr.Zero);
+                                StartExplorer();
+                                Thread.Sleep(4000);
+                                taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
+                            } else {
+                                IsInjecting = true;
+                                return;
+                            }
+                        } else {
+                            inject = false;
+                        }
+                    }
+                    
+                    
+                }
                 try {
-                    File.WriteAllBytes(dllPath, Properties.Resources.RainbowTaskbarDLL);
-                } catch { }
+                    File.WriteAllBytes(dllPath, Environment.Is64BitOperatingSystem ? Properties.Resources.RainbowTaskbarDLL_x64 : Properties.Resources.RainbowTaskbarDLL_Win32);
+                }
+                catch { }
 
                 library = LoadLibrary(dllPath);
 
-                SetAppearanceTypeDLL = Marshal.GetDelegateForFunctionPointer<SetAppearanceTypeDelegate>(GetProcAddress(library, "SetAppearanceTypeDLL"));
-                CloseDLL = Marshal.GetDelegateForFunctionPointer<CloseDelegate>(GetProcAddress(library, "CloseDLL"));
+                if(GetProcAddress(library, "SetAppearanceTypeDLL") != IntPtr.Zero) 
+                    SetAppearanceTypeDLL = Marshal.GetDelegateForFunctionPointer<SetAppearanceTypeDelegate>(GetProcAddress(library, "SetAppearanceTypeDLL"));
+                if(GetProcAddress(library, "CloseDLL") != IntPtr.Zero) 
+                    CloseDLL = Marshal.GetDelegateForFunctionPointer<CloseDelegate>(GetProcAddress(library, "CloseDLL"));
+
+                if(inject) {
+                    var guid = new GUID() {
+                        a = 0xc9d60190,
+                        b = 0x2c89,
+                        c = 0x11ee,
+                        d = new byte[] { 0xbe, 0x56, 0x02, 0x42, 0xac, 0x12, 0x00, 0x02 }
+                    };
+
+                    uint pid = 0;
+                    GetWindowThreadProcessId(TaskbarHelper.FindWindow("Shell_TrayWnd", null), out pid);
 
 
-                var guid = new GUID() {
-                    a = 0xc9d60190,
-                    b = 0x2c89,
-                    c = 0x11ee,
-                    d = new byte[] { 0xbe, 0x56, 0x02, 0x42, 0xac, 0x12, 0x00, 0x02 }
-                };
+                    int hr = -1;
+                    int tries = 0;
+                    do {
+                        var xamlthread = new Thread(() => {
+                            hr = InitializeXamlDiagnosticsEx("VisualDiagConnection1", pid, null, dllPath, guid, null);
+                        });
+                        xamlthread.Start();
+                        xamlthread.Join();
+                        Thread.Sleep(250);
+                    } while (hr != 0 && tries++ < 5);
 
-                uint pid = 0;
-                GetWindowThreadProcessId(taskbarHWND, out pid);
-
-
+                    // too lazy to make an event, this shall work
+                    Task.Delay(1250).Wait();
+                }
                 
-                var xamlthread = new Thread(() => {
-                    InitializeXamlDiagnosticsEx("VisualDiagConnection1", pid, null, dllPath, guid, null);
-                });
-                xamlthread.Start();
-                xamlthread.Join();
-
-                // too lazy to make an event, this shall work
-                Task.Delay(1250).Wait();
-
                 IsInjecting = false;
                 IsInjected = true;
             }
@@ -117,13 +187,17 @@ namespace RainbowTaskbar.ExplorerTAP
         }
         public static void Reset() {
             if (!IsInjected) return;
-            CloseDLL();
+            if (CloseDLL is not null)
+                CloseDLL();
             if (library != IntPtr.Zero) FreeLibrary(library);
+            SetAppearanceTypeDLL = null;
+            CloseDLL = null;
             IsInjected = false;
         }
 
         public static void SetAppearanceType(TransparencyInstruction.TransparencyInstructionStyle type) {
             if (!NeedsTAP() || IsInjecting) return;
+            if (SetAppearanceTypeDLL is null) return;
             uint hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
             if (hres == 0) tries = 0;
             if (hres != 0 && tries < 3) { // MK_E_UNAVAILABLE or other errors?
@@ -133,7 +207,7 @@ namespace RainbowTaskbar.ExplorerTAP
                 }
                 if (hres != 0 && tries >= 3) {
                     MessageBox.Show(
-                        $"0x{hres.ToString("X8")} : {Marshal.GetExceptionForHR(unchecked((int)hres))?.Message}\n\nThere seems to be an issue with the RainbowTaskbar DLL injected into explorer.exe. This process is very experimental, so please open up an issue on GitHub (Right-click RainbowTaskbar on system tray -> Submit an issue or request) to try and debug the problem. Make sure to also include any other errors you might have encountered.", "RainbowTaskbar Error", MessageBoxButton.OK, MessageBoxImage.Warning
+                        $"0x{hres.ToString("X8")} : {Marshal.GetExceptionForHR(unchecked((int) hres))?.Message}\n\n{App.localization["msgbox_baddll"]}", "RainbowTaskbar Error", MessageBoxButton.OK, MessageBoxImage.Warning
                         );
                 }
 

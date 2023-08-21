@@ -13,7 +13,7 @@ namespace RainbowTaskbar.Languages
 {
     public class Localization
     {
-        public static List<string> languages = new List<string>() { "SystemDefault", "en_US", "ro_RO", "ja_JP" };
+        public static List<string> languages = new List<string>() { "SystemDefault", "en_US", "ro_RO", "ja_JP", "zh_CN" };
         public ResourceDictionary dictionary;
         public Localization() {
             Switch(CultureInfo.InstalledUICulture.Name);
@@ -32,6 +32,12 @@ namespace RainbowTaskbar.Languages
                 case "ja_JP":
                     dictionary = new ja_JP();
                     (dictionary as ja_JP).InitializeComponent();
+                    break;
+                case "zh":
+                case "zh_CN":
+                case "zh_SG":
+                    dictionary = new zh_CN();
+                    (dictionary as zh_CN).InitializeComponent();
                     break;
                 default:
                     dictionary = new en_US();

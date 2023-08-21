@@ -138,6 +138,15 @@
     <s:String x:Key="exit">Ieși</s:String>
     <s:String x:Key="confirm">Confirmi?</s:String>
 
+    <!-- Dialog boxes -->
+    <s:String x:Key="msgbox_baddll">A apărut o problemă cu DLL-ul injectat in explorer.exe. 
+        Acest proces este incă unul instabil, deci vă rugăm să deschideți o problema pe GitHub (click dreapta pe RainbowTaskbar in partea dreaptă a taskbar-ului -> Trimite o problemă/sugestie) 
+        pentru a putea rezolva problema. Vă rugăm să afișați și orice alte erori pe care le-ați întalnit.</s:String>
+    <s:String x:Key="msgbox_olddll">Pentru a activa toate efectele de transparență, RainbowTaskbar trebuie să repornească procesul explorer.exe.
+        Doriți să continuați?</s:String>
+    <s:String x:Key="msgbox_badarch">Arhitectura procesorului dvs. (x64) nu este compatibila cu acest program (x86). 
+        Vă rugăm sa instalați versiunea corectă a programului (rnbtsk-x64.exe / setup-x64.exe) de pe GitHub.</s:String>
+
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">Tradus de ad2017.</s:String>
 

@@ -4,27 +4,36 @@
 #include <comdef.h>
 #include <tchar.h>
 
-
+#include <winrt/Windows.UI.Core.h>
 HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::SetAppearanceType(UINT type) {_F
-
+    if (!active) return S_FALSE;
     try {
 _E      auto watch = treeWatch.get();
 _E      for (auto& [handle, taskbar] : watch->taskbarMap) {
+_E          Taskbar& t = taskbar;//?
 _E          switch (type) {
 _E          case 0: // default
-_E              taskbar.rectangleBackground.Fill(taskbar.originalBrush);
+_E              taskbar.dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::High, [&]() {
+_E                  t.rectangleBackground.Fill(t.originalBrush);
+_E              });
+_E              
 _E              break;
 _E          case 2: // transparent
-_E              taskbar.rectangleBackground.Fill(winrt::Windows::UI::Xaml::Media::SolidColorBrush(winrt::Windows::UI::Colors::Transparent()));
+_E              taskbar.dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::High, [&]() {
+_E                  t.rectangleBackground.Fill(winrt::Windows::UI::Xaml::Media::SolidColorBrush(winrt::Windows::UI::Colors::Transparent()));
+_E              });
+_E              
 _E              break;
 _E
 _E          case 1: // blurred (?)
-_E              auto brush = winrt::Windows::UI::Xaml::Media::AcrylicBrush();
-_E              brush.TintColor(winrt::Windows::UI::Colors::Transparent());
-_E              brush.TintOpacity(0);
-_E              brush.TintLuminosityOpacity(0.0);
-_E              brush.BackgroundSource(winrt::Windows::UI::Xaml::Media::AcrylicBackgroundSource::HostBackdrop);
-_E              taskbar.rectangleBackground.Fill(brush);
+_E              taskbar.dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::High, [&]() {
+_E                  auto brush = winrt::Windows::UI::Xaml::Media::AcrylicBrush();
+_E                  brush.TintColor(winrt::Windows::UI::Colors::Transparent());
+_E                  brush.TintOpacity(0);
+_E                  brush.TintLuminosityOpacity(0.0);
+_E                  brush.BackgroundSource(winrt::Windows::UI::Xaml::Media::AcrylicBackgroundSource::HostBackdrop);
+_E                  t.rectangleBackground.Fill(brush);
+_E              });
 _E              break;
 _E          }
 _E      }
@@ -41,14 +50,22 @@ _E      }
 }
 
 
-HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Close() {
-
-    SetAppearanceType(0);
-    CoRevokeClassObject(proxyCookie);
-    RevokeActiveObject(activeObjectCookie, 0);
-    treeWatch->Stop();
-    return S_OK;
+HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Close() try {
+_E  SetAppearanceType(0);
+_E  return 0;
 }
+catch (...)
+{
+    HRESULT res = winrt::to_hresult();
+    _com_error err(res);
+    WCHAR data[1024];
+    __EFMT(data, err.ErrorMessage());
+}
+
+HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Version() {
+    return 1;
+}
+
 
 HRESULT AppearanceServiceAPI::Invoke(DISPID dispIdMember, // 0 or 1
     REFIID riid, // null
@@ -73,10 +90,15 @@ HRESULT AppearanceServiceAPI::Invoke(DISPID dispIdMember, // 0 or 1
         return S_OK;
 
     case 1:
+    {
         HRESULT hr = Close();
         if (FAILED(hr))
             return hr;
         return S_OK;
+    }
+    case 2:
+        return Version();
+        
     }
 
     return DISP_E_MEMBERNOTFOUND;

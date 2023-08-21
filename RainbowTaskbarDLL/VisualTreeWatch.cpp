@@ -79,6 +79,7 @@ _E                                  if (taskbarMap.find(handle) == taskbarMap.en
 _E                                      Taskbar t = Taskbar();
 _E                                      t.originalBrush = rect.Fill();
 _E                                      t.rectangleBackground = rect;
+_E                                      t.dispatcher = rect.Dispatcher();
 _E                                      taskbarMap.emplace(handle, t);
 _E                                  }
 _E                              }
@@ -112,9 +113,6 @@ _E      }
 
 void VisualTreeWatch::Stop() {
     xamlDiagnostics.as<IVisualTreeService3>()->UnadviseVisualTreeChange(this);
-    HMODULE th;
-    GetModuleHandleEx(0, 0, &th);
-    FreeLibrary(th);
 }
 
 

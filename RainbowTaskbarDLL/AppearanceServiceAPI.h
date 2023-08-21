@@ -15,12 +15,15 @@ public:
 
     DWORD proxyCookie = 0;
     DWORD activeObjectCookie = 0;
+    bool active = true;
 
     HRESULT STDMETHODCALLTYPE SetAppearanceType(UINT type);
 
     HRESULT STDMETHODCALLTYPE Close();
 
-    HRESULT Invoke(DISPID dispIdMember,
+    HRESULT STDMETHODCALLTYPE Version();
+
+    HRESULT STDMETHODCALLTYPE Invoke(DISPID dispIdMember,
         REFIID riid,
         LCID lcid,
         WORD wFlags,

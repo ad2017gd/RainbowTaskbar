@@ -22,11 +22,8 @@ internal class ClearLayerInstruction : Instruction {
 
     public override bool Execute(Taskbar window, CancellationToken token) {
         window.Dispatcher.Invoke(() => {
-            try {
-                window.canvasManager.layers.renderTargets[Layer].Clear();
-            } catch {
-                window.canvasManager.layers.MakeIfNeeded(Layer);
-            }
+            window.canvasManager.layers.MakeIfNeeded(Layer);
+            window.canvasManager.layers.renderTargets[Layer].Clear();
         }, System.Windows.Threading.DispatcherPriority.Normal, token);
         return false;
     }
