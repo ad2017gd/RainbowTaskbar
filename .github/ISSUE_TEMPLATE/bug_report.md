@@ -27,3 +27,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Windows version and/or build**
 ... (can be a screenshot of winver.exe)
+
+**RainbowTaskbar version**
+...
