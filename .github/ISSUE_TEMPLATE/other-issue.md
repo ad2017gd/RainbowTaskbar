@@ -1,6 +1,6 @@
 ---
 name: Other issue
-about: Blank template for any other issues
+about: ONLY USE IF NOT A BUG REPORT/FEATURE REQUEST!
 title: ''
 labels: ''
 assignees: ad2017gd
