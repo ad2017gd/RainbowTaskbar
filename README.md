@@ -1,7 +1,8 @@
 <div align="center">
 
 [<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://www.microsoft.com/store/productId/9NN78X0674XW)
-[<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280432158-42dfc314-40fc-40f8-a8ef-43d2a5d61d12.png" alt="Download from Microsoft Store" height="64">](https://raw.githubusercontent.com/ad2017gd/RainbowTaskbar/releases/setup-x64.msi)
+[<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280434707-419db9a3-70fa-45c6-936d-a500e11b957b.png" alt="Download from Microsoft Store" height="64">](https://raw.githubusercontent.com/ad2017gd/RainbowTaskbar/releases/setup-x64.msi)
+
 
    <a href="../../stargazers"><img src="https://img.shields.io/github/stars/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="LICENSE"><img src="https://img.shields.io/github/license/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
