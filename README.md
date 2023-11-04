@@ -16,7 +16,7 @@
 <p>Useful tool for Windows taskbar customization. Supports color effects, transitions, blur, images, text, rounded corners, shapes, transparency and a new HTTP API. Now rewritten in .NET 6!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
-   <img style="margin: 0 auto; width: 75%;" src="https://github.com/ad2017gd/RainbowTaskbar/assets/39013925/29a01115-9aff-40eb-afbf-7770aaf346b4">
+   <img style="margin: 0 auto; width: 90%;" src="https://github.com/ad2017gd/RainbowTaskbar/assets/39013925/29a01115-9aff-40eb-afbf-7770aaf346b4">
 
 <br>
 <br>
