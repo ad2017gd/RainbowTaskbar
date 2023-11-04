@@ -1,6 +1,6 @@
 <div align="center">
 
-[<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://www.microsoft.com/store/productId/9NN78X0674XW)
+[<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://www.microsoft.com/store/productId/9NN78X0674XW)*
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280434808-334b68d6-9568-4cc5-988d-a9bf186c1b8c.png" alt="Download from Microsoft Store" height="64">](https://raw.githubusercontent.com/ad2017gd/RainbowTaskbar/releases/setup-x64.msi)
 
 
@@ -38,3 +38,5 @@ Documentation has been moved to https://ad2017.dev/rnb/docs
 
 # License
 See `LICENSE` for more information.
+
+*The Microsoft Store version of this software is provided as a means for donations. This software is free and open-source. You can download it for free in the releases tab or by clicking the download button next to the Microsoft Store page button.
