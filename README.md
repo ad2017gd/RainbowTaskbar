@@ -41,5 +41,6 @@ Documentation has been moved to https://ad2017.dev/rnb/docs
 # License
 See `LICENSE` for more information.
 
-# Note
+# Notes
+## Microsoft Store
 *The Microsoft Store version of this software is provided as a means for donations. This software is free and open-source. You can download it for free in the releases tab or by clicking the download button next to the Microsoft Store page button.
