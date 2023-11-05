@@ -125,11 +125,13 @@
     <!-- Instruction context menu -->
     <s:String x:Key="duplicate">Duplică</s:String> <!-- it's a verb! -->
     <s:String x:Key="delete">Șterge</s:String>
+    <s:String x:Key="duplicate_rev_color">Duplică - Inversează culorile</s:String>
 
     <s:String x:Key="presetname">Nume:</s:String> <!-- it's a noun! -->
     <s:String x:Key="enterpresetname">Introdu numele presetării</s:String>
     
     <!-- Tray context menu -->
+    <s:String x:Key="contextmenu">Meniu compact</s:String>
     <s:String x:Key="open">Deschide</s:String>
     <s:String x:Key="presets">Presetări</s:String>
     <s:String x:Key="donate">Donează</s:String>
@@ -146,6 +148,9 @@
         Doriți să continuați?</s:String>
     <s:String x:Key="msgbox_badarch">Arhitectura procesorului dvs. (x64) nu este compatibila cu acest program (x86). 
         Vă rugăm sa instalați versiunea corectă a programului (rnbtsk-x64.exe / setup-x64.exe) de pe GitHub.</s:String>
+    <s:String x:Key="msgbox_migrateoldcfg">A fost gasită o configurație (rnbconf.txt) veche (v1).
+        Doriți să o migrați la noua versiune de configurație?
+    </s:String>
 
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">Tradus de ad2017.</s:String>

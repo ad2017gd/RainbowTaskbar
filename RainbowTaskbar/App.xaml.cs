@@ -70,70 +70,25 @@ public partial class App : Application {
 
         return tsk;
     }
-    
+    public static bool firstRun = false;
+
+    private static void LaunchEditor() {
+        if (editor == null) {
+            editor = new Editor();
+        }
+        editor.Show();
+        editor.WindowState = WindowState.Normal;
+        editor.Activate();
+        editor.BringIntoView();
+        editor.Focus();
+        editor.Topmost = true;
+        editor.Topmost = false;
+    }
     public App() {
         localization = new Localization();
         
         
 
-        if (mutex.WaitOne(TimeSpan.Zero, true)) {
-            Task.Run(async () => {
-                await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
-                pipe.MessageReceived += (sender, args) => {
-                    if (args.Message == "OpenEditor")
-                        Current.Dispatcher.Invoke(() => {
-                            if (editor == null) {
-                                editor = new Editor();
-                            }
-                            editor.Show();
-                            editor.WindowState = WindowState.Normal;
-                            editor.Activate();
-                            editor.BringIntoView();
-                            editor.Focus();
-                            editor.Topmost = true;
-                            editor.Topmost = false;
-                        });
-                };
-                await pipe.StartAsync();
-                await Task.Delay(Timeout.InfiniteTimeSpan);
-            });
-
-
-
-            editorViewModel = new EditorViewModel();
-
-            Config = Config.FromFile();
-            Config.MagicCookie++;
-            Config.ToFile();
-            if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
-
-
-            Task.Run(() => {
-                ExplorerTAP.ExplorerTAP.TryInject();
-
-                App.Current.Dispatcher.Invoke(() => {
-                    taskbars = FindAllTaskbars();
-                    SetupTaskbars();
-
-                    Taskbar.SetupLayers();
-
-                    App.Config.StartThread();
-                    API.Start();
-                });
-
-                
-            });
-            
-
-        }
-        else {
-            // Other processes
-            var pipe = new PipeClient<string>("RainbowTaskbar Pipe");
-            pipe.ConnectAsync().Wait();
-            pipe.WriteAsync("OpenEditor").Wait();
-            pipe.DisconnectAsync().Wait();
-            Environment.Exit(0);
-        }
     }
 
     [OnChangedMethod(nameof(ReloadTaskbars))]
@@ -197,5 +152,76 @@ public partial class App : Application {
             ExplorerTAP.ExplorerTAP.Reset();
         });
         Current.Dispatcher.Invoke(() => { Current.Shutdown(); });
+    }
+
+    private void Application_Startup(object sender, StartupEventArgs e) {
+        foreach (string s in e.Args) {
+        }
+
+
+        if (mutex.WaitOne(TimeSpan.Zero, true)) {
+            Task.Run(async () => {
+                await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
+                pipe.MessageReceived += (sender, args) => {
+                    if (args.Message == "OpenEditor")
+                        Current.Dispatcher.Invoke(() => {
+                            LaunchEditor();
+                        });
+                };
+                await pipe.StartAsync();
+                await Task.Delay(Timeout.InfiniteTimeSpan);
+            });
+
+
+
+            editorViewModel = new EditorViewModel();
+
+            Config = Config.FromFile();
+            Config.MagicCookie++;
+            Config.ToFile();
+            if (Config.CheckUpdate) AutoUpdate.CheckForUpdate();
+            if (Config.FirstStart) {
+                Config.FirstStart = false;
+                Config.ToFile();
+                firstRun = true;
+            }
+
+            
+
+            Task.Run(() => {
+                ExplorerTAP.ExplorerTAP.TryInject();
+
+                App.Current.Dispatcher.Invoke(() => {
+                    taskbars = FindAllTaskbars();
+                    SetupTaskbars();
+
+                    Taskbar.SetupLayers();
+
+                    App.Config.StartThread();
+
+                    if (firstRun == true) {
+                        Task.Run(() => {
+                            Thread.Sleep(1000); // amazing coding
+                            LaunchEditor();
+                        });
+                    }
+
+                    API.Start();
+                });
+
+
+
+            });
+
+
+        }
+        else {
+            // Other processes
+            var pipe = new PipeClient<string>("RainbowTaskbar Pipe");
+            pipe.ConnectAsync().Wait();
+            pipe.WriteAsync("OpenEditor").Wait();
+            pipe.DisconnectAsync().Wait();
+            Environment.Exit(0);
+        }
     }
 }

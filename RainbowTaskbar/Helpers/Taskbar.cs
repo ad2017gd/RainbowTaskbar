@@ -169,6 +169,8 @@ public class TaskbarHelper {
         SetBlur();
         if (idObject != 0 || idChild != 0) return;
 
+        if (window is not null && window.TaskbarClip is not null) 
+            window.TaskbarClip.Rect = new(0, 0, window.Width * scale, window.Height * scale);
         var raise = TaskbarPositionChanged;
         if (raise != null) raise(null, null);
     }
@@ -350,6 +352,9 @@ public class TaskbarHelper {
         return scale;
     }
 
+    [DllImport("gdi32.dll")]
+    public static extern int OffsetRgn(IntPtr hrgn, int nXOffset, int nYOffset);
+
     public bool UpdateRadius() {
         if (!IsWindow(HWND)) return false;
         if (old_radius != Radius) {
@@ -390,7 +395,13 @@ public class TaskbarHelper {
 
             rgn = CreateRectRgn(0, 0, 0, 0);
             GetWindowRgn(HWND, rgn);
-            SetWindowRgn(window.windowHelper.HWND, rgn, true);
+            if(Style == TaskbarStyle.ForceDefault || Style == TaskbarStyle.Default || Style == TaskbarStyle.Blur) {
+                SetWindowRgn(window.windowHelper.HWND, rgn, true);
+            }
+            window.Dispatcher.Invoke(() => {
+                window.TaskbarClip.RadiusX = window.TaskbarClip.RadiusY = Radius / 2;
+                window.TaskbarClip.Rect = new(0, 0, window.Width, window.Height);
+            });
 
             return true;
         }

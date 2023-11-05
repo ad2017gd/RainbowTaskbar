@@ -20,10 +20,25 @@
         <ErrorReport>prompt</ErrorReport>
         <AssemblyVersion>2.3.2</AssemblyVersion>
         <FileVersion>2.3.2</FileVersion>
+        <SignAssembly>False</SignAssembly>
+		
+		   <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		
+		   <Platforms>AnyCPU;x64;x86</Platforms>
+		
+
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Optimize>False</Optimize>
     </PropertyGroup>
 
     <ItemGroup>

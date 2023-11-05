@@ -124,11 +124,13 @@
     <!-- Instruction context menu -->
     <s:String x:Key="duplicate">複製</s:String> <!-- it's a verb! -->
     <s:String x:Key="delete">削除</s:String>
+    <!-- no translation--> <s:String x:Key="duplicate_rev_color">複製 - Swap colors</s:String>
 
     <s:String x:Key="presetname">名前：</s:String> <!-- it's a noun! -->
     <s:String x:Key="enterpresetname">プリセットの名前を入力してください：</s:String>
     
     <!-- Tray context menu -->
+    <s:String x:Key="contextmenu">Compact menu</s:String>
     <s:String x:Key="open">開く</s:String>
     <s:String x:Key="presets">プレセット</s:String>
     <s:String x:Key="donate">サポート</s:String>
@@ -145,6 +147,9 @@
         Do you wish to proceed?</s:String>
     <s:String x:Key="msgbox_badarch">Your processor architecture (x64) is incompatible with this executable (x86). 
         Please download the correct executable (rnbtsk-x64.exe / setup-x64.exe) from GitHub releases.</s:String>
+    <s:String x:Key="msgbox_migrateoldcfg">RainbowTaskbar has found a legacy (v1) config version (rnbconf.txt).
+        Do you wish to migrate it to the new config format?
+    </s:String>
 
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">TechnoBiscuitによる翻訳。</s:String>

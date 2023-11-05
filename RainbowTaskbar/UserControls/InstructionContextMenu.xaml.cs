@@ -1,4 +1,5 @@
-﻿using RainbowTaskbar.Helpers;
+﻿using RainbowTaskbar.Configuration.Instructions;
+using RainbowTaskbar.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,19 @@ namespace RainbowTaskbar.UserControls {
 
 
         private void Duplicate_Click(object sender, RoutedEventArgs e) {
-            App.Config.Instructions.Insert(App.editorViewModel.SelectedInstructionIndex ?? 0, ObjectCopier.DeepClone(App.editorViewModel.SelectedInstruction));
+            App.Config.Instructions.Insert((App.editorViewModel.SelectedInstructionIndex ?? 0)+1, ObjectCopier.DeepClone(App.editorViewModel.SelectedInstruction));
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e) {
             App.Config.Instructions.RemoveAt(App.editorViewModel.SelectedInstructionIndex ?? 0);
+        }
+
+        private void DuplicateRevColor_Click(object sender, RoutedEventArgs e) {
+            var obj = ObjectCopier.DeepClone(App.editorViewModel.SelectedInstruction) as ColorInstruction;
+            var tmp = obj.Color1;
+            obj.Color1 = obj.Color2;
+            obj.Color2 = tmp;
+            App.Config.Instructions.Insert((App.editorViewModel.SelectedInstructionIndex ?? 0)+1, obj);
         }
     }
 }

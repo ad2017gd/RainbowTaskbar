@@ -82,7 +82,7 @@ namespace RainbowTaskbar.ExplorerTAP
             } while (!NeedsTAP());
         }
 
-        public static void TryInject() {
+        public static bool TryInject() {
 
             var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
 
@@ -90,7 +90,7 @@ namespace RainbowTaskbar.ExplorerTAP
                 if(Environment.Is64BitOperatingSystem && !Environment.Is64BitProcess) {
                     MessageBox.Show(App.localization["msgbox_badarch"], "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Warning);
                     IsInjecting = true;
-                    return;
+                    return true;
                 }
 
 
@@ -132,7 +132,7 @@ namespace RainbowTaskbar.ExplorerTAP
                                 taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
                             } else {
                                 IsInjecting = true;
-                                return;
+                                return true;
                             }
                         } else {
                             inject = false;
@@ -182,7 +182,10 @@ namespace RainbowTaskbar.ExplorerTAP
                 
                 IsInjecting = false;
                 IsInjected = true;
+            } else {
+                return false;
             }
+            return true;
 
         }
         public static void Reset() {
@@ -200,12 +203,13 @@ namespace RainbowTaskbar.ExplorerTAP
             if (SetAppearanceTypeDLL is null) return;
             uint hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
             if (hres == 0) tries = 0;
-            if (hres != 0 && tries < 3) { // MK_E_UNAVAILABLE or other errors?
-                while(hres != 0 && tries++ < 3) {
-                    TryInject();
+            if (hres != 0 && tries < 10) { // MK_E_UNAVAILABLE or other errors?
+                while(hres != 0 && tries < 10) {
+                    if(TryInject()) 
+                        tries++;
                     hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
                 }
-                if (hres != 0 && tries >= 3) {
+                if (hres != 0 && tries >= 10) {
                     MessageBox.Show(
                         $"0x{hres.ToString("X8")} : {Marshal.GetExceptionForHR(unchecked((int) hres))?.Message}\n\n{App.localization["msgbox_baddll"]}", "RainbowTaskbar Error", MessageBoxButton.OK, MessageBoxImage.Warning
                         );

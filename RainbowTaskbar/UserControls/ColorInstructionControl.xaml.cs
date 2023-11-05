@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,6 +14,12 @@ namespace RainbowTaskbar.UserControls;
 public partial class ColorInstructionControl : UserControl {
     public ColorInstructionControl() {
         InitializeComponent();
+        Task.Run(() => {
+            Thread.Sleep(100);
+            Dispatcher.Invoke(() => {
+                ColorPicker1_SelectedColorChanged(null, null);
+            });
+        });
     }
 
     private void ColorPicker1_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e) {
@@ -44,5 +52,10 @@ public partial class ColorInstructionControl : UserControl {
         else {
             ColorPicker1_SelectedColorChanged(null, null);
         }
+    }
+
+    public void UpdateColors() {
+
+        ColorPicker1_SelectedColorChanged(null, null);
     }
 }

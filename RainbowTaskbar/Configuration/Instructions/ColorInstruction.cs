@@ -60,6 +60,8 @@ internal class ColorInstruction : Instruction {
 
     [field: DataMember] public bool Randomize { get; set; } = false;
 
+    public bool Has2Colors { get => Effect == ColorInstructionEffect.FadeGradient || Effect == ColorInstructionEffect.Gradient; }
+
     public override JObject ToJSON() {
         dynamic data = new ExpandoObject();
         data.Name = GetType().Name;

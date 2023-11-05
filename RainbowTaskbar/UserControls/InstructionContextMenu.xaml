@@ -10,6 +10,24 @@
 
         </Style>
     </ContextMenu.Style>
-    <MenuItem x:Name="Duplicate" Click="Duplicate_Click" Header="{DynamicResource duplicate}" />
+    <MenuItem x:Name="Duplicate" Click="Duplicate_Click" Header="{DynamicResource duplicate}">
+    </MenuItem>
+    <MenuItem x:Name="DuplicateRevColor" Click="DuplicateRevColor_Click" Header="{DynamicResource duplicate_rev_color}">
+        <MenuItem.Style>
+            <Style TargetType="MenuItem" BasedOn="{StaticResource DefaultMenuItemStyle}">
+                <Style.Setters>
+                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                </Style.Setters>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding SelectedInstruction.Has2Colors}" Value="True">
+                        <DataTrigger.Setters>
+                            <Setter Property="Visibility" Value="Visible"></Setter>
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </MenuItem.Style>
+        
+    </MenuItem>
     <MenuItem x:Name="Delete" Click="Delete_Click" Header="{DynamicResource delete}" />
 </ContextMenu>

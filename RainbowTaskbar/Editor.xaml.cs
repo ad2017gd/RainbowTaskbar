@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using ModernWpf.Controls;
 using RainbowTaskbar.Configuration;
@@ -56,9 +57,14 @@ public partial class Editor : Window {
 
     private void Save_Click(object sender, RoutedEventArgs e) => App.Config.ToFile();
 
+    private static bool shownTip = false;
     private void Window_Closing(object sender, CancelEventArgs e) {
         //e.Cancel = true;
         //Hide();
+        if (App.firstRun && !shownTip && App.trayWindow.TrayIcon is not null && !App.trayWindow.TrayIcon.IsDisposed) {
+            App.trayWindow.TrayIcon.ShowBalloonTip("RainbowTaskbar", "The editor has been minimized to the system tray. Double-click to open the editor or right-click to open the context menu.", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+            shownTip = true;
+        }
         App.editor = null;
     }
 
@@ -70,6 +76,13 @@ public partial class Editor : Window {
     private void AppBarButton_Click(object sender, RoutedEventArgs e) {
         var contextMenu = (sender as AppBarButton).ContextMenu;
         contextMenu.PlacementTarget = (sender as AppBarButton);
+        contextMenu.IsOpen = true;
+    }
+
+    private void OpenContextMenu_Click(object sender, RoutedEventArgs e) {
+        var contextMenu = App.trayWindow.TrayIcon.ContextMenu;
+        Button button = sender as Button;
+        contextMenu.PlacementTarget = button;
         contextMenu.IsOpen = true;
     }
 }

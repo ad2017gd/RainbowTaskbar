@@ -301,7 +301,7 @@ public class InstructionsToPresetCommand : ICommand {
         this.vm = vm;
     }
 
-    public bool CanExecute(object parameter) => App.Config.Instructions.Count > 0;
+    public bool CanExecute(object parameter) => App.Config is not null && App.Config.Instructions.Count > 0;
 
     public void Execute(object parameter) {
         var dialog = new PresetNameDialog();

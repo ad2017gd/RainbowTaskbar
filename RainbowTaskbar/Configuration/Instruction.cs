@@ -27,6 +27,11 @@ public abstract class Instruction : INotifyPropertyChanged {
             return App.localization.Name(this.GetType().Name.ToLower());
         }
     }
+    public string TypeName {
+        get {
+            return this.GetType().Name;
+        }
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
 

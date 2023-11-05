@@ -51,7 +51,7 @@ public class ShapeInstruction : Instruction {
                 return App.Config.GraphicsRepeat ? _tsk.canvasManager.layers.height : App.layers.height;
             }
             else {
-                return X2;
+                return Y2;
             }
         }
     }

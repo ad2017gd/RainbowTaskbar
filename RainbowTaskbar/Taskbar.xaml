@@ -12,12 +12,12 @@
         MouseMove="RainbowTaskbar_MouseMove"
         MouseDown="RainbowTaskbar_MouseDown"
         MouseUp="RainbowTaskbar_MouseUp"
+        Background="Transparent"
         Title="Taskbar" Height="1" Width="1">
+    <Window.Clip>
+        <RectangleGeometry x:Name="TaskbarClip" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
+    </Window.Clip>
     <Grid Name="MainGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="31*" />
-            <ColumnDefinition Width="169*" />
-        </Grid.ColumnDefinitions>
         <Canvas x:Name="Layer0"/>
         <Canvas x:Name="Layer1"/>
         <Canvas x:Name="Layer2"/>

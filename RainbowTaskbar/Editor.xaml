@@ -14,7 +14,7 @@
         Title="{DynamicResource editor}"
         ui:TitleBar.Background="{DynamicResource ButtonBackground}"
         Icon="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
-        Height="500" Width="800">
+        Height="550" Width="800">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -70,7 +70,7 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
 
                                 </ui:CommandBar>
                                 
-                        <ListBox Margin="0,5,0,0" MaxHeight="280" Width="245" dd:DragDrop.IsDragSource="True"
+                        <ListBox Margin="0,5,0,0" MaxHeight="300" Width="245" dd:DragDrop.IsDragSource="True"
                                  dd:DragDrop.IsDropTarget="True" dd:DragDrop.DragHandler="{Binding}"
                                  ItemsSource="{Binding Config.Instructions}"
                                  SelectedItem="{Binding SelectedInstruction}"
@@ -87,21 +87,20 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                                    <Button Grid.Row="0" Grid.Column="0" MinWidth="90" Click="Button_Click" Content="{DynamicResource apply}" />
-                            <Button Grid.Row="0" Grid.Column="1" MinWidth="90" Click="ButtonBase_OnClick"
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Button Grid.Row="0" HorizontalAlignment="Stretch" Click="ButtonBase_OnClick"
                                     Margin="5,0,0,0" Content="{DynamicResource applyandsave}" />
-                            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="180" Margin="0,3,0,0"
+                                    <Button Grid.Row="1" HorizontalAlignment="Stretch"  Margin="0,3,0,0"
                                     Command="{Binding InstructionsToPresetCommandImpl}"
                                     Content="{DynamicResource topreset}" />
-                        </Grid>
+                                    <Button Grid.Row="2" HorizontalAlignment="Stretch"   Margin="0,3,0,0"
+                                    Click="OpenContextMenu_Click"
+                                    Content="{DynamicResource contextmenu}" />
+                                </Grid>
 
                     </StackPanel>
                         
@@ -140,6 +139,12 @@ AncestorType={x:Type Window}}, Path=DataContext.AddInstructionCommandImpl}" />
                                 </ComboBox>
                                 
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{DynamicResource contextmenu}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" />
+                                <Button Content="{DynamicResource open}" Margin="5,0,0,0" x:Name="OpenContextMenu" Click="OpenContextMenu_Click"></Button>
+
+                            </StackPanel>
+
 
                             <Label Content="{DynamicResource httpapi}" HorizontalAlignment="Left" Margin="5,15,0,0" VerticalAlignment="Top"
                                FontSize="24" />

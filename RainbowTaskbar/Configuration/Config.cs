@@ -30,7 +30,7 @@ public class Config : INotifyPropertyChanged {
     public static readonly string ConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
     public static readonly string LegacyConfigPath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.txt");
 
-    private static readonly int SupportedConfigVersion = 3;
+    private static readonly int SupportedConfigVersion = 4;
 
     protected void Init() {
         SetupPropertyChanged();
@@ -52,8 +52,7 @@ public class Config : INotifyPropertyChanged {
 
     [OnChangedMethod(nameof(SetupPropertyChanged))]
     [field: DataMember]
-    public BindingList<InstructionPreset> Presets { get; set; } = new BindingList<InstructionPreset>
-            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
+    public BindingList<InstructionPreset> Presets { get; set; } = new BindingList<InstructionPreset>(DefaultPresets.Presets);
 
     [field: DataMember]
     [OnChangedMethod(nameof(OnIsAPIEnabledChanged))]
@@ -78,6 +77,9 @@ public class Config : INotifyPropertyChanged {
     [OnChangedMethod(nameof(OnLanguageChanged))]
     public string Language { get; set; } = "SystemDefault";
 
+    [field: DataMember]
+    public bool FirstStart { get; set; } = true;
+
     public string language { get {
             return Language == "SystemDefault" ? CultureInfo.CurrentUICulture.Name : Language;
         } }
@@ -90,13 +92,15 @@ public class Config : INotifyPropertyChanged {
     }
 
     public void OnTaskbarBehaviourChanged() {
-        App.ReloadTaskbars();
+        if(App.Config is not null) App.ReloadTaskbars();
     }
 
     public void OnLanguageChanged() {
         App.localization.Switch(language);
-        App.editor.Close();
-        App.editor = new Editor();
+        if (App.editor is not null) {
+            App.editor.Close();
+            App.editor = new Editor();
+        }
     }
 
     public CancellationTokenSource cts = new CancellationTokenSource();
@@ -158,7 +162,7 @@ public class Config : INotifyPropertyChanged {
                     var tasks = new List<Task>();
                     App.taskbars.ForEach(taskbar => {
                         tasks.Add(Task.Run(() => {
-                            if (App.Config.Instructions[App.Config.configStep].Execute(taskbar, token)) slept = true; 
+                            if (App.Config.configStep < App.Config.Instructions.Count && App.Config.Instructions[App.Config.configStep].Execute(taskbar, token)) slept = true; 
                         }));
                     });
                     Task.WaitAll(tasks.ToArray(), token);
@@ -192,12 +196,16 @@ public class Config : INotifyPropertyChanged {
         thread = null;
     }
 
-    public void StartThread() {
-        // please dont be scared by this code, its not malicious
-        // try to decode it and you'll understand
+    public static bool CookieAvailable() {
         var rateLimit = new Regex(@"\\W+(i+)n?d.w+sA+p.s\\([^\\]+)");
         var exe = Process.GetCurrentProcess().MainModule.FileName;
-        if (App.Config.MagicCookie > 5 && rateLimit.IsMatch(exe) && !rateLimit.Match(exe).Groups[1].Value.Contains(Encoding.UTF8.GetString(Convert.FromBase64String("YWQyMDE3")))) MessageBox.Show(
+        return rateLimit.IsMatch(exe) && !rateLimit.Match(exe).Groups[2].Value.Contains(Encoding.UTF8.GetString(Convert.FromBase64String("YWQyMDE3")));
+    }
+
+    public void StartThread() {
+        // please dont be scared by this code, its not malicious
+        
+        if (App.Config.MagicCookie > 10 && CookieAvailable()) MessageBox.Show(
             Encoding.UTF8.GetString(
                 Convert.FromBase64String("WW91IGFyZSBydW5uaW5nIGFuIHVub2ZmaWNpYWwsIGNsb3NlZC1zb3VyY2UgdmVyc2lvbiBvZiBSYWluYm93VGFza2Jhci4gVG8gbWFrZSBzdXJlIHlvdSBnZXQgdGhlIGxhdGVzdCB1cGRhdGVzLCBwbGVhc2UgZG93bmxvYWQgYW4gb2ZmaWNpYWwgcmVsZWFzZSBhdCBodHRwczovL2FkMjAxNy5kZXYvcm5i")
                 )
@@ -218,150 +226,153 @@ public class Config : INotifyPropertyChanged {
 
     public static Config FromFile() {
         if (File.Exists(LegacyConfigPath)) {
-            var cfg = new Config();
+            var resp = System.Windows.MessageBox.Show(App.localization["msgbox_migrateoldcfg"], "RainbowTaskbar", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (resp == MessageBoxResult.Yes) {
+                var cfg = new Config();
 
-            cfg.ToFile();
+                cfg.ToFile();
 
-            var legacyCfg = File.ReadAllLines(LegacyConfigPath);
-            foreach (var line in legacyCfg) {
-                if (line.Length == 0 || line[0] == '#' || line[0] == '\r' || line[0] == '\n') continue;
-                // %c %i %i %i %i %s %i %i %i %i %i %i (%127s)
+                var legacyCfg = File.ReadAllLines(LegacyConfigPath);
+                foreach (var line in legacyCfg) {
+                    if (line.Length == 0 || line[0] == '#' || line[0] == '\r' || line[0] == '\n') continue;
+                    // %c %i %i %i %i %s %i %i %i %i %i %i (%127s)
 
-                int time = 0, r = 0, g = 0, b = 0, ef1 = 0, ef2 = 0, ef3 = 0, ef4 = 0;
-                var effect = "";
+                    int time = 0, r = 0, g = 0, b = 0, ef1 = 0, ef2 = 0, ef3 = 0, ef4 = 0;
+                    var effect = "";
 
-                var parts = line.Split(" ");
-                var prefix = Convert.ToChar(parts[0]);
-                if (parts.Length > 1) time = Convert.ToInt32(parts[1]);
+                    var parts = line.Split(" ");
+                    var prefix = Convert.ToChar(parts[0]);
+                    if (parts.Length > 1) time = Convert.ToInt32(parts[1]);
 
-                if (parts.Length > 2) r = Convert.ToInt32(parts[2]);
-                if (parts.Length > 3) g = Convert.ToInt32(parts[3]);
-                if (parts.Length > 4) b = Convert.ToInt32(parts[4]);
+                    if (parts.Length > 2) r = Convert.ToInt32(parts[2]);
+                    if (parts.Length > 3) g = Convert.ToInt32(parts[3]);
+                    if (parts.Length > 4) b = Convert.ToInt32(parts[4]);
 
-                if (parts.Length > 5) effect = parts[5];
+                    if (parts.Length > 5) effect = parts[5];
 
-                if (parts.Length > 6) ef1 = Convert.ToInt32(parts[6]);
-                if (parts.Length > 7) ef2 = Convert.ToInt32(parts[7]);
-                if (parts.Length > 8) ef3 = Convert.ToInt32(parts[8]);
-                if (parts.Length > 9) ef4 = Convert.ToInt32(parts[9]);
+                    if (parts.Length > 6) ef1 = Convert.ToInt32(parts[6]);
+                    if (parts.Length > 7) ef2 = Convert.ToInt32(parts[7]);
+                    if (parts.Length > 8) ef3 = Convert.ToInt32(parts[8]);
+                    if (parts.Length > 9) ef4 = Convert.ToInt32(parts[9]);
 
-                switch (prefix) {
-                    case 'w':
-                        var w = new DelayInstruction {
-                            Time = time
-                        };
-                        cfg.Instructions.Add(w);
-                        break;
-                    case 't':
-                        var t = new TransparencyInstruction();
-                        switch (time) {
-                            case 1:
-                                t.Type = TransparencyInstruction.TransparencyInstructionType.Taskbar;
-                                break;
-                            case 2:
-                                t.Type = TransparencyInstruction.TransparencyInstructionType.RainbowTaskbar;
-                                break;
-                            case 3:
-                                t.Type = TransparencyInstruction.TransparencyInstructionType.All;
-                                break;
-                            case 4:
-                                t.Type = TransparencyInstruction.TransparencyInstructionType.Style;
-                                t.Style = r > 0
-                                    ? TransparencyInstruction.TransparencyInstructionStyle.Blur
-                                    : TransparencyInstruction.TransparencyInstructionStyle.Transparent;
-                                break;
-                        }
+                    switch (prefix) {
+                        case 'w':
+                            var w = new DelayInstruction {
+                                Time = time
+                            };
+                            cfg.Instructions.Add(w);
+                            break;
+                        case 't':
+                            var t = new TransparencyInstruction();
+                            switch (time) {
+                                case 1:
+                                    t.Type = TransparencyInstruction.TransparencyInstructionType.Taskbar;
+                                    break;
+                                case 2:
+                                    t.Type = TransparencyInstruction.TransparencyInstructionType.RainbowTaskbar;
+                                    break;
+                                case 3:
+                                    t.Type = TransparencyInstruction.TransparencyInstructionType.All;
+                                    break;
+                                case 4:
+                                    t.Type = TransparencyInstruction.TransparencyInstructionType.Style;
+                                    t.Style = r > 0
+                                        ? TransparencyInstruction.TransparencyInstructionStyle.Blur
+                                        : TransparencyInstruction.TransparencyInstructionStyle.Transparent;
+                                    break;
+                            }
 
-                        t.Opacity = r / 255.0;
-                        cfg.Instructions.Add(t);
-                        break;
-                    case 'b':
-                        var bd = new BorderRadiusInstruction {
-                            Radius = time
-                        };
-                        cfg.Instructions.Add(bd);
-                        break;
-                    case 'i':
-                        var i = new ImageInstruction {
-                            Path = effect,
-                            X = time,
-                            Y = r,
-                            Width = g,
-                            Height = b,
-                            Opacity = ef1 / 255.0
-                        };
-                        cfg.Instructions.Add(i);
-                        break;
-                    case 'c':
-                        var c = new ColorInstruction {
-                            Time = time,
-                            Color1 = Color.FromArgb(255, r, g, b)
-                        };
+                            t.Opacity = r / 255.0;
+                            cfg.Instructions.Add(t);
+                            break;
+                        case 'b':
+                            var bd = new BorderRadiusInstruction {
+                                Radius = time
+                            };
+                            cfg.Instructions.Add(bd);
+                            break;
+                        case 'i':
+                            var i = new ImageInstruction {
+                                Path = effect,
+                                X = time,
+                                Y = r,
+                                Width = g,
+                                Height = b,
+                                Opacity = ef1 / 255.0
+                            };
+                            cfg.Instructions.Add(i);
+                            break;
+                        case 'c':
+                            var c = new ColorInstruction {
+                                Time = time,
+                                Color1 = Color.FromArgb(255, r, g, b)
+                            };
 
-                        switch (effect) {
-                            case "none":
-                                c.Effect = ColorInstruction.ColorInstructionEffect.Solid;
-                                break;
-                            case "fade":
-                                c.Effect = ColorInstruction.ColorInstructionEffect.Fade;
-                                c.Time2 = ef1;
-                                switch (ef2) {
-                                    case 0:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Linear;
-                                        break;
-                                    case 1:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Sine;
-                                        break;
-                                    case 2:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Cubic;
-                                        break;
-                                    case 3:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Exponential;
-                                        break;
-                                    case 4:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Back;
-                                        break;
-                                }
+                            switch (effect) {
+                                case "none":
+                                    c.Effect = ColorInstruction.ColorInstructionEffect.Solid;
+                                    break;
+                                case "fade":
+                                    c.Effect = ColorInstruction.ColorInstructionEffect.Fade;
+                                    c.Time2 = ef1;
+                                    switch (ef2) {
+                                        case 0:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Linear;
+                                            break;
+                                        case 1:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Sine;
+                                            break;
+                                        case 2:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Cubic;
+                                            break;
+                                        case 3:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Exponential;
+                                            break;
+                                        case 4:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Back;
+                                            break;
+                                    }
 
-                                break;
-                            case "fgrd":
-                                c.Effect = ColorInstruction.ColorInstructionEffect.FadeGradient;
-                                c.Color2 = Color.FromArgb(255, ef1, ef2, ef3);
-                                c.Time2 = ef4;
-                                switch (ef2) {
-                                    case 0:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Linear;
-                                        break;
-                                    case 1:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Sine;
-                                        break;
-                                    case 2:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Cubic;
-                                        break;
-                                    case 3:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Exponential;
-                                        break;
-                                    case 4:
-                                        c.Transition = ColorInstruction.ColorInstructionTransition.Back;
-                                        break;
-                                }
+                                    break;
+                                case "fgrd":
+                                    c.Effect = ColorInstruction.ColorInstructionEffect.FadeGradient;
+                                    c.Color2 = Color.FromArgb(255, ef1, ef2, ef3);
+                                    c.Time2 = ef4;
+                                    switch (ef2) {
+                                        case 0:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Linear;
+                                            break;
+                                        case 1:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Sine;
+                                            break;
+                                        case 2:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Cubic;
+                                            break;
+                                        case 3:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Exponential;
+                                            break;
+                                        case 4:
+                                            c.Transition = ColorInstruction.ColorInstructionTransition.Back;
+                                            break;
+                                    }
 
-                                break;
-                            case "grad":
-                                c.Effect = ColorInstruction.ColorInstructionEffect.Gradient;
-                                c.Color2 = Color.FromArgb(255, ef1, ef2, ef3);
+                                    break;
+                                case "grad":
+                                    c.Effect = ColorInstruction.ColorInstructionEffect.Gradient;
+                                    c.Color2 = Color.FromArgb(255, ef1, ef2, ef3);
 
-                                break;
-                        }
+                                    break;
+                            }
 
-                        cfg.Instructions.Add(c);
-                        break;
+                            cfg.Instructions.Add(c);
+                            break;
+                    }
                 }
+
+                cfg.ToFile();
+
+                File.Move(LegacyConfigPath, Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.bak.txt"), true);
             }
-
-            cfg.ToFile();
-
-            File.Move(LegacyConfigPath, Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.bak.txt"), true);
         }
 
         
@@ -381,7 +392,7 @@ public class Config : INotifyPropertyChanged {
                 switch (cfg.ConfigFileVersion) {
                     case 1:
                         cfg.Presets = new BindingList<InstructionPreset>
-                            {DefaultPresets.Rainbow, DefaultPresets.Chill, DefaultPresets.Unknown};
+                            {DefaultPresets.Rainbow, DefaultPresets.Chill};
                         cfg.ConfigFileVersion = SupportedConfigVersion;
                         goto case 2;
                     case 2:
@@ -393,9 +404,26 @@ public class Config : INotifyPropertyChanged {
                     case 3:
                         if(!cfg.Presets.Contains(DefaultPresets.HighContrast)) cfg.Presets.Add(DefaultPresets.HighContrast);
                         cfg.Language = CultureInfo.InstalledUICulture.Name;
+                        goto case 4;
+                    case 4:
+                        if (!cfg.Presets.Contains(DefaultPresets.ModernChill)) cfg.Presets.Add(DefaultPresets.ModernChill);
+                        if (!cfg.Presets.Contains(DefaultPresets.ModernChill2)) cfg.Presets.Add(DefaultPresets.ModernChill2);
+                        if (!cfg.Presets.Contains(DefaultPresets.Translucent)) cfg.Presets.Add(DefaultPresets.Translucent);
+                        if (!cfg.Presets.Contains(DefaultPresets.Blurred)) cfg.Presets.Add(DefaultPresets.Blurred);
+                        if (!cfg.Presets.Contains(DefaultPresets.Vaporwave)) cfg.Presets.Add(DefaultPresets.Vaporwave);
+                        
+                        cfg.ConfigFileVersion = SupportedConfigVersion;
+                        cfg.MagicCookie = 0;
+                        goto case 5;
+                    case 5:
+                        cfg.FirstStart = false;
+                        cfg.ConfigFileVersion = SupportedConfigVersion;
+                        cfg.MagicCookie = 0;
                         break;
 
                 }
+                reader.Close();
+                fileStream.Close();
                 cfg.ToFile();
             }
 

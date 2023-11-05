@@ -26,8 +26,8 @@ namespace RainbowTaskbar.Drawing
 
         public LayerManager(Taskbar window) {
             this.window = window;
-            width = (int) window.Width;
-            height = (int) window.Height;
+            width = (int) (window.Width);
+            height = (int) (window.Height);
             for (int i = 0; i < 16; i++) brushes.Add(new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255)));
         }
 

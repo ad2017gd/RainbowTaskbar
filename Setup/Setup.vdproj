@@ -43,6 +43,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -193,7 +209,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RainbowTaskbar"
         "ProductCode" = "8:{D523B4A1-B78D-4558-A926-9F70AD98FCC0}"
-        "PackageCode" = "8:{D1B80344-3D20-4162-9374-6315F0AAC336}"
+        "PackageCode" = "8:{824023BC-0216-4DDE-A9E1-7C72DAD49660}"
         "UpgradeCode" = "8:{196F8FDD-5ECD-420B-9755-18A328F4585B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

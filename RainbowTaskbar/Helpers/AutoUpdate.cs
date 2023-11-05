@@ -17,6 +17,8 @@ namespace RainbowTaskbar.Helpers;
 internal static class AutoUpdate {
     public static void CheckForUpdate() =>
         Task.Run(async () => {
+
+            if (Configuration.Config.CookieAvailable()) return;
             using var http = new HttpClient();
             using var web = new WebClient();
             http.DefaultRequestHeaders.Add("User-Agent", "RainbowTaskbar");
