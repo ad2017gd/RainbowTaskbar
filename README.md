@@ -1,4 +1,11 @@
 <div align="center">
+
+[<sub>*</sub>](#note)
+[<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://www.microsoft.com/store/productId/9NN78X0674XW)
+[<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280434808-334b68d6-9568-4cc5-988d-a9bf186c1b8c.png" alt="Download setup x64" height="64">](https://raw.githubusercontent.com/ad2017gd/RainbowTaskbar/releases/setup-x64.msi)
+[<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280435213-f3b1165b-dba6-4f0d-84ac-2cae15ec992a.png" alt="Donate" height="64">](https://paypal.me/ad2k17)
+
+
    <a href="../../stargazers"><img src="https://img.shields.io/github/stars/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="LICENSE"><img src="https://img.shields.io/github/license/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
    <a href="../../issues"><img src="https://img.shields.io/github/issues/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
@@ -9,9 +16,14 @@
 <p>Useful tool for Windows taskbar customization. Supports color effects, transitions, blur, images, text, rounded corners, shapes, transparency and a new HTTP API. Now rewritten in .NET 6!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
+   <img style="margin: 0 auto; width: 90%;" src="https://github.com/ad2017gd/RainbowTaskbar/assets/39013925/4e5ce6d6-4222-4437-9822-f1a19291e028">
 
-   <img style="margin: 0 auto; width: 75%;" src="https://user-images.githubusercontent.com/39013925/139352818-714ccc11-1e08-4e19-bd82-b4f24610d082.png">
-<br>
+   <div style="margin: 0 auto;">
+      <img style="width: 30%;" src="https://github.com/ad2017gd/RainbowTaskbar/assets/39013925/29a01115-9aff-40eb-afbf-7770aaf346b4">
+      <img style="width: 30%;" src="https://github.com/ad2017gd/RainbowTaskbar/assets/39013925/3effb1a7-8adf-4628-b415-42a303f5090f">
+   </div>
+   
+
 <br>
 <br>
 </div>
@@ -33,3 +45,7 @@ Documentation has been moved to https://ad2017.dev/rnb/docs
 
 # License
 See `LICENSE` for more information.
+
+# Notes
+## Microsoft Store
+*The Microsoft Store version of this software is provided as a means for donations. This software is free and open-source. You can download it for free in the releases tab or by clicking the download button next to the Microsoft Store page button.
