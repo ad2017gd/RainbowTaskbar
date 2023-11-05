@@ -82,7 +82,6 @@ public partial class Editor : Window {
     private void OpenContextMenu_Click(object sender, RoutedEventArgs e) {
         var contextMenu = App.trayWindow.TrayIcon.ContextMenu;
         Button button = sender as Button;
-        contextMenu.PlacementTarget = button;
         contextMenu.IsOpen = true;
     }
 }

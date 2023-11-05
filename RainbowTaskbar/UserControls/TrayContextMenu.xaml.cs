@@ -47,7 +47,7 @@ public partial class TrayContextMenu : ContextMenu {
     private void Exit_Click(object sender, RoutedEventArgs e) => App.Exit();
 
     private void IssueOrRequest_Click(object sender, RoutedEventArgs e) {
-        Process.Start(new ProcessStartInfo("https://github.com/ad2017gd/RainbowTaskbar/issues/new") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo("https://github.com/ad2017gd/RainbowTaskbar/issues/new/choose") { UseShellExecute = true });
         e.Handled = true;
     }
 
