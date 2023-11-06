@@ -15,7 +15,10 @@
         Background="Transparent"
         Title="Taskbar" Height="1" Width="1">
     <Window.Clip>
-        <RectangleGeometry x:Name="TaskbarClip" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
+        <GeometryGroup FillRule="Nonzero">
+            <RectangleGeometry x:Name="TaskbarClip" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
+            <RectangleGeometry x:Name="TaskbarClipHide" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
+        </GeometryGroup>
     </Window.Clip>
     <Grid Name="MainGrid">
         <Canvas x:Name="Layer0"/>

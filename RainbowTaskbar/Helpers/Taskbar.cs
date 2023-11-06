@@ -354,11 +354,12 @@ public class TaskbarHelper {
 
     [DllImport("gdi32.dll")]
     public static extern int OffsetRgn(IntPtr hrgn, int nXOffset, int nYOffset);
-
+    private TaskbarStyle old_style = TaskbarStyle.ForceDefault;
     public bool UpdateRadius() {
         if (!IsWindow(HWND)) return false;
-        if (old_radius != Radius) {
+        if (old_radius != Radius && old_style != Style) {
             old_radius = Radius;
+            old_style = Style;
 
             var scale = GetScalingFactor();
 
@@ -377,6 +378,14 @@ public class TaskbarHelper {
 
                     DeleteObject(rgn1);
                     DeleteObject(rgn2);
+
+                    window.Dispatcher.Invoke(() => {
+                        window.TaskbarClip.RadiusX = window.TaskbarClip.RadiusY = Radius / 2;
+                        window.TaskbarClip.Rect = new(0, 0, window.Width, window.Height);
+
+                        window.TaskbarClipHide.RadiusX = window.TaskbarClipHide.RadiusY = 0;
+                        window.TaskbarClipHide.Rect = new(0, 0, Radius / 2, window.Height);
+                    });
                 }
                 else if (first){
                     var rgn1 = CreateRoundRectRgn(0, 0, w + 1, h + 1, Radius, Radius);
@@ -386,22 +395,38 @@ public class TaskbarHelper {
 
                     DeleteObject(rgn1);
                     DeleteObject(rgn2);
+
+                    window.Dispatcher.Invoke(() => {
+                        window.TaskbarClip.RadiusX = window.TaskbarClip.RadiusY = Radius / 2;
+                        window.TaskbarClip.Rect = new(0, 0, window.Width, window.Height);
+
+                        window.TaskbarClipHide.RadiusX = window.TaskbarClipHide.RadiusY = 0;
+                        window.TaskbarClipHide.Rect = new(window.Width - Radius / 2, 0, Radius / 2, window.Height);
+                    });
                 }
             }
             else {
                 rgn = CreateRoundRectRgn(0, 0, w + 1, h + 1, Radius, Radius);
                 SetWindowRgn(HWND, rgn, true);
+
+                window.Dispatcher.Invoke(() => {
+                    window.TaskbarClip.RadiusX = window.TaskbarClip.RadiusY = Radius / 2;
+                    window.TaskbarClip.Rect = new(0, 0, window.Width, window.Height);
+
+                    window.TaskbarClipHide.RadiusX = window.TaskbarClipHide.RadiusY = 0;
+                    window.TaskbarClipHide.Rect = new(0, 0, 0, 0);
+                });
             }
 
             rgn = CreateRectRgn(0, 0, 0, 0);
             GetWindowRgn(HWND, rgn);
-            if(Style == TaskbarStyle.ForceDefault || Style == TaskbarStyle.Default || Style == TaskbarStyle.Blur) {
+            if(Style == TaskbarStyle.Default || Style == TaskbarStyle.Blur) {
                 SetWindowRgn(window.windowHelper.HWND, rgn, true);
+            } else {
+                var rgn2 = CreateRectRgn(0, 0, w, h);
+                SetWindowRgn(window.windowHelper.HWND, rgn2, true);
+                DeleteObject(rgn2);
             }
-            window.Dispatcher.Invoke(() => {
-                window.TaskbarClip.RadiusX = window.TaskbarClip.RadiusY = Radius / 2;
-                window.TaskbarClip.Rect = new(0, 0, window.Width, window.Height);
-            });
 
             return true;
         }

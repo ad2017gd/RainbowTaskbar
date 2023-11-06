@@ -46,8 +46,10 @@ public class TaskbarViewModel {
                 window.Layer12, window.Layer13, window.Layer14, window.Layer15
             });
 
-        foreach (var cvs in window.canvasManager.canvases)
+        foreach (var cvs in window.canvasManager.canvases) {
             cvs.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+        }
+        
 
         //cts = new CancellationTokenSource();
         //StartZThread(window);
