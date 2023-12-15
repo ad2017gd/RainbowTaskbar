@@ -64,7 +64,7 @@ After the rewrite, RainbowTaskbar received even more attention from people, whic
 copies of this software being sold on markets such as the Microsoft Store by other people, stripping it of all the credits.
 
 If you wish to support me in the future development of this app and, perhaps, other apps, you can [buy RainbowTaskbar from the Microsoft Store](https://www.microsoft.com/store/productId/9NN78X0674XW) 
-which is actually published by me, or by donating on (PayPal)[https://paypal.me/ad2k17]. I thank you once again for using this software.
+which is actually published by me, or by donating on [PayPal](https://paypal.me/ad2k17). I thank you once again for using this software.
 
 </div>
 
