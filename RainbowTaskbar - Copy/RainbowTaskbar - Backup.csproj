@@ -1,0 +1,138 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <Version>2.4.1</Version>
+        <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
+        <Description>RainbowTaskbar is a Windows utility to customize the shell taskbar.</Description>
+        <Authors>Ad2017, zCri</Authors>
+        <PackageIcon>icon.ico</PackageIcon>
+        <PackageIconUrl />
+        <RepositoryUrl>https://github.com/ad2017gd/RainbowTaskbar</RepositoryUrl>
+        <RepositoryType>GitHub</RepositoryType>
+        <Company></Company>
+        <NeutralLanguage>en</NeutralLanguage>
+        <PackageReleaseNotes />
+        <AnalysisLevel>latest</AnalysisLevel>
+        <Nullable>disable</Nullable>
+        <ErrorReport>prompt</ErrorReport>
+        <AssemblyVersion>2.4.1</AssemblyVersion>
+        <FileVersion>2.4</FileVersion>
+        <SignAssembly>False</SignAssembly>
+		
+		   <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		
+		   <Platforms>AnyCPU;x64;x86</Platforms>
+		
+
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Resources\Nano.png" />
+        <None Remove="Resources\Paypal.png" />
+        <None Remove="..\x64\Release\RainbowTaskbarDLL.dll" Link="Resources\RainbowTaskbarDLL.dll" />
+        <Resource Include="..\x64\Release\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="..\Release\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <None Include="Resources\icon.ico">
+            <Pack>True</Pack>
+        </None>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
+        <PackageReference Include="FastMember" Version="1.5.0" />
+        <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
+        <PackageReference Include="H.Pipes" Version="2.0.35" />
+        <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0">
+        </PackageReference>
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+        <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+
+        <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
+            <PrivateAssets>all</PrivateAssets>
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </PackageReference>
+
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+
+        <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\RainbowTaskbarDLL\RainbowTaskbarDLL.vcxproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <Resource Include="Resources\icon.ico">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\Nano.png">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\Paypal.png">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <Compile Update="App.xaml.cs">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Compile>
+        <Compile Update="Languages\ja_JP.xaml.cs">
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Languages\ro_RO.xaml.cs">
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Properties\Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Properties\Settings.Designer.cs">
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Settings.settings</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <None Update="Properties\Settings.settings">
+            <Generator>SettingsSingleFileGenerator</Generator>
+            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
+
+</Project>

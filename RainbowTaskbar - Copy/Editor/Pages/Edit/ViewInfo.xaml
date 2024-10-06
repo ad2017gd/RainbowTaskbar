@@ -1,0 +1,90 @@
+﻿<Page x:Class="RainbowTaskbar.Editor.Pages.Edit.ViewInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RainbowTaskbar.Editor.Pages.Edit" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ViewInfo">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../Languages/en_US.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid Margin="16" ScrollViewer.CanContentScroll="False" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Grid.Row="0" x:Name="thumbPreview" HorizontalAlignment="Stretch" Grid.Column="1"></Image>
+        <Grid ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Viewbox Grid.Row="0" StretchDirection="DownOnly" Stretch="Uniform" HorizontalAlignment="Left">
+                <TextBlock FontSize="36" Text="{Binding Config.Name}"></TextBlock>
+            </Viewbox>
+            <FlowDocumentScrollViewer  IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" Grid.Row="1" Margin="0,0,0,8" FontSize="16" x:Name="description">
+                
+                <FlowDocument></FlowDocument>
+            </FlowDocumentScrollViewer>
+            <StackPanel Grid.Row="2" Margin="0,0,0,8">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource filesize}" xml:space="preserve"></TextBlock>
+                    <TextBlock Text="{Binding FileSize}"></TextBlock>
+                    <TextBlock Text="{DynamicResource filesizeextra}" xml:space="preserve"></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource author}" xml:space="preserve"></TextBlock>
+                    <TextBlock Text="{Binding Config.CachedPublisherUsername}"></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource likes}" xml:space="preserve"></TextBlock>
+                    <TextBlock Text="{Binding Config.CachedLikeCount}"></TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <ui:Button Icon="{ui:SymbolIcon ArrowDownload24}" Click="Download">
+                <ui:Button.Style>
+                    <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                        <Setter Property="Content" Value="{DynamicResource download}"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Downloaded}" Value="True">
+                                <DataTrigger.Setters>
+                                    <Setter Property="Content" Value="{DynamicResource downloadnew}"></Setter>
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ui:Button.Style>
+            </ui:Button>
+            <ui:Button Margin="5,0,0,0" Click="Like">
+                <ui:Button.Style>
+                    <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                        <Setter Property="Content" Value="Like"></Setter>
+                        <Setter Property="Icon" Value="{ui:SymbolIcon Heart24}"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Liked}" Value="True">
+                                <DataTrigger.Setters>
+                                    <Setter Property="Content" Value="Unlike"></Setter>
+                                    <Setter Property="Icon" Value="{ui:SymbolIcon HeartBroken24}"></Setter>
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ui:Button.Style>
+            </ui:Button>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,118 @@
+﻿<local:EditPage x:Class="RainbowTaskbar.Editor.Pages.Edit.InstructionEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                 xmlns:dd="urn:gong-wpf-dragdrop" 
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:local="clr-namespace:RainbowTaskbar.Editor.Pages.Edit" xmlns:controls="clr-namespace:RainbowTaskbar.Editor.Pages.Controls"
+                mc:Ignorable="d" 
+                ScrollViewer.CanContentScroll="False"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="InstructionEditPage">
+    <local:EditPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../Languages/en_US.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </local:EditPage.Resources>
+
+    <Grid Margin="16" ScrollViewer.CanContentScroll="False">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <ui:CardExpander Header="{DynamicResource runoncegroup}" IsExpanded="True">
+                        <StackPanel>
+                            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" dd:DragDrop.IsDragSource="True"
+dd:DragDrop.IsDropTarget="True" dd:DragDrop.DragHandler="{Binding}"
+ItemsSource="{Binding Current.Data.RunOnceGroup.Instructions}"
+SelectionChanged="ListBox_SelectionChanged">
+                                <ListBox.ContextMenu>
+                                    <controls:InstructionContextMenu ParentListBox="{Binding Path=PlacementTarget,RelativeSource={x:Static RelativeSource.Self}}"></controls:InstructionContextMenu>
+                                </ListBox.ContextMenu>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Description}"></TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <ui:Button DataContext="{Binding Current.Data.RunOnceGroup}" Click="AddInstruction" HorizontalAlignment="Right" Icon="{ui:SymbolIcon Add24}" Content="{DynamicResource new}"></ui:Button>
+                        </StackPanel>
+                        
+                    </ui:CardExpander>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
+                    <ui:CardExpander IsExpanded="True">
+                        <ui:CardExpander.Header>
+                            <DockPanel>
+                                <ui:Button Click="AddGroup" Icon="{ui:SymbolIcon Add24}" DockPanel.Dock="Left" Margin="0,0,8,0"></ui:Button>
+                                <TextBlock VerticalAlignment="Center" Text="{DynamicResource loopinggroups}"></TextBlock>
+                            </DockPanel>
+                        </ui:CardExpander.Header>
+                        <ItemsControl ItemsSource="{Binding Current.Data.LoopGroups}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,8">
+                                        <ui:CardExpander  IsExpanded="True">
+                                            <ui:CardExpander.Header>
+                                                <DockPanel>
+                                                    <ui:Button Icon="{ui:SymbolIcon Delete24}" Click="DeleteGroup" DockPanel.Dock="Left" Margin="0,0,8,0"></ui:Button>
+                                                    <TextBlock VerticalAlignment="Center" Text="{DynamicResource group}"></TextBlock>
+                                                </DockPanel>
+                                                
+                                            </ui:CardExpander.Header>
+                                            <StackPanel>
+                                                <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" dd:DragDrop.IsDragSource="True"
+dd:DragDrop.IsDropTarget="True" dd:DragDrop.DragHandler="{Binding}"
+ItemsSource="{Binding Instructions}"
+SelectionChanged="ListBox_SelectionChanged">
+                                                    <ListBox.ContextMenu>
+                                                        <controls:InstructionContextMenu ParentListBox="{Binding Path=PlacementTarget,RelativeSource={x:Static RelativeSource.Self}}"></controls:InstructionContextMenu>
+                                                    </ListBox.ContextMenu>
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Path=Description}"></TextBlock>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                                <ui:Button DataContext="{Binding}" HorizontalAlignment="Right" Icon="{ui:SymbolIcon Add24}" Click="AddInstruction" Content="Add">
+
+                                                </ui:Button>
+                                            </StackPanel>
+                                            
+                                        </ui:CardExpander>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ui:CardExpander>
+                </StackPanel>
+               
+            </Grid>
+        </ScrollViewer>
+        <Grid Grid.Column="1" Margin="16">
+            <ScrollViewer>
+                <ContentPresenter Content="{Binding SelectedInstructionControl}" />
+            </ScrollViewer>
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <ui:Button Click="RunConfig" Icon="{ui:SymbolIcon Play24}" Margin="0,0,4,0" Content="{DynamicResource run}"></ui:Button>
+            <ui:Button Click="SaveConfig" Icon="{ui:SymbolIcon Save24}" Content="{DynamicResource save}"></ui:Button>
+        </StackPanel>
+    </Grid>
+</local:EditPage>
