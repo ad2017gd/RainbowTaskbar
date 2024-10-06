@@ -1,7 +1,11 @@
 <div align="center">
+   
+# [! BETA RELEASE FOR 3.0, LOOKING FOR TESTERS !](https://github.com/ad2017gd/RainbowTaskbar/releases/tag/3.0b)
+   
+## [Thank you!](#thank-you-for-100-stars)
 
-[<sub>*</sub>](#note)
-[<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://www.microsoft.com/store/productId/9NN78X0674XW)
+[<sub>*</sub>](#microsoft-store)
+[<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://apps.microsoft.com/detail/9nn78x0674xw)
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280434808-334b68d6-9568-4cc5-988d-a9bf186c1b8c.png" alt="Download setup x64" height="64">](https://raw.githubusercontent.com/ad2017gd/RainbowTaskbar/releases/setup-x64.msi)
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280435213-f3b1165b-dba6-4f0d-84ac-2cae15ec992a.png" alt="Donate" height="64">](https://paypal.me/ad2k17)
 
@@ -42,6 +46,29 @@ Have fun using RainbowTaskbar!
 
 # Documentation
 Documentation has been moved to https://ad2017.dev/rnb/docs
+
+<div align="center">
+
+# Thank you for 100 stars
+
+A sincere thank you to all the users of RainbowTaskbar! Since the first release of this program in 2021, I would have never expected it to have as many users as it has now.
+
+RainbowTaskbar has really been a passion project of mine all this time. It all started thanks to my friend telling me about the fact that, at the time, there weren't any really good
+taskbar customization software (actually there were and still are but none would fit my personalization needs).
+
+The first version of RainbowTaskbar was written in C, which was a pretty bad idea. I didn't realise at the time, but the UI was also pretty much garbage. However, when I saw
+open source software websites reposting my tool, it really gave me the motivation to still work on this program.
+
+Thanks to my other friend, [zCri](https://github.com/zCri), we both rewrote RainbowTaskbar to the current v2 .NET version, which allowed me to implement even more
+features with cleaner UI.
+
+After the rewrite, RainbowTaskbar received even more attention from people, which also made me continue updating it. However, all the attention has also led to some
+copies of this software being sold on markets such as the Microsoft Store by other people, stripping it of all the credits.
+
+If you wish to support me in the future development of this app and, perhaps, other apps, you can [buy RainbowTaskbar from the Microsoft Store](https://www.microsoft.com/store/productId/9NN78X0674XW) 
+which is actually published by me, or by donating on [PayPal](https://paypal.me/ad2k17). I thank you once again for using this software.
+
+</div>
 
 # License
 See `LICENSE` for more information.
