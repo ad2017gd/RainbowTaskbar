@@ -1,8 +1,0 @@
-﻿EXPORTS
-DllGetClassObject PRIVATE
-DllCanUnloadNow PRIVATE
-SetAppearanceTypeDLL
-CloseDLL
-VersionDLL
-GetDataPtrDLL
-DebugGetUITreeDLL
