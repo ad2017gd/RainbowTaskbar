@@ -9,9 +9,6 @@
         AllowsTransparency="True"
         ShowInTaskbar="False"
         WindowStyle="None"
-        MouseMove="RainbowTaskbar_MouseMove"
-        MouseDown="RainbowTaskbar_MouseDown"
-        MouseUp="RainbowTaskbar_MouseUp"
         Background="Transparent"
         Title="Taskbar" Height="1" Width="1">
     <Window.Clip>
@@ -21,24 +18,6 @@
         </GeometryGroup>
     </Window.Clip>
     <Grid Name="MainGrid">
-        <Canvas x:Name="Layer0"/>
-        <Canvas x:Name="Layer1"/>
-        <Canvas x:Name="Layer2"/>
-        <Canvas x:Name="Layer3"/>
-        <Canvas x:Name="Layer4"/>
-        <Canvas x:Name="Layer5"/>
-        <Canvas x:Name="Layer6"/>
-        <Canvas x:Name="Layer7"/>
-        <Canvas x:Name="Layer8"/>
-        <Canvas x:Name="Layer9"/>
-        <Canvas x:Name="Layer10"/>
-        <Canvas x:Name="Layer11"/>
-        <Canvas x:Name="Layer12"/>
-        <Canvas x:Name="Layer13"/>
-        <Canvas x:Name="Layer14"/>
-        <Canvas x:Name="Layer15"/>
-
-
-
+        
     </Grid>
 </Window>

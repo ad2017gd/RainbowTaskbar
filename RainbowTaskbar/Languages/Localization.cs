@@ -1,4 +1,5 @@
-﻿using RainbowTaskbar.Configuration;
+﻿using RainbowTaskbar.Configuration.InstructionConfig.Instructions;
+using RainbowTaskbar.Configuration.InstructionConfig;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,8 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace RainbowTaskbar.Languages
-{
+namespace RainbowTaskbar.Languages {
     public class Localization
     {
         public static List<string> languages = new List<string>() { "SystemDefault", "en_US", "ro_RO", "ja_JP", "zh_CN" };
@@ -61,13 +61,13 @@ namespace RainbowTaskbar.Languages
             } }
 
 
-        public string Format(Instruction instruction, params object[] args) {
+        public string InstructionFormat(Instruction instruction, params object[] args) {
             return string.Format(Get($"{instruction.GetType().Name.ToLower()}format"), args);
         }
         public string Name(string str) {
             return str is not null ? Get(str.ToLower()) : null;
         }
-        public string FormatSuffix(Instruction instruction, string suffix, params object[] args) {
+        public string InstructionFormatSuffix(Instruction instruction, string suffix, params object[] args) {
             return string.Format(Get($"{instruction.GetType().Name.ToLower()}{suffix}format"), args);
         }
 

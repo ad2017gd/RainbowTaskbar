@@ -4,12 +4,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
-using Newtonsoft.Json.Linq;
-using RainbowTaskbar.Configuration;
-using RainbowTaskbar.Configuration.Instructions;
+
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
+using RainbowTaskbar.V2Legacy.Configuration;
+using RainbowTaskbar.V2Legacy.Configuration.Instructions;
 using RainbowTaskbar.WebSocketServices;
 
 namespace RainbowTaskbar;
@@ -18,7 +18,8 @@ namespace RainbowTaskbar;
 ///     Interaction logic for Taskbar.xaml
 /// </summary>
 public partial class Taskbar : Window {
-    public CanvasManager canvasManager;
+    // TODO: config-specific
+    //public CanvasManager canvasManager;
     public bool secondary;
     public TaskbarHelper taskbarHelper;
     public TaskbarViewModel viewModel;
@@ -79,79 +80,40 @@ public partial class Taskbar : Window {
         taskbarHelper.SetBlur();
     }
 
-    private void RainbowTaskbar_MouseMove(object sender, System.Windows.Input.MouseEventArgs e) {
-        if (API.APISubscribed.Count > 0) {
-            var data = new JObject();
-            data.Add("type", "MouseMove");
-            data.Add("x", e.GetPosition(this).X);
-            data.Add("y", e.GetPosition(this).Y);
-            WebSocketAPIServer.SendToSubscribed(data.ToString());
-        }
-    }
-
-    // TODO: fix by using mouse hook on real taskbar (?)
-    private void RainbowTaskbar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-        if (API.APISubscribed.Count > 0) {
-            var data = new JObject();
-            data.Add("type", "MouseDown");
-            data.Add("x", e.GetPosition(this).X);
-            data.Add("y", e.GetPosition(this).Y);
-            var states = new JObject();
-            states.Add("left", JToken.FromObject(e.LeftButton));
-            states.Add("right", JToken.FromObject(e.RightButton));
-            states.Add("middle", JToken.FromObject(e.MiddleButton));
-            data.Add("button_states", states);
-            WebSocketAPIServer.SendToSubscribed(data.ToString());
-        }
-    }
-
-    // TODO: fix by using mouse hook on real taskbar (?)
-    private void RainbowTaskbar_MouseUp(object sender, MouseButtonEventArgs e) {
-        if (API.APISubscribed.Count > 0) {
-            var data = new JObject();
-            data.Add("type", "MouseUp");
-            data.Add("x", e.GetPosition(this).X);
-            data.Add("y", e.GetPosition(this).Y);
-            var states = new JObject();
-            states.Add("left", JToken.FromObject(e.LeftButton));
-            states.Add("right", JToken.FromObject(e.RightButton));
-            states.Add("middle", JToken.FromObject(e.MiddleButton));
-            data.Add("button_states", states);
-            WebSocketAPIServer.SendToSubscribed(data.ToString());
-        }
-    }
 
     public static void SetupLayers() {
-        App.Current.Dispatcher.Invoke(() => {
-            if (App.Config.GraphicsRepeat) {
-                App.taskbars.ForEach(t => {
-                    t.canvasManager.layers = new LayerManager(t);
-                });
-            }
-            else {
-                App.layers = new LayerManager();
-                App.layers.width = (int) App.taskbars.Sum(t => t.Width);
-                App.layers.height = (int) App.taskbars[0].Height;
-            }
-        });
+        // TODO: config-specifc
+       // App.Current.Dispatcher.Invoke(() => {
+       //     if (App.Config.GraphicsRepeat) {
+       //         App.taskbars.ForEach(t => {
+       //             t.canvasManager.layers = new LayerManager(t);
+       //         });
+       //     }
+       //     else {
+       //         App.layers = new LayerManager();
+       //         App.layers.width = (int) App.taskbars.Sum(t => t.Width);
+       //         App.layers.height = (int) App.taskbars[0].Height;
+       //     }
+       // });
     }
 
     public static void SoftReset() {
-        SetupLayers();
-        new List<Instruction>(App.Config.Instructions).ForEach((i) => {
-            if (i is ImageInstruction) {
-                ((ImageInstruction) i).drawn = false;
-            }
-            if (i is ShapeInstruction) {
-                ((ShapeInstruction) i).drawn = false;
-            }
-            if (i is TextInstruction) {
-                ((TextInstruction) i).drawn = false;
-            }
-        });
-
-        App.Config.StopThread();
-        App.Config.configStep = -1;
-        App.Config.StartThread();
+        // TODO: config-specific once again
+       // SetupLayers();
+       // new List<Instruction>(App.Config.Instructions).ForEach((i) => {
+       //     if (i is ImageInstruction) {
+       //         ((ImageInstruction) i).drawn = false;
+       //     }
+       //     if (i is ShapeInstruction) {
+       //         ((ShapeInstruction) i).drawn = false;
+       //     }
+       //     if (i is TextInstruction) {
+       //         ((TextInstruction) i).drawn = false;
+       //     }
+       // });
+       // 
+       // App.Config.StopThread();
+       // App.Config.configStep = -1;
+       // App.Config.StartThread();
     }
 }

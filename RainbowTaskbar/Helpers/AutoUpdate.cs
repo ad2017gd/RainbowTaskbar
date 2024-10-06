@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using RainbowTaskbar.Configuration;
 
 namespace RainbowTaskbar.Helpers;
 
@@ -18,7 +19,7 @@ internal static class AutoUpdate {
     public static void CheckForUpdate() =>
         Task.Run(async () => {
 
-            if (Configuration.Config.CookieAvailable()) return;
+            if (Config.CookieAvailable()) return;
             using var http = new HttpClient();
             using var web = new WebClient();
             http.DefaultRequestHeaders.Add("User-Agent", "RainbowTaskbar");

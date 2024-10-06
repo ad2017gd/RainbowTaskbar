@@ -1,6 +1,7 @@
 ﻿using H.Pipes;
-using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Helpers;
+using RainbowTaskbar.Configuration.InstructionConfig;
+using RainbowTaskbar.Configuration.InstructionConfig.Instructions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,8 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace RainbowTaskbar.ExplorerTAP
-{
+namespace RainbowTaskbar.ExplorerTAP {
     [StructLayout(LayoutKind.Sequential)]
     struct GUID {
         public uint a;

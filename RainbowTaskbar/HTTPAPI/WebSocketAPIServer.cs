@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
+
 using RainbowTaskbar.HTTPAPI;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -25,7 +25,7 @@ internal class WebSocketAPIServer : WebSocketBehavior {
 
             dynamic parsed = null;
             try {
-                parsed = JObject.Parse(JSONData);
+                //parsed = JObject.Parse(JSONData);
             }
             catch {
                 return;

@@ -11,7 +11,7 @@ public static class API {
     public static void Start() {
         Stop();
 
-        http = App.Config.APIPort is > 0 and < 65536 ? new HttpServer(App.Config.APIPort) : new HttpServer(9093);
+        http = App.Settings.APIPort is > 0 and < 65536 ? new HttpServer(App.Settings.APIPort) : new HttpServer(9093);
 
         http.AddWebSocketService<WebSocketAPIServer>("/rnbws");
         http.OnGet += HTTPAPIServer.Get;
@@ -19,7 +19,7 @@ public static class API {
         http.OnOptions += HTTPAPIServer.Options;
         http.KeepClean = false;
 
-        if (App.Config.IsAPIEnabled) http.Start();
+        if (App.Settings.IsAPIEnabled) http.Start();
     }
 
     public static void Stop() => http?.Stop();

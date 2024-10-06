@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Newtonsoft.Json.Linq;
+
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
@@ -40,7 +40,8 @@ public class TaskbarViewModel {
         window.Width = Taskbar.Width - Taskbar.X;
         window.Height = Taskbar.Height - Taskbar.Y;
 
-        window.canvasManager = new CanvasManager(window, new Canvas[] {
+        // TODO: config-specific
+       /* window.canvasManager = new CanvasManager(window, new Canvas[] {
                 window.Layer0, window.Layer1, window.Layer2, window.Layer3, window.Layer4, window.Layer5,
                 window.Layer6, window.Layer7, window.Layer8, window.Layer9, window.Layer10, window.Layer11,
                 window.Layer12, window.Layer13, window.Layer14, window.Layer15
@@ -49,6 +50,7 @@ public class TaskbarViewModel {
         foreach (var cvs in window.canvasManager.canvases) {
             cvs.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
         }
+       */
         
 
         //cts = new CancellationTokenSource();

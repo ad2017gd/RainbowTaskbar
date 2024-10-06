@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Windows;
-using Newtonsoft.Json.Linq;
-using RainbowTaskbar.Configuration;
+
+using RainbowTaskbar.V2Legacy.Configuration;
 using WebSocketSharp.Server;
 
 namespace RainbowTaskbar.HTTPAPI;
 
 public static class HTTPAPIServer {
+    // TODO: config-specific AND get rid of newtonsoft-json
     public static void Get(object sender, HttpRequestEventArgs args) {
-        var req = args.Request;
+        /*var req = args.Request;
         var res = args.Response;
 
         var uri = new Uri("http://localhost" + req.RawUrl);
@@ -76,8 +77,9 @@ public static class HTTPAPIServer {
             res.ContentLength64 = data.Length;
             res.OutputStream.Write(data);
         }
-
         res.Close();
+        
+        */
     }
 
     public static void Options(object sender, HttpRequestEventArgs args) {
@@ -90,6 +92,7 @@ public static class HTTPAPIServer {
     }
 
     public static void Post(object sender, HttpRequestEventArgs args) {
+        /*
         var http = (HttpServer) sender;
         var req = args.Request;
         var res = args.Response;
@@ -212,5 +215,6 @@ public static class HTTPAPIServer {
             res.ContentLength64 = data.Length;
             res.OutputStream.Write(data);
         }
+        */
     }
 }

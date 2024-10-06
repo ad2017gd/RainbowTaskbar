@@ -36,12 +36,14 @@ namespace RainbowTaskbar.Drawing
                 for (int i = renderTargets.Count; i <= layer; i++) {
                     var target = new RenderTargetBitmap((int) width, (int) height, 96, 96, PixelFormats.Pbgra32);
                     renderTargets.Add(target);
-                    if(window is not null) window.canvasManager.SetImage(i, target);
-                    else {
-                        App.taskbars.ForEach(b => {
-                            b.canvasManager.SetImage(i, target);
-                        });
-                    }
+                    // TODO: config specific canvas manager
+                    //if(window is not null) window.canvasManager.SetImage(i, target);
+                    //else {
+                        // TODO: another taskbar count thing idk
+                        //App.taskbars.ForEach(b => {
+                        //    b.canvasManager.SetImage(i, target);
+                        //});
+                    //}
                 }
 
             }

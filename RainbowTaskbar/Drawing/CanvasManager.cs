@@ -16,7 +16,9 @@ public class CanvasManager {
     public LayerManager layers { 
         get {
             if (_layers == null) {
-                return App.layers;
+                // todo: config-specific i think
+                //return App.layers;
+                return null;
             }
             else return _layers;
         }
@@ -32,7 +34,7 @@ public class CanvasManager {
             c.Width = window.Width;
             c.Height = window.Height;
         });
-        if (App.Config.GraphicsRepeat) _layers = new LayerManager(window);
+        if (App.Settings.GraphicsRepeat) _layers = new LayerManager(window);
     }
 
     public void SetImage(int index, RenderTargetBitmap target) {
@@ -48,7 +50,7 @@ public class CanvasManager {
         img.Stretch = Stretch.None;
         c.Children.Add(img);
         Canvas.SetTop(img, 0);
-        if(!App.Config.GraphicsRepeat) {
+        if(!App.Settings.GraphicsRepeat) {
             Canvas.SetLeft(img, -window.Left);
         }
     }

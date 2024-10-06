@@ -12,12 +12,13 @@ using System.Windows.Interop;
 using H.Pipes;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
-using RainbowTaskbar.Configuration.Instructions;
 using RainbowTaskbar.Drawing;
+using RainbowTaskbar.Editor;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
 using RainbowTaskbar.Languages;
 using Localization = RainbowTaskbar.Languages.Localization;
+using RainbowTaskbar.Preferences;
 
 namespace RainbowTaskbar;
 
@@ -33,26 +34,28 @@ public partial class App : Application {
 
 
 
-    public static Random rnd = new();
+    //public static LayerManager layers = null;
+    //public static List<Taskbar> taskbars = new();
 
-    //public static HttpServer http;
-    public static List<Taskbar> taskbars = new();
-
-    public static Editor editor = null;
+    public static EditorWindow editor = null;
 
     public static TrayWindow trayWindow = (TrayWindow) Current.MainWindow;
 
     public static EditorViewModel editorViewModel = null;
 
-    public static LayerManager layers = null;
-
-    public JsonSerializerOptions jsonSerializerOptions = null;
-
-    //public static List<string> APISubscribed = new();
     public static Mutex mutex = new(true, "RainbowTaskbar Mutex");
 
     public static Localization localization;
 
+    public static bool firstRun = false;
+
+    // TODO: separate config-independent taskbar logic and config dependent logic
+
+    /*[OnChangedMethod(nameof(ReloadTaskbars))]*/
+    public static Config Config { get; set; }
+    public static Settings Settings { get; set; }
+
+    /*
     public static List<Taskbar> FindAllTaskbars() {
         List<Taskbar> tsk = new List<Taskbar>();
 
@@ -69,31 +72,9 @@ public partial class App : Application {
         }
 
         return tsk;
-    }
-    public static bool firstRun = false;
+    }*/
 
-    private static void LaunchEditor() {
-        if (editor == null) {
-            editor = new Editor();
-        }
-        editor.Show();
-        editor.WindowState = WindowState.Normal;
-        editor.Activate();
-        editor.BringIntoView();
-        editor.Focus();
-        editor.Topmost = true;
-        editor.Topmost = false;
-    }
-    public App() {
-        localization = new Localization();
-        
-        
-
-    }
-
-    [OnChangedMethod(nameof(ReloadTaskbars))]
-    public static Config Config { get; set; }
-
+    /*
     public static void SetupTaskbars() {
         taskbars.MinBy(t => t.Left).taskbarHelper.first = true;
         taskbars.MaxBy(t => t.Left).taskbarHelper.last = true;
@@ -118,7 +99,7 @@ public partial class App : Application {
 
     }
 
-    public static void ReloadTaskbars() =>
+     public static void ReloadTaskbars() =>
         Current.Dispatcher.Invoke(() => {
 
 
@@ -135,11 +116,30 @@ public partial class App : Application {
 
             
         });
+    */
+
+    private static void LaunchEditor() {
+        if (editor == null) {
+            editor = new EditorWindow();
+        }
+        editor.Show();
+        editor.WindowState = WindowState.Normal;
+        editor.Activate();
+        editor.BringIntoView();
+        editor.Focus();
+        editor.Topmost = true;
+        editor.Topmost = false;
+    }
+    public App() {
+        localization = new Localization();
+    }
+    
+   
 
     public new static void Exit() {
         if(trayWindow is not null) trayWindow.TrayIcon.Dispose();
 
-        taskbars.ForEach(t => {
+        /*taskbars.ForEach(t => {
             t.taskbarHelper.Radius = 0;
             t.taskbarHelper.UpdateRadius();
 
@@ -150,7 +150,7 @@ public partial class App : Application {
             t.taskbarHelper.SetBlur();
             // win11 fix
             ExplorerTAP.ExplorerTAP.Reset();
-        });
+        });*/
         Current.Dispatcher.Invoke(() => { Current.Shutdown(); });
     }
 
@@ -175,7 +175,7 @@ public partial class App : Application {
 
 
             editorViewModel = new EditorViewModel();
-
+            /*
             Config = Config.FromFile();
             Config.MagicCookie++;
             Config.ToFile();
@@ -185,19 +185,19 @@ public partial class App : Application {
                 Config.ToFile();
                 firstRun = true;
             }
-
-            
+            */
 
             Task.Run(() => {
                 ExplorerTAP.ExplorerTAP.TryInject();
 
                 App.Current.Dispatcher.Invoke(() => {
-                    taskbars = FindAllTaskbars();
+                    /*taskbars = FindAllTaskbars();
                     SetupTaskbars();
 
                     Taskbar.SetupLayers();
 
                     App.Config.StartThread();
+                    */
 
                     if (firstRun == true) {
                         Task.Run(() => {
