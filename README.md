@@ -1,5 +1,7 @@
 <div align="center">
-
+   
+# [! BETA RELEASE FOR 3.0, LOOKING FOR TESTERS !](https://github.com/ad2017gd/RainbowTaskbar/releases/tag/3.0b)
+   
 ## [Thank you!](#thank-you-for-100-stars)
 
 [<sub>*</sub>](#microsoft-store)
