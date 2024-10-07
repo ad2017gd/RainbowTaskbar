@@ -1,0 +1,193 @@
+﻿<ResourceDictionary x:Class="RainbowTaskbar.Languages.en_US"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <s:String x:Key="home">主页</s:String>
+    <s:String x:Key="settings">设置</s:String>
+    <s:String x:Key="about">关于</s:String>
+    <s:String x:Key="browse">浏览</s:String>
+    <s:String x:Key="configs">配置</s:String>
+
+    <!-- About Tab -->
+    <s:String x:Key="description">彩虹任务栏是一个工具，允许您极大地自定义任务栏的外观。</s:String>
+    <s:String x:Key="donations">它完全免费使用，但捐赠非常受欢迎！</s:String>
+    <!-- RainbowTaskbar is free software.
+         Made by ad2017 , with the help of zCri .-->
+
+    <!-- Configs Tab -->
+    <s:String x:Key="new">新建</s:String>
+    <s:String x:Key="enum_classic">经典</s:String>
+    <s:String x:Key="enum_web">网络</s:String>
+    
+    <!-- Instruction config edit -->
+    <s:String x:Key="runoncegroup">运行一次组</s:String>
+    <s:String x:Key="loopinggroups">循环组</s:String>
+    <s:String x:Key="group">组</s:String>
+    <s:String x:Key="run">运行</s:String>
+    <s:String x:Key="save">保存</s:String>
+        <!-- Config edit -->
+    <s:String x:Key="name">标题</s:String>
+    <s:String x:Key="thumbnail">缩略图</s:String>
+    <s:String x:Key="editconfig">编辑配置</s:String>
+    <s:String x:Key="saveandpublish">保存并发布</s:String>
+    <s:String x:Key="publishstatus" xml:space="preserve">发布状态: </s:String> <!-- 请不要省略末尾的空格！ -->
+    <s:String x:Key="enum_published">最新发布</s:String>
+    <s:String x:Key="enum_previouslypublished">先前已发布，但不是最新的</s:String>
+    <s:String x:Key="enum_notpublished">未发布</s:String>
+    <s:String x:Key="pickimg">选择图片</s:String>
+    <s:String x:Key="copypreset">从预设复制指令</s:String>
+    <s:String x:Key="descriptionlit">描述</s:String>
+    <s:String x:Key="addprop">添加属性</s:String>
+    <s:String x:Key="propname">属性名称</s:String>
+    <s:String x:Key="propkey">属性键</s:String>
+    <s:String x:Key="proptype">属性类型</s:String>
+
+    <s:String x:Key="enum_string">字符串</s:String>
+    <s:String x:Key="enum_number">数字</s:String>
+    <s:String x:Key="enum_color">颜色</s:String>
+    <s:String x:Key="enum_boolean">布尔值</s:String>
+    <!-- Config view -->
+    <s:String x:Key="filesize" xml:space="preserve">文件大小: </s:String> <!-- do not omit space at the end please! -->
+    <s:String x:Key="filesizeextra"> KB (包含缩略图)</s:String> <!-- incl. = including, do not omit space at the end please! -->
+    <s:String x:Key="author" xml:space="preserve">作者: </s:String> <!-- do not omit space at the end please! -->
+    <s:String x:Key="likes" xml:space="preserve">点赞数: </s:String> <!-- do not omit space at the end please! -->
+    <s:String x:Key="download">下载</s:String><!-- verb! -->
+    <s:String x:Key="downloadnew">下载新副本</s:String><!-- download is a verb! -->
+    <s:String x:Key="like">点赞</s:String><!-- verb! -->
+    <s:String x:Key="unlike">取消点赞Unlike</s:String><!-- verb! -->
+    
+    <!-- Settings tab -->
+    <s:String x:Key="general">常规</s:String>
+    <s:String x:Key="runstartup">启动时运行</s:String>
+    <s:String x:Key="checkupdate">检查更新</s:String>
+    <s:String x:Key="showicon">显示托盘图标</s:String>
+    <s:String x:Key="language">语言</s:String>
+    <s:String x:Key="workshop">工作坊</s:String>
+    <s:String x:Key="signedin">已登录为</s:String>
+    <s:String x:Key="logingit">登录（GitHub）</s:String>
+    <s:String x:Key="passmouse">传递鼠标输入到底层（可能会使用 CPU）</s:String>
+    <s:String x:Key="allowjs">允许 JavaScript</s:String>
+    <s:String x:Key="graphics">图形</s:String>
+    <s:String x:Key="interpquality">插值质量（数值越小越好）</s:String>
+    <s:String x:Key="multipletaskbars">多个任务栏</s:String>
+    <s:String x:Key="perfimpact">（当前设置可能会影响性能）</s:String>
+    <s:String x:Key="samerad">相同的圆角半径</s:String>
+    <s:String x:Key="graphicsrepeat">重复图形</s:String>
+    <s:String x:Key="comingsoon">即将推出...</s:String>
+    <s:String x:Key="webfps">最大网页帧率</s:String>
+    <s:String x:Key="systemdefault">（使用系统语言）</s:String>
+
+    <!-- Browse Tab -->
+    <s:String x:Key="search">搜索内容...</s:String>
+
+    <!-- Instructions and displayed format strings -->
+    <s:String x:Key="borderradiusinstruction">圆角半径</s:String>
+    <s:String x:Key="clearlayerinstruction">清除层</s:String>
+    <s:String x:Key="colorinstruction">颜色</s:String>
+    <s:String x:Key="delayinstruction">延迟</s:String>
+    <s:String x:Key="imageinstruction">图像</s:String>
+    <s:String x:Key="shapeinstruction">形状</s:String>
+    <s:String x:Key="textinstruction">文本</s:String>
+    <s:String x:Key="transparencyinstruction">透明度/样式</s:String>
+
+    <s:String x:Key="borderradiusinstructionformat">圆角半径 - {0}px</s:String>
+    <s:String x:Key="clearlayerinstructionformat">清除层 - {0}</s:String>
+    <s:String x:Key="colorinstructionrandomizedformat">{0} - 随机</s:String>
+    <!-- no translation --> <s:String x:Key="colorinstructiongradientformat">{0} - {1} -> {2}</s:String>
+    <!-- no translation --> <s:String x:Key="colorinstructionsolidformat">{0} - {1}</s:String>
+    <s:String x:Key="delayinstructionformat">延迟 - {0}ms</s:String>
+    <s:String x:Key="imageinstructionformat">图像 - {0}</s:String>
+    <s:String x:Key="shapeinstructionformat">形状 - {0}</s:String>
+    <s:String x:Key="textinstructionformat">文本 - {0}</s:String>
+    <s:String x:Key="transparencyinstructionstyleformat">样式 - {0}</s:String>
+    <s:String x:Key="transparencyinstructionlayerformat">图层 {0} - {1}%</s:String>
+    <s:String x:Key="transparencyinstructionopacityformat">{0} - {1}%</s:String>
+
+    <!-- Enums -->
+        <!-- Shapes -->
+    <s:String x:Key="enum_line">直线</s:String>
+    <s:String x:Key="enum_rectangle">矩形</s:String>
+    <s:String x:Key="enum_roundedrect">圆角矩形</s:String>
+    <s:String x:Key="enum_ellipse">椭圆</s:String>
+        <!-- Color instruction effects -->
+    <s:String x:Key="enum_solid">纯色</s:String>
+    <s:String x:Key="enum_fade">渐隐纯色</s:String>
+    <s:String x:Key="enum_gradient">渐变</s:String>
+    <s:String x:Key="enum_fadegradient">渐隐渐变</s:String>
+        <!-- Color instruction transitions -->
+    <s:String x:Key="enum_linear">线性</s:String>
+    <s:String x:Key="enum_cubic">三次方</s:String>
+    <s:String x:Key="enum_sine">正弦</s:String>
+    <s:String x:Key="enum_exponential">指数</s:String>
+    <s:String x:Key="enum_back">回弹</s:String>
+        <!-- Transparency instruction option 1 -->
+    <s:String x:Key="enum_taskbar">任务栏透明度</s:String>
+    <s:String x:Key="enum_rainbowtaskbar">底层透明度</s:String>
+    <s:String x:Key="enum_all">任务栏和底层透明度</s:String>
+    <s:String x:Key="enum_layer">图层透明度</s:String>
+    <s:String x:Key="enum_style">任务栏样式</s:String>
+        <!-- Transparency instruction styles -->
+    <s:String x:Key="enum_default">默认</s:String>
+    <s:String x:Key="enum_blur">模糊</s:String>
+    <s:String x:Key="enum_transparent">透明</s:String>
+    
+    <!-- Instruction controls -->
+        <!-- Shape -->
+    <s:String x:Key="drawonce">仅绘制一次</s:String>
+    <s:String x:Key="strokecolor">描边颜色</s:String> <!-- stroke is a noun! -->
+    <s:String x:Key="fillcolor">填充颜色</s:String> <!-- fill is a noun! -->
+    <s:String x:Key="thickness">厚度</s:String>
+    <s:String x:Key="radius">圆角半径</s:String>
+    <s:String x:Key="fittaskbars">适应任务栏</s:String> <!-- fit is a verb! -->
+        <!-- Color -->
+    <s:String x:Key="randomize">随机颜色</s:String>
+    <s:String x:Key="holdtime">保持时间</s:String>
+    <s:String x:Key="fadetime">褪色时间</s:String>
+    <s:String x:Key="gradientangle">渐变角度 °</s:String>
+    <s:String x:Key="layer">图层</s:String>
+    <s:String x:Key="milliseconds">毫秒</s:String>
+        <!-- Image -->
+    <s:String x:Key="chooseimg">选择图像</s:String>
+    <s:String x:Key="width">宽度</s:String>
+    <s:String x:Key="height">高度</s:String>
+        <!-- Text -->
+    <s:String x:Key="fontsize">字体大小</s:String>
+    <s:String x:Key="fontcolor">字体颜色</s:String>
+    <s:String x:Key="centerx">沿 X 轴居中</s:String> <!-- center is a verb! -->
+        <!-- Transparency -->
+    <s:String x:Key="change">更改</s:String>
+    <s:String x:Key="to">到</s:String>
+
+
+
+    <!-- Instruction context menu -->
+    <s:String x:Key="duplicate">重复</s:String> <!-- it's a verb! -->
+    <s:String x:Key="delete">删除</s:String>
+    <s:String x:Key="duplicate_rev_color">复制 - 交换颜色</s:String>
+    
+    <!-- Tray window context menu -->
+    <s:String x:Key="openeditor">打开编辑器</s:String>
+    <s:String x:Key="donate">捐赠</s:String>
+    <s:String x:Key="projectpage">打开项目页面</s:String>
+    <s:String x:Key="issueorreq">提交问题或请求</s:String>
+    <s:String x:Key="exit">退出</s:String>
+
+    <!-- Dialog boxes -->
+    <s:String x:Key="msgbox_baddll">注入 explorer.exe 的 RainbowTaskbar DLL 似乎存在问题。 
+        此过程非常具有实验性，因此请在 GitHub 上打开一个问题（右键单击系统托盘上的 RainbowTaskbar -> 提交问题或请求）
+        尝试调试问题。请确保还包括您可能遇到的任何其他错误。</s:String>
+    <s:String x:Key="msgbox_olddll">要启用透明效果，RainbowTaskbar 必须重新启动 explorer.exe 进程。
+        您想要继续吗？</s:String>
+    <s:String x:Key="msgbox_badarch">您的处理器架构 (x64) 与此可执行文件 (x86) 不兼容。 
+        请从 GitHub 版本下载正确的可执行文件（rnbtsk-x64.exe / setup-x64.exe）。</s:String>
+    <s:String x:Key="msgbox_migrateoldcfg">RainbowTaskbar 发现了旧版（v1）配置版本（rnbconf.txt）。
+        您希望将其迁移到新的配置格式吗？
+    </s:String>
+    <s:String x:Key="msgbox_login">
+        输入下面登录成功页面显示的代码
+    </s:String>
+
+    <!-- Fill with "Translated by ..." -->
+    <s:String x:Key="langcredits">大眼仔~旭</s:String>
+
+</ResourceDictionary>
