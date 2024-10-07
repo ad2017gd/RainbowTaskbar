@@ -24,10 +24,13 @@
         <Image VerticalAlignment="Center" MouseLeftButtonDown="Image_MouseLeftButtonDown"
                                        Tag="https://paypal.me/ad2k17" Height="80" Width="200" Stretch="Fill"
                                        Source="pack://application:,,,/Resources/Paypal.png" />
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom">
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center">
             <Hyperlink Click="Hyperlink_Click">
                 GitHub
             </Hyperlink>
+            <LineBreak></LineBreak>
+            <Run Text="{DynamicResource langcredits}"></Run>
         </TextBlock>
+        
     </Grid>
 </Page>

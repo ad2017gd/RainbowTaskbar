@@ -11,8 +11,6 @@ using System.Windows.Media;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
-using RainbowTaskbar.WebSocketServices;
-
 namespace RainbowTaskbar;
 
 public class TaskbarViewModel {

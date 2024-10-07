@@ -19,7 +19,6 @@ using System.Xml;
 
 using PropertyChanged;
 using RainbowTaskbar.HTTPAPI;
-using RainbowTaskbar.WebSocketServices;
 using System.Diagnostics;
 using RainbowTaskbar.Configuration.Instruction.Instructions;
 using System.Text.Json.Serialization;

@@ -46,6 +46,8 @@
     <s:String x:Key="enum_number">Number</s:String>
     <s:String x:Key="enum_color">Color</s:String>
     <s:String x:Key="enum_boolean">Boolean</s:String>
+    
+    
     <!-- Config view -->
     <s:String x:Key="filesize" xml:space="preserve">File size: </s:String> <!-- do not omit space at the end please! -->
     <s:String x:Key="filesizeextra"> KB (incl. thumbnail)</s:String> <!-- incl. = including, do not omit space at the end please! -->
@@ -180,13 +182,27 @@
         Do you wish to proceed?</s:String>
     <s:String x:Key="msgbox_badarch">Your processor architecture (x64) is incompatible with this executable (x86). 
         Please download the correct executable (rnbtsk-x64.exe / setup-x64.exe) from GitHub releases.</s:String>
-    <s:String x:Key="msgbox_migrateoldcfg">RainbowTaskbar has found a legacy (v1) config version (rnbconf.txt).
+    <s:String x:Key="msgbox_migrateoldcfg">RainbowTaskbar has found a legacy config version.
         Do you wish to migrate it to the new config format?
     </s:String>
     <s:String x:Key="msgbox_login">
         Input the code displayed on the login success page below
     </s:String>
-
+    <s:String x:Key="msgbox_notloggedin">You must be logged in to publish your config! Check the settings page to sign in.</s:String>
+    <s:String x:Key="msgbox_notloggedin_title">Not logged in</s:String>
+    <s:String x:Key="msgbox_notloggedin2">You must be logged in to like a config!</s:String>
+    <s:String x:Key="msgbox_fail">Failed to publish config.</s:String>
+    <s:String x:Key="msgbox_fail_title">Fail</s:String>
+    <s:String x:Key="msgbox_thumbnail">Config info/data updated. Failed to upload thumbnail.</s:String>
+    <s:String x:Key="msgbox_property_title">Create new property</s:String>
+    <s:String x:Key="msgbox_login_title">Log in with code</s:String>
+    <s:String x:Key="msgbox_login_button">Log in</s:String>
+    <s:String x:Key="msgbox_save_title">Save your work?</s:String>
+    <s:String x:Key="msgbox_save">Do you wish to save your current config?</s:String>
+    <s:String x:Key="msgbox_save_b1">Save</s:String>
+    <s:String x:Key="msgbox_save_b2">Don't save</s:String>
+    <s:String x:Key="msgbox_button_cancel">Cancel</s:String>
+    <s:String x:Key="msgbox_update">A new RainbowTaskbar update has released. Would you like to update?</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">‎</s:String>
 

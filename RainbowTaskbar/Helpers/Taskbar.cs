@@ -394,7 +394,7 @@ public class TaskbarHelper {
 
             var scale = GetScalingFactor();
 
-            var r = GetRectangle();
+            var r = GetRealRectangle();
 
             var w = (int) ((r.Width) * scale);
             var h = (int) ((r.Height) * scale);

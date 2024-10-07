@@ -12,7 +12,6 @@ using RainbowTaskbar.Configuration.Instruction.Instructions;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
-using RainbowTaskbar.WebSocketServices;
 using Wpf.Ui.Controls;
 using System.Text.Json.Nodes;
 

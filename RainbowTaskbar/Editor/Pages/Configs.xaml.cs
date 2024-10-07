@@ -31,12 +31,14 @@ namespace RainbowTaskbar.Editor.Pages
         {
             DataContext = this;
             InitializeComponent();
+
+            App.localization.Enable(Resources.MergedDictionaries);
         }
 
         private void AddNewConfig(object sender, RoutedEventArgs e) {
             var menu = (MenuItem)sender;
             Config cfg = null;
-            if(menu.Header.ToString() == "Classic") {
+            if(menu.Tag.ToString() == "classic") {
                 cfg = new InstructionConfig();
             } else {
                 cfg = new WebConfig();

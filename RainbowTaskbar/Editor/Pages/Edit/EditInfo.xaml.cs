@@ -41,6 +41,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public EditInfo(Config config) {
             InitializeComponent();
             this.DataContext = this;
+            App.localization.Enable(Resources.MergedDictionaries);
+
             Config = config;
             New = Config.Copy();
 
@@ -108,8 +110,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
             Save(null, null);
             if(!App.Settings.LoggedIn) {
                 App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
-                    Content = "You must be logged in to publish your config! Check the settings page to sign in.",
-                    Title = "Not logged in",
+                    Content = App.localization.Get("msgbox_notloggedin"),
+                    Title = App.localization.Get("msgbox_notloggedin_title"),
                     CloseButtonText = "OK"
                 });
                 return;
@@ -118,8 +120,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                 var res = App.Settings.workshopAPI.PublishConfigAsync(Config).Result;
                 if (res is null || !res.Result) {
                     Dispatcher.Invoke(() => App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
-                        Content = "Failed to publish config.",
-                        Title = "Fail",
+                        Content = App.localization.Get("msgbox_fail"),
+                        Title = App.localization.Get("msgbox_fail_title"),
                         CloseButtonText = "OK"
                     }));
                     return;
@@ -129,8 +131,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                         var res2 = App.Settings.workshopAPI.SetConfigThumbnail(Config, thumbPreview).Result;
                         if (res2 is null || !res2.Result) {
                             Dispatcher.Invoke(() => App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
-                                Content = "Config info/data updated. Failed to upload thumbnail.",
-                                Title = "Fail",
+                                Content = App.localization.Get("msgbox_thumbnail"),
+                                Title = App.localization.Get("msgbox_fail_title"),
                                 CloseButtonText = "OK"
                             }));
                         }
@@ -187,7 +189,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                 Task<ContentDialogResult> result = null;
                 Dispatcher.Invoke(() => result = App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
                     Content = ctrl,
-                    Title = "Create new property",
+                    Title = App.localization.Get("msgbox_property_title"),
                     CloseButtonText = "OK"
                 }));
                 result.Wait();

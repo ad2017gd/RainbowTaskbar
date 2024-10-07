@@ -18,7 +18,6 @@ using System.Windows.Media.Animation;
 using System.Xml;
 using PropertyChanged;
 using RainbowTaskbar.HTTPAPI;
-using RainbowTaskbar.WebSocketServices;
 using System.Diagnostics;
 using RainbowTaskbar.V2Legacy.Configuration.Instructions;
 

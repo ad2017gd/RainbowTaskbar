@@ -33,6 +33,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public WebEditPage() {
             InitializeComponent();
             this.DataContext = this;
+            App.localization.Enable(Resources.MergedDictionaries);
 
             var envasync = CoreWebView2Environment.CreateAsync(null, System.IO.Path.GetTempPath(), new CoreWebView2EnvironmentOptions());
             Task.Run(() => {

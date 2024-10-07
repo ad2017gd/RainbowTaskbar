@@ -30,7 +30,7 @@ internal static class AutoUpdate {
             var response = ser.ReadObject(content) as GitHubAPIResponse;
             if (Assembly.GetExecutingAssembly().GetName().Version.CompareTo(Version.Parse(response.TagName)) < 0) {
                 // Outdated version
-                var res = MessageBox.Show("A new RainbowTaskbar update has released. Would you like to update?",
+                var res = MessageBox.Show(App.localization.Get("msgbox_update"),
                     "RainbowTaskbar", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (res == MessageBoxResult.Yes) {
                     var asset = response.Assets.First(asset =>

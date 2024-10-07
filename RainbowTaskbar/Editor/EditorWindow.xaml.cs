@@ -43,7 +43,7 @@ namespace RainbowTaskbar.Editor {
             this.DataContext = App.editorViewModel;
 
             this.contentDialogService = new ContentDialogService();
-            contentDialogService.SetContentPresenter(RootContentDialogPresenter);
+            contentDialogService.SetDialogHost(RootContentDialogPresenter);
 
             App.localization.Enable(Resources.MergedDictionaries);
 
@@ -78,11 +78,11 @@ namespace RainbowTaskbar.Editor {
                 var task = contentDialogService.ShowSimpleDialogAsync(
                     // todo: translations, instruction-config save or quit
                     new SimpleContentDialogCreateOptions() {
-                        Title = "Save your work?",
-                        Content = "Do you wish to save your current config?",
-                        PrimaryButtonText = "Save",
-                        SecondaryButtonText = "Don't Save",
-                        CloseButtonText = "Cancel",
+                        Title = App.localization.Get("msgbox_save_title"),
+                        Content = App.localization.Get("msgbox_save"),
+                        PrimaryButtonText = App.localization.Get("msgbox_save_b1"),
+                        SecondaryButtonText = App.localization.Get("msgbox_save_b2"),
+                        CloseButtonText = App.localization.Get("msgbox_button_cancel"),
                 });
 
                 Task.Run(() => {

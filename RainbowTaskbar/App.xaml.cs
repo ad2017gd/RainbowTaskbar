@@ -208,25 +208,29 @@ public partial class App : Application {
             });
 
 
+
             if (!Settings.GraphicsRepeat) {
                 webViewReady.WaitOne();
                 //App.webView = new();
             }
 
+
+            App.localization.Switch(Settings.language);
+            if (Settings.CheckUpdate) AutoUpdate.CheckForUpdate();
+
             Settings.workshopAPI = new WorkshopAPI() {};
 
             Settings.OnLoginKeyChanged();
 
-            if (Settings.CheckUpdate) AutoUpdate.CheckForUpdate();
             if (Settings.FirstStart) {
                 Settings.FirstStart = false;
                 Settings.ToFile();
                 firstRun = true;
             }
             //TODO:remove this its for debugfging
-            LaunchEditor();
+            // LaunchEditor();
 
-            if(Settings.WebTouchThrough) StartHook();
+            if (Settings.WebTouchThrough) StartHook();
 
             Task.Run(() => {
                 ExplorerTAP.ExplorerTAP.TryInject();

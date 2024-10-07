@@ -23,7 +23,7 @@ namespace RainbowTaskbar.Editor.Pages {
         public About() {
             InitializeComponent();
 
-            
+            App.localization.Enable(Resources.MergedDictionaries);
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

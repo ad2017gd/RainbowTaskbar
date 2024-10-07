@@ -36,6 +36,8 @@ namespace RainbowTaskbar.Editor.Pages {
         public Settings() {
             DataContext = this;
             InitializeComponent();
+
+            App.localization.Enable(Resources.MergedDictionaries);
         }
 
         private void github_Click(object sender, RoutedEventArgs e) {
@@ -44,8 +46,8 @@ namespace RainbowTaskbar.Editor.Pages {
             var loginControl = new LoginControl();
             var task = App.editor.contentDialogService.ShowSimpleDialogAsync(new() { 
                 Content = loginControl, 
-                Title = "Log in with code", 
-                PrimaryButtonText = "Log in", 
+                Title = App.localization.Get("msgbox_login_title"), 
+                PrimaryButtonText = App.localization.Get("msgbox_login_button"), 
                 CloseButtonText = "Cancel" 
             });
             Task.Run(() => {
@@ -61,6 +63,7 @@ namespace RainbowTaskbar.Editor.Pages {
                         var content = http.PostAsJsonAsync("https://rnbsrv.ad2017.dev/user/code", new { code }).Result;
                         dynamic json = content.Content.ReadFromJsonAsync<ExpandoObject>().Result;
                         SettingsCfg.LoginKey = json.key.ToString();
+                        SettingsCfg.ToFile();
                     } catch { }
 
                 }

@@ -61,6 +61,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public InstructionEditPage(InstructionConfig config) {
             InitializeComponent();
             DataContext = this;
+            App.localization.Enable(Resources.MergedDictionaries);
+
             Config = config;
             Current = config.Copy() as InstructionConfig;
         }
@@ -109,6 +111,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
             var idx = App.Configs.IndexOf(Config);
             App.Configs.RemoveAt(idx);
             App.Configs.Insert(idx, Current);
+            Config = Current;
+            Current = Current.Copy() as InstructionConfig;
         }
     }
 }

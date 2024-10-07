@@ -22,8 +22,8 @@
                 <ui:DropDownButton Content="{DynamicResource new}" Icon="{ui:SymbolIcon Add24}">
                     <ui:DropDownButton.Flyout>
                         <ContextMenu >
-                            <MenuItem Header="{DynamicResource enum_classic}" Click="AddNewConfig"/>
-                            <MenuItem Header="{DynamicResource enum_web}" Click="AddNewConfig"/>
+                            <MenuItem Tag="classic"  Header="{DynamicResource enum_classic}" Click="AddNewConfig"/>
+                            <MenuItem Tag="web" Header="{DynamicResource enum_web}" Click="AddNewConfig"/>
                         </ContextMenu>
                     </ui:DropDownButton.Flyout>
                 </ui:DropDownButton>

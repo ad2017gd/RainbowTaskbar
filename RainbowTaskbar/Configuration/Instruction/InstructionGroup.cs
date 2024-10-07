@@ -40,16 +40,6 @@ namespace RainbowTaskbar.Configuration.Instruction {
             for (groupStep = 0;
                      groupStep < Instructions.Count && !token.IsCancellationRequested;
                      groupStep++) {
-                if (API.APISubscribed.Count > 0) {
-                    /* Rewrite system text json
-                     * 
-                    var data = new JObject();
-                    data.Add("type", "InstructionStep");
-                    data.Add("index", App.Config.configStep);
-                    data.Add("instruction", App.Config.Instructions[App.Config.configStep].ToJSON());
-                    WebSocketAPIServer.SendToSubscribed(data.ToString());
-                    */
-                }
 
                 try {
                     var pHandle = App.GetCurrentProcess();
@@ -70,7 +60,6 @@ namespace RainbowTaskbar.Configuration.Instruction {
                     if (e.GetType() == typeof(OperationCanceledException) || e.InnerException is not null && e.InnerException.GetType() == typeof(TaskCanceledException)) {
                         return slept;
                     }
-                    // TODO: Localization 
                     MessageBox.Show(
                         $"The \"{Instructions[groupStep].Description}\" instruction at index {groupStep} (starting from 0) threw an exception, it will be removed from the instruction group.\n${e.Message}",
                         "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Error);

@@ -30,14 +30,6 @@ namespace RainbowTaskbar.Preferences {
         public long StartedCount { get; set; } = 0;
 
         
-        [OnChangedMethod(nameof(OnIsAPIEnabledChanged))]
-        [OnChangedMethod(nameof(SaveChanged))]
-        public bool IsAPIEnabled { get; set; } = false;
-
-        [OnChangedMethod(nameof(OnAPIPortChanged))]
-        [OnChangedMethod(nameof(SaveChanged))]
-        public int APIPort { get; set; } = 9093;
-        [OnChangedMethod(nameof(SaveChanged))]
         public int InterpolationQuality { get; set; } = 25;
         [OnChangedMethod(nameof(SaveChanged))]
         [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
@@ -158,6 +150,7 @@ namespace RainbowTaskbar.Preferences {
             if (App.editor is not null) {
                 App.editor.Close();
                 App.editor = new EditorWindow();
+                App.LaunchEditor();
             }
         }
 
@@ -178,18 +171,6 @@ namespace RainbowTaskbar.Preferences {
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        public void OnIsAPIEnabledChanged() {
-            if (API.http is not null) {
-                if (IsAPIEnabled) API.Start();
-                else
-                    API.Stop();
-            }
-        }
-
-        public void OnAPIPortChanged() {
-            API.Start();
-        }
 
         public static Settings FromFile(string file = null) {
             if (file is null) file = Path.Join(App.rainbowTaskbarDir, "settings.json");

@@ -37,6 +37,7 @@ namespace RainbowTaskbar.Editor.Pages
         {
             DataContext = this;
             InitializeComponent();
+            App.localization.Enable(Resources.MergedDictionaries);
             Search();
         }
         public void OnSortChanged() {

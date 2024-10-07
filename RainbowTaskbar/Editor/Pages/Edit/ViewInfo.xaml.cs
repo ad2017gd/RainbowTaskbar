@@ -37,6 +37,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public ViewInfo(Config config) {
             InitializeComponent();
             this.DataContext = this;
+            App.localization.Enable(Resources.MergedDictionaries);
             Config = config;
 
             var content = new TextRange(description.Document.ContentStart, description.Document.ContentEnd);
@@ -64,8 +65,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         private void Like(object sender, RoutedEventArgs e) {
             if(!App.Settings.LoggedIn) {
                 App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
-                    Content = "You must be logged in to like a config!",
-                    Title = "Not logged in",
+                    Content = App.localization.Get("msgbox_notloggedin2"),
+                    Title = App.localization.Get("msgbox_notloggedin_title"),
                     CloseButtonText = "OK"
                 });
                 return;
