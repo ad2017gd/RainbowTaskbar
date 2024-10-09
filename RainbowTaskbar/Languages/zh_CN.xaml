@@ -186,7 +186,21 @@
     <s:String x:Key="msgbox_login">
         输入下面登录成功页面显示的代码
     </s:String>
-
+    <s:String x:Key="msgbox_notloggedin">You must be logged in to publish your config! Check the settings page to sign in.</s:String>
+    <s:String x:Key="msgbox_notloggedin_title">Not logged in</s:String>
+    <s:String x:Key="msgbox_notloggedin2">You must be logged in to like a config!</s:String>
+    <s:String x:Key="msgbox_fail">Failed to publish config.</s:String>
+    <s:String x:Key="msgbox_fail_title">Fail</s:String>
+    <s:String x:Key="msgbox_thumbnail">Config info/data updated. Failed to upload thumbnail.</s:String>
+    <s:String x:Key="msgbox_property_title">Create new property</s:String>
+    <s:String x:Key="msgbox_login_title">Log in with code</s:String>
+    <s:String x:Key="msgbox_login_button">Log in</s:String>
+    <s:String x:Key="msgbox_save_title">Save your work?</s:String>
+    <s:String x:Key="msgbox_save">Do you wish to save your current config?</s:String>
+    <s:String x:Key="msgbox_save_b1">Save</s:String>
+    <s:String x:Key="msgbox_save_b2">Don't save</s:String>
+    <s:String x:Key="msgbox_button_cancel">Cancel</s:String>
+    <s:String x:Key="msgbox_update">A new RainbowTaskbar update has released. Would you like to update?</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">大眼仔~旭</s:String>
 

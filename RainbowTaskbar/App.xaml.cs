@@ -95,7 +95,10 @@ public partial class App : Application {
         if (nCode >= 0) {
             App.taskbars.ForEach(x => {
                 if (x.webView is null) return;
+
                 // passing WM_LBUTTONDOWN interferes with tray icon, too bad
+                if (wParam == 0x0201 && trayWindow.TrayIcon.ContextMenu.IsOpen || wParam == 0x0204) return;
+                
                 var pn = System.Windows.Forms.Control.MousePosition;
                 if (!new System.Drawing.Rectangle(new((int) x.Left, (int) x.Top), new((int) x.ActualWidth, (int) x.ActualHeight)).Contains(pn)) return;
 
@@ -165,6 +168,8 @@ public partial class App : Application {
 
     public new static void Exit() {
         if(trayWindow is not null) trayWindow.TrayIcon.Dispose();
+
+        StopHook();
 
         taskbars.ForEach(t => {
             t.taskbarHelper.Radius = 0;
