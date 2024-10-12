@@ -9,8 +9,8 @@
     <s:String x:Key="configs">配置</s:String>
 
     <!-- About Tab -->
-    <s:String x:Key="description">彩虹任务栏是一个工具，允许您极大地自定义任务栏的外观。</s:String>
-    <s:String x:Key="donations">它完全免费使用，但捐赠非常受欢迎！</s:String>
+    <s:String x:Key="description">RainbowTaskbar 是一个增强工具，允许您极大地自定义任务栏的外观。</s:String>
+    <s:String x:Key="donations">它完全免费使用，但非常欢迎捐赠支持！</s:String>
     <!-- RainbowTaskbar is free software.
          Made by ad2017 , with the help of zCri .-->
 
@@ -30,7 +30,7 @@
     <s:String x:Key="thumbnail">缩略图</s:String>
     <s:String x:Key="editconfig">编辑配置</s:String>
     <s:String x:Key="saveandpublish">保存并发布</s:String>
-    <s:String x:Key="publishstatus" xml:space="preserve">发布状态: </s:String> <!-- 请不要省略末尾的空格！ -->
+    <s:String x:Key="publishstatus" xml:space="preserve">发布状态: </s:String> <!-- do not omit space at the end please! -->
     <s:String x:Key="enum_published">最新发布</s:String>
     <s:String x:Key="enum_previouslypublished">先前已发布，但不是最新的</s:String>
     <s:String x:Key="enum_notpublished">未发布</s:String>
@@ -52,9 +52,9 @@
     <s:String x:Key="author" xml:space="preserve">作者: </s:String> <!-- do not omit space at the end please! -->
     <s:String x:Key="likes" xml:space="preserve">点赞数: </s:String> <!-- do not omit space at the end please! -->
     <s:String x:Key="download">下载</s:String><!-- verb! -->
-    <s:String x:Key="downloadnew">下载新副本</s:String><!-- download is a verb! -->
+    <s:String x:Key="downloadnew">下载新版本</s:String><!-- download is a verb! -->
     <s:String x:Key="like">点赞</s:String><!-- verb! -->
-    <s:String x:Key="unlike">取消点赞Unlike</s:String><!-- verb! -->
+    <s:String x:Key="unlike">取消点赞</s:String><!-- verb! -->
     
     <!-- Settings tab -->
     <s:String x:Key="general">常规</s:String>
@@ -62,7 +62,7 @@
     <s:String x:Key="checkupdate">检查更新</s:String>
     <s:String x:Key="showicon">显示托盘图标</s:String>
     <s:String x:Key="language">语言</s:String>
-    <s:String x:Key="workshop">工作坊</s:String>
+    <s:String x:Key="workshop">工作区</s:String>
     <s:String x:Key="signedin">已登录为</s:String>
     <s:String x:Key="logingit">登录（GitHub）</s:String>
     <s:String x:Key="passmouse">传递鼠标输入到底层（可能会使用 CPU）</s:String>
@@ -82,7 +82,7 @@
 
     <!-- Instructions and displayed format strings -->
     <s:String x:Key="borderradiusinstruction">圆角半径</s:String>
-    <s:String x:Key="clearlayerinstruction">清除层</s:String>
+    <s:String x:Key="clearlayerinstruction">清除图层</s:String>
     <s:String x:Key="colorinstruction">颜色</s:String>
     <s:String x:Key="delayinstruction">延迟</s:String>
     <s:String x:Key="imageinstruction">图像</s:String>
@@ -186,21 +186,21 @@
     <s:String x:Key="msgbox_login">
         输入下面登录成功页面显示的代码
     </s:String>
-    <s:String x:Key="msgbox_notloggedin">You must be logged in to publish your config! Check the settings page to sign in.</s:String>
-    <s:String x:Key="msgbox_notloggedin_title">Not logged in</s:String>
-    <s:String x:Key="msgbox_notloggedin2">You must be logged in to like a config!</s:String>
-    <s:String x:Key="msgbox_fail">Failed to publish config.</s:String>
-    <s:String x:Key="msgbox_fail_title">Fail</s:String>
-    <s:String x:Key="msgbox_thumbnail">Config info/data updated. Failed to upload thumbnail.</s:String>
-    <s:String x:Key="msgbox_property_title">Create new property</s:String>
-    <s:String x:Key="msgbox_login_title">Log in with code</s:String>
-    <s:String x:Key="msgbox_login_button">Log in</s:String>
-    <s:String x:Key="msgbox_save_title">Save your work?</s:String>
-    <s:String x:Key="msgbox_save">Do you wish to save your current config?</s:String>
-    <s:String x:Key="msgbox_save_b1">Save</s:String>
-    <s:String x:Key="msgbox_save_b2">Don't save</s:String>
-    <s:String x:Key="msgbox_button_cancel">Cancel</s:String>
-    <s:String x:Key="msgbox_update">A new RainbowTaskbar update has released. Would you like to update?</s:String>
+    <s:String x:Key="msgbox_notloggedin">您必须登录才能发布您的配置！请前往设置页面进行登录。</s:String>
+    <s:String x:Key="msgbox_notloggedin_title">未登录</s:String>
+    <s:String x:Key="msgbox_notloggedin2">您必须登录才能点赞配置！</s:String>
+    <s:String x:Key="msgbox_fail">发布配置失败。</s:String>
+    <s:String x:Key="msgbox_fail_title">失败</s:String>
+    <s:String x:Key="msgbox_thumbnail">配置信息/数据已更新。缩略图上传失败。</s:String>
+    <s:String x:Key="msgbox_property_title">创建新属性</s:String>
+    <s:String x:Key="msgbox_login_title">使用验证码登录</s:String>
+    <s:String x:Key="msgbox_login_button">登录</s:String>
+    <s:String x:Key="msgbox_save_title">保存您的工作吗？</s:String>
+    <s:String x:Key="msgbox_save">您是否希望保存当前的配置？</s:String>
+    <s:String x:Key="msgbox_save_b1">保存</s:String>
+    <s:String x:Key="msgbox_save_b2">不保存</s:String>
+    <s:String x:Key="msgbox_button_cancel">取消</s:String>
+    <s:String x:Key="msgbox_update">RainbowTaskbar 有新版本发布了。您想要更新吗？</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">大眼仔~旭</s:String>
 
