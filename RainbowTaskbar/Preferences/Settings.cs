@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Net.Http.Json;
 using System.Dynamic;
 using RainbowTaskbar.Configuration.Web;
+using RainbowTaskbar.Configuration.Instruction.Instructions;
 
 namespace RainbowTaskbar.Preferences {
     public class Settings : INotifyPropertyChanged {
@@ -68,6 +69,20 @@ namespace RainbowTaskbar.Preferences {
             if (WebTouchThrough) App.StartHook();
             else App.StopHook();
         }
+        [OnChangedMethod(nameof(SaveChanged))]
+        [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
+        [OnChangedMethod(nameof(OnGlobalOpacityChanged))]
+        public double GlobalOpacity { get; set; } = -1;
+
+        public void OnGlobalOpacityChanged() {
+            if(GlobalOpacity != -1) App.taskbars.ForEach(x => {
+                new TransparencyInstruction() {
+                    Type = TransparencyInstruction.TransparencyInstructionType.Taskbar,
+                    Opacity = GlobalOpacity
+                }.Execute(x);
+            });
+        }
+
         public void OnWebScriptEnabledChanged() {
             App.taskbars.ForEach(x => {
                 try {

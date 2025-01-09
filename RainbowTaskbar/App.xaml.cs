@@ -25,6 +25,10 @@ using System.IO;
 using System.Collections.ObjectModel;
 using Microsoft.Web.WebView2.WinForms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.ComponentModel;
+using System.Globalization;
+using System.Runtime.Serialization;
+using System.Xml;
 
 namespace RainbowTaskbar;
 
@@ -223,6 +227,52 @@ public partial class App : Application {
             App.localization.Switch(Settings.language);
             if (Settings.CheckUpdate) AutoUpdate.CheckForUpdate();
 
+
+            // port old config bleh
+
+            var oldconfigpath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.xml");
+            var nwoldconfigpath = Environment.ExpandEnvironmentVariables("%appdata%/rnbconf.bak.xml");
+            if (File.Exists(oldconfigpath)) {
+                var res = MessageBox.Show(App.localization.Get("msgbox_migrate"), "RainbowTaskbar", MessageBoxButton.YesNo);
+
+                if (res == MessageBoxResult.Yes) {
+                    File.WriteAllText(oldconfigpath, File.ReadAllText(oldconfigpath).Replace("RainbowTaskbar.Configuration", "RainbowTaskbar.V2Legacy.Configuration"));
+
+
+                    using var fileStream = new FileStream(oldconfigpath, FileMode.OpenOrCreate);
+                    using var reader = XmlDictionaryReader.CreateTextReader(fileStream, new XmlDictionaryReaderQuotas());
+
+                    var serializerSettings = new DataContractSerializerSettings {
+                        PreserveObjectReferences = true
+                    };
+
+                    var serializer = new DataContractSerializer(typeof(V2Legacy.Configuration.Config), serializerSettings);
+                    var cfg = serializer.ReadObject(reader) as V2Legacy.Configuration.Config;
+
+                    var curcfg = InstructionConfig.FromLegacyConfig(cfg);
+                    curcfg.ToFile();
+                    App.Configs.Add(curcfg);
+                    foreach (var preset in cfg.Presets) {
+                        var portcfg = InstructionConfig.FromLegacyPreset(preset);
+                        portcfg.ToFile();
+                        App.Configs.Add(portcfg);
+                    }
+
+                    reader.Close();
+                    fileStream.Close();
+
+                    File.Delete(oldconfigpath);
+                } else {
+                    File.Delete(oldconfigpath);
+                }
+            }
+
+            
+
+            
+
+
+
             Settings.workshopAPI = new WorkshopAPI() {};
 
             Settings.OnLoginKeyChanged();
@@ -248,7 +298,10 @@ public partial class App : Application {
                     Taskbar.SetupWebViews();
 
                     if(App.Settings.SelectedConfig is not null) App.Settings.SelectedConfig.Start();
-                    
+
+                    Settings.OnGlobalOpacityChanged();
+
+
 
                     if (firstRun == true) {
                         Task.Run(() => {

@@ -78,6 +78,9 @@
     <s:String x:Key="comingsoon">Coming soon...</s:String>
     <s:String x:Key="webfps">Maximum web FPS</s:String>
     <s:String x:Key="systemdefault">(Use system language)</s:String>
+    <s:String x:Key="globalprop">Global properties</s:String>
+    <s:String x:Key="globalpropdef">*to keep config setting, use value '-1'</s:String>
+    <s:String x:Key="globalopacity">Taskbar transparency (0-1)</s:String>
 
     <!-- Browse Tab -->
     <s:String x:Key="search">Search something...</s:String>
@@ -203,6 +206,7 @@
     <s:String x:Key="msgbox_save_b2">Don't save</s:String>
     <s:String x:Key="msgbox_button_cancel">Cancel</s:String>
     <s:String x:Key="msgbox_update">A new RainbowTaskbar update has released. Would you like to update?</s:String>
+    <s:String x:Key="msgbox_migrate">Do you wish to migrate the legacy (v2) config and presets to the current version?</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">‎</s:String>
 

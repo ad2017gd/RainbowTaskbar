@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:RainbowTaskbar.Editor.Pages"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:loc="clr-namespace:RainbowTaskbar.Languages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="900" d:DesignWidth="800"
       Title="Settings">
     <Page.Resources>
         <ResourceDictionary>
@@ -64,7 +64,7 @@
             <TextBlock FontSize="24" FontWeight="SemiBold" Text="{DynamicResource multipletaskbars}"></TextBlock>
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="{DynamicResource graphicsrepeat}" IsChecked="{Binding SettingsCfg.GraphicsRepeat}"></CheckBox>
-                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="10" Text="{DynamicResource perfimpact}">
+                <!--<TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="10" Text="{DynamicResource perfimpact}">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                             <Setter Property="Visibility" Value="Collapsed"></Setter>
@@ -77,9 +77,17 @@
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
-                </TextBlock>
+                </TextBlock>-->
             </StackPanel>
             <CheckBox Content="{DynamicResource samerad}" IsChecked="{Binding SettingsCfg.SameRadiusOnEach}"></CheckBox>
+
+            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource globalprop}"></TextBlock>
+            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="10" Text="{DynamicResource globalpropdef}"></TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Text="{DynamicResource globalopacity}"></TextBlock>
+                <ui:NumberBox Minimum="-1" Maximum="1" ClearButtonEnabled="False" Value="{Binding SettingsCfg.GlobalOpacity, UpdateSourceTrigger=PropertyChanged}" SpinButtonPlacementMode="Hidden"></ui:NumberBox>
+            </StackPanel>
+
 
             <TextBlock FontSize="32" FontWeight="SemiBold">API</TextBlock>
             <TextBlock Text="{DynamicResource comingsoon}"></TextBlock>

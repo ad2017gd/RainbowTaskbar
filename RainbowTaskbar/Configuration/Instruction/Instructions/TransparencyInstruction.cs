@@ -28,6 +28,8 @@ public class TransparencyInstruction : Instruction {
 
     public double Opacity { get; set; } = 1;
 
+    public double TaskbarOpacity { get => App.Settings.GlobalOpacity == -1 ? Opacity : App.Settings.GlobalOpacity; }
+
     public TransparencyInstructionStyle Style { get; set; }
 
     public int Layer { get; set; }
@@ -66,7 +68,7 @@ public class TransparencyInstruction : Instruction {
         switch (Type) {
             case TransparencyInstructionType.Taskbar:
 
-                window.taskbarHelper.SetAlpha(Opacity);
+                window.taskbarHelper.SetAlpha(TaskbarOpacity);
                 break;
 
             case TransparencyInstructionType.RainbowTaskbar:
@@ -79,7 +81,7 @@ public class TransparencyInstruction : Instruction {
                 window.Dispatcher.Invoke(() => {
                     if (window.Opacity != Opacity) window.Opacity = Opacity;
                 }, System.Windows.Threading.DispatcherPriority.Normal, token);
-                window.taskbarHelper.SetAlpha(Opacity);
+                window.taskbarHelper.SetAlpha(TaskbarOpacity);
                 break;
 
             case TransparencyInstructionType.Style:

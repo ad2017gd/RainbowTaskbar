@@ -94,4 +94,113 @@ public class InstructionConfig : Config {
 
 
     }
+
+    public static BindingList<Instruction> LegacyInstructionsToV2(BindingList<V2Legacy.Configuration.Instruction> instructions) {
+        var cfg = new BindingList<Instruction>();
+
+
+        foreach (var inst in instructions) {
+            if (inst is V2Legacy.Configuration.Instructions.BorderRadiusInstruction binst) {
+                cfg.Add(new BorderRadiusInstruction() {
+                    Radius = binst.Radius,
+                });
+            }
+            if (inst is V2Legacy.Configuration.Instructions.ClearLayerInstruction cinst) {
+                cfg.Add(new ClearLayerInstruction() {
+                    Layer = cinst.Layer,
+                });
+            }
+            if (inst is V2Legacy.Configuration.Instructions.ColorInstruction clinst) {
+                cfg.Add(new ColorInstruction() {
+                    Angle = clinst.Angle,
+                    Color1 = clinst.Color1,
+                    Color2 = clinst.Color2,
+                    Effect = (ColorInstruction.ColorInstructionEffect) clinst.Effect,
+                    Randomize = clinst.Randomize,
+                    Layer = clinst.Layer,
+                    Time = clinst.Time,
+                    Time2 = clinst.Time2,
+                    Transition = (ColorInstruction.ColorInstructionTransition) clinst.Transition
+                });
+            }
+            if (inst is V2Legacy.Configuration.Instructions.DelayInstruction dinst) {
+                cfg.Add(new DelayInstruction() {
+                    Time = dinst.Time,
+                });
+            }
+            if (inst is V2Legacy.Configuration.Instructions.ImageInstruction iinst) {
+                cfg.Add(new ImageInstruction() {
+                    DrawOnce = iinst.DrawOnce,
+                    Height = iinst.Height,
+                    Layer = iinst.Layer,
+                    Width = iinst.Width,
+                    Opacity = iinst.Opacity,
+                    Path = iinst.Path,
+                    X = iinst.X,
+                    Y = iinst.Y
+                });
+            }
+            if (inst is V2Legacy.Configuration.Instructions.ShapeInstruction sinst) {
+                cfg.Add(new ShapeInstruction() {
+                    DrawOnce = sinst.DrawOnce,
+                    Shape = (ShapeInstruction.ShapeInstructionShapes) sinst.Shape,
+                    Fill = sinst.Fill,
+                    FitTaskbars = sinst.FitTaskbars,
+                    Layer = sinst.Layer,
+                    Line = sinst.Line,
+                    LineSize = sinst.LineSize,
+                    Radius = sinst.Radius,
+                    X2 = sinst.X2,
+                    Y2 = sinst.Y2,
+                    X = sinst.X,
+                    Y = sinst.Y
+                });
+            }
+            if (inst is V2Legacy.Configuration.Instructions.TextInstruction tinst) {
+                cfg.Add(new TextInstruction() {
+                    Size = tinst.Size,
+                    Center = tinst.Center,
+                    Color = tinst.Color,
+                    DrawOnce = tinst.DrawOnce,
+                    Font = tinst.Font,
+                    Layer = tinst.Layer,
+                    Text = tinst.Text,
+                    X = tinst.X,
+                    Y = tinst.Y,
+                });
+            }
+            if (inst is V2Legacy.Configuration.Instructions.TransparencyInstruction trinst) {
+                cfg.Add(new TransparencyInstruction() {
+                    Layer = trinst.Layer,
+                    Style = (TransparencyInstruction.TransparencyInstructionStyle) trinst.Style,
+                    Opacity = trinst.Opacity,
+                    Type = (TransparencyInstruction.TransparencyInstructionType) trinst.Type
+                });
+            }
+        }
+
+        return cfg;
+    }
+
+
+    public static InstructionConfig FromLegacyConfig(V2Legacy.Configuration.Config config) {
+        var cfg = new InstructionConfig();
+        cfg.InitNew();
+        var cfgData = (InstructionConfigData)cfg.ConfigData;
+        cfgData.LoopGroups.Add(new());
+        cfgData.LoopGroups[0].Instructions = LegacyInstructionsToV2(config.Instructions);
+        cfg.Name = "(MIGRATED) Current";
+        return cfg;
+    }
+    public static InstructionConfig FromLegacyPreset(V2Legacy.Configuration.InstructionPreset preset) {
+        var cfg = new InstructionConfig();
+        cfg.InitNew();
+        var cfgData = (InstructionConfigData) cfg.ConfigData;
+        cfgData.LoopGroups.Add(new());
+        cfgData.LoopGroups[0].Instructions = LegacyInstructionsToV2(preset.Instructions);
+        cfg.Name = "(MIGRATED) " + preset.Name;
+        
+
+        return cfg;
+    }
 }
