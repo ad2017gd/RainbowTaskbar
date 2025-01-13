@@ -15,7 +15,7 @@
    <a href="https://paypal.me/ad2k17"><img src="https://img.shields.io/badge/donators-4-red?style=for-the-badge&logo=paypal"></a>   
    
    <h1><a href="https://ad2017.dev/rnb">RainbowTaskbar</a></h1>
-<p>Useful tool for Windows taskbar customization. Supports color effects, transitions, blur, images, text, rounded corners, shapes, transparency and a new HTTP API. Now rewritten in .NET 6!</p>
+<p>Useful tool for Windows taskbar customization. Supports web configurations or instruction-like configurations that feature color effects, transitions, blur, images, text, rounded corners, shapes, transparency. Now rewritten in .NET 8!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
    <img style="margin: 0 auto; width: 90%;" src="https://github.com/ad2017gd/RainbowTaskbar/assets/39013925/4e5ce6d6-4222-4437-9822-f1a19291e028">
@@ -33,17 +33,17 @@
 # Getting started
 First off, grab yourself the hottest new release at https://github.com/ad2017gd/RainbowTaskbar/releases.
 
-RainbowTaskbar is a portable app, so there's no installing required. If not already installed, you will be prompted to install the **.NET 6** runtime ([x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.7-windows-x64-installer); [x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.7-windows-x86-installer)).
+RainbowTaskbar is a portable app, so there's no installing required. There are setups available, but they only install a single file and create a nice shortcut for you. If not already installed, you will be prompted to install the **.NET 8** runtime.
 
-After launching the app for the first time, you will automatically get the Rainbow preset. To open the editor/change your preset, locate the tray icon
-on your taskbar.
+After launching the app for the first time, the editor will automatically open. You can find other users' presets in the Browse tab, or you can create your own.
 
-![](https://ad2017.dev/rnb/assets/tray.png)
+![image](https://github.com/user-attachments/assets/acf1be2d-c5ea-493a-9a63-e266cd909b20)
+
 
 Have fun using RainbowTaskbar!
 
 # Documentation
-Documentation has been moved to https://ad2017.dev/rnb/docs
+TODO
 
 <div align="center">
 
