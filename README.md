@@ -57,7 +57,7 @@ taskbar customization software (actually there were and still are but none would
 The first version of RainbowTaskbar was written in C, which was a pretty bad idea. I didn't realise at the time, but the UI was also pretty much garbage. However, when I saw
 open source software websites reposting my tool, it really gave me the motivation to still work on this program.
 
-Thanks to my other friend, [zCri](https://github.com/zCri), we both rewrote RainbowTaskbar to the current v2 .NET version, which allowed me to implement even more
+Thanks to my other friend, [zCri](https://github.com/zCri), we both rewrote RainbowTaskbar to the (then) current v2 .NET version (now v3!), which allowed me to implement even more
 features with cleaner UI.
 
 After the rewrite, RainbowTaskbar received even more attention from people, which also made me continue updating it. However, all the attention has also led to some
