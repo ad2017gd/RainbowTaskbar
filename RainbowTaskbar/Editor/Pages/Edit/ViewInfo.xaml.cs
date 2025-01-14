@@ -21,6 +21,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Extensions;
 
@@ -37,6 +38,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public ViewInfo(Config config) {
             InitializeComponent();
             this.DataContext = this;
+            ApplicationThemeManager.ApplySystemTheme(true);
             App.localization.Enable(Resources.MergedDictionaries);
             Config = config;
 

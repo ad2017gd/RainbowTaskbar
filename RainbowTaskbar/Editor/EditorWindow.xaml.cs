@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
@@ -54,9 +55,32 @@ namespace RainbowTaskbar.Editor {
                     Directory.Delete(App.monacoDir, true);
                 ZipFile.ExtractToDirectory(stream, App.monacoDir);
             }
+
+            if(App.Settings.Version < Assembly.GetExecutingAssembly().GetName().Version) {
+                App.Settings.Version = Assembly.GetExecutingAssembly().GetName().Version;
+                // do stuff ?
+                App.Settings.SaveChanged();
+            }
         }
 
+        Page current = null;
         private void nav_Navigating(NavigationView sender, NavigatingCancelEventArgs args) {
+
+            // this is totally disgusting
+            if ((current is Browse || App.editorViewModel.EditPage is InstructionEditPage) && args.Page is not EmptyPageBadFix) {
+                args.Cancel = true;
+                nav.Navigate(typeof(EmptyPageBadFix));
+                Type t = args.Page.GetType();
+                Task.Run(() => {
+                    Thread.Sleep(30);
+                    Dispatcher.Invoke(() => nav.Navigate(t));
+                });
+            }
+
+            current = args.Page as Page;
+            
+
+            
             if (App.editorViewModel.EditPage is not null && App.editorViewModel.EditPage is InstructionEditPage) {
                 var page = App.editorViewModel.EditPage as InstructionEditPage;
                 page.Current.Stop();
@@ -76,7 +100,6 @@ namespace RainbowTaskbar.Editor {
                 }
 
                 var task = contentDialogService.ShowSimpleDialogAsync(
-                    // todo: translations, instruction-config save or quit
                     new SimpleContentDialogCreateOptions() {
                         Title = App.localization.Get("msgbox_save_title"),
                         Content = App.localization.Get("msgbox_save"),
@@ -140,6 +163,8 @@ namespace RainbowTaskbar.Editor {
             if(App.editorViewModel.EditPage is not null) {
                 App.editorViewModel.EditPage = null;
             }
+
+            ApplicationThemeManager.ApplySystemTheme(true);
         }
 
         private void FluentWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {

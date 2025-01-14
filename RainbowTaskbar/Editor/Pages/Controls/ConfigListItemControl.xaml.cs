@@ -68,6 +68,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
             e.Handled = true;
             var page = new EditInfo(Config);
             App.editor.nav.ReplaceContent(page);
+            
         }
 
         private void Select(object sender, RoutedEventArgs e) {

@@ -24,6 +24,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Extensions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -41,6 +42,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public EditInfo(Config config) {
             InitializeComponent();
             this.DataContext = this;
+            ApplicationThemeManager.ApplySystemTheme(true);
             App.localization.Enable(Resources.MergedDictionaries);
 
             Config = config;
@@ -127,16 +129,18 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                     return;
                 }
                 Dispatcher.Invoke(() => {
-                    Task.Run(() => {
-                        var res2 = App.Settings.workshopAPI.SetConfigThumbnail(Config, thumbPreview).Result;
-                        if (res2 is null || !res2.Result) {
-                            Dispatcher.Invoke(() => App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
-                                Content = App.localization.Get("msgbox_thumbnail"),
-                                Title = App.localization.Get("msgbox_fail_title"),
-                                CloseButtonText = "OK"
-                            }));
-                        }
-                    });
+
+                    if (thumbPreview.Source is not null)
+                        Task.Run(() => {
+                            var res2 = App.Settings.workshopAPI.SetConfigThumbnail(Config, thumbPreview).Result;
+                            if (res2 is null || !res2.Result) {
+                                Dispatcher.Invoke(() => App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
+                                    Content = App.localization.Get("msgbox_thumbnail"),
+                                    Title = App.localization.Get("msgbox_fail_title"),
+                                    CloseButtonText = "OK"
+                                }));
+                            }
+                        });
                     
 
                     Config.PublishedID = res.Data.PublishedID;

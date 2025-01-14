@@ -23,6 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 
 namespace RainbowTaskbar.Editor.Pages.Edit {
     /// <summary>
@@ -33,6 +34,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public WebEditPage() {
             InitializeComponent();
             this.DataContext = this;
+            ApplicationThemeManager.ApplySystemTheme(true);
             App.localization.Enable(Resources.MergedDictionaries);
 
             var envasync = CoreWebView2Environment.CreateAsync(null, System.IO.Path.GetTempPath(), new CoreWebView2EnvironmentOptions());

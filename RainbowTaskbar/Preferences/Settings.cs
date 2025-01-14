@@ -74,6 +74,8 @@ namespace RainbowTaskbar.Preferences {
         [OnChangedMethod(nameof(OnGlobalOpacityChanged))]
         public double GlobalOpacity { get; set; } = -1;
 
+        public Version Version { get; set; } = new Version("1.0");
+
         public void OnGlobalOpacityChanged() {
             if(GlobalOpacity != -1) App.taskbars.ForEach(x => {
                 new TransparencyInstruction() {

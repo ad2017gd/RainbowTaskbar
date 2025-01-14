@@ -19,13 +19,13 @@ internal static class AutoUpdate {
     public static void CheckForUpdate() =>
         Task.Run(async () => {
 
-            
+
             using var http = new HttpClient();
             using var web = new WebClient();
             http.DefaultRequestHeaders.Add("User-Agent", "RainbowTaskbar");
             var content =
                 await http.GetStreamAsync("https://api.github.com/repos/ad2017gd/RainbowTaskbar/releases/latest");
-            
+
             var ser = new DataContractJsonSerializer(typeof(GitHubAPIResponse));
             var response = ser.ReadObject(content) as GitHubAPIResponse;
             if (Assembly.GetExecutingAssembly().GetName().Version.CompareTo(Version.Parse(response.TagName)) < 0) {
@@ -52,6 +52,18 @@ internal static class AutoUpdate {
                 }
             }
         });
+    public static async Task<string> GetLatestBody() {
+        using var http = new HttpClient();
+        using var web = new WebClient();
+        http.DefaultRequestHeaders.Add("User-Agent", "RainbowTaskbar");
+        var content =
+            await http.GetStreamAsync("https://api.github.com/repos/ad2017gd/RainbowTaskbar/releases/latest");
+
+        var ser = new DataContractJsonSerializer(typeof(GitHubAPIResponse));
+        var response = ser.ReadObject(content) as GitHubAPIResponse;
+        return response.Body;
+    }
+        
 
     [DataContract]
     public class Asset {
@@ -68,6 +80,8 @@ internal static class AutoUpdate {
         [DataMember(Name = "tag_name")] public string TagName { get; set; }
 
         [DataMember(Name = "name")] public string Name { get; set; }
+
+        [DataMember(Name = "body")] public string Body { get; set; }
 
         [DataMember(Name = "assets")] public List<Asset> Assets { get; set; }
     }

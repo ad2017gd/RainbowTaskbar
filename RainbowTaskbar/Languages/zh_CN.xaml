@@ -204,6 +204,7 @@
     <s:String x:Key="msgbox_save_b2">不保存</s:String>
     <s:String x:Key="msgbox_button_cancel">取消</s:String>
     <s:String x:Key="msgbox_update">RainbowTaskbar 有新版本发布了。您想要更新吗？</s:String>
+    <s:String x:Key="msgbox_migrate">Do you wish to migrate the legacy (v2) config and presets to the current version?</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">大眼仔~旭</s:String>
 

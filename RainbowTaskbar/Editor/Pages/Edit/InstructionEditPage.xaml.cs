@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 using Xceed.Wpf.AvalonDock.Controls;
 
 namespace RainbowTaskbar.Editor.Pages.Edit {
@@ -61,6 +62,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public InstructionEditPage(InstructionConfig config) {
             InitializeComponent();
             DataContext = this;
+            ApplicationThemeManager.ApplySystemTheme(true);
             App.localization.Enable(Resources.MergedDictionaries);
 
             Config = config;

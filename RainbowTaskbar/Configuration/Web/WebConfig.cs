@@ -113,7 +113,7 @@ namespace RainbowTaskbar.Configuration.Web {
     <head>
         <script>
             // !!! Helper taskbar interop functions !!! //
-            const TASKBAR=0;const UNDERLAY=1;const DEFAULT=0;const BLUR=1;const TRANSPARENT=2;const setOpacity = (which,value) => window.chrome.webview.postMessage({m:"opacity",value,which});const setStyle = (style) => window.chrome.webview.postMessage({m:"style",style});const setOffset = (offset) => window.chrome.webview.postMessage({m:"offset",v:offset});
+            const TASKBAR=0;const UNDERLAY=1;const DEFAULT=0;const BLUR=1;const TRANSPARENT=2;const setOpacity = (which,v) => window.chrome.webview.postMessage({m:"transparency",v,which});const setStyle = (style) => window.chrome.webview.postMessage({m:"style",style});const setOffset = (offset) => window.chrome.webview.postMessage({m:"offset",v:offset});
             let last = performance.now() / 1000;let fpsTh = 0;
 
             // ---------------------- !!! Place your code (except any requestAnimationFrame stuff) inside of this self-executing function !!! ---------------------- //

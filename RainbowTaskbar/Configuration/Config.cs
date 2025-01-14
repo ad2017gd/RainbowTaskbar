@@ -68,9 +68,6 @@ namespace RainbowTaskbar.Configuration {
         public void InitNew() {
             LocalID = Guid.NewGuid().ToString();
         }
-        public void Update() {
-            // TODO: update
-        }
         public static Config FromFile(string file) {
             if (!File.Exists(file)) return null;
             Config cfg = JsonSerializer.Deserialize<Config>(File.ReadAllText(file), SerializerOptions);

@@ -4,7 +4,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0-windows7.0</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>2.99</Version>
+        <Version>3.0.1</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>RainbowTaskbar is a Windows utility to customize the shell taskbar.</Description>
         <Authors>Ad2017, zCri</Authors>
@@ -19,8 +19,8 @@
         <AnalysisLevel>latest</AnalysisLevel>
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
-        <AssemblyVersion>2.99</AssemblyVersion>
-        <FileVersion>2.99</FileVersion>
+        <AssemblyVersion>3.0.1</AssemblyVersion>
+        <FileVersion>3.0.1</FileVersion>
         <SignAssembly>False</SignAssembly>
 		
 		   <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -64,13 +64,14 @@
     <ItemGroup>
         <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
         <PackageReference Include="FastMember" Version="1.5.0" />
-        <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
-        <PackageReference Include="H.Pipes" Version="2.0.59" />
-        <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0">
+        <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
+        <PackageReference Include="H.Pipes" Version="15.0.0" />
+        <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1">
         </PackageReference>
         <PackageReference Include="Kasay.DependencyProperty.WPF.Fody" Version="1.0.3" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2646-prerelease" />
-        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
+        <PackageReference Include="Markdig" Version="0.40.0" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 
         <PackageReference Include="PropertyChanged.Fody" Version="4.1.0">
             <PrivateAssets>all</PrivateAssets>
@@ -78,11 +79,11 @@
             <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="System.Drawing.Common" Version="8.0.7" />
+        <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
 
         <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
 
-        <PackageReference Include="WPF-UI" Version="3.0.4" />
+        <PackageReference Include="WPF-UI" Version="3.0.5" />
     </ItemGroup>
 
 

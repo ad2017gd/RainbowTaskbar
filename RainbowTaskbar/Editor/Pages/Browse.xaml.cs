@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 
 namespace RainbowTaskbar.Editor.Pages
 {
@@ -37,6 +38,7 @@ namespace RainbowTaskbar.Editor.Pages
         {
             DataContext = this;
             InitializeComponent();
+            ApplicationThemeManager.ApplySystemTheme(true);
             App.localization.Enable(Resources.MergedDictionaries);
             Search();
         }

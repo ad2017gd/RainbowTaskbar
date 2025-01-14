@@ -146,8 +146,7 @@ public partial class Taskbar : Window {
                         webView.CoreWebView2.Settings.IsSwipeNavigationEnabled = false;
                         webView.CoreWebView2.Settings.IsStatusBarEnabled = false;
                         webView.CoreWebView2.Settings.IsPinchZoomEnabled = false;
-                        webView.CoreWebView2.Settings.AreDevToolsEnabled = true;
-                        webView.CoreWebView2.OpenDevToolsWindow();
+                        webView.CoreWebView2.Settings.AreDevToolsEnabled = false;
                         webView.CoreWebView2.Settings.UserAgent = "RainbowTaskbar Web Display https://ad2017.dev/rnb";
                         webView.CoreWebView2.IsMuted = false;
 
@@ -169,28 +168,28 @@ public partial class Taskbar : Window {
     public void SetupWebViewMessageReceiver() {
         webView.WebMessageReceived += (_, args) => {
             var message = JsonSerializer.Deserialize<JsonNode>(args.WebMessageAsJson);
-            switch (message["m"].GetValue<string?>()) {
+            switch (message["m"]?.GetValue<string?>()) {
                 case "style":
                     new TransparencyInstruction() {
                         Type = TransparencyInstruction.TransparencyInstructionType.Style,
-                        Style = (TransparencyInstruction.TransparencyInstructionStyle) (message["style"].GetValue<int?>() ?? (int) TransparencyInstruction.TransparencyInstructionStyle.Default)
+                        Style = (TransparencyInstruction.TransparencyInstructionStyle) (message["style"]?.GetValue<int?>() ?? (int) TransparencyInstruction.TransparencyInstructionStyle.Default)
                     }.Execute(this);
                     break;
                 case "transparency":
                     new TransparencyInstruction() {
-                        Type = (TransparencyInstruction.TransparencyInstructionType) (message["which"].GetValue<int?>() ?? (int) TransparencyInstruction.TransparencyInstructionType.RainbowTaskbar),
-                        Layer = message["layer"].GetValue<int?>() ?? 0,
-                        Opacity = message["v"].GetValue<int?>() ?? 1
+                        Type = (TransparencyInstruction.TransparencyInstructionType) (message["which"]?.GetValue<int?>() ?? (int) TransparencyInstruction.TransparencyInstructionType.RainbowTaskbar),
+                        Layer = message["layer"]?.GetValue<int?>() ?? 0,
+                        Opacity = message["v"]?.GetValue<double?>() ?? 1
                     }.Execute(this);
                     break;
                 case "offset":
                     var old = UnderlayOffset;
-                    UnderlayOffset = Math.Max(Math.Min(message["v"].GetValue<int?>() ?? 0, 96), -96);
+                    UnderlayOffset = Math.Max(Math.Min(message["v"]?.GetValue<int?>() ?? 0, 96), -96);
                     this.Height = App.layers is not null ? App.layers.height - UnderlayOffset : (canvasManager.layers?.height ?? 48) - UnderlayOffset;
                     break;
                 case "audio":
                     // request audio stream
-                    //todo
+                    // todo
 
                     break;
             }
