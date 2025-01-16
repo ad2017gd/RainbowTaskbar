@@ -59,7 +59,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
         }
         public string ConfigType { get => (Config is WebConfig) ? App.localization["enum_web"] : App.localization["enum_classic"]; }
 
-        public bool Downloaded { get => App.Configs.Any(x=>x.PublishedID == Config.PublishedID); }
+        public bool Downloaded { get => App.Configs.Any(x=>x.PublishedID == Config.PublishedID || (x.PublishedID is null && x.PreviousPublishedID == Config.PublishedID)); }
         public bool CanDelete { get => Config.CachedPublisherUsername == App.Settings.AccountUsername || App.Settings.AccountUsername == "ad2017gd"; }
 
         public bool Unverified { get; set; } = false;
