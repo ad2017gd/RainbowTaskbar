@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -85,8 +86,16 @@ namespace RainbowTaskbar.Editor.Pages.Controls
 
         private void Select(object sender, RoutedEventArgs e) {
             e.Handled = true;
+            App.editor.nav.Navigate(typeof(EmptyPageBadFix));
+
             var page = new ViewInfo(Config);
-            App.editor.nav.ReplaceContent(page);
+            Task.Run(() => {
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() => App.editor.nav.Navigate(typeof(EmptyPageBadFix2)));
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() => App.editor.nav.ReplaceContent(page));
+            });
+            
         }
 
         private void Download(object sender, RoutedEventArgs e) {

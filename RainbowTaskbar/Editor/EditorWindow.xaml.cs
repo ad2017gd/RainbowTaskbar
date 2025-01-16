@@ -66,13 +66,14 @@ namespace RainbowTaskbar.Editor {
         Page current = null;
         private void nav_Navigating(NavigationView sender, NavigatingCancelEventArgs args) {
 
-            // this is totally disgusting
-            if ((current is Browse || App.editorViewModel.EditPage is InstructionEditPage) && args.Page is not EmptyPageBadFix) {
+            // this is totally disgusting but wpf ui is cooked so whatever
+
+            if (current is not null && current.GetType() != args.Page.GetType() && (current is Browse || App.editorViewModel.EditPage is InstructionEditPage) && args.Page is not EmptyPageBadFix) {
                 args.Cancel = true;
                 nav.Navigate(typeof(EmptyPageBadFix));
                 Type t = args.Page.GetType();
                 Task.Run(() => {
-                    Thread.Sleep(30);
+                    Thread.Sleep(40);
                     Dispatcher.Invoke(() => nav.Navigate(t));
                 });
             }

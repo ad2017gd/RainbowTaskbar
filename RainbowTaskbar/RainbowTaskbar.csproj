@@ -110,6 +110,9 @@
         <Compile Update="Editor\Pages\About.xaml.cs">
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Editor\Pages\EmptyPageBadFix2.xaml.cs">
+          <SubType>Code</SubType>
+        </Compile>
         <Compile Update="Properties\Resources.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
