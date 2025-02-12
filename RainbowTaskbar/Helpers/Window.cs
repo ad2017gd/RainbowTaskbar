@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Interop;
 
 namespace RainbowTaskbar.Helpers;
@@ -43,12 +44,58 @@ public class WindowHelper {
     [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
     private static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
 
+    [DllImport("user32.dll")]
+    static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+
+
+    // size of a device name string
+    private const int CCHDEVICENAME = 32;
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    internal struct MonitorInfoEx {
+        public int Size;
+        public RECT Monitor;
+        public RECT WorkArea;
+        public uint Flags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHDEVICENAME)]
+        public string DeviceName;
+
+        public void Init() {
+            this.Size = 40 + 2 * CCHDEVICENAME;
+            this.DeviceName = string.Empty;
+        }
+    }
+
+    [DllImport("user32.dll")]
+    static extern bool GetMonitorInfo(IntPtr hMonitor, out MonitorInfoEx lpmi);
+    [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool DeleteObject([In] IntPtr hObject);
+
     int oldheight = 0;
     private void TaskbarPosChanged(object sender, EventArgs args) {
         taskbar.PlaceWindowUnder(window);
-        if (!App.Settings.GraphicsRepeat && App.hiddenWebViewHost is not null && oldheight != taskbar.GetRectangle().Height) {
-            App.hiddenWebViewHost.Height = taskbar.GetRectangle().Height;
-            oldheight = taskbar.GetRectangle().Height;
+        var rect = taskbar.GetRectangle();
+        if (!App.Settings.GraphicsRepeat && App.hiddenWebViewHost is not null && oldheight != rect.Height) {
+            App.hiddenWebViewHost.Height = rect.Height;
+            oldheight = rect.Height;
+        }
+        if(autoHide) {
+            var scr = Screen.FromPoint(new(rect.X, rect.Y));
+            int max = Math.Max(0,Math.Min(rect.Height, scr.Bounds.Bottom - rect.Y));
+
+
+            var rgn1 = CreateRectRgn(0, 0, rect.Width, rect.Height);
+            var rgn2 = CreateRectRgn(0, max, rect.Width, rect.Height);
+            var rgn = CreateRectRgn(0, 0, 0, 0);
+            CombineRgn(rgn, rgn1, rgn2, CombineRgnStyles.RGN_XOR);
+            SetWindowRgn(HWND, rgn, false);
+            DeleteObject(rgn1);
+            DeleteObject(rgn2);
+            
+           // window.AutoHideClip.RadiusX = window.AutoHideClip.RadiusY = 0;
+            //window.AutoHideClip.Rect = new(0, max, 1920, rect.Height);
+
         }
         if (ddHandle != IntPtr.Zero) UpdateDuplicate();
     }

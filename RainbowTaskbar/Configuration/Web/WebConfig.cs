@@ -162,7 +162,9 @@ namespace RainbowTaskbar.Configuration.Web {
                 webView?.CoreWebView2.Resume();
                 webView.CoreWebView2.MemoryUsageTargetLevel = Microsoft.Web.WebView2.Core.CoreWebView2MemoryUsageTargetLevel.Low;
 
-                webView?.NavigateToString("<html></html>");
+                File.WriteAllText(Path.Join(App.rainbowTaskbarDir, "current.html"), Data.WebContent);
+
+                webView?.CoreWebView2.Navigate(Path.Join(App.rainbowTaskbarDir, "current.html"));
                 EventHandler<CoreWebView2NavigationCompletedEventArgs> handler = null;
                 handler = (sender, args) => {
                     var code = $$"""
@@ -196,7 +198,6 @@ namespace RainbowTaskbar.Configuration.Web {
                         return "window.rtUserConfig[" + JsonSerializer.Serialize(new Regex("[^\\w$]").Replace(x.Key, " ")) + "]=" + x.ValueJS + ";";
                     })) ?? ""}}
 
-                        document.write({{JsonSerializer.Serialize(Data.WebContent)}});
                         """;
                     webView?.ExecuteScriptAsync(
                         code);

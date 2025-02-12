@@ -74,6 +74,7 @@ public class TransparencyInstruction : Instruction {
             case TransparencyInstructionType.RainbowTaskbar:
                 window.Dispatcher.Invoke(() => {
                     if (window.Opacity != Opacity) window.Opacity = Opacity;
+                    
                 }, System.Windows.Threading.DispatcherPriority.Normal, token);
                 break;
 

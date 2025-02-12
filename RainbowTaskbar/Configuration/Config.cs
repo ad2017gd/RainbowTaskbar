@@ -1,4 +1,5 @@
 ﻿using RainbowTaskbar.Configuration.Instruction;
+using RainbowTaskbar.Configuration.Instruction.Instructions;
 using RainbowTaskbar.Configuration.Web;
 using RainbowTaskbar.Helpers;
 using System;
@@ -88,8 +89,25 @@ namespace RainbowTaskbar.Configuration {
         }
 
         public virtual void Start() {
-            if(currentlyRunning is not null) currentlyRunning.Stop().Wait();
+            App.taskbars.ForEach(x => {
+                new TransparencyInstruction() {
+                    Type = TransparencyInstruction.TransparencyInstructionType.All,
+                    Opacity = 1
+                }.Execute(x);
+            });
+            App.taskbars.ForEach(x => {
+                new TransparencyInstruction() {
+                    Type = TransparencyInstruction.TransparencyInstructionType.Style,
+                    Style = TransparencyInstruction.TransparencyInstructionStyle.Default,
+                }.Execute(x);
+            });
+            if (currentlyRunning is not null) currentlyRunning.Stop().Wait();
             currentlyRunning = this;
+           
+            
+
+
+
         }
         public abstract Task Stop();
 

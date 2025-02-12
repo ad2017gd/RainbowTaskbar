@@ -79,67 +79,63 @@ HRESULT VisualTreeWatch::OnVisualTreeChange(ParentChildRelation rel, VisualEleme
     // we also cannot get its children so we wait for an element that has it as its parent, 
     // its weird idk
 _E      auto changed = ConvertFromH< winrt::Windows::UI::Xaml::Hosting::IDesktopWindowXamlSource>(rel.Parent);
-_E      
 _E      if (changed && mutationType == Add) {
 _E          root = ConvertFromH<winrt::Windows::UI::Xaml::FrameworkElement>(element.Handle);
 _E          if (root) {
 _E
 _E              auto children = FindChildrenRecursive(L"TaskbarFrame", root);
-_E              if (taskbarFrames < children.size()) {
-_E                  taskbarFrames = children.size();
-_E                  for (auto& frame : children) {
-_E                      InstanceHandle handle = ConvertToH(frame.second);
-_E                      
+_E              for (auto& frame : children) {
+_E                  InstanceHandle handle = ConvertToH(frame.second);
+_E                  
 _E
-_E                      auto rects = FindChildrenRecursive(L"BackgroundFill", frame.second);
-_E                      for (auto& rect_ : rects) {
-_E                          auto rect = rect_.second.try_as<winrt::Windows::UI::Xaml::Shapes::Rectangle>();
-_E                          if (rect) {
-_E                              
-_E                              if (taskbarMap.find(handle) == taskbarMap.end()) {
-_E                                  Taskbar t = Taskbar();
-_E                                  t.originalBrush = rect.Fill();
-_E                                  t.rectangleBackground = rect;
-_E                                  t.dispatcher = rect.Dispatcher();
-_E                                  HWND hwnd;
-_E                                  changed.try_as<IDesktopWindowXamlSourceNative>()->get_WindowHandle(&hwnd);
-_E                                  t.handle = GetParent(hwnd);
-_E                                  for (int i = 0; i < 8; i++) {
-_E                                      if (!data->lTaskbarInfo[i].taskbar) {
-_E                                          data->lTaskbarInfo[i].taskbar = t.handle;
-_E                                          t.tInfoIndex = i;
-_E                                          break;
-_E                                      }
-_E                                  }
-_E
-_E
-_E                                  taskbarMap.emplace(handle, t);
-_E                              }
-_E                          }
-_E                      }
-_E
-_E                      auto borders = FindChildrenRecursive(L"BackgroundStroke", frame.second);
-_E                      for (auto& border_ : borders) {
-_E                          auto border = border_.second.try_as<winrt::Windows::UI::Xaml::Shapes::Rectangle>();
-_E                          if (border) {
-_E                              if(taskbarMap.find(handle) != taskbarMap.end()) 
-                                    taskbarMap.find(handle)->second.border = border;
-_E                          }
-_E                      }
-_E
-_E                      auto gripper = FindChildrenRecursive(L"GripperControl", frame.second);
-_E                      if (gripper.begin()->second) {
-_E                          auto grip = gripper.begin()->second;
-_E                          if(taskbarMap.find(handle) != taskbarMap.end()) {
-_E                              auto& tb = taskbarMap.find(handle)->second;
-_E                              tb.gripper = grip;
-_E                              StartYPosTask(&taskbarMap.find(handle)->second, this);
-_E                              
+_E                  auto rects = FindChildrenRecursive(L"BackgroundFill", frame.second);
+_E                  for (auto& rect_ : rects) {
+_E                      auto rect = rect_.second.try_as<winrt::Windows::UI::Xaml::Shapes::Rectangle>();
+_E                      if (rect) {
 _E                          
+_E                          if (taskbarMap.find(handle) == taskbarMap.end()) {
+_E                              Taskbar t = Taskbar();
+_E                              t.originalBrush = rect.Fill();
+_E                              t.rectangleBackground = rect;
+_E                              t.dispatcher = rect.Dispatcher();
+_E                              HWND hwnd;
+_E                              changed.try_as<IDesktopWindowXamlSourceNative>()->get_WindowHandle(&hwnd);
+_E                              t.handle = GetParent(hwnd);
+_E                              for (int i = 0; i < 8; i++) {
+_E                                  if (!data->lTaskbarInfo[i].taskbar) {
+_E                                      data->lTaskbarInfo[i].taskbar = t.handle;
+_E                                      t.tInfoIndex = i;
+_E                                      break;
+_E                                  }
+_E                              }
+_E
+_E
+_E                              taskbarMap.emplace(handle, t);
 _E                          }
 _E                      }
-_E
 _E                  }
+_E
+_E                  auto borders = FindChildrenRecursive(L"BackgroundStroke", frame.second);
+_E                  for (auto& border_ : borders) {
+_E                      auto border = border_.second.try_as<winrt::Windows::UI::Xaml::Shapes::Rectangle>();
+_E                      if (border) {
+_E                          if(taskbarMap.find(handle) != taskbarMap.end()) 
+                                taskbarMap.find(handle)->second.border = border;
+_E                      }
+_E                  }
+_E
+_E                  auto gripper = FindChildrenRecursive(L"GripperControl", frame.second);
+_E                  if (gripper.begin()->second) {
+_E                      auto grip = gripper.begin()->second;
+_E                      if(taskbarMap.find(handle) != taskbarMap.end()) {
+_E                          auto& tb = taskbarMap.find(handle)->second;
+_E                          tb.gripper = grip;
+_E                          StartYPosTask(&taskbarMap.find(handle)->second, this);
+_E                          
+_E                      
+_E                      }
+_E                  }
+_E
 _E              }
 _E          }
 _E      }

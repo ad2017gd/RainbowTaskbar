@@ -15,10 +15,17 @@
         Background="Transparent"
         Title="Taskbar" Height="1" Width="2">
     <Window.Clip>
-        <GeometryGroup FillRule="Nonzero">
-            <RectangleGeometry x:Name="TaskbarClip" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
-            <RectangleGeometry x:Name="TaskbarClipHide" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
-        </GeometryGroup>
+        <CombinedGeometry GeometryCombineMode="Xor">
+            <CombinedGeometry.Geometry1>
+                <GeometryGroup FillRule="Nonzero">
+                    <RectangleGeometry x:Name="TaskbarClip" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
+                    <RectangleGeometry x:Name="TaskbarClipHide" Rect="0,0,1920,48" RadiusX="0" RadiusY="0"/>
+                </GeometryGroup>
+            </CombinedGeometry.Geometry1>
+            <CombinedGeometry.Geometry2>
+                <RectangleGeometry x:Name="AutoHideClip" Rect="0,0,0,0" RadiusX="0" RadiusY="0"/>
+            </CombinedGeometry.Geometry2>
+        </CombinedGeometry>
     </Window.Clip>
     <Grid x:Name="MainGrid" Background="Transparent">
         <Grid x:Name="WebGrid" Background="Transparent">

@@ -303,6 +303,7 @@ public class TaskbarHelper {
     static extern int SHQueryUserNotificationState(
      out QUERY_USER_NOTIFICATION_STATE pquns);
 
+
     public void PlaceWindowUnder(Taskbar window) {
         if (!IsWindow(HWND)) return;
 
@@ -456,7 +457,7 @@ public class TaskbarHelper {
             } else {
                 var rgn2 = CreateRectRgn(0, 0, w, h);
                 SetWindowRgn(window.windowHelper.HWND, rgn2, true);
-                DeleteObject(rgn2);
+                DeleteObject(rgn);
             }
 
             return true;
