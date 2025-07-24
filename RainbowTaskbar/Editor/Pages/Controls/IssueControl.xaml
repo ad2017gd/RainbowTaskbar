@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="RainbowTaskbar.Editor.Pages.Controls.IssueControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RainbowTaskbar.Editor.Pages.Controls" xmlns:loc="clr-namespace:RainbowTaskbar.Languages"
+             xmlns:w="clr-namespace:RainbowTaskbar.Configuration.Web"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <loc:EnumTranslator x:Key="EnumTranslator" />
+        <ObjectDataProvider x:Key="WebConfigUserSettingDataType" ObjectType="{x:Type s:Enum}" MethodName="GetValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="w:WebConfigUserSettingDataType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <Grid MinWidth="480">
+        <StackPanel>
+            <TextBlock VerticalAlignment="Center" Text="{DynamicResource issueremind}" Margin="0,0,5,5" HorizontalAlignment="Left"></TextBlock>
+            <StackPanel Orientation="Vertical">
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource issuetitle}" Margin="0,0,5,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBox Text="{Binding Title}" Width="280" HorizontalAlignment="Left"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource issuedesc}" Margin="0,0,5,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Description}" MinHeight="64" Width="360" HorizontalAlignment="Left"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock VerticalAlignment="Center" Text="{DynamicResource issuecontact}" Margin="0,0,5,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBox Text="{Binding Contact}" Width="280" HorizontalAlignment="Left"></TextBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

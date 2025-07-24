@@ -26,13 +26,14 @@ using System.IO;
 using System.Threading;
 using WebView2 = Microsoft.Web.WebView2.Wpf.WebView2;
 using System.Windows.Media;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RainbowTaskbar;
 
 /// <summary>
 ///     Interaction logic for Taskbar.xaml
 /// </summary>
-public partial class Taskbar : Window {
+public partial class Taskbar : System.Windows.Window {
 
     public CanvasManager canvasManager;
     public bool secondary;
@@ -78,21 +79,44 @@ public partial class Taskbar : Window {
         public uint flags;
     }
     public const int WM_WINDOWPOSCHANGING = 0x46;
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
+
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
-        if(msg == WM_WINDOWPOSCHANGING) {
+        if (msg == WM_WINDOWPOSCHANGING) {
             WINDOWPOS wp = (WINDOWPOS) System.Runtime.InteropServices.Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
-            if (wp.hwndInsertAfter != hwndInsertAfter) {
-                taskbarHelper.SetWindowZUnder(this);
+            if (GetWindow(wp.hwndInsertAfter, 3) != hwndInsertAfter) {
+                //taskbarHelper.PlaceWindowUnder(this);
+                
                 taskbarHelper.SetBlur();
                 hwndInsertAfter = taskbarHelper.HWND;
             }
         }
-            return IntPtr.Zero;
+        if (msg == WM_Shell) {
+            if ((uint) wParam == 53) 
+                App.IsAppFullscreen = true;
+            if ((uint) wParam == 54) 
+                App.IsAppFullscreen = false;
+        }
+        return IntPtr.Zero;
     }
 
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern uint RegisterWindowMessage(string lpString);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern bool RegisterShellHookWindow(IntPtr window);
+
+    private uint WM_Shell = 0;
+    
     protected override void OnSourceInitialized(EventArgs e) {
         base.OnSourceInitialized(e);
         HwndSource source = (HwndSource) HwndSource.FromHwnd(new WindowInteropHelper(this).EnsureHandle());
+        if(!secondary) {
+            RegisterShellHookWindow(new WindowInteropHelper(this).EnsureHandle());
+            WM_Shell = RegisterWindowMessage("SHELLHOOK");
+        }
         source.AddHook(WndProc);
     }
     #endregion
@@ -150,6 +174,8 @@ public partial class Taskbar : Window {
                         webView.CoreWebView2.Settings.UserAgent = "RainbowTaskbar Web Display https://ad2017.dev/rnb";
                         webView.CoreWebView2.IsMuted = false;
 
+
+
                         webView.CoreWebView2.MemoryUsageTargetLevel = Microsoft.Web.WebView2.Core.CoreWebView2MemoryUsageTargetLevel.Low;
 
                         webView.CoreWebView2.ProcessFailed += (_, _) => {
@@ -195,7 +221,8 @@ public partial class Taskbar : Window {
                         taskbars.ForEach(x => {
                             var old = UnderlayOffset;
                             UnderlayOffset = Math.Max(Math.Min(message["v"]?.GetValue<int?>() ?? 0, 96), -96);
-                            x.Height = App.layers is not null ? App.layers.height - UnderlayOffset : (canvasManager.layers?.height ?? 48) - UnderlayOffset;
+                            int nwh = App.layers is not null ? (App.layers.height - UnderlayOffset) : ((canvasManager.layers?.height ?? 48) - UnderlayOffset);
+                            x.Height = nwh;
                         });
 
                         break;
@@ -228,10 +255,11 @@ public partial class Taskbar : Window {
 
                         App.Current.Dispatcher.Invoke(() => {
 
-
                             App.hiddenWebViewHost.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
+                            App.hiddenWebViewHost.Width = App.taskbars.Sum(t2 => t2.Width);
+                            App.hiddenWebViewHost.Height = App.taskbars.Max(t2 => t2.Height);
+                            var ttt = App.taskbars.Max(t2 => t2.Height);
 
-                            App.hiddenWebViewHost.Width = App.taskbars.Sum(t => t.Width);
                             App.hiddenWebViewHost.Top = 9999;
                             App.hiddenWebViewHost.Left = 9999;
 

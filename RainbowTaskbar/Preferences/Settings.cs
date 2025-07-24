@@ -50,7 +50,7 @@ namespace RainbowTaskbar.Preferences {
 
         [OnChangedMethod(nameof(SaveChanged))]
         [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
-        public int MaxWebFPS { get; set; } = 30;
+        public int MaxWebFPS { get; set; } = 40;
 
         [JsonIgnore]
         public string AccountUsername { get; set; } = "";
@@ -193,15 +193,18 @@ namespace RainbowTaskbar.Preferences {
             if (file is null) file = Path.Join(App.rainbowTaskbarDir, "settings.json");
 
             if (!File.Exists(file)) return new();
-            return JsonSerializer.Deserialize<Settings>(File.ReadAllText(file));
+            var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(file));
+            settings.loaded = true;
+            return settings;
         }
         public void ToFile(string file = null) {
             if (file is null) file = Path.Join(App.rainbowTaskbarDir, "settings.json");
 
             File.WriteAllText(file, JsonSerializer.Serialize(this));
         }
-
+        public bool loaded = false;
         public void SaveChanged() {
+            if (!loaded) return;
             ToFile();
         }
 

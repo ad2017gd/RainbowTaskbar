@@ -29,6 +29,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Xml;
+using System.Text;
 
 namespace RainbowTaskbar;
 
@@ -198,6 +199,21 @@ public partial class App : Application {
         UnhookWindowsHookEx(mouseHookId);
         mouseHookId = -1;
     }
+    private static bool isappfullscreen = false;
+    public static bool IsAppFullscreen { get => isappfullscreen; set {
+            isappfullscreen = value;
+            if(value) {
+                App.taskbars.ForEach(x => x.Hide());
+            } else {
+                App.taskbars.ForEach(x => x.Show());
+            }
+        } }
+
+    public static bool IsAppMicrosoftStore { get => !IsMicrosoftStore(); }
+    public static bool IsMicrosoftStore() {
+        return System.Environment.ProcessPath.ToLower().StartsWith(@"c:\program files\windowsapps");
+       
+    }
     private void Application_Startup(object sender, StartupEventArgs e) {
         foreach (string s in e.Args) {
         }
@@ -225,7 +241,7 @@ public partial class App : Application {
 
 
             App.localization.Switch(Settings.language);
-            if (Settings.CheckUpdate) AutoUpdate.CheckForUpdate();
+            if (Settings.CheckUpdate && !IsMicrosoftStore()) AutoUpdate.CheckForUpdate();
 
 
             // port old config bleh
@@ -330,21 +346,34 @@ public partial class App : Application {
         }
     }
 
+    public delegate bool EnumWindowsProc(IntPtr hWnd, int lParam);
+
+    [DllImport("user32.dll")]
+    private static extern int EnumWindows(EnumWindowsProc proc, int lParam);
+
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
     public static List<Taskbar> FindAllTaskbars() {
         List<Taskbar> tsk = new List<Taskbar>();
 
         var nw = new Taskbar(TaskbarHelper.FindWindow("Shell_TrayWnd", null));
         nw.Show();
         tsk.Add(nw);
-        IntPtr next = IntPtr.Zero;
-        while (true) {
-            next = TaskbarHelper.FindWindowEx(IntPtr.Zero, next, "Shell_SecondaryTrayWnd", null);
-            if (next == IntPtr.Zero) break;
-            var newWindow = new Taskbar(next, true);
-            newWindow.Show();
-            tsk.Add(newWindow);
-        }
 
+        EnumWindows(new EnumWindowsProc((hWnd, lParam) =>
+        {
+            StringBuilder className = new StringBuilder(255);
+            GetClassName(hWnd, className, 255);
+            if (className.ToString() == "Shell_SecondaryTrayWnd") {
+                var newWindow = new Taskbar(hWnd, true);
+                newWindow.Show();
+                tsk.Add(newWindow);
+            }
+
+            return true;
+        }), 0);
+        
         return tsk;
     }
     public static void SetupTaskbars() {

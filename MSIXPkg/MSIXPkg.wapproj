@@ -66,7 +66,6 @@
     <PackageCertificateThumbprint>40B50629E82B937D260DD0F9C51A9BA6DD8E241D</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
-  
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
@@ -75,6 +74,7 @@
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" PrivateAssets="all" />
+    <PackageReference Include="WPF-UI" Version="4.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RainbowTaskbar\RainbowTaskbar.csproj" />

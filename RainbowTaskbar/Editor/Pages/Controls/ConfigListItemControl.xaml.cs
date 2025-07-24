@@ -25,7 +25,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
     /// <summary>
     /// Interaction logic for ConfigListItemControl.xaml
     /// </summary>
-    public partial class ConfigListItemControl : UserControl, INotifyPropertyChanged
+    public partial class ConfigListItemControl : UserControl, INotifyPropertyChanged, IDisposable
     {
         public static readonly DependencyProperty ConfigProperty =
                    DependencyProperty.Register(
@@ -79,6 +79,11 @@ namespace RainbowTaskbar.Editor.Pages.Controls
                 App.ReloadTaskbars();
             }
             App.Settings.ToFile();
+        }
+
+        public void Dispose() {
+            image.Source = null;
+            image.UpdateLayout();
         }
     }
 }

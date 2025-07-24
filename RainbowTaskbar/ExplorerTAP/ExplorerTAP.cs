@@ -67,12 +67,14 @@ namespace RainbowTaskbar.ExplorerTAP {
         public static bool IsInjected { get; set; } = false;
         public static bool IsInjecting { get; set; } = false;
 
+        public static bool NeedsTAPCache { get; set; } = false;
+
         public static bool NeedsTAP() {
             var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
             return
-                taskbarHWND != IntPtr.Zero &&
+                (NeedsTAPCache = taskbarHWND != IntPtr.Zero &&
                 TaskbarHelper.FindWindowEx(taskbarHWND, IntPtr.Zero, "Windows.UI.Composition.DesktopWindowContentBridge", null) != IntPtr.Zero &&
-                TaskbarHelper.FindWindowEx(taskbarHWND, IntPtr.Zero, "WorkerW", null) == IntPtr.Zero;
+                TaskbarHelper.FindWindowEx(taskbarHWND, IntPtr.Zero, "WorkerW", null) == IntPtr.Zero);
                 
         }
 
@@ -183,15 +185,15 @@ namespace RainbowTaskbar.ExplorerTAP {
 
 
                     int hr = -1;
-                    int tries = 0;
+                    int tries = 1;
                     do {
                         var xamlthread = new Thread(() => {
-                            hr = InitializeXamlDiagnosticsEx("VisualDiagConnection1", pid, null, dllPath, guid, null);
+                            hr = InitializeXamlDiagnosticsEx($"VisualDiagConnection{tries}", pid, null, dllPath, guid, null);
                         });
                         xamlthread.Start();
                         xamlthread.Join();
-                        Thread.Sleep(250);
-                    } while (hr != 0 && tries++ < 5);
+                        Thread.Sleep(50);
+                    } while (hr != 0 && tries++ < 50);
 
                     // too lazy to make an event, this shall work
                     Task.Delay(1250).Wait();

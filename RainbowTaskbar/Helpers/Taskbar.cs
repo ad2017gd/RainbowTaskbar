@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -72,7 +74,7 @@ public class TaskbarHelper {
 
     public const int WM_DWMCOMPOSITIONCHANGED = 0x031E;
 
-    private static float scale = GetScalingFactor();
+    private float scale;
     private byte _alpha = 255;
 
     public bool autoHide = IsAutoHide();
@@ -88,6 +90,7 @@ public class TaskbarHelper {
     private int old_radius = 0;
 
     private WinEventDelegate procDelegate;
+    private WinEventDelegate proc2Delegate;
     public int Radius = 0;
     public int YOffset = 0;
 
@@ -100,6 +103,7 @@ public class TaskbarHelper {
     public TaskbarHelper(IntPtr hWnd, bool secondary = false) {
         HWND = hWnd;
         Secondary = secondary;
+        scale = GetScalingFactor();
 
         SendMessage(HWND, WM_DWMCOMPOSITIONCHANGED, 1, null);
     }
@@ -129,28 +133,10 @@ public class TaskbarHelper {
     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy,
         int uFlags);
 
-    [DllImportAttribute("user32.dll")]
-    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-    [DllImportAttribute("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
-
     [DllImport("user32.dll")]
     private static extern bool EnumThreadWindows(int dwThreadId, EnumThreadDelegate lpfn,
         IntPtr lParam);
 
-    public static IEnumerable<IntPtr> EnumerateProcessWindowHandles(Process process) {
-        var handles = new List<IntPtr>();
-
-        foreach (ProcessThread thread in process.Threads)
-            EnumThreadWindows(thread.Id,
-                (hWnd, lParam) => {
-                    handles.Add(hWnd);
-                    return true;
-                }, IntPtr.Zero);
-
-        return handles;
-    }
 
     [DllImport("user32.dll")]
     private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr
@@ -170,11 +156,10 @@ public class TaskbarHelper {
     private void WinEventProc(IntPtr hWinEventHook, uint eventType,
         IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime) {
         if (hwnd != HWND) return;
-        SetBlur();
         if (idObject != 0 || idChild != 0) return;
 
         if (window is not null && window.TaskbarClip is not null) 
-            window.TaskbarClip.Rect = new(0, 0, window.Width * scale, window.Height * scale);
+            window.TaskbarClip.Rect = new(0, 0, window.Width, window.Height);
         var raise = TaskbarPositionChanged;
         if (raise != null) raise(null, null);
     }
@@ -183,6 +168,8 @@ public class TaskbarHelper {
         procDelegate = WinEventProc;
         hhook = SetWinEventHook(EVENT_OBJECT_LOCATIONCHANGE, EVENT_OBJECT_LOCATIONCHANGE, IntPtr.Zero,
             procDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+
+        
     }
 
     public void PositionChangedUnhook() => UnhookWinEvent(hhook);
@@ -190,16 +177,16 @@ public class TaskbarHelper {
     public void SetAlpha(double alpha) {
         if (!IsWindow(HWND)) return;
         if (!layered) {
-            SetWindowLong(HWND, GWL_EXSTYLE, (uint) GetWindowLong(HWND, GWL_EXSTYLE).ToInt32() | WS_EX_LAYERED);
+            //SetWindowLong(HWND, GWL_EXSTYLE, (uint) GetWindowLong(HWND, GWL_EXSTYLE).ToInt32() | WS_EX_LAYERED);
             layered = true;
         }
         // I have no idea what the reasoning behind this is, but it probably meant something when i first did it so we're keeping it!
         if (_alpha != (byte) (alpha * 255)) {
-            SetLayeredWindowAttributes(HWND, 0, (byte) (alpha * 255), LWA_ALPHA);
+            //SetLayeredWindowAttributes(HWND, 0, (byte) (alpha * 255), LWA_ALPHA);
             _alpha = (byte) (alpha * 255);
         } else {
-            SetLayeredWindowAttributes(HWND, 0, 254, LWA_ALPHA);
-            _alpha = 254;
+            //SetLayeredWindowAttributes(HWND, 0, 100, LWA_ALPHA);
+            _alpha = 100;
         }
         
     }
@@ -217,6 +204,7 @@ public class TaskbarHelper {
 
     public void SetBlur() {
         if (!IsWindow(HWND)) return;
+        if (ExplorerTAP.ExplorerTAP.NeedsTAPCache) return;
         var accent = new AccentPolicy();
         switch (Style) {
             case TaskbarStyle.Default:
@@ -275,15 +263,15 @@ public class TaskbarHelper {
         GetWindowRect(HWND, out rc);
         return new Rectangle(rc.Left, rc.Top, rc.Right - rc.Left, rc.Bottom - rc.Top);
     }
-    public Rectangle GetRectangle() {
+    public Rectangle GetRectangle(bool scaling = true) {
         if (!IsWindow(HWND)) return new Rectangle(0, 0, 0, 0);
         RECT rc;
         GetWindowRect(HWND, out rc);
 
-        if(ExplorerTAP.ExplorerTAP.NeedsTAP()) {
+        if(ExplorerTAP.ExplorerTAP.NeedsTAPCache) {
             var actualPos = ExplorerTAP.ExplorerTAP.GetYPosition(window);
             ;
-            rc.Top += actualPos;
+            rc.Top += (int)(actualPos * (scaling ? GetScalingFactor() : 1));
             //rc.Bottom += actualPos;
         }
 
@@ -310,8 +298,11 @@ public class TaskbarHelper {
         UpdateRadius();
         var rect = GetRectangle();
 
-        SetWindowPos(window.windowHelper.HWND, HWND, rect.X, rect.Y, rect.Width, rect.Height,
+        SetWindowPos(window.windowHelper.HWND, HWND, rect.X, rect.Y, 0, 0,
             SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOSIZE);
+        if (window.Width != rect.Width * (1 / scale)) window.Width = rect.Width * (1/scale);
+        var off = App.Settings.GraphicsRepeat ? 0 : window.UnderlayOffset;
+        if (window.Height - off != rect.Height * (1 / scale)) window.Height = rect.Height * (1 / scale) - off;
 
 
     }
@@ -319,7 +310,7 @@ public class TaskbarHelper {
     public void SetWindowZUnder(Taskbar window) {
         if (!IsWindow(HWND)) return;
         SetWindowPos(window.windowHelper.HWND, HWND, 0, 0, 0, 0,
-        SWP.NOREDRAW | SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOREPOSITION | SWP.NOMOVE | SWP.NOSIZE);
+        SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOMOVE | SWP.NOSIZE);
     }
 
     //SetWindowLong(HWND, GWL_EXSTYLE, (uint)((int)GetWindowLong(HWND, GWL_EXSTYLE) | WS_EX_LAYERED));
@@ -374,7 +365,9 @@ public class TaskbarHelper {
         }
     }
 
-    private static float GetScalingFactor() {
+    public float GetScalingFactor() {
+        if (DPIUtil.IsSupportingDpiPerMonitor) return (float)DPIUtil.ScaleFactor(window);
+
         var desktop = GetDC(IntPtr.Zero);
         var real = GetDeviceCaps(desktop, 10);
         var fals = GetDeviceCaps(desktop, 117);

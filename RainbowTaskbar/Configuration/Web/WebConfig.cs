@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace RainbowTaskbar.Configuration.Web {
     public enum WebConfigUserSettingDataType {
@@ -164,10 +165,7 @@ namespace RainbowTaskbar.Configuration.Web {
 
                 File.WriteAllText(Path.Join(App.rainbowTaskbarDir, "current.html"), Data.WebContent);
 
-                webView?.CoreWebView2.Navigate(Path.Join(App.rainbowTaskbarDir, "current.html"));
-                EventHandler<CoreWebView2NavigationCompletedEventArgs> handler = null;
-                handler = (sender, args) => {
-                    var code = $$"""
+                var code = $$"""
                         // code adapted from https://github.com/PixelsCommander/fps-control-chrome-extension/blob/master/src/js/content.js
 
                         window.rtMaxFPS = {{App.Settings.MaxWebFPS}};
@@ -195,15 +193,24 @@ namespace RainbowTaskbar.Configuration.Web {
                         window.requestAnimationFrame = __mockedRaf;
                         window.rtUserConfig = {};
                         {{string.Join('\n', Data.UserSettings.Select((x) => {
-                        return "window.rtUserConfig[" + JsonSerializer.Serialize(new Regex("[^\\w$]").Replace(x.Key, " ")) + "]=" + x.ValueJS + ";";
-                    })) ?? ""}}
+                    return "window.rtUserConfig[" + JsonSerializer.Serialize(new Regex("[^\\w$]").Replace(x.Key, " ")) + "]=" + x.ValueJS + ";";
+                })) ?? ""}}
 
                         """;
-                    webView?.ExecuteScriptAsync(
-                        code);
-                    webView.NavigationCompleted -= handler;
-                };
-                webView.NavigationCompleted += handler;
+                webView?.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+                    code).ContinueWith((s) => {
+                        App.Current.Dispatcher.Invoke(() => {
+                            webView?.CoreWebView2.Navigate(Path.Join(App.rainbowTaskbarDir, "current.html"));
+                            EventHandler<CoreWebView2NavigationCompletedEventArgs> handler = null;
+                            handler = (sender, args) => {
+                                webView.CoreWebView2.RemoveScriptToExecuteOnDocumentCreated(s.Result);
+                                webView.NavigationCompleted -= handler;
+                            };
+                            webView.NavigationCompleted += handler;
+                        });
+                    });
+
+                
             });
         }
 

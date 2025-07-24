@@ -75,6 +75,10 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                 (Config.ConfigData as WebConfigData).UserSettings = (New.ConfigData as WebConfigData).UserSettings;
             }
             Config.ToFile();
+
+            if (this.Config == Config.currentlyRunning) {
+                Config.Start();
+            }
         }
 
         private void Edit(object sender, RoutedEventArgs e) {
@@ -203,5 +207,6 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                 });
             });
         }
+
     }
 }

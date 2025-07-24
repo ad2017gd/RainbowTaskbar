@@ -42,6 +42,8 @@
     <s:String x:Key="propkey">属性键</s:String>
     <s:String x:Key="proptype">属性类型</s:String>
 
+    <s:String x:Key="devtools">Open Developer Tools</s:String>
+
     <s:String x:Key="enum_string">字符串</s:String>
     <s:String x:Key="enum_number">数字</s:String>
     <s:String x:Key="enum_color">颜色</s:String>
@@ -55,7 +57,19 @@
     <s:String x:Key="downloadnew">下载新版本</s:String><!-- download is a verb! -->
     <s:String x:Key="like">点赞</s:String><!-- verb! -->
     <s:String x:Key="unlike">取消点赞</s:String><!-- verb! -->
-    
+    <s:String x:Key="comments">Comments</s:String>
+    <s:String x:Key="goback">Go back</s:String>
+
+    <!-- Home tab -->
+    <s:String x:Key="welcome">Welcome to the RainbowTaskbar editor!</s:String>
+    <s:String x:Key="whatsnew">What's new in the latest update</s:String>
+    <s:String x:Key="review">Review on Store</s:String>
+
+    <s:String x:Key="issueremind">*using GitHub to submit an issue or request is preferred.</s:String>
+    <s:String x:Key="issuetitle">Issue title</s:String>
+    <s:String x:Key="issuedesc">Description</s:String>
+    <s:String x:Key="issuecontact">Contact info (optional)</s:String>
+
     <!-- Settings tab -->
     <s:String x:Key="general">常规</s:String>
     <s:String x:Key="runstartup">启动时运行</s:String>
@@ -65,6 +79,8 @@
     <s:String x:Key="workshop">工作区</s:String>
     <s:String x:Key="signedin">已登录为</s:String>
     <s:String x:Key="logingit">登录（GitHub）</s:String>
+    <s:String x:Key="logingoog">登录（Google）</s:String>
+    <s:String x:Key="signout">Log out</s:String>
     <s:String x:Key="passmouse">传递鼠标输入到底层（可能会使用 CPU）</s:String>
     <s:String x:Key="allowjs">允许 JavaScript</s:String>
     <s:String x:Key="graphics">图形</s:String>
@@ -205,6 +221,7 @@
     <s:String x:Key="msgbox_button_cancel">取消</s:String>
     <s:String x:Key="msgbox_update">RainbowTaskbar 有新版本发布了。您想要更新吗？</s:String>
     <s:String x:Key="msgbox_migrate">Do you wish to migrate the legacy (v2) config and presets to the current version?</s:String>
+    <s:String x:Key="msgbox_issuegithub">Use GitHub</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">大眼仔~旭</s:String>
 

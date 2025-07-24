@@ -67,6 +67,7 @@ catch (...)
 }
 
 HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Version() { 
+
     return 2;
 }
 

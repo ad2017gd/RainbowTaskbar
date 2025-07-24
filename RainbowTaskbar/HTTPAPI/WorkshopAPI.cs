@@ -64,6 +64,8 @@ namespace RainbowTaskbar.HTTPAPI {
         public string AuthorUsername { get; set; }
         [JsonPropertyName("likes")]
         public int LikeCount { get; set; }
+        [JsonPropertyName("comments")]
+        public int CommentCount { get; set; }
     }
     public class PublishConfigResponse : ResultResponse {
         [JsonPropertyName("config")]
@@ -71,11 +73,40 @@ namespace RainbowTaskbar.HTTPAPI {
         
     }
 
+    public class CommentData {
+        [JsonPropertyName("author")]
+        public string AuthorUsername { get; set; }
+        [JsonPropertyName("content")]
+        public string Content { get; set; }
+        [JsonPropertyName("datePublished")]
+        public long Published { get; set; }
+        [JsonPropertyName("id")]
+        public string ID { get; set; }
+
+        [JsonIgnore]
+        public bool OwnComment { get => AuthorUsername == App.Settings.AccountUsername || App.Settings.AccountUsername == "ad2017gd"; }
+    }
+
+    public class ConfigCommentsResponse : ResultResponse {
+        [JsonPropertyName("comments")]
+        public List<CommentData> Comments { get; set; }
+    }
+    public class ConfigCommentRequest : AuthenticatedRequest {
+        [JsonPropertyName("content")]
+        public string Content { get; set; }
+    }
+    public class ConfigCommentResponse : ResultResponse {
+        [JsonPropertyName("id")]
+        public string ID { get; set; }
+    }
+
     public class SearchConfigRequest {
         [JsonPropertyName("search")]
         public string Search { get; set; }
         [JsonPropertyName("page")]
         public int Page { get; set; }
+        [JsonPropertyName("sort")]
+        public int Sort { get; set; }
 
     }
 
@@ -101,6 +132,7 @@ namespace RainbowTaskbar.HTTPAPI {
                     cfg.CachedPublisherUsername = x.AuthorUsername;
                     cfg.ConfigData = JsonSerializer.Deserialize<Configuration.ConfigData>(x.Data, Config.SerializerOptions);
                     cfg.CachedLikeCount = x.LikeCount;
+                    cfg.CachedCommentCount = x.CommentCount;
 
                     return cfg;
                 } catch {
@@ -112,6 +144,16 @@ namespace RainbowTaskbar.HTTPAPI {
     public class ThumbnailConfigRequest : AuthenticatedRequest {
         [JsonPropertyName("thumbnail")]
         public string Image { get; set; }
+
+    }
+
+    public class IssueRequest {
+        [JsonPropertyName("title")]
+        public string Title { get; set; }
+        [JsonPropertyName("content")]
+        public string Content { get; set; }
+        [JsonPropertyName("contact")]
+        public string Contact { get; set; }
 
     }
     public class WorkshopAPI {
@@ -136,11 +178,12 @@ namespace RainbowTaskbar.HTTPAPI {
                 return null;
             }
         }
-        public async Task<SearchConfigResponse?> SearchConfigsAsync(string search, int page = 0) {
+        public async Task<SearchConfigResponse?> SearchConfigsAsync(string search, SortBy sort, int page = 0) {
             try {
                 using var http = new HttpClient();
 
                 var content = await http.PostAsJsonAsync("https://rnbsrv.ad2017.dev/config", new SearchConfigRequest {
+                    Sort = (int)sort,
                     Search = search,
                     Page = page
                 });
@@ -216,12 +259,78 @@ namespace RainbowTaskbar.HTTPAPI {
             }
         }
 
+        public async Task<ConfigCommentsResponse> GetConfigComments(Config config) {
+            try {
+                using var http = new HttpClient();
+
+                var content = await http.PostAsJsonAsync($"https://rnbsrv.ad2017.dev/config/{config.PublishedID}/comments", new AuthenticatedRequest {
+                    LoginKey = LoginKey
+                });
+                var result = await content.Content.ReadFromJsonAsync<ConfigCommentsResponse>();
+
+                return result;
+            }
+            catch {
+                return null;
+            }
+        }
+        public async Task<ConfigCommentResponse> AddConfigComment(Config config, string comment) {
+            try {
+                using var http = new HttpClient();
+
+                var content = await http.PostAsJsonAsync($"https://rnbsrv.ad2017.dev/config/{config.PublishedID}/comment", new ConfigCommentRequest {
+                    Content = comment,
+                    LoginKey = LoginKey
+                });
+                var result = await content.Content.ReadFromJsonAsync<ConfigCommentResponse>();
+
+                return result;
+            }
+            catch {
+                return null;
+            }
+        }
+
+        public async Task<ResultResponse> DeleteConfigComment(Config config, string ID) {
+            try {
+                using var http = new HttpClient();
+
+                var content = await http.PostAsJsonAsync($"https://rnbsrv.ad2017.dev/config/{config.PublishedID}/comment/{ID}/delete", new AuthenticatedRequest {
+                    LoginKey = LoginKey
+                });
+                var result = await content.Content.ReadFromJsonAsync<ResultResponse>();
+
+                return result;
+            }
+            catch {
+                return null;
+            }
+        }
+
         public async Task<ResultResponse> LikeConfig(Config cfg, bool like = true) {
             try {
                 using var http = new HttpClient();
 
                 var content = await http.PostAsJsonAsync($"https://rnbsrv.ad2017.dev/config/{cfg.PublishedID}/{(like ? "" : "un")}like", new AuthenticatedRequest {
                     LoginKey = LoginKey
+                });
+                var result = await content.Content.ReadFromJsonAsync<ResultResponse>();
+
+                return result;
+            }
+            catch {
+                return null;
+            }
+        }
+
+        public async Task<ResultResponse> SubmitIssue(string title, string desc, string contact) {
+            try {
+                using var http = new HttpClient();
+
+                var content = await http.PostAsJsonAsync($"https://rnbsrv.ad2017.dev/issue", new IssueRequest {
+                    Title = title,
+                    Contact = contact == "" || contact == string.Empty ? "Not provided" : contact,
+                    Content = desc
                 });
                 var result = await content.Content.ReadFromJsonAsync<ResultResponse>();
 

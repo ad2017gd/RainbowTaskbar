@@ -21,7 +21,7 @@ public class WindowHelper {
 
     public static int Count;
 
-    private static float scale = GetScalingFactor();
+    public float scale;
 
     public bool autoHide = IsAutoHide();
     public IntPtr HWND = (IntPtr) 0;
@@ -36,6 +36,7 @@ public class WindowHelper {
         Count++;
         this.window = window;
         Init(taskbarHelper);
+        scale = taskbar.GetScalingFactor();
     }
 
     [DllImport("user32.dll")]
@@ -72,21 +73,50 @@ public class WindowHelper {
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool DeleteObject([In] IntPtr hObject);
 
-    int oldheight = 0;
+    [DllImport("user32.dll")]
+    static extern IntPtr WindowFromPoint(System.Drawing.Point p);
+
+
+    DateTime lastZIndex = DateTime.MinValue;
     private void TaskbarPosChanged(object sender, EventArgs args) {
-        taskbar.PlaceWindowUnder(window);
+
         var rect = taskbar.GetRectangle();
-        if (!App.Settings.GraphicsRepeat && App.hiddenWebViewHost is not null && oldheight != rect.Height) {
-            App.hiddenWebViewHost.Height = rect.Height;
-            oldheight = rect.Height;
+        var changed = Math.Abs(window.Left - rect.Left * (1 / scale)) > 0.001 || Math.Abs(window.Top - rect.Top * (1 / scale)) > 0.001 || Math.Abs(window.Width - rect.Width * (1 / scale)) > 0.001 || Math.Abs(window.Height - rect.Height * (1 / scale)) > 0.001;
+        if (changed) {
+            taskbar.PlaceWindowUnder(window);
+            taskbar.SetBlur();
         }
-        if(autoHide) {
-            var scr = Screen.FromPoint(new(rect.X, rect.Y));
-            int max = Math.Max(0,Math.Min(rect.Height, scr.Bounds.Bottom - rect.Y));
+
+            if (DateTime.Now - lastZIndex > TimeSpan.FromSeconds(0.1) && !changed) {
+            lastZIndex = DateTime.Now;
+            taskbar.PlaceWindowUnder(window);
+            taskbar.SetBlur();
+        }
+
+       
+
+        if (!App.Settings.GraphicsRepeat && App.hiddenWebViewHost is not null && window.Height != rect.Height * (1 / scale)) {
+            App.hiddenWebViewHost.Height = rect.Height * (1/scale);
+        }
+        if(autoHide && changed) {
+            var Taskbar = rect;
+            var finalW = Taskbar.Width * (1 / scale);
+            var finalH = Taskbar.Width * (1 / scale);
+            if(finalW > window.MinWidth) {
+                window.MinWidth = Taskbar.Width * (1 / scale);
+                window.Width = Taskbar.Width * (1 / scale);
+            }
+            if (finalH > window.MinHeight) {
+                window.MinHeight = Taskbar.Height * (1 / scale);
+                window.Height = Taskbar.Height * (1 / scale);
+            }
+
+            var scr = Screen.FromPoint(new((int)(rect.X*scale), (int)(rect.Y * scale)));
+            int max = (int) Math.Max(0,Math.Min(rect.Height, scr.Bounds.Bottom - rect.Y));
 
 
-            var rgn1 = CreateRectRgn(0, 0, rect.Width, rect.Height);
-            var rgn2 = CreateRectRgn(0, max, rect.Width, rect.Height);
+            var rgn1 = CreateRectRgn(0, 0, (int)(rect.Width * scale), (int) (rect.Height * scale));
+            var rgn2 = CreateRectRgn(0, (int) (max* scale), (int) (rect.Width * scale), (int) (rect.Height * scale));
             var rgn = CreateRectRgn(0, 0, 0, 0);
             CombineRgn(rgn, rgn1, rgn2, CombineRgnStyles.RGN_XOR);
             SetWindowRgn(HWND, rgn, false);
@@ -156,18 +186,7 @@ public class WindowHelper {
     [DllImport("user32.dll", SetLastError = true)]
     private static extern int ReleaseDC(IntPtr hWnd, IntPtr hdc);
 
-    [DllImport("gdi32.dll")]
-    private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
-
-    private static float GetScalingFactor() {
-        var desktop = GetDC(IntPtr.Zero);
-        var real = GetDeviceCaps(desktop, 10);
-        var fals = GetDeviceCaps(desktop, 117);
-
-        var scale = fals / (float) real;
-        ReleaseDC(IntPtr.Zero, desktop);
-        return scale;
-    }
+   
 
     [DllImport("dwmapi.dll", SetLastError = true)]
     static extern int DwmRegisterThumbnail(IntPtr dest, IntPtr src, out IntPtr thumb);
@@ -206,7 +225,7 @@ public class WindowHelper {
         dskThumbProps.fSourceClientAreaOnly = 1;
         dskThumbProps.fVisible = 1;
         dskThumbProps.opacity = 255;
-        var rect = taskbar.GetRectangle();
+        var rect = taskbar.GetRectangle(true);
         dskThumbProps.rcSource = new RECT() { Top = 0, Left = 0, Right = (int) rect.Width, Bottom = (int) rect.Height };
         dskThumbProps.rcDestination = new RECT() { Top = (int) (rect.Top - window.Top), Left = 0, Right = (int) rect.Width, Bottom = (int) rect.Height };
         DwmUpdateThumbnailProperties(ddHandle, ref dskThumbProps);
@@ -218,9 +237,10 @@ public class WindowHelper {
         dskThumbProps.fSourceClientAreaOnly = 1;
         dskThumbProps.fVisible = 1;
         dskThumbProps.opacity = 255;
-        var rect = taskbar.GetRectangle();
+        var rect = taskbar.GetRectangle(true);
+        
         dskThumbProps.rcSource = new RECT() { Top = 0, Left = rect.X, Right = (int) rect.Width + rect.X, Bottom = (int) rect.Height };
-        dskThumbProps.rcDestination = new RECT() { Top = (int) (rect.Top - window.Top), Left = 0, Right = (int) rect.Width, Bottom = (int) rect.Height };
+        dskThumbProps.rcDestination = new RECT() { Top = (int) (rect.Top - window.Top * scale), Left = 0, Right = (int) rect.Width, Bottom = (int) rect.Height };
         DwmUpdateThumbnailProperties(ddHandle, ref dskThumbProps);
         ;
     }

@@ -11,6 +11,8 @@
         ShowInTaskbar="False"
         WindowStyle="None"
         
+        SizeToContent="Manual"
+        
         Closing="Window_Closing"
         Background="Transparent"
         Title="Taskbar" Height="1" Width="2">

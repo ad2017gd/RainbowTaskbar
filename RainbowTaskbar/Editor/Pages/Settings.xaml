@@ -45,8 +45,15 @@
                 <TextBlock FontSize="16" Text="{Binding SettingsCfg.AccountUsername, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                 <TextBlock FontSize="16">)</TextBlock>
             </StackPanel>
-            <Button Content="{DynamicResource logingit}" x:Name="login" Click="github_Click">
-            </Button>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="{DynamicResource logingit}" x:Name="login" Click="github_Click" Margin="0,0,5,0">
+                </Button>
+                <Button Content="{DynamicResource logingoog}" x:Name="login2" Click="google_Click" Margin="0,0,15,0">
+                </Button>
+                <Button Content="{DynamicResource signout}" x:Name="signout" Click="login2_Click" Margin="0,0,15,0">
+                </Button>
+            </StackPanel>
+            
 
             <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource enum_web}"></TextBlock>
             <CheckBox Content="{DynamicResource passmouse}" IsChecked="{Binding SettingsCfg.WebTouchThrough}"></CheckBox>

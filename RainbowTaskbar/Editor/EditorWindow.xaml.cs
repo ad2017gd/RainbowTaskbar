@@ -1,4 +1,5 @@
 ﻿using RainbowTaskbar.Editor.Pages;
+using RainbowTaskbar.Editor.Pages.Controls;
 using RainbowTaskbar.Editor.Pages.Edit;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ using Wpf.Ui;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Extensions;
+using Xceed.Wpf.AvalonDock.Controls;
 
 namespace RainbowTaskbar.Editor {
     /// <summary>
@@ -33,7 +35,7 @@ namespace RainbowTaskbar.Editor {
         public IContentDialogService contentDialogService;
         public EditorWindow() {
 
-            SystemThemeWatcher.Watch(this);
+            //SystemThemeWatcher.Watch(this);
             InitializeComponent();
 
             nav.Loaded += (_, _) => {
@@ -65,10 +67,27 @@ namespace RainbowTaskbar.Editor {
 
         Page current = null;
         private void nav_Navigating(NavigationView sender, NavigatingCancelEventArgs args) {
-
             // this is totally disgusting but wpf ui is cooked so whatever
 
+
+            if(args.Page is Browse b) {
+                b.OnSortChanged(); 
+            }
+
+            if (current is Configs cfgs) {
+                cfgs.itemscontrol.FindVisualChildren<ConfigListItemControl>().ToList().ForEach(x => {
+                    x.Dispose();
+                });
+            }
+
             if (current is not null && current.GetType() != args.Page.GetType() && (current is Browse || App.editorViewModel.EditPage is InstructionEditPage) && args.Page is not EmptyPageBadFix) {
+                if(current is Browse br) {
+                    br.itemscontrol.FindVisualChildren<ResultListItemControl>().ToList().ForEach(x => {
+                        x.Dispose();
+                    });
+                }
+
+                
                 args.Cancel = true;
                 nav.Navigate(typeof(EmptyPageBadFix));
                 Type t = args.Page.GetType();
@@ -77,7 +96,6 @@ namespace RainbowTaskbar.Editor {
                     Dispatcher.Invoke(() => nav.Navigate(t));
                 });
             }
-
             current = args.Page as Page;
             
 
@@ -169,8 +187,9 @@ namespace RainbowTaskbar.Editor {
         }
 
         private void FluentWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            e.Cancel = true;
-            Hide();
+            App.editor = null;
+            //e.Cancel = true;
+            //Hide();
         }
     }
 }

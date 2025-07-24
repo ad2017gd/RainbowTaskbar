@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +36,8 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         public bool Downloaded { get => App.Configs.Any(x => x.PublishedID == Config.PublishedID); }
         public string FileSize { get => (Encoding.UTF8.GetBytes(JsonSerializer.Serialize(Config)).Length / 1024.0).ToString("N1"); }
         public bool Liked { get; set; }
+
+        public string CommentButtonText { get => App.localization.Get("comments") + $" ({Config.CachedCommentCount})"; }
         public ViewInfo(Config config) {
             InitializeComponent();
             this.DataContext = this;
@@ -77,6 +80,19 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
             Liked = !Liked;
             Config.CachedLikeCount += Liked ? 1 : -1;
             App.Settings.workshopAPI.LikeConfig(Config, Liked);
+        }
+
+        private void Comment(object sender, RoutedEventArgs e) {
+           var page = new ViewComments(Config);
+            page.OldPage = this;
+
+            App.editor.nav.Navigate(typeof(EmptyPageBadFix));
+            Task.Run(() => {
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() => App.editor.nav.Navigate(typeof(EmptyPageBadFix2)));
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() => App.editor.nav.ReplaceContent(page));
+            });
         }
     }
 }

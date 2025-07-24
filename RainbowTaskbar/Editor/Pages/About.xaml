@@ -21,14 +21,28 @@
             <TextBlock HorizontalAlignment="Center" Text="{DynamicResource description}"></TextBlock>
             <TextBlock HorizontalAlignment="Center" Text="{DynamicResource donations}"></TextBlock>
         </StackPanel>
-        <Image VerticalAlignment="Center" MouseLeftButtonDown="Image_MouseLeftButtonDown"
+        <Image VerticalAlignment="Center" x:Name="paypal" MouseLeftButtonDown="Image_MouseLeftButtonDown"
                                        Tag="https://paypal.me/ad2k17" Height="80" Width="200" Stretch="Fill"
-                                       Source="pack://application:,,,/Resources/Paypal.png" />
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center">
+                                       Source="pack://application:,,,/Resources/Paypal.png">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+
+        </Image>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center">
             <Hyperlink Click="Hyperlink_Click">
                 GitHub
             </Hyperlink>
             <LineBreak></LineBreak>
+            <Hyperlink Click="Hyperlink_Click_1">
+                Submit an issue or request
+            </Hyperlink>
             <Run Text="{DynamicResource langcredits}"></Run>
         </TextBlock>
         

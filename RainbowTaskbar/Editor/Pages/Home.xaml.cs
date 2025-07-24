@@ -1,7 +1,12 @@
-﻿using RainbowTaskbar.Helpers;
+﻿using RainbowTaskbar.Configuration.Web;
+using RainbowTaskbar.Editor.Pages.Controls;
+using RainbowTaskbar.Editor.Pages.Controls.WebControls;
+using RainbowTaskbar.Editor.Pages.Edit;
+using RainbowTaskbar.Helpers;
 using RainbowTaskbar.Interpolation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -17,6 +22,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
+using Wpf.Ui.Extensions;
 
 namespace RainbowTaskbar.Editor.Pages {
     /// <summary>
@@ -29,11 +36,18 @@ namespace RainbowTaskbar.Editor.Pages {
             ApplicationThemeManager.ApplySystemTheme(true);
 
             App.localization.Enable(Resources.MergedDictionaries);
+            DataContext = App.editorViewModel;
             
             Task.Run( () => {
                 
                 if(App.editorViewModel.LatestUpdateInfo is null) {
-                    var str = AutoUpdate.GetLatestBody().Result;
+                    string str;
+                    try {
+                        str = AutoUpdate.GetLatestBody().Result;
+                    }
+                    catch (Exception ex) {
+                        str = "Failed to get latest update info.";
+                    }
                     App.editorViewModel.LatestUpdateInfo = Markdig.Markdown.ToHtml(str);
                 }
                 Task t = null;
@@ -59,6 +73,53 @@ namespace RainbowTaskbar.Editor.Pages {
                 });
             });
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            Process.Start(new ProcessStartInfo("ms-windows-store:Review?PFN=48822ad2017.30397FC5B3C66_32727fk258az6") { UseShellExecute = true });
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            var ctrl = new IssueControl();
+
+            lastupdate.Visibility = Visibility.Hidden;
+
+            Task.Run(() => {
+                Task<ContentDialogResult> result = null;
+                Dispatcher.Invoke(() => result = App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
+                    Content = ctrl,
+                    Title = App.localization.Get("issueorreq"),
+                    PrimaryButtonText = "OK",
+                    SecondaryButtonText = App.localization.Get("msgbox_issuegithub"),
+                    CloseButtonText = App.localization.Get("msgbox_button_cancel")
+                }));
+                result.Wait();
+
+                if (result.Result == ContentDialogResult.Primary) {
+                    Task<HTTPAPI.ResultResponse> res = null;
+                    Dispatcher.Invoke(() => {
+                        res = App.Settings.workshopAPI.SubmitIssue(ctrl.Title, ctrl.Description, ctrl.Contact);
+                    });
+                    res.Wait();
+                    if (!res.Result.Result) {
+                        Dispatcher.Invoke(() => App.editor.contentDialogService.ShowSimpleDialogAsync(new() {
+                            Content = App.localization.Get("msgbox_fail_title"),
+                            Title = App.localization.Get("msgbox_fail_title"),
+                            CloseButtonText = "OK"
+                        }).ContinueWith((t) => Dispatcher.Invoke(() => lastupdate.Visibility = Visibility.Visible)));
+                    } else {
+                        Dispatcher.Invoke(() => lastupdate.Visibility = Visibility.Visible);
+                    }
+                }
+                else if(result.Result == ContentDialogResult.Secondary) {
+                    Process.Start(new ProcessStartInfo("https://github.com/ad2017gd/RainbowTaskbar/issues/new/choose") { UseShellExecute = true });
+                    Dispatcher.Invoke(() => lastupdate.Visibility = Visibility.Visible);
+                } else {
+                    Dispatcher.Invoke(() => lastupdate.Visibility = Visibility.Visible);
+                }
+
+                
+            });
         }
     }
 }

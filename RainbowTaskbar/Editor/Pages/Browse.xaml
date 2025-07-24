@@ -36,20 +36,38 @@
             <ui:TextBox PlaceholderText="{DynamicResource search}" TextChanged="TextBox_TextChanged" x:Name="search" Grid.Column="0"></ui:TextBox>
             <ComboBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource SortBy}}" SelectedValue="{Binding Sort}"></ComboBox>
         </Grid>
-        <ScrollViewer Grid.Row="1" Margin="-4,0,0,0" ScrollChanged="ScrollViewer_ScrollChanged">
-            <ItemsControl ItemsSource="{Binding ResultList}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+        <ScrollViewer Grid.Row="1" Margin="-4,0,0,0" ScrollChanged="ScrollViewer_ScrollChanged" x:Name="scrollViewer">
+            <StackPanel>
+                <ItemsControl x:Name="itemscontrol" ItemsSource="{Binding ResultList}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <controls:ResultListItemControl Margin="4" Config="{Binding}" PageParent="{Binding ElementName=browsePage, Path=.}"></controls:ResultListItemControl>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <controls:ResultListItemControl Margin="4" Config="{Binding}" PageParent="{Binding ElementName=browsePage, Path=.}"></controls:ResultListItemControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Visible"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SearchLoaded}" Value="True">
+                                    <DataTrigger.Setters>
+                                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                    </DataTrigger.Setters>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <ui:ProgressRing IsIndeterminate="True" Margin="0,16,0,16"/>
+                </StackPanel>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </Page>

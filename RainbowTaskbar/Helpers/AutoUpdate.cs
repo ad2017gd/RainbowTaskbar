@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Security.AccessControl;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -37,14 +39,38 @@ internal static class AutoUpdate {
                         Environment.Is64BitProcess ? asset.Name.Contains("x64") : !asset.Name.Contains("x64"));
 
                     var uri = new Uri(asset.BrowserDownloadUrl);
-                    var oldfile = Process.GetCurrentProcess().MainModule.ModuleName;
-                    var newfile = $"{Process.GetCurrentProcess().MainModule.ModuleName}_new.exe";
+                    var oldfile = Environment.ProcessPath;
+                    var newfile = $"{Environment.ProcessPath}_new.exe";
+
+                    var programfilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                    var verb = "";
+                    var programfiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                    if (true || Environment.ProcessPath.StartsWith(programfilesX86, StringComparison.OrdinalIgnoreCase) || Environment.ProcessPath.StartsWith(programfiles, StringComparison.OrdinalIgnoreCase)) {
+                        verb = "runas";
+                        newfile = Environment.ExpandEnvironmentVariables("%temp%\\rnbtsk_newver_.exe");
+                        MessageBox.Show(newfile);
+                    }
+
                     await web.DownloadFileTaskAsync(uri, newfile);
 
+
+
+
+                    var data = false;
                     var proc = Process.Start(
                         new ProcessStartInfo {
+                            UseShellExecute = verb == "runas",
+                            Verb = verb,
                             Arguments =
-                                $"/C taskkill /f /im \"{oldfile}\" > nul && timeout /t 1 /nobreak > nul && move /y \"{newfile}\" \"{oldfile}\" > nul && start \"\" \"{oldfile}\"",
+                                $"/C echo p && timeout /t 1 /nobreak > nul && taskkill /f /im \"{Process.GetCurrentProcess().MainModule.ModuleName}\" > nul && timeout /t 1 /nobreak > nul && move /y \"{newfile}\" \"{oldfile}\" > nul",
+                            FileName = "cmd",
+                            WindowStyle = ProcessWindowStyle.Hidden
+                        }
+                    );
+                    var procStart = Process.Start(
+                        new ProcessStartInfo {
+                            Arguments =
+                                $"/C timeout /t 10 /nobreak > nul && start \"\" \"{oldfile}\"",
                             FileName = "cmd",
                             WindowStyle = ProcessWindowStyle.Hidden
                         }

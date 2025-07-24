@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -47,6 +48,8 @@ namespace RainbowTaskbar.Configuration {
         public string? CachedBase64Thumbnail { get; set; }
         [JsonIgnore]
         public int? CachedLikeCount { get; set; }
+        [JsonIgnore]
+        public int? CachedCommentCount { get; set; }
         public string LocalID { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime Updated { get; set; } = DateTime.Now;
@@ -89,18 +92,7 @@ namespace RainbowTaskbar.Configuration {
         }
 
         public virtual void Start() {
-            App.taskbars.ForEach(x => {
-                new TransparencyInstruction() {
-                    Type = TransparencyInstruction.TransparencyInstructionType.All,
-                    Opacity = 1
-                }.Execute(x);
-            });
-            App.taskbars.ForEach(x => {
-                new TransparencyInstruction() {
-                    Type = TransparencyInstruction.TransparencyInstructionType.Style,
-                    Style = TransparencyInstruction.TransparencyInstructionStyle.Default,
-                }.Execute(x);
-            });
+           
             if (currentlyRunning is not null) currentlyRunning.Stop().Wait();
             currentlyRunning = this;
            
@@ -110,21 +102,25 @@ namespace RainbowTaskbar.Configuration {
 
         }
         public abstract Task Stop();
-
-
         public BitmapImage? LoadImage() {
             if (CachedBase64Thumbnail is null) return null;
 
             try {
                 byte[] imageBytes = Convert.FromBase64String(CachedBase64Thumbnail);
 
-                BitmapImage bi = new BitmapImage();
+                var bImg = new BitmapImage();
+                using (var stream = new MemoryStream(imageBytes, 0, imageBytes.Length)) {
+                    
+                    bImg.BeginInit();
+                    bImg.CacheOption = BitmapCacheOption.OnLoad;
+                    bImg.StreamSource = stream;
+                    bImg.EndInit();
 
-                bi.BeginInit();
-                bi.StreamSource = new MemoryStream(imageBytes, 0, imageBytes.Length);
-                bi.EndInit();
+                    bImg.Freeze();
+                }
+                
 
-                return bi;
+                return bImg;
 
             }
             catch { return null; }

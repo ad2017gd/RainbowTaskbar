@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -28,7 +29,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
     /// <summary>
     /// Interaction logic for ResultListItemControl.xaml
     /// </summary>
-    public partial class ResultListItemControl : UserControl, INotifyPropertyChanged
+    public partial class ResultListItemControl : UserControl, INotifyPropertyChanged, IDisposable
     {
         public static readonly DependencyProperty ConfigProperty =
                    DependencyProperty.Register(
@@ -64,6 +65,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
         public bool CanDelete { get => Config.CachedPublisherUsername == App.Settings.AccountUsername || App.Settings.AccountUsername == "ad2017gd"; }
 
         public bool Unverified { get; set; } = false;
+
 
         public async void OnConfigChanged() {
             Config.CachedBase64Thumbnail = await App.Settings.workshopAPI.DownloadThumbnailBase64(Config);
@@ -141,6 +143,11 @@ namespace RainbowTaskbar.Editor.Pages.Controls
                     }
                 });
             });
+        }
+
+        public void Dispose() {
+            image.Source = null;
+            image.UpdateLayout();
         }
     }
 }

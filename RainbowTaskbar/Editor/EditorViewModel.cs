@@ -11,5 +11,6 @@ namespace RainbowTaskbar.Editor {
     public class EditorViewModel {
         public EditPage EditPage { get; set; }
         public string? LatestUpdateInfo { get; set; } = null;
+        public bool IsAppMicrosoftStore { get => App.IsAppMicrosoftStore; }
     }
 }

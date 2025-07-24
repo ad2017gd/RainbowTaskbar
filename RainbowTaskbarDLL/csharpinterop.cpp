@@ -1,7 +1,8 @@
 ﻿#include "winrt.h"
 #include "RainbowTaskbarDLL_h.h"
 #include <comdef.h>
-
+#include <windows.h>
+#include <winuser.h>
 
 #define IF_GET_API                                                              \
 HRESULT hr;                                                                     \
@@ -51,6 +52,7 @@ __declspec(dllexport) STDAPI SetAppearanceTypeDLL(UINT type) {
 __declspec(dllexport) STDAPI CloseDLL() {
     IF_GET_API {
         NO_ARGS(Close);
+    
     } else {
         return E_FAIL;
     }

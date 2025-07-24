@@ -26,6 +26,8 @@ namespace RainbowTaskbar.Editor.Pages {
             ApplicationThemeManager.ApplySystemTheme(true);
 
             App.localization.Enable(Resources.MergedDictionaries);
+
+
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
@@ -34,6 +36,10 @@ namespace RainbowTaskbar.Editor.Pages {
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e) {
             Process.Start(new ProcessStartInfo("https://github.com/ad2017gd") { UseShellExecute = true });
+        }
+
+        private void Hyperlink_Click_1(object sender, RoutedEventArgs e) {
+            Process.Start(new ProcessStartInfo("https://github.com/ad2017gd/RainbowTaskbar/issues/new/choose") { UseShellExecute = true });
         }
     }
 }

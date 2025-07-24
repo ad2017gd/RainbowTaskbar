@@ -39,6 +39,10 @@
             <Image Grid.Row="1" x:Name="thumbPreview" HorizontalAlignment="Stretch"></Image>
             <ui:Button Grid.Row="2"  x:Name="picture" Click="picture_Click" Icon="{ui:SymbolIcon Image24}" Content="{DynamicResource pickimg}"></ui:Button>
             <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
                 <ItemsControl ItemsSource="{Binding New.ConfigData.UserSettings}">
                     <ItemsControl.Template>
                         <ControlTemplate TargetType="ItemsControl">
@@ -131,10 +135,11 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                
             </Grid>
-            <ui:Button Grid.Row="4" Content="{DynamicResource addprop}" Icon="{ui:SymbolIcon Add24}" Click="AddProperty">
-                <ui:Button.Style>
-                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
+            <StackPanel Grid.Row="4" Orientation="Horizontal">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding New.ConfigType}" Value="WebConfig">
@@ -144,8 +149,13 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </ui:Button.Style>
-            </ui:Button>
+                </StackPanel.Style>
+                <ui:Button Margin="0,0,4,0" Icon="{ui:SymbolIcon Save24}" Content="{DynamicResource save}" Click="Save"></ui:Button>
+                <ui:Button Content="{DynamicResource addprop}" Icon="{ui:SymbolIcon Add24}" Click="AddProperty">
+                    
+                </ui:Button>
+            </StackPanel>
+            
         </Grid>
         <StackPanel Margin="0,0,0,16">
             <TextBlock FontSize="16" VerticalAlignment="Center" Margin="0,0,0,4" Text="{DynamicResource name}"></TextBlock>

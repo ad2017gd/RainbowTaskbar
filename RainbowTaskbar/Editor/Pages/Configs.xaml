@@ -28,7 +28,7 @@
                     </ui:DropDownButton.Flyout>
                 </ui:DropDownButton>
             </StackPanel>
-            <ItemsControl ItemsSource="{Binding ConfigList}" Margin="-4,0,0,0">
+            <ItemsControl x:Name="itemscontrol" ItemsSource="{Binding ConfigList}" Margin="-4,0,0,0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />

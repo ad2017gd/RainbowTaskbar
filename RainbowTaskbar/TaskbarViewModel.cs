@@ -33,10 +33,22 @@ public class TaskbarViewModel {
         window.taskbarHelper.PositionChangedHook();
         window.taskbarHelper.UpdateRadius();
 
-        var Taskbar = window.taskbarHelper.GetRectangle();
+        var Taskbar = window.taskbarHelper.GetRectangle(true);
+        window.Left = 0;
+        window.Top = 0;
+        double scale = window.taskbarHelper.GetScalingFactor();
+        window.MinWidth = Taskbar.Width * (1/ scale);
+        window.Width = Taskbar.Width * (1 / scale);
+        window.MinHeight = Taskbar.Height * (1 / scale);
+        window.Height = Taskbar.Height * (1 / scale);
 
-        window.Width = Taskbar.Width;
-        window.Height = Taskbar.Height;
+
+        window.TaskbarClip.RadiusX = window.TaskbarClip.RadiusY = 0;
+        window.TaskbarClip.Rect = new(0, 0, window.Width, window.Height);
+
+        window.TaskbarClipHide.RadiusX = window.TaskbarClipHide.RadiusY = 0;
+        window.TaskbarClipHide.Rect = new(0, 0, 0, 0);
+
         if (HWND == IntPtr.Zero) return;
         window.canvasManager = new CanvasManager(window, new Canvas[] {
                 window.Layer0, window.Layer1, window.Layer2, window.Layer3, window.Layer4, window.Layer5,

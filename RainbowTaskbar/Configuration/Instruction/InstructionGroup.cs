@@ -42,8 +42,7 @@ namespace RainbowTaskbar.Configuration.Instruction {
                      groupStep++) {
 
                 try {
-                    var pHandle = App.GetCurrentProcess();
-                    App.SetProcessWorkingSetSize(pHandle, -1, -1);
+                    
 
 
                     var tasks = new List<Task>();

@@ -209,7 +209,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RainbowTaskbar"
         "ProductCode" = "8:{D523B4A1-B78D-4558-A926-9F70AD98FCC0}"
-        "PackageCode" = "8:{09370936-8AAF-4AE2-B18D-4F0BDDCF78B3}"
+        "PackageCode" = "8:{C1599814-E196-4C27-B6D2-A8A701C3904C}"
         "UpgradeCode" = "8:{196F8FDD-5ECD-420B-9755-18A328F4585B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

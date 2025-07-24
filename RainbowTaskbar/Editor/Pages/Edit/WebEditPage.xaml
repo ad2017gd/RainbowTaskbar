@@ -24,6 +24,8 @@
         </Grid.RowDefinitions>
         <Menu>
             <ui:MenuItem Header="{DynamicResource run}" Icon="{ui:SymbolIcon Play24}" Click="RunConfig"/>
+
+            <CheckBox IsChecked="{Binding OpenDevTools}" Content="{DynamicResource devtools}"></CheckBox>
         </Menu>
         <local:WebView2Fixed Grid.Row="1" x:Name="webView" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></local:WebView2Fixed>
     </Grid>

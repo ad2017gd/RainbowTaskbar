@@ -42,6 +42,8 @@
     <s:String x:Key="propkey">Property key</s:String>
     <s:String x:Key="proptype">Property type</s:String>
 
+    <s:String x:Key="devtools">Open Developer Tools</s:String>
+
     <s:String x:Key="enum_string">String</s:String>
     <s:String x:Key="enum_number">Number</s:String>
     <s:String x:Key="enum_color">Color</s:String>
@@ -57,7 +59,19 @@
     <s:String x:Key="downloadnew">Download new copy</s:String><!-- download is a verb! -->
     <s:String x:Key="like">Like</s:String><!-- verb! -->
     <s:String x:Key="unlike">Unlike</s:String><!-- verb! -->
-    
+    <s:String x:Key="comments">Comments</s:String>
+    <s:String x:Key="goback">Go back</s:String>
+
+    <!-- Home tab -->
+    <s:String x:Key="welcome">Welcome to the RainbowTaskbar editor!</s:String>
+    <s:String x:Key="whatsnew">What's new in the latest update</s:String>
+    <s:String x:Key="review">Review on Store</s:String>
+
+    <s:String x:Key="issueremind">*using GitHub to submit an issue or request is preferred.</s:String>
+    <s:String x:Key="issuetitle">Issue title</s:String>
+    <s:String x:Key="issuedesc">Description</s:String>
+    <s:String x:Key="issuecontact">Contact info (optional)</s:String>
+
     <!-- Settings tab -->
     <s:String x:Key="general">General</s:String>
     <s:String x:Key="runstartup">Run at startup</s:String>
@@ -67,6 +81,8 @@
     <s:String x:Key="workshop">Workshop</s:String>
     <s:String x:Key="signedin">Signed in as</s:String>
     <s:String x:Key="logingit">Log in (GitHub)</s:String>
+    <s:String x:Key="logingoog">Log in (Google)</s:String>
+    <s:String x:Key="signout">Log out</s:String>
     <s:String x:Key="passmouse">Pass mouse input to underlay (may use CPU)</s:String>
     <s:String x:Key="allowjs">Allow JavaScript</s:String>
     <s:String x:Key="graphics">Graphics</s:String>
@@ -207,6 +223,7 @@
     <s:String x:Key="msgbox_button_cancel">Cancel</s:String>
     <s:String x:Key="msgbox_update">A new RainbowTaskbar update has released. Would you like to update?</s:String>
     <s:String x:Key="msgbox_migrate">Do you wish to migrate the legacy (v2) config and presets to the current version?</s:String>
+    <s:String x:Key="msgbox_issuegithub">Use GitHub</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">‎</s:String>
 

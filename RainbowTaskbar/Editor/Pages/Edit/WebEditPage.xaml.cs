@@ -6,6 +6,7 @@ using RainbowTaskbar.Configuration.Web;
 using RainbowTaskbar.Editor.Pages.Controls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,21 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
     /// Interaction logic for WebEdit.xaml
     /// </summary>
     public partial class WebEditPage : EditPage {
+
+        
+        public bool OpenDevTools { get; set; } = false;
+
+        public void OnOpenDevToolsChanged() {
+            if(OpenDevTools) {
+                if(!App.Settings.GraphicsRepeat) {
+                    App.hiddenWebViewHost.webView_.CoreWebView2?.OpenDevToolsWindow();
+                } else {
+                    if (App.taskbars.Count > 0) {
+                        App.taskbars[0].webView.CoreWebView2?.OpenDevToolsWindow();
+                    }
+                }
+            }
+        }
 
         public WebEditPage() {
             InitializeComponent();
@@ -122,8 +138,13 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                 Dispatcher.Invoke(() => {
                     Current.Start();
                     });
+                Thread.Sleep(1000);
+                Dispatcher.Invoke(() => {
+                    OnOpenDevToolsChanged();
+                });
             });
         }
+        
 
     }
 }

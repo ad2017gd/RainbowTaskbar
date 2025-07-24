@@ -20,8 +20,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="title" HorizontalAlignment="Center" FontSize="32" FontWeight="SemiBold" Margin="0,0,0,10">Welcome to the RainbowTaskbar editor!</TextBlock>
+        <TextBlock x:Name="title" HorizontalAlignment="Center" FontSize="32" FontWeight="SemiBold" Margin="0,0,0,10" Text="{DynamicResource welcome}"></TextBlock>
         <Grid x:Name="lastupdate" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
@@ -32,8 +33,24 @@
                     <Setter Property="Visibility" Value="Collapsed"></Setter>
                 </Style>
             </Grid.Style>
-            <TextBlock>What's new in the latest update</TextBlock>
+            <TextBlock Text="{DynamicResource whatsnew}"></TextBlock>
             <wv2:WebView2 Grid.Row="1" x:Name="wv"></wv2:WebView2>
         </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <ui:Button Margin="0,0,4,0" Icon="{ui:SymbolIcon Star24}" Click="Button_Click" Content="{DynamicResource review}">
+                <ui:Button.Style>
+                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsAppMicrosoftStore}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ui:Button.Style></ui:Button>
+
+            <ui:Button Icon="{ui:SymbolIcon Info24}" Content="{DynamicResource issueorreq}" Click="Button_Click_1">
+            </ui:Button>
+        </StackPanel>
     </Grid>
 </Page>

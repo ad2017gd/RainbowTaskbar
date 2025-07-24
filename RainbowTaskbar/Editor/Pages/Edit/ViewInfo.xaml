@@ -85,6 +85,8 @@
                     </Style>
                 </ui:Button.Style>
             </ui:Button>
+            <ui:Button Margin="5,0,0,0" Click="Comment" Content="{Binding CommentButtonText}" Icon="{ui:SymbolIcon Comment24}">
+            </ui:Button>
         </StackPanel>
     </Grid>
 </Page>

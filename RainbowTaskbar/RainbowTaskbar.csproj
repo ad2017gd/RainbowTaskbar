@@ -4,7 +4,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0-windows7.0</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>3.0.1</Version>
+        <Version>3.1.1</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>RainbowTaskbar is a Windows utility to customize the shell taskbar.</Description>
         <Authors>Ad2017, zCri</Authors>
@@ -17,10 +17,11 @@
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
         <PackageReleaseNotes />
         <AnalysisLevel>latest</AnalysisLevel>
+        
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
-        <AssemblyVersion>3.0.1</AssemblyVersion>
-        <FileVersion>3.0.1</FileVersion>
+        <AssemblyVersion>3.1.1</AssemblyVersion>
+        <FileVersion>3.1.1</FileVersion>
         <SignAssembly>False</SignAssembly>
 		
 		   <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -28,6 +29,10 @@
 		   <Platforms>AnyCPU;x64;x86</Platforms>
 		
 		   <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		
+		   <AssemblyName>RainbowTaskbar</AssemblyName>
+		
+		   <StartupObject>RainbowTaskbar.App</StartupObject>
 		
 
     </PropertyGroup>
@@ -62,7 +67,7 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
+        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25103.5738" />
         <PackageReference Include="FastMember" Version="1.5.0" />
         <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
         <PackageReference Include="H.Pipes" Version="15.0.0" />
@@ -70,7 +75,7 @@
         </PackageReference>
         <PackageReference Include="Kasay.DependencyProperty.WPF.Fody" Version="1.0.3" />
         <PackageReference Include="Markdig" Version="0.40.0" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3065.39" />
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 
         <PackageReference Include="PropertyChanged.Fody" Version="4.1.0">
@@ -79,11 +84,11 @@
             <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
+        <PackageReference Include="System.Drawing.Common" Version="9.0.2" />
 
         <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11" />
 
-        <PackageReference Include="WPF-UI" Version="3.0.5" />
+        <PackageReference Include="WPF-UI" Version="4.0.3" />
     </ItemGroup>
 
 
@@ -102,6 +107,9 @@
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Compile>
         <Compile Update="Editor\Pages\Controls\ResultListItemControl.xaml.cs">
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Editor\Pages\Edit\ViewComments.xaml.cs">
           <SubType>Code</SubType>
         </Compile>
         <Compile Update="Editor\Pages\Edit\ViewInfo.xaml.cs">
@@ -149,6 +157,13 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RainbowTaskbarDLL\RainbowTaskbarDLL.vcxproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Page Update="Editor\Pages\Edit\ViewComments.xaml">
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
 
 </Project>
