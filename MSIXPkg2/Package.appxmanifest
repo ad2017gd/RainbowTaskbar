@@ -9,7 +9,7 @@
   <Identity
     Name="48822ad2017.30397FC5B3C66"
     Publisher="CN=7F27496D-0310-4FD3-81EF-B816897FD011"
-    Version="3.1.0.0" />
+    Version="3.1.1.0" />
 
   <Properties>
     <DisplayName>RainbowTaskbar.</DisplayName>

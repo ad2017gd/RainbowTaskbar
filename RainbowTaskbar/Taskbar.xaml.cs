@@ -55,6 +55,7 @@ public partial class Taskbar : System.Windows.Window {
         viewModel = new TaskbarViewModel(this, HWND);
         Closing += viewModel.OnWindowClosing;
         DataContext = viewModel;
+
         
         if(HWND != IntPtr.Zero && !App.Settings.GraphicsRepeat) {
             //webView_.Dispose();
@@ -145,6 +146,9 @@ public partial class Taskbar : System.Windows.Window {
        });
     }
     private static void SetupWebView(WebView2 webView, Mutex mutex = null) {
+        
+
+
         var envasync = CoreWebView2Environment.CreateAsync(null, Path.GetTempPath(), new CoreWebView2EnvironmentOptions());
         Task.Run(() => {
             var env = envasync.Result;
@@ -165,6 +169,9 @@ public partial class Taskbar : System.Windows.Window {
                     try { t.Wait(); } catch { return; }
                     webView.Dispatcher.Invoke(() => {
                         if(mutex is not null) mutex.ReleaseMutex();
+
+                        
+
                         webView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
                         webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
                         webView.CoreWebView2.Settings.IsSwipeNavigationEnabled = false;
@@ -260,8 +267,8 @@ public partial class Taskbar : System.Windows.Window {
                             App.hiddenWebViewHost.Height = App.taskbars.Max(t2 => t2.Height);
                             var ttt = App.taskbars.Max(t2 => t2.Height);
 
-                            App.hiddenWebViewHost.Top = 9999;
-                            App.hiddenWebViewHost.Left = 9999;
+                            App.hiddenWebViewHost.Top = 19999;
+                            App.hiddenWebViewHost.Left = 19999;
 
                             t.windowHelper.Duplicate(new WindowInteropHelper(App.hiddenWebViewHost).EnsureHandle());
                         });

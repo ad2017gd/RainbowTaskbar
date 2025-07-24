@@ -36,7 +36,7 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock FontSize="24" Text="{DynamicResource thumbnail}"></TextBlock>
-            <Image Grid.Row="1" x:Name="thumbPreview" HorizontalAlignment="Stretch"></Image>
+            <controls:UnsafeImage Grid.Row="1" x:Name="thumbPreview" HorizontalAlignment="Stretch"></controls:UnsafeImage>
             <ui:Button Grid.Row="2"  x:Name="picture" Click="picture_Click" Icon="{ui:SymbolIcon Image24}" Content="{DynamicResource pickimg}"></ui:Button>
             <Grid Grid.Row="3">
                 <Grid.RowDefinitions>

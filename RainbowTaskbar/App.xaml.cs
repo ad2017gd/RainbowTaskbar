@@ -98,11 +98,13 @@ public partial class App : Application {
 
         
         if (nCode >= 0) {
+
+            if (wParam == 0x0201 && trayWindow.TrayIcon.ContextMenu.IsOpen || wParam == 0x0204) return CallNextHookEx(mouseHookId, nCode, wParam, lParam);
+            var farLeft = (int) (App.taskbars.Count > 0 ? App.taskbars.Min(x => x.Left) : 0);
             App.taskbars.ForEach(x => {
                 if (x.webView is null) return;
 
                 // passing WM_LBUTTONDOWN interferes with tray icon, too bad
-                if (wParam == 0x0201 && trayWindow.TrayIcon.ContextMenu.IsOpen || wParam == 0x0204) return;
                 
                 var pn = System.Windows.Forms.Control.MousePosition;
                 if (!new System.Drawing.Rectangle(new((int) x.Left, (int) x.Top), new((int) x.ActualWidth, (int) x.ActualHeight)).Contains(pn)) return;
@@ -110,7 +112,7 @@ public partial class App : Application {
                 POINT p = new POINT { X = (int) pn.X, Y = (int) pn.Y };
                 IntPtr cch = FindLastChildAtPoint(x.webView.Handle, 0, 0);
                 ScreenToClient(App.Settings.GraphicsRepeat ? cch : new WindowInteropHelper(x).EnsureHandle(), ref p);
-                if (!App.Settings.GraphicsRepeat) p.X += (int)x.Left;
+                if (!App.Settings.GraphicsRepeat) p.X += (int) x.Left - farLeft;
                 PostMessage(cch, (uint) wParam, 0x0000, (IntPtr) (((uint) p.Y << 16) | ((((ushort) p.X) & 0xFFFF))));
             });
 
@@ -137,6 +139,7 @@ public partial class App : Application {
     public static HiddenWebViewHost hiddenWebViewHost = null;
     public static Microsoft.Web.WebView2.Wpf.WebView2 webView { get => hiddenWebViewHost?.webView_; }
     public static Mutex webViewReady = new Mutex();
+    public static int farLeft;
 
     public static List<Config> AllConfigsFromFiles() {
         List<Config> configs = new();
@@ -209,7 +212,7 @@ public partial class App : Application {
             }
         } }
 
-    public static bool IsAppMicrosoftStore { get => !IsMicrosoftStore(); }
+    public static bool IsAppMicrosoftStore { get => IsMicrosoftStore(); }
     public static bool IsMicrosoftStore() {
         return System.Environment.ProcessPath.ToLower().StartsWith(@"c:\program files\windowsapps");
        
@@ -386,6 +389,7 @@ public partial class App : Application {
         });
 
 
+
     }
     public static void ReloadTaskbars(bool startConfig = true) =>
         Current.Dispatcher.Invoke(() => {
@@ -407,6 +411,8 @@ public partial class App : Application {
                 taskbar.windowHelper.RemoveDuplicate();
                 taskbar.Close();
             });
+
+            Config.currentlyRunning = null;
 
             taskbars = FindAllTaskbars();
 

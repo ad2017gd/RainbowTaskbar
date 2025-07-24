@@ -29,7 +29,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
     /// <summary>
     /// Interaction logic for ResultListItemControl.xaml
     /// </summary>
-    public partial class ResultListItemControl : UserControl, INotifyPropertyChanged, IDisposable
+    public partial class ResultListItemControl : UserControl, INotifyPropertyChanged
     {
         public static readonly DependencyProperty ConfigProperty =
                    DependencyProperty.Register(
@@ -145,9 +145,5 @@ namespace RainbowTaskbar.Editor.Pages.Controls
             });
         }
 
-        public void Dispose() {
-            image.Source = null;
-            image.UpdateLayout();
-        }
     }
 }

@@ -93,7 +93,7 @@ namespace RainbowTaskbar.Configuration {
 
         public virtual void Start() {
            
-            if (currentlyRunning is not null) currentlyRunning.Stop().Wait();
+            if (currentlyRunning is not null) currentlyRunning.Stop().Wait(150);
             currentlyRunning = this;
            
             

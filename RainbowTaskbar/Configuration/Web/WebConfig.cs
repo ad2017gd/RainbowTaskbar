@@ -236,18 +236,16 @@ namespace RainbowTaskbar.Configuration.Web {
         }
 
         public override async Task Stop() {
-            App.taskbars.ForEach(async x => {
-                var wv = x.webView;
-                var tsk = wv?.EnsureCoreWebView2Async();
-                await Task.Run(() => {
-                    try { tsk?.Wait(); } catch { return; }
-                    App.Current.Dispatcher.Invoke(() => {
-                        try {
-                            wv?.NavigateToString("<html></html>");
-                            wv?.CoreWebView2.TrySuspendAsync();
-                        }
-                        catch { }
-                    });
+            var wv = App.webView;
+            var tsk = wv?.EnsureCoreWebView2Async();
+            await Task.Run(() => {
+                try { tsk?.Wait(100); } catch { return; }
+                App.Current.Dispatcher.Invoke(() => {
+                    try {
+                        wv?.NavigateToString("<html></html>");
+                        wv?.CoreWebView2.TrySuspendAsync();
+                    }
+                    catch { }
                 });
             });
         }

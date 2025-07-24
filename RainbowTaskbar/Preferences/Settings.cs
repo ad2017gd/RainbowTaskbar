@@ -34,7 +34,7 @@ namespace RainbowTaskbar.Preferences {
         public int InterpolationQuality { get; set; } = 25;
         [OnChangedMethod(nameof(SaveChanged))]
         [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
-        public bool GraphicsRepeat { get; set; } = true;
+        public bool GraphicsRepeat { get; set; } = false;
         [OnChangedMethod(nameof(SaveChanged))]
         [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
         public bool SameRadiusOnEach { get; set; } = false;

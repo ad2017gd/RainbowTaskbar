@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 using RainbowTaskbar.Drawing;
@@ -32,6 +33,9 @@ public class TaskbarViewModel {
         window.taskbarHelper.window = window;
         window.taskbarHelper.PositionChangedHook();
         window.taskbarHelper.UpdateRadius();
+
+        IntPtr thisHwnd = new WindowInteropHelper(window).Handle;
+        TaskbarHelper.SetWindowLong(thisHwnd, TaskbarHelper.GWL_EXSTYLE, (uint) (TaskbarHelper.GetWindowLong(thisHwnd, TaskbarHelper.GWL_EXSTYLE).ToInt32() | 0x00000080L) /*WS_EX_TOOLWINDOW*/);
 
         var Taskbar = window.taskbarHelper.GetRectangle(true);
         window.Left = 0;
@@ -87,9 +91,10 @@ public class TaskbarViewModel {
     */
     public void OnWindowClosing(object sender, CancelEventArgs e) {
         Window.taskbarHelper.PositionChangedUnhook();
+        Window.windowHelper.alive = false;
         //cts.Cancel();
         //cts.Dispose();
-        
+
 
     }
 }

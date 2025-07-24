@@ -31,7 +31,7 @@
                 <ui:NavigationView.MenuItems>
                     <ui:NavigationViewItem NavigationCacheMode="Enabled" Content="{DynamicResource home}" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type pages:Home}"/>
                     <ui:NavigationViewItem NavigationCacheMode="Disabled" Content="{DynamicResource configs}" Icon="{ui:SymbolIcon CalendarAgenda24}" TargetPageType="{x:Type pages:Configs}"/>
-                    <ui:NavigationViewItem NavigationCacheMode="Disabled" Content="{DynamicResource browse}" Icon="{ui:SymbolIcon Globe24}" TargetPageType="{x:Type pages:Browse}"/>
+                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Content="{DynamicResource browse}" Icon="{ui:SymbolIcon Globe24}" TargetPageType="{x:Type pages:Browse}"/>
                 </ui:NavigationView.MenuItems>
                 <ui:NavigationView.FooterMenuItems>
                     <ui:NavigationViewItem NavigationCacheMode="Enabled" Content="{DynamicResource settings}" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:Settings}"/>

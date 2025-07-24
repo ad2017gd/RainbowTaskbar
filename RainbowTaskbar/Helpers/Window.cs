@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -131,7 +132,7 @@ public class WindowHelper {
     }
 
     public static IntPtr GetHWND(Window window) => new WindowInteropHelper(Window.GetWindow(window)).EnsureHandle();
-
+    public bool alive = true;
     public void Init(TaskbarHelper taskbarHelper) {
         HWND = GetHWND(window);
         SetWindowLong(HWND, (int) GWL.EXSTYLE,
@@ -142,7 +143,7 @@ public class WindowHelper {
         taskbarHelper.TaskbarPositionChanged += TaskbarPosChanged;
 
         Task.Run(() => {
-            while (true) {
+            while (alive) {
                 window.Dispatcher.Invoke(() => TaskbarPosChanged(null, null));
                 Thread.Sleep(25);
             }
@@ -237,7 +238,9 @@ public class WindowHelper {
         dskThumbProps.fSourceClientAreaOnly = 1;
         dskThumbProps.fVisible = 1;
         dskThumbProps.opacity = 255;
+        
         var rect = taskbar.GetRectangle(true);
+        rect.X -= (int) App.taskbars.Min(x => x.Left); ;
         
         dskThumbProps.rcSource = new RECT() { Top = 0, Left = rect.X, Right = (int) rect.Width + rect.X, Bottom = (int) rect.Height };
         dskThumbProps.rcDestination = new RECT() { Top = (int) (rect.Top - window.Top * scale), Left = 0, Right = (int) rect.Width, Bottom = (int) rect.Height };

@@ -74,18 +74,12 @@ namespace RainbowTaskbar.Editor {
                 b.OnSortChanged(); 
             }
 
-            if (current is Configs cfgs) {
-                cfgs.itemscontrol.FindVisualChildren<ConfigListItemControl>().ToList().ForEach(x => {
-                    x.Dispose();
-                });
-            }
+            current.FindVisualChildren<UnsafeImage>().ToList().ForEach(x => {
+                x.Dispose();
+            });
 
             if (current is not null && current.GetType() != args.Page.GetType() && (current is Browse || App.editorViewModel.EditPage is InstructionEditPage) && args.Page is not EmptyPageBadFix) {
-                if(current is Browse br) {
-                    br.itemscontrol.FindVisualChildren<ResultListItemControl>().ToList().ForEach(x => {
-                        x.Dispose();
-                    });
-                }
+                
 
                 
                 args.Cancel = true;
@@ -188,6 +182,9 @@ namespace RainbowTaskbar.Editor {
 
         private void FluentWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             App.editor = null;
+            nav.FindVisualChildren<UnsafeImage>().ToList().ForEach(x => {
+                x.Dispose();
+            });
             //e.Cancel = true;
             //Hide();
         }

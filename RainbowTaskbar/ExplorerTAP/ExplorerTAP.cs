@@ -92,6 +92,9 @@ namespace RainbowTaskbar.ExplorerTAP {
             } while (!NeedsTAP());
         }
         public static IntPtr dataPtr = IntPtr.Zero;
+        static IntPtr proc = IntPtr.Zero;
+        static IntPtr str = IntPtr.Zero;
+
         public static bool TryInject() {
 
             var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
@@ -198,7 +201,14 @@ namespace RainbowTaskbar.ExplorerTAP {
                     // too lazy to make an event, this shall work
                     Task.Delay(1250).Wait();
                 }
-                
+
+                if (proc != IntPtr.Zero) CloseHandle(proc);
+                if (str != IntPtr.Zero) Marshal.FreeHGlobal(str);
+
+                GetWindowThreadProcessId(taskbarHWND, out var pidd);
+                proc = OpenProcess(ProcessAccessFlags.VirtualMemoryRead, false, pidd);
+                str = Marshal.AllocHGlobal(Marshal.SizeOf<RainbowTaskbarData>());
+
                 IsInjecting = false;
                 IsInjected = true;
                 
@@ -301,12 +311,8 @@ namespace RainbowTaskbar.ExplorerTAP {
             if (!NeedsTAP() || IsInjecting) return 0;
 
             if (dataPtr == IntPtr.Zero) dataPtr = GetDataPtr();
-            GetWindowThreadProcessId(t.taskbarHelper.HWND, out var pid);
-            IntPtr proc = OpenProcess(ProcessAccessFlags.VirtualMemoryRead, false, pid);
-            IntPtr str = Marshal.AllocHGlobal(Marshal.SizeOf<RainbowTaskbarData>());
             ReadProcessMemory(proc, dataPtr, str, Marshal.SizeOf<RainbowTaskbarData>(), out _);
             var data = Marshal.PtrToStructure<RainbowTaskbarData>(str);
-            CloseHandle(proc);
 
             var x = data.lTaskbarInfo.FirstOrDefault(x => x.taskbar == t.taskbarHelper.HWND, new()).YPosition;
             return x;

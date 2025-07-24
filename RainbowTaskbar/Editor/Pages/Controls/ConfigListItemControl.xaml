@@ -32,7 +32,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Viewbox Grid.ColumnSpan="2" OpacityMask="{StaticResource ImageOpacityMask}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="UniformToFill">
-                    <Image x:Name="image" OpacityMask="White"></Image>
+                    <local:UnsafeImage x:Name="image" OpacityMask="White"></local:UnsafeImage>
                 </Viewbox>
                 <Viewbox Grid.ColumnSpan="2" Grid.Row="2" StretchDirection="DownOnly" Stretch="Uniform">
                     <TextBlock FontSize="32"  HorizontalAlignment="Center" Text="{Binding Config.Name}"></TextBlock>

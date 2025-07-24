@@ -114,10 +114,10 @@ public class TaskbarHelper {
     private static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
 
     [DllImport("user32.dll")]
-    private static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+    public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-    private static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+    public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
 
     [DllImport("user32.dll", SetLastError = true)]
     public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);

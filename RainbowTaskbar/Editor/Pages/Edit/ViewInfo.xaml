@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:RainbowTaskbar.Editor.Pages.Edit" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
+      xmlns:local="clr-namespace:RainbowTaskbar.Editor.Pages.Edit" xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" xmlns:controls="clr-namespace:RainbowTaskbar.Editor.Pages.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ViewInfo">
@@ -23,7 +23,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Image Grid.Row="0" x:Name="thumbPreview" HorizontalAlignment="Stretch" Grid.Column="1"></Image>
+        <controls:UnsafeImage Grid.Row="0" x:Name="thumbPreview" HorizontalAlignment="Stretch" Grid.Column="1"></controls:UnsafeImage>
         <Grid ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>

@@ -25,7 +25,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
     /// <summary>
     /// Interaction logic for ConfigListItemControl.xaml
     /// </summary>
-    public partial class ConfigListItemControl : UserControl, INotifyPropertyChanged, IDisposable
+    public partial class ConfigListItemControl : UserControl, INotifyPropertyChanged
     {
         public static readonly DependencyProperty ConfigProperty =
                    DependencyProperty.Register(
@@ -72,7 +72,6 @@ namespace RainbowTaskbar.Editor.Pages.Controls
         }
 
         private void Select(object sender, RoutedEventArgs e) {
-            if(App.Settings.SelectedConfig is not null) App.Settings.SelectedConfig.Stop();
             if (App.Settings.SelectedConfig != Config) {
                 App.Settings.SelectedConfig = Config;
             } else {
@@ -81,9 +80,5 @@ namespace RainbowTaskbar.Editor.Pages.Controls
             App.Settings.ToFile();
         }
 
-        public void Dispose() {
-            image.Source = null;
-            image.UpdateLayout();
-        }
     }
 }

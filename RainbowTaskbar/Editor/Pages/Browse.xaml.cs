@@ -51,7 +51,7 @@ namespace RainbowTaskbar.Editor.Pages
         }
 
         public void Clear() {
-            itemscontrol.FindVisualChildren<ResultListItemControl>().ToList().ForEach(x => {
+            itemscontrol.FindVisualChildren<UnsafeImage>().ToList().ForEach(x => {
                 x.Dispose();
             });
             ResultList.Clear();
