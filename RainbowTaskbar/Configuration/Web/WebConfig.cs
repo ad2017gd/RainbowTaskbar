@@ -137,7 +137,7 @@ namespace RainbowTaskbar.Configuration.Web {
             })();
 
             function loop() {
-                 window.requestAnimationFrame(loop);let now = performance.now() / 1000;let dt = Math.min(now - last, 1);last = now;if (rtMaxFPS > 0) {fpsThreshold += dt;if (fpsTh < 1 / rtMaxFPS) {return;}fpsThreshold -= 1 / rtMaxFPS;}
+                 window.requestAnimationFrame(loop);let now = performance.now() / 1000;let dt = Math.min(now - last, 1);last = now;if (rtMaxFPS > 0) {fpsTh += dt;if (fpsTh < 1 / rtMaxFPS) {return;}fpsTh -= 1 / rtMaxFPS;}
                  
                  // ------------- !!! PLACE YOUR ANIMATION/UPDATE CODE BELOW THIS LINE, INSIDE THIS FUNCTION !!! ------------------- //
              }
