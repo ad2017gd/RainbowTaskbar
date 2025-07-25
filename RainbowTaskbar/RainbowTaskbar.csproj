@@ -4,7 +4,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0-windows7.0</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>3.1.1</Version>
+        <Version>3.1.2</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>RainbowTaskbar is a Windows utility to customize the shell taskbar.</Description>
         <Authors>Ad2017, zCri</Authors>
@@ -20,8 +20,8 @@
         
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
-        <AssemblyVersion>3.1.1</AssemblyVersion>
-        <FileVersion>3.1.1</FileVersion>
+        <AssemblyVersion>3.1.2</AssemblyVersion>
+        <FileVersion>3.1.2</FileVersion>
         <SignAssembly>False</SignAssembly>
 		
 		   <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>

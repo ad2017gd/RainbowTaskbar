@@ -102,6 +102,7 @@ namespace RainbowTaskbar.Configuration.Web {
     }
     [Serializable]
     public class WebConfig : Config {
+        [JsonIgnore]
         public WebConfigData Data { get => ConfigData as WebConfigData; set 
             {
                 ConfigData = value;

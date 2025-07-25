@@ -179,7 +179,7 @@ public partial class Taskbar : System.Windows.Window {
                         webView.CoreWebView2.Settings.IsPinchZoomEnabled = false;
                         webView.CoreWebView2.Settings.AreDevToolsEnabled = false;
                         webView.CoreWebView2.Settings.UserAgent = "RainbowTaskbar Web Display https://ad2017.dev/rnb";
-                        webView.CoreWebView2.IsMuted = false;
+                        webView.CoreWebView2.IsMuted = true;
 
 
 
