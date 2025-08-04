@@ -13,7 +13,7 @@ using System.Windows.Data;
 namespace RainbowTaskbar.Languages {
     public class Localization
     {
-        public static List<string> languages = new List<string>() { "SystemDefault", "en_US", "zh_CN"};
+        public static List<string> languages = new List<string>() { "SystemDefault", "en_US", "zh_CN", "fr_FR" };
         public ResourceDictionary dictionary;
         public Localization() {
             Switch(CultureInfo.InstalledUICulture.Name);
@@ -27,6 +27,10 @@ namespace RainbowTaskbar.Languages {
                 case "zh_SG":
                     dictionary = new zh_CN();
                     (dictionary as zh_CN).InitializeComponent();
+                    break;
+                case "fr_FR":
+                    dictionary = new fr_FR();
+                    (dictionary as fr_FR).InitializeComponent();
                     break;
                 default:
                     dictionary = new en_US();
