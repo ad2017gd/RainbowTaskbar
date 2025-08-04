@@ -58,11 +58,7 @@ namespace RainbowTaskbar.Editor {
                 ZipFile.ExtractToDirectory(stream, App.monacoDir);
             }
 
-            if(App.Settings.Version < Assembly.GetExecutingAssembly().GetName().Version) {
-                App.Settings.Version = Assembly.GetExecutingAssembly().GetName().Version;
-                // do stuff ?
-                App.Settings.SaveChanged();
-            }
+            
         }
 
         Page current = null;

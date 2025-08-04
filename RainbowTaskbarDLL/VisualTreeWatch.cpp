@@ -166,4 +166,6 @@ HRESULT VisualTreeWatch::OnElementStateChanged(InstanceHandle, VisualElementStat
 
 VisualTreeWatch::VisualTreeWatch() {
     appService = winrt::make_self<AppearanceServiceAPI>(get_strong());
+
+
 }

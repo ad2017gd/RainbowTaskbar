@@ -4,12 +4,13 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
   IgnorableNamespaces="uap rescap">
 
   <Identity
     Name="48822ad2017.30397FC5B3C66"
     Publisher="CN=7F27496D-0310-4FD3-81EF-B816897FD011"
-    Version="3.1.2.0" />
+    Version="3.1.3.0" />
 
   <Properties>
     <DisplayName>RainbowTaskbar.</DisplayName>
@@ -19,12 +20,14 @@
 
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14393.0" MaxVersionTested="10.0.14393.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
   </Dependencies>
 
   <Resources>
     <Resource Language="x-generate"/>
   </Resources>
+    
+    
 
   <Applications>
     <Application Id="App"
@@ -39,6 +42,18 @@
         <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png"  Square71x71Logo="Images\SmallTile.png" Square310x310Logo="Images\LargeTile.png"/>
         <uap:SplashScreen Image="Images\SplashScreen.png" />
       </uap:VisualElements>
+
+        <Extensions>
+            <uap5:Extension
+              Category="windows.startupTask"
+              Executable="RainbowTaskbar\RainbowTaskbar.exe"
+              EntryPoint="Windows.FullTrustApplication">
+                <uap5:StartupTask
+                  TaskId="RnbTsk_Startup"
+                  Enabled="true"
+                  DisplayName="RainbowTaskbar" />
+            </uap5:Extension>
+        </Extensions>
     </Application>
   </Applications>
 
@@ -47,4 +62,6 @@
     <rescap:Capability Name="runFullTrust" />
     <Capability Name="internetClientServer"/>
   </Capabilities>
+
+    
 </Package>

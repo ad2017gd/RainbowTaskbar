@@ -23,12 +23,15 @@ using System.Net.Http.Json;
 using System.Dynamic;
 using RainbowTaskbar.Configuration.Web;
 using RainbowTaskbar.Configuration.Instruction.Instructions;
+using System.Windows;
+#if MSIX_BUILD
+using Windows.ApplicationModel;
+#endif
 
 namespace RainbowTaskbar.Preferences {
     public class Settings : INotifyPropertyChanged {
         [OnChangedMethod(nameof(SaveChanged))]
         public bool CheckUpdate { get; set; } = true;
-        public long StartedCount { get; set; } = 0;
 
         
         public int InterpolationQuality { get; set; } = 25;
@@ -136,15 +139,39 @@ namespace RainbowTaskbar.Preferences {
 
         [JsonIgnore]
         public bool RunAtStartup {
-            get => (string?) Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run")
-                .GetValue("RainbowTaskbar") == Process.GetCurrentProcess().MainModule.FileName;
+            get {
+                if (!App.IsMicrosoftStore()) {
+#if MSIX_BUILD
+                    StartupTask t = StartupTask.GetAsync("RnbTsk_Startup").AsTask().Result;
+                    if (t is null) return false;
+                    
+                    return t.State == StartupTaskState.Enabled || t.State == StartupTaskState.EnabledByPolicy;
+#else
+                    return false;
+#endif
+                } else {
+                    return (string?) Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run")
+                .GetValue("RainbowTaskbar") == Environment.ProcessPath;
+                }
+            }
 
             set {
-                var key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-                if (value)
-                    key.SetValue("RainbowTaskbar", Process.GetCurrentProcess().MainModule.FileName);
-                else
-                    key.DeleteValue("RainbowTaskbar");
+                if(!App.IsMicrosoftStore()) {
+#if MSIX_BUILD
+                    StartupTask t = StartupTask.GetAsync("RnbTsk_Startup").AsTask().Result;
+                    if (t is null) return;
+                    if (value)
+                        t.RequestEnableAsync();
+                    else
+                        t.Disable();
+#endif
+                } else {
+                        var key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                    if (value)
+                        key.SetValue("RainbowTaskbar", Environment.ProcessPath);
+                    else
+                        key.DeleteValue("RainbowTaskbar");
+                }
             }
         }
 

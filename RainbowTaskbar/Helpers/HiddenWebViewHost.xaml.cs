@@ -20,7 +20,8 @@ namespace RainbowTaskbar.Helpers {
         public HiddenWebViewHost() {
             InitializeComponent();
             WindowHelper.InitOther(this);
-
+            Width = 2000;
+            Height = 100;
             Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
         }
     }

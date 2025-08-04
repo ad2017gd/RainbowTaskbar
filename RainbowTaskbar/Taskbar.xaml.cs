@@ -186,9 +186,6 @@ public partial class Taskbar : System.Windows.Window {
                         webView.CoreWebView2.MemoryUsageTargetLevel = Microsoft.Web.WebView2.Core.CoreWebView2MemoryUsageTargetLevel.Low;
 
                         webView.CoreWebView2.ProcessFailed += (_, _) => {
-                            if (!App.Settings.GraphicsRepeat) {
-                                App.hiddenWebViewHost = new();
-                            }
                             App.ReloadTaskbars();
                         };
                     });
@@ -263,9 +260,9 @@ public partial class Taskbar : System.Windows.Window {
                         App.Current.Dispatcher.Invoke(() => {
 
                             App.hiddenWebViewHost.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
-                            App.hiddenWebViewHost.Width = App.taskbars.Sum(t2 => t2.Width);
-                            App.hiddenWebViewHost.Height = App.taskbars.Max(t2 => t2.Height);
-                            var ttt = App.taskbars.Max(t2 => t2.Height);
+                            var taskbars = App.taskbars;
+                            App.hiddenWebViewHost.MinWidth = App.taskbars.Sum(t2 => t2.Width);
+                            App.hiddenWebViewHost.MinHeight = App.taskbars.Max(t2 => t2.Height);
 
                             App.hiddenWebViewHost.Top = 19999;
                             App.hiddenWebViewHost.Left = 19999;

@@ -399,7 +399,7 @@ public class TaskbarHelper {
                     var rgn2 = CreateRectRgn(0, 0, w / 2, h + 1);
                     var rgn1 = CreateRoundRectRgn(w / 3, 0, w + 1, h + 1, Radius, Radius);
                     CombineRgn(rgn, rgn1, rgn2, CombineRgnStyles.RGN_OR);
-                    SetWindowRgn(HWND, rgn, true);
+                    if(SetWindowRgn(HWND, rgn, true) != 0) DeleteObject(rgn);
 
                     DeleteObject(rgn1);
                     DeleteObject(rgn2);
@@ -416,7 +416,7 @@ public class TaskbarHelper {
                     var rgn1 = CreateRoundRectRgn(0, 0, w + 1, h + 1, Radius, Radius);
                     var rgn2 = CreateRectRgn(w / 2, 0, w + 1, h + 1);
                     CombineRgn(rgn, rgn1, rgn2, CombineRgnStyles.RGN_OR);
-                    SetWindowRgn(HWND, rgn, true);
+                    if(SetWindowRgn(HWND, rgn, true) != 0) DeleteObject(rgn);
 
                     DeleteObject(rgn1);
                     DeleteObject(rgn2);
@@ -432,7 +432,7 @@ public class TaskbarHelper {
             }
             else {
                 rgn = CreateRoundRectRgn(0, 0, w + 1, h + 1, Radius, Radius);
-                SetWindowRgn(HWND, rgn, true);
+                if(SetWindowRgn(HWND, rgn, true)!=0) DeleteObject(rgn);
 
                 window.Dispatcher.Invoke(() => {
                     window.TaskbarClip.RadiusX = window.TaskbarClip.RadiusY = Radius / 2;
@@ -446,10 +446,10 @@ public class TaskbarHelper {
             rgn = CreateRectRgn(0, 0, 0, 0);
             GetWindowRgn(HWND, rgn);
             if(Style == TaskbarStyle.Default || Style == TaskbarStyle.Blur) {
-                SetWindowRgn(window.windowHelper.HWND, rgn, true);
+                if(SetWindowRgn(window.windowHelper.HWND, rgn, true) != 0) DeleteObject(rgn);
             } else {
                 var rgn2 = CreateRectRgn(0, 0, w, h);
-                SetWindowRgn(window.windowHelper.HWND, rgn2, true);
+                if(SetWindowRgn(window.windowHelper.HWND, rgn2, true) != 0) DeleteObject(rgn2);
                 DeleteObject(rgn);
             }
 

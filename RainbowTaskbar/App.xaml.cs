@@ -1,35 +1,36 @@
-﻿using System;
+﻿using H.Pipes;
+using Microsoft.Web.WebView2.WinForms;
+using PropertyChanged;
+using RainbowTaskbar.Configuration;
+using RainbowTaskbar.Configuration.Instruction;
+using RainbowTaskbar.Configuration.Web;
+using RainbowTaskbar.Drawing;
+using RainbowTaskbar.Editor;
+using RainbowTaskbar.Helpers;
+using RainbowTaskbar.HTTPAPI;
+using RainbowTaskbar.Languages;
+using RainbowTaskbar.Preferences;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
-using H.Pipes;
-using PropertyChanged;
-using RainbowTaskbar.Configuration;
-using RainbowTaskbar.Drawing;
-using RainbowTaskbar.Editor;
-using RainbowTaskbar.Helpers;
-using RainbowTaskbar.HTTPAPI;
-using RainbowTaskbar.Languages;
-using Localization = RainbowTaskbar.Languages.Localization;
-using RainbowTaskbar.Preferences;
-using RainbowTaskbar.Configuration.Instruction;
-using RainbowTaskbar.Configuration.Web;
-using System.IO;
-using System.Collections.ObjectModel;
-using Microsoft.Web.WebView2.WinForms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.ComponentModel;
-using System.Globalization;
-using System.Runtime.Serialization;
 using System.Xml;
-using System.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Localization = RainbowTaskbar.Languages.Localization;
 
 namespace RainbowTaskbar;
 
@@ -107,13 +108,14 @@ public partial class App : Application {
                 // passing WM_LBUTTONDOWN interferes with tray icon, too bad
                 
                 var pn = System.Windows.Forms.Control.MousePosition;
-                if (!new System.Drawing.Rectangle(new((int) x.Left, (int) x.Top), new((int) x.ActualWidth, (int) x.ActualHeight)).Contains(pn)) return;
+                var scale = x.windowHelper.scale;
+                if (!new System.Drawing.Rectangle(new((int) (x.Left * scale), (int) (x.Top * scale)), new((int) (x.ActualWidth * scale), (int) (x.ActualHeight * scale))).Contains(pn)) return;
 
-                POINT p = new POINT { X = (int) pn.X, Y = (int) pn.Y };
+                POINT p = new POINT { X = (int) (pn.X), Y = (int) (pn.Y ) };
                 IntPtr cch = FindLastChildAtPoint(x.webView.Handle, 0, 0);
-                ScreenToClient(App.Settings.GraphicsRepeat ? cch : new WindowInteropHelper(x).EnsureHandle(), ref p);
+                ScreenToClient(App.Settings.GraphicsRepeat ? cch : x.windowHelper.HWND, ref p);
                 if (!App.Settings.GraphicsRepeat) p.X += (int) x.Left - farLeft;
-                PostMessage(cch, (uint) wParam, 0x0000, (IntPtr) (((uint) p.Y << 16) | ((((ushort) p.X) & 0xFFFF))));
+                PostMessage(cch, (uint) wParam, 0x0000, (IntPtr) (((uint) (p.Y) << 16) | ((((ushort) (p.X)) & 0xFFFF))));
             });
 
             
@@ -305,6 +307,18 @@ public partial class App : Application {
             // LaunchEditor();
 
             if (Settings.WebTouchThrough) StartHook();
+
+            if (App.Settings.Version < Assembly.GetExecutingAssembly().GetName().Version) {
+                if (App.Settings.Version > new Version("1.0")) {
+                    // Valid update
+                    if (App.Settings.Version <= new Version("3.1.3") && App.IsMicrosoftStore()) {
+                        App.Settings.RunAtStartup = true;
+                    }
+                }
+
+                App.Settings.Version = Assembly.GetExecutingAssembly().GetName().Version;
+                App.Settings.SaveChanged();
+            }
 
             Task.Run(() => {
                 ExplorerTAP.ExplorerTAP.TryInject();

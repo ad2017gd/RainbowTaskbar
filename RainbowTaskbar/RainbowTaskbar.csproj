@@ -2,12 +2,13 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net8.0-windows7.0</TargetFramework>
+        <TargetFramework Condition="'$(Configuration)'=='Release (MSIX)'">net8.0-windows10.0.19041.0</TargetFramework>
+        <TargetFramework Condition="'$(Configuration)'!='Release (MSIX)'">net8.0-windows7.0</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>3.1.2</Version>
+        <Version>3.1.2.1</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>RainbowTaskbar is a Windows utility to customize the shell taskbar.</Description>
-        <Authors>Ad2017, zCri</Authors>
+        <Authors>ad2017gd, zCri</Authors>
         <PackageIcon>icon.ico</PackageIcon>
         <PackageIconUrl />
         <RepositoryUrl>https://github.com/ad2017gd/RainbowTaskbar</RepositoryUrl>
@@ -20,8 +21,8 @@
         
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
-        <AssemblyVersion>3.1.2</AssemblyVersion>
-        <FileVersion>3.1.2</FileVersion>
+        <AssemblyVersion>3.1.3</AssemblyVersion>
+        <FileVersion>3.1.3</FileVersion>
         <SignAssembly>False</SignAssembly>
 		
 		   <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -34,8 +35,22 @@
 		
 		   <StartupObject>RainbowTaskbar.App</StartupObject>
 		
+		   <Configurations>Debug;Release;Release (MSIX)</Configurations>
+
+
+
+
 
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release (MSIX)'">
+        <DefineConstants>$(DefineConstants);MSIX_BUILD</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <ProjectReference Include="..\RainbowTaskbarDLL\RainbowTaskbarDLL.vcxproj" />
+    </ItemGroup>
+
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <Optimize>False</Optimize>
@@ -49,15 +64,16 @@
       <Optimize>False</Optimize>
     </PropertyGroup>
 
+
     <ItemGroup>
         <None Remove="Resources\Paypal.png" />
-        <Resource Include="..\x64\Release\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
+        <Resource Include="..\x64\Debug\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
           <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
         <Resource Include="Resources\monaco.zip">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
-        <Resource Include="..\Release\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
+        <Resource Include="..\Debug\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
           <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
         <None Include="Resources\icon.ico">
@@ -147,6 +163,8 @@
             <Generator>SettingsSingleFileGenerator</Generator>
             <LastGenOutput>Settings.Designer.cs</LastGenOutput>
         </None>
+
+        
     </ItemGroup>
 
 

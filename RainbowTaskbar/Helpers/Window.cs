@@ -120,7 +120,7 @@ public class WindowHelper {
             var rgn2 = CreateRectRgn(0, (int) (max* scale), (int) (rect.Width * scale), (int) (rect.Height * scale));
             var rgn = CreateRectRgn(0, 0, 0, 0);
             CombineRgn(rgn, rgn1, rgn2, CombineRgnStyles.RGN_XOR);
-            SetWindowRgn(HWND, rgn, false);
+            if(SetWindowRgn(HWND, rgn, false) != 0) DeleteObject(rgn);
             DeleteObject(rgn1);
             DeleteObject(rgn2);
             
@@ -145,7 +145,7 @@ public class WindowHelper {
         Task.Run(() => {
             while (alive) {
                 window.Dispatcher.Invoke(() => TaskbarPosChanged(null, null));
-                Thread.Sleep(25);
+                Thread.Sleep(20);
             }
         });
     }
@@ -221,18 +221,10 @@ public class WindowHelper {
         if (ddHandle != IntPtr.Zero) DwmUnregisterThumbnail(ddHandle);
         var r = DwmRegisterThumbnail(this.HWND, handle, out ddHandle);
 
-        DWM_THUMBNAIL_PROPERTIES dskThumbProps = new();
-        dskThumbProps.dwFlags = DWM_TNP.DWM_TNP_SOURCECLIENTAREAONLY | DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_RECTSOURCE | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTDESTINATION;
-        dskThumbProps.fSourceClientAreaOnly = 1;
-        dskThumbProps.fVisible = 1;
-        dskThumbProps.opacity = 255;
-        var rect = taskbar.GetRectangle(true);
-        dskThumbProps.rcSource = new RECT() { Top = 0, Left = 0, Right = (int) rect.Width, Bottom = (int) rect.Height };
-        dskThumbProps.rcDestination = new RECT() { Top = (int) (rect.Top - window.Top), Left = 0, Right = (int) rect.Width, Bottom = (int) rect.Height };
-        DwmUpdateThumbnailProperties(ddHandle, ref dskThumbProps);
         ;
     }
     public void UpdateDuplicate() {
+        if (ddHandle == IntPtr.Zero) return;
         DWM_THUMBNAIL_PROPERTIES dskThumbProps = new();
         dskThumbProps.dwFlags = DWM_TNP.DWM_TNP_SOURCECLIENTAREAONLY | DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_RECTSOURCE | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTDESTINATION;
         dskThumbProps.fSourceClientAreaOnly = 1;

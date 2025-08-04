@@ -8,7 +8,8 @@
       }
     },
     "RainbowTaskbar": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "hotReloadEnabled": false
     }
   }
 }

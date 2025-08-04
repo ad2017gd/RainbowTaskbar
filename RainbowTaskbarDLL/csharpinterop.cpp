@@ -4,13 +4,16 @@
 #include <windows.h>
 #include <winuser.h>
 
+
+#include <winrt/Windows.ApplicationModel.h>
+
 #define IF_GET_API                                                              \
 HRESULT hr;                                                                     \
-winrt::com_ptr<IUnknown> _API;                                                  \
+winrt::com_ptr<::IUnknown> _API;                                                  \
 if (FAILED(hr = GetActiveObject(CLSID_AppearanceServiceAPI, 0, _API.put()))) {  \
     return hr;                                                                  \
 }                                                                               \
-winrt::com_ptr<IDispatch> API = _API.try_as<IDispatch>();                       \
+winrt::com_ptr<::IDispatch> API = _API.try_as<::IDispatch>();                       \
 if (API != nullptr)
 
 #define INVOKE(x) API->Invoke(x, IID_NULL, 0, DISPATCH_METHOD, &params, 0, 0, 0)
@@ -28,7 +31,7 @@ return hr
 #define Close 1
 #define Version 2
 #define GetDataPtr 3
-#define GetYPosition 4
+#define SetStartup 4
 
 #define DGetUiTree 10
 
@@ -49,6 +52,7 @@ __declspec(dllexport) STDAPI SetAppearanceTypeDLL(UINT type) {
     }
 
 }
+
 __declspec(dllexport) STDAPI CloseDLL() {
     IF_GET_API {
         NO_ARGS(Close);

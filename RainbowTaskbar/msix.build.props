@@ -1,0 +1,6 @@
+﻿<Project>
+  <PropertyGroup>
+    <IsMsixBuild>true</IsMsixBuild>
+    <DefineConstants>$(DefineConstants);MSIX_BUILD</DefineConstants>
+  </PropertyGroup>
+</Project>
