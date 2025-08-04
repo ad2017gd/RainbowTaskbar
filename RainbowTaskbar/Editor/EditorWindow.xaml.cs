@@ -1,4 +1,5 @@
-﻿using RainbowTaskbar.Editor.Pages;
+﻿using RainbowTaskbar.Configuration;
+using RainbowTaskbar.Editor.Pages;
 using RainbowTaskbar.Editor.Pages.Controls;
 using RainbowTaskbar.Editor.Pages.Edit;
 using System;
@@ -62,6 +63,18 @@ namespace RainbowTaskbar.Editor {
         }
 
         Page current = null;
+
+        public void OpenConfig(Config config) {
+            App.editor.nav.Navigate(typeof(EmptyPageBadFix));
+
+            var page = new ViewInfo(config);
+            Task.Run(() => {
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() => App.editor.nav.Navigate(typeof(EmptyPageBadFix2)));
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() => App.editor.nav.ReplaceContent(page));
+            });
+        }
         private void nav_Navigating(NavigationView sender, NavigatingCancelEventArgs args) {
             // this is totally disgusting but wpf ui is cooked so whatever
 

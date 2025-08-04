@@ -1,5 +1,6 @@
 ﻿using H.Pipes;
 using Microsoft.Web.WebView2.WinForms;
+using Microsoft.Win32;
 using PropertyChanged;
 using RainbowTaskbar.Configuration;
 using RainbowTaskbar.Configuration.Instruction;
@@ -26,6 +27,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Interop;
 using System.Xml;
@@ -220,11 +222,19 @@ public partial class App : Application {
        
     }
     private void Application_Startup(object sender, StartupEventArgs e) {
-        foreach (string s in e.Args) {
-        }
+
+        
 
 
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
+            if (e.Args.Length > 0 && e.Args[0] == "shell") {
+                Task.Run(() => {
+                    Thread.Sleep(500);
+                    Process.Start(Environment.ProcessPath, Environment.GetCommandLineArgs());
+                });
+            }
+
+
             Task.Run(async () => {
                 await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
                 pipe.MessageReceived += (sender, args) => {
@@ -232,6 +242,26 @@ public partial class App : Application {
                         Dispatcher.Invoke(() => {
                             LaunchEditor();
                         });
+                    if (args.Message.StartsWith("Shell=")) {
+                        var uri = new Uri(args.Message.Split("Shell=")[1]);
+                        Dispatcher.Invoke(() => {
+                            LaunchEditor();
+                        });
+
+                        if (uri.Host == "config") {
+                            var configs = App.Settings.workshopAPI.SearchConfigsAsync(uri.AbsolutePath.Substring(1), Editor.Pages.SortBy.Match).Result;
+                            if(configs.Result && configs.Results.Count == 1) {
+                                var config = configs.Parse().ElementAt(0);
+                                config.CachedBase64Thumbnail = App.Settings.workshopAPI.DownloadThumbnailBase64(config).Result;
+                                config.LoadImage();
+                                Dispatcher.Invoke(() => {
+                                    App.editor.OpenConfig(config);
+                                });
+                            }
+                        }
+
+                    }
+                        
                 };
                 await pipe.StartAsync();
                 await Task.Delay(Timeout.InfiniteTimeSpan);
@@ -288,9 +318,12 @@ public partial class App : Application {
                 }
             }
 
-            
+
 
             
+
+
+
 
 
 
@@ -354,12 +387,30 @@ public partial class App : Application {
 
         }
         else {
-            // Other processes
+            var shell = false;
+            var shellMessage = "";
+            foreach (string s in e.Args) {
+                if(shell == true) {
+                    shellMessage = s;
+                }
+                if(s == "shell") {
+                    shell = true;
+                }
+                
+            }
+
+
             var pipe = new PipeClient<string>("RainbowTaskbar Pipe");
             pipe.ConnectAsync().Wait();
-            pipe.WriteAsync("OpenEditor").Wait();
+            if (shell) {
+                pipe.WriteAsync("Shell="+shellMessage).Wait();
+            } else {
+                pipe.WriteAsync("OpenEditor").Wait();
+                
+            }
             pipe.DisconnectAsync().Wait();
             Environment.Exit(0);
+
         }
     }
 

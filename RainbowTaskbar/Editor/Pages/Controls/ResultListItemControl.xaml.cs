@@ -88,15 +88,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
 
         private void Select(object sender, RoutedEventArgs e) {
             e.Handled = true;
-            App.editor.nav.Navigate(typeof(EmptyPageBadFix));
-
-            var page = new ViewInfo(Config);
-            Task.Run(() => {
-                Thread.Sleep(50);
-                Dispatcher.Invoke(() => App.editor.nav.Navigate(typeof(EmptyPageBadFix2)));
-                Thread.Sleep(50);
-                Dispatcher.Invoke(() => App.editor.nav.ReplaceContent(page));
-            });
+            App.editor.OpenConfig(Config);
             
         }
 

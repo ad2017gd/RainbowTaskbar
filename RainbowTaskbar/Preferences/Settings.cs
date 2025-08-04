@@ -140,7 +140,7 @@ namespace RainbowTaskbar.Preferences {
         [JsonIgnore]
         public bool RunAtStartup {
             get {
-                if (!App.IsMicrosoftStore()) {
+                if (App.IsMicrosoftStore()) {
 #if MSIX_BUILD
                     StartupTask t = StartupTask.GetAsync("RnbTsk_Startup").AsTask().Result;
                     if (t is null) return false;
@@ -156,7 +156,7 @@ namespace RainbowTaskbar.Preferences {
             }
 
             set {
-                if(!App.IsMicrosoftStore()) {
+                if(App.IsMicrosoftStore()) {
 #if MSIX_BUILD
                     StartupTask t = StartupTask.GetAsync("RnbTsk_Startup").AsTask().Result;
                     if (t is null) return;
@@ -171,6 +171,23 @@ namespace RainbowTaskbar.Preferences {
                         key.SetValue("RainbowTaskbar", Environment.ProcessPath);
                     else
                         key.DeleteValue("RainbowTaskbar");
+                    key.Close();
+                }
+
+                string prot = "rnbtsk";
+                RegistryKey reg = Registry.CurrentUser.OpenSubKey($"Software\\Classes\\{prot}", true);
+                if (reg != null) {
+                    reg = reg.OpenSubKey(@"shell\open\command", true);
+                    reg.SetValue(string.Empty, Environment.ProcessPath + " " + "shell \"%1\"");
+                    reg.Close();
+                } else {
+                    reg = Registry.CurrentUser.CreateSubKey($"Software\\Classes\\{prot}", true);
+                    reg.SetValue(string.Empty, "URL: " + prot);
+                    reg.SetValue("URL Protocol", string.Empty);
+
+                    reg = reg.CreateSubKey(@"shell\open\command");
+                    reg.SetValue(string.Empty, Environment.ProcessPath + " " + "shell \"%1\"");
+                    reg.Close();
                 }
             }
         }
