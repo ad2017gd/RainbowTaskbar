@@ -1,4 +1,4 @@
-﻿<Page x:Class="RainbowTaskbar.Editor.Pages.Settings"
+<Page x:Class="RainbowTaskbar.Editor.Pages.Settings"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,15 +15,18 @@
             </ResourceDictionary.MergedDictionaries>
             <loc:LanguageConverter x:Key="LanguageConverter" />
         </ResourceDictionary>
-        
+
     </Page.Resources>
-    <Grid Margin="16">
+    <Grid Margin="0,25,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel>
+        <StackPanel Margin="45,0,0,0">
             <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource general}"></TextBlock>
+            <Grid Height="15"/>
+            <!-- Little Spacer -->
+
             <CheckBox Content="{DynamicResource runstartup}" IsChecked="{Binding SettingsCfg.RunAtStartup}"></CheckBox>
             <CheckBox Content="{DynamicResource checkupdate}" IsChecked="{Binding SettingsCfg.CheckUpdate}"></CheckBox>
             <CheckBox Content="{DynamicResource showicon}" IsChecked="{Binding SettingsCfg.ShowTrayIcon}"></CheckBox>
@@ -38,9 +41,15 @@
                 </ComboBox>
             </StackPanel>
 
+            <Grid Height="50"/>
+            <!-- Big Spacer -->
+
             <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource workshop}"></TextBlock>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontSize="16" xml:space="preserve" Text="{DynamicResource signedin}"></TextBlock>
+            <Grid Height="15"/>
+            <!-- Little Spacer -->
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock FontSize="16" xml:space="preserve" Text="{DynamicResource signedin}" FontWeight="SemiBold"></TextBlock>
                 <TextBlock FontSize="16" xml:space="preserve" Text=" ("></TextBlock>
                 <TextBlock FontSize="16" Text="{Binding SettingsCfg.AccountUsername, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                 <TextBlock FontSize="16">)</TextBlock>
@@ -53,9 +62,14 @@
                 <Button Content="{DynamicResource signout}" x:Name="signout" Click="login2_Click" Margin="0,0,15,0">
                 </Button>
             </StackPanel>
-            
+
+            <Grid Height="50"/>
+            <!-- Big Spacer -->
 
             <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource enum_web}"></TextBlock>
+            <Grid Height="15"/>
+            <!-- Little Spacer -->
+
             <CheckBox Content="{DynamicResource passmouse}" IsChecked="{Binding SettingsCfg.WebTouchThrough}"></CheckBox>
             <CheckBox Content="{DynamicResource allowjs}" IsChecked="{Binding SettingsCfg.WebScriptEnabled}"></CheckBox>
             <StackPanel Orientation="Horizontal">
@@ -63,12 +77,25 @@
                 <ui:NumberBox ClearButtonEnabled="False" Value="{Binding SettingsCfg.MaxWebFPS, UpdateSourceTrigger=PropertyChanged}" SpinButtonPlacementMode="Hidden"></ui:NumberBox>
             </StackPanel>
 
+            <Grid Height="50"/>
+            <!-- Big Spacer -->
+
             <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource graphics}"></TextBlock>
+            <Grid Height="15"/>
+            <!-- Little Spacer -->
+
             <StackPanel Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Text="{DynamicResource interpquality}"></TextBlock>
                 <ui:NumberBox ClearButtonEnabled="False" Value="{Binding SettingsCfg.InterpolationQuality}" SpinButtonPlacementMode="Hidden"></ui:NumberBox>
             </StackPanel>
+
+            <Grid Height="50"/>
+            <!-- Big Spacer -->
+
             <TextBlock FontSize="24" FontWeight="SemiBold" Text="{DynamicResource multipletaskbars}"></TextBlock>
+            <Grid Height="15"/>
+            <!-- Little Spacer -->
+
             <StackPanel Orientation="Horizontal">
                 <CheckBox Content="{DynamicResource graphicsrepeat}" IsChecked="{Binding SettingsCfg.GraphicsRepeat}"></CheckBox>
                 <!--<TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="10" Text="{DynamicResource perfimpact}">
@@ -88,16 +115,30 @@
             </StackPanel>
             <CheckBox Content="{DynamicResource samerad}" IsChecked="{Binding SettingsCfg.SameRadiusOnEach}"></CheckBox>
 
+            <Grid Height="50"/>
+            <!-- Big Spacer -->
+
             <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource globalprop}"></TextBlock>
-            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="10" Text="{DynamicResource globalpropdef}"></TextBlock>
+            <Grid Height="15"/>
+            <!-- Little Spacer -->
+
+            <TextBlock VerticalAlignment="Center" FontSize="12" FontWeight="Bold" Text="{DynamicResource globalpropdef}"></TextBlock>
             <StackPanel Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Text="{DynamicResource globalopacity}"></TextBlock>
                 <ui:NumberBox Minimum="-1" Maximum="1" ClearButtonEnabled="False" Value="{Binding SettingsCfg.GlobalOpacity, UpdateSourceTrigger=PropertyChanged}" SpinButtonPlacementMode="Hidden"></ui:NumberBox>
             </StackPanel>
 
+            <Grid Height="50"/>
+            <!-- Big Spacer -->
 
             <TextBlock FontSize="32" FontWeight="SemiBold">API</TextBlock>
+            <Grid Height="15"/>
+            <!-- Little Spacer -->
+
             <TextBlock Text="{DynamicResource comingsoon}"></TextBlock>
+            <Grid Height="50"/>
+            <!-- Big Spacer -->
+
         </StackPanel>
     </Grid>
 </Page>
