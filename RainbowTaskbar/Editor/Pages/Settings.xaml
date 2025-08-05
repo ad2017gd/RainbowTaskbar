@@ -22,8 +22,8 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel HorizontalAlignment="Center">
-            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource general}" HorizontalAlignment="Center"></TextBlock>
+        <StackPanel Margin="45,0,0,0">
+            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource general}"></TextBlock>
             <Grid Height="15"/>
             <!-- Little Spacer -->
 
@@ -44,7 +44,7 @@
             <Grid Height="50"/>
             <!-- Big Spacer -->
 
-            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource workshop}" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource workshop}"></TextBlock>
             <Grid Height="15"/>
             <!-- Little Spacer -->
 
@@ -66,7 +66,7 @@
             <Grid Height="50"/>
             <!-- Big Spacer -->
 
-            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource enum_web}" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource enum_web}"></TextBlock>
             <Grid Height="15"/>
             <!-- Little Spacer -->
 
@@ -80,7 +80,7 @@
             <Grid Height="50"/>
             <!-- Big Spacer -->
 
-            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource graphics}" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource graphics}"></TextBlock>
             <Grid Height="15"/>
             <!-- Little Spacer -->
 
@@ -92,7 +92,7 @@
             <Grid Height="50"/>
             <!-- Big Spacer -->
 
-            <TextBlock FontSize="24" FontWeight="SemiBold" Text="{DynamicResource multipletaskbars}" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock FontSize="24" FontWeight="SemiBold" Text="{DynamicResource multipletaskbars}"></TextBlock>
             <Grid Height="15"/>
             <!-- Little Spacer -->
 
@@ -118,7 +118,7 @@
             <Grid Height="50"/>
             <!-- Big Spacer -->
 
-            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource globalprop}" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock FontSize="32" FontWeight="SemiBold" Text="{DynamicResource globalprop}"></TextBlock>
             <Grid Height="15"/>
             <!-- Little Spacer -->
 
@@ -131,7 +131,7 @@
             <Grid Height="50"/>
             <!-- Big Spacer -->
 
-            <TextBlock FontSize="32" FontWeight="SemiBold" HorizontalAlignment="Center">API</TextBlock>
+            <TextBlock FontSize="32" FontWeight="SemiBold">API</TextBlock>
             <Grid Height="15"/>
             <!-- Little Spacer -->
 
