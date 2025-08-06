@@ -1,19 +1,12 @@
 <div align="center">
    
-## [Thank you!](#thank-you-for-100-stars)
+## [Official site](https://ad2017.dev/rnb)
 
 [<sub>*</sub>](#microsoft-store)
 [<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://apps.microsoft.com/detail/9nn78x0674xw)
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280434808-334b68d6-9568-4cc5-988d-a9bf186c1b8c.png" alt="Download x64" height="64">](https://github.com/ad2017gd/RainbowTaskbar/releases/download/3.1.2/setup-x64.msi)
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280435213-f3b1165b-dba6-4f0d-84ac-2cae15ec992a.png" alt="Donate" height="64">](https://paypal.me/ad2k17)
 
-
-   <a href="../../stargazers"><img src="https://img.shields.io/github/stars/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
-   <a href="LICENSE"><img src="https://img.shields.io/github/license/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
-   <a href="../../issues"><img src="https://img.shields.io/github/issues/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
-   <a href="../../releases"><img src="https://img.shields.io/github/v/release/ad2017gd/RainbowTaskbar?style=for-the-badge"></a>
-   <a href="https://paypal.me/ad2k17"><img src="https://img.shields.io/badge/donators-4-red?style=for-the-badge&logo=paypal"></a>   
-   
    <h1><a href="https://ad2017.dev/rnb">RainbowTaskbar</a></h1>
 <p>Useful tool for Windows taskbar customization. Supports web configurations or instruction-like configurations that feature color effects, transitions, blur, images, text, rounded corners, shapes, transparency. Now rewritten in .NET 8!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
