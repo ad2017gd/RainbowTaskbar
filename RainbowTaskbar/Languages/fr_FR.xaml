@@ -5,7 +5,7 @@
     <s:String x:Key="home">Accueil</s:String>
     <s:String x:Key="settings">Paramètres</s:String>
     <s:String x:Key="about">À propos</s:String>
-    <s:String x:Key="browse">Rechercher</s:String>
+    <s:String x:Key="browse">Galerie</s:String>
     <s:String x:Key="configs">Configurations</s:String>
 
     <!-- About Tab -->
@@ -229,4 +229,5 @@
 
 </ResourceDictionary>
     
+
     
