@@ -9,8 +9,8 @@
     <s:String x:Key="configs">Configurations</s:String>
 
     <!-- About Tab -->
-    <s:String x:Key="aboutrnb">About RainbowTaskbar</s:String>
-    <s:String x:Key="rnbweb">Open RainbowTaskbar website</s:String>
+    <s:String x:Key="aboutrnb">À propos de RainbowTaskbar</s:String>
+    <s:String x:Key="rnbweb">Accéder au site de RainbowTaskbar</s:String>
     <s:String x:Key="description">RainbowTaskbar est un outil gratuit et open source qui permet de personnaliser l'apparence de la barre des tâches.</s:String>
     <s:String x:Key="donations">Les dons sont les bienvenus !</s:String>
     
@@ -18,7 +18,7 @@
          Made by ad2017 , with the help of zCri .-->
 
     <!-- Configs Tab -->
-    <s:String x:Key="untitled">Untitled</s:String>
+    <s:String x:Key="untitled">Sans titre</s:String>
     <s:String x:Key="new">Nouveau</s:String>
     <s:String x:Key="enum_classic">Classique</s:String>
     <s:String x:Key="enum_web">Web</s:String>
@@ -177,7 +177,7 @@
     <s:String x:Key="fadetime">Durée de fondu</s:String>
     <s:String x:Key="gradientangle">Angle du dégradé °</s:String>
     <s:String x:Key="layer">Calque</s:String>
-    <s:String x:Key="milliseconds">ms</s:String>
+    <s:String x:Key="millisecondes">ms</s:String>
         <!-- Image -->
     <s:String x:Key="chooseimg">Choisir une image</s:String>
     <s:String x:Key="width">Largeur</s:String>
@@ -238,5 +238,6 @@
     <s:String x:Key="langcredits">Traduit par Jean-Baptiste A.</s:String>
 
 </ResourceDictionary>
+
 
 
