@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
+﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Wpf;
 using RainbowTaskbar.Configuration;
@@ -12,21 +7,26 @@ using RainbowTaskbar.Configuration.Instruction.Instructions;
 using RainbowTaskbar.Drawing;
 using RainbowTaskbar.Helpers;
 using RainbowTaskbar.HTTPAPI;
-using Wpf.Ui.Controls;
-using System.Text.Json.Nodes;
-
-using System.Text.Json;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows.Media.Media3D;
-using Microsoft.Web.WebView2.Core;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading;
-using WebView2 = Microsoft.Web.WebView2.Wpf.WebView2;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
+using Wpf.Ui.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using WebView2 = Microsoft.Web.WebView2.Wpf.WebView2;
 
 namespace RainbowTaskbar;
 
@@ -82,7 +82,8 @@ public partial class Taskbar : System.Windows.Window {
     public const int WM_WINDOWPOSCHANGING = 0x46;
     [DllImport("user32.dll", SetLastError = true)]
     private static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
-
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
         if (msg == WM_WINDOWPOSCHANGING) {
             WINDOWPOS wp = (WINDOWPOS) System.Runtime.InteropServices.Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
@@ -94,7 +95,13 @@ public partial class Taskbar : System.Windows.Window {
             }
         }
         if (msg == WM_Shell) {
-            var dontcare = lParam == TaskbarHelper.FindWindow("XamlExplorerHostIslandWindow", null);
+            var wnd = lParam;
+            var clname = new StringBuilder(256);
+            GetClassName(wnd, clname, clname.Capacity);
+
+            // fix: used to hide underlay when peeking window on taskbar
+            var dontcare = clname.ToString() == "XamlExplorerHostIslandWindow";
+
             if ((uint) wParam == 53 && !dontcare) 
                 App.IsAppFullscreen = true;
             if ((uint) wParam == 54 && !dontcare) 

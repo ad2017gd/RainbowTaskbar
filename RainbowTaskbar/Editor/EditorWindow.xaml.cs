@@ -36,7 +36,7 @@ namespace RainbowTaskbar.Editor {
         public IContentDialogService contentDialogService;
         public EditorWindow() {
 
-            //SystemThemeWatcher.Watch(this);
+            SystemThemeWatcher.Watch(this);
             InitializeComponent();
 
             nav.Loaded += (_, _) => {

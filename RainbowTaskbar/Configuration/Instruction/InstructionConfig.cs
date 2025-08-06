@@ -75,7 +75,7 @@ public class InstructionConfig : Config {
         var tasks = new List<Task>();
         if(cts is not null) {
             cts.Cancel();
-            //cts = null;
+            cts = null;
         }
         if(Data.RunOnceGroup.Task is not null) tasks.Add(Data.RunOnceGroup.Task);
         foreach(var group in Data.LoopGroups) {

@@ -1,0 +1,240 @@
+﻿<ResourceDictionary x:Class="RainbowTaskbar.Languages.ro_RO"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <s:String x:Key="home">Acasă</s:String>
+    <s:String x:Key="settings">Setări</s:String>
+    <s:String x:Key="about">Despre</s:String>
+    <s:String x:Key="browse">Caută</s:String>
+    <s:String x:Key="configs">Configurații</s:String>
+
+    <!-- About Tab -->
+    <s:String x:Key="aboutrnb">Despre RainbowTaskbar</s:String>
+    <s:String x:Key="rnbweb">Deschide site-ul RainbowTaskbar</s:String>
+    <s:String x:Key="description">RainbowTaskbar este un instrument care vă permite să personalizați taskbar-ul.</s:String>
+    <s:String x:Key="donations">Este complet gratuit, dar donațiile sunt apreciate!</s:String>
+    <!-- RainbowTaskbar is free software.
+         Made by ad2017 , with the help of zCri .-->
+
+    <!-- Configs Tab -->
+    <s:String x:Key="untitled">Fără titlu</s:String>
+    <s:String x:Key="new">Nou</s:String>
+    <s:String x:Key="enum_classic">Clasic</s:String>
+    <s:String x:Key="enum_web">Web</s:String>
+    
+    <!-- Instruction config edit -->
+    <s:String x:Key="runoncegroup">Grup care execută o data</s:String>
+    <s:String x:Key="loopinggroups">Grup care execută continuu</s:String>
+    <s:String x:Key="group">Grup</s:String>
+    <s:String x:Key="run">Execută</s:String>
+    <s:String x:Key="save">Salvează</s:String>
+    <s:String x:Key="add">Adaugă</s:String>
+        <!-- Config edit -->
+    <s:String x:Key="name">Titlu</s:String>
+    <s:String x:Key="thumbnail">Imagine</s:String>
+    <s:String x:Key="editconfig">Modifică configurația</s:String>
+    <s:String x:Key="saveandpublish">Salvează și publică</s:String>
+    <s:String x:Key="publishstatus" xml:space="preserve">Status: </s:String> <!-- do not omit space at the end please! -->
+    <s:String x:Key="enum_published">Cel mai nou publicat</s:String>
+    <s:String x:Key="enum_previouslypublished">Publicat precedent, dar nu cel mai nou</s:String>
+    <s:String x:Key="enum_notpublished">Nu a fost publicat</s:String>
+    <s:String x:Key="pickimg">Alege o imagine</s:String>
+    <s:String x:Key="copypreset">Copiază instrucțiuni din prestabilite</s:String>
+    <s:String x:Key="descriptionlit">Descriere</s:String>
+    <s:String x:Key="addprop">Adaugă proprietate</s:String>
+    <s:String x:Key="propname">Nume proprietate</s:String>
+    <s:String x:Key="propkey">Cheie proprietate</s:String>
+    <s:String x:Key="proptype">Tip proprietate</s:String>
+    <s:String x:Key="defpropkey">proprietate_1</s:String>
+    <s:String x:Key="defpropname">Proprietate nouă</s:String>
+
+    <s:String x:Key="devtools">Deschide instrumentele de dezvoltator</s:String>
+
+    <s:String x:Key="enum_string">Text</s:String>
+    <s:String x:Key="enum_number">Număr</s:String>
+    <s:String x:Key="enum_color">Culoare</s:String>
+    <s:String x:Key="enum_boolean">Boolean</s:String>
+    
+    
+    <!-- Config view -->
+    <s:String x:Key="filesize" xml:space="preserve">Mărime fișier: </s:String> <!-- do not omit space at the end please! -->
+    <s:String x:Key="filesizeextra"> KO (cu imagine)</s:String> <!-- incl. = including, do not omit space at the end please! -->
+    <s:String x:Key="author" xml:space="preserve">Autor: </s:String> <!-- do not omit space at the end please! -->
+    <s:String x:Key="likes" xml:space="preserve">Aprecieri: </s:String> <!-- do not omit space at the end please! -->
+    <s:String x:Key="download">Descarcă</s:String><!-- verb! -->
+    <s:String x:Key="downloadnew">Descarcă o copie nouă</s:String><!-- download is a verb! -->
+    <s:String x:Key="like">Apreciază</s:String><!-- verb! -->
+    <s:String x:Key="unlike">Nu mai aprecia</s:String><!-- verb! -->
+    <s:String x:Key="comments">Comentarii</s:String>
+    <s:String x:Key="goback">Înapoi</s:String>
+    <s:String x:Key="openweb">Deschide în web</s:String>
+
+    <!-- Home tab -->
+    <s:String x:Key="welcome">Bun venit la editor-ul RainbowTaskbar!</s:String>
+    <s:String x:Key="whatsnew">Ce e nou în ultimul update</s:String>
+    <s:String x:Key="review">Adaugă un review</s:String>
+
+    <s:String x:Key="issueremind">*este preferată utilizarea platformei GitHub pentru a publica o problemă sau o cerere.</s:String>
+    <s:String x:Key="issuetitle">Titlu cerere</s:String>
+    <s:String x:Key="issuedesc">Descriere</s:String>
+    <s:String x:Key="issuecontact">Date de contact (optional)</s:String>
+
+    <!-- Settings tab -->
+    <s:String x:Key="general">General</s:String>
+    <s:String x:Key="runstartup">Execută la pornirea sistemului</s:String>
+    <s:String x:Key="checkupdate">Verifică actualizari</s:String>
+    <s:String x:Key="showicon">Afișează iconița de notificari</s:String>
+    <s:String x:Key="language">Limbă</s:String>
+    <s:String x:Key="workshop">Workshop</s:String>
+    <s:String x:Key="signedin">Autentificat ca</s:String>
+    <s:String x:Key="logingit">Autentificare (GitHub)</s:String>
+    <s:String x:Key="logingoog">Autentificare (Google)</s:String>
+    <s:String x:Key="signout">Deconectare</s:String>
+    <s:String x:Key="passmouse">Trimite mouse input la substrat (poate utiliza CPU)</s:String>
+    <s:String x:Key="allowjs">Permite JavaScript</s:String>
+    <s:String x:Key="graphics">Grafici</s:String>
+    <s:String x:Key="interpquality">Calitate interpolare (mai mic = mai bun)</s:String>
+    <s:String x:Key="multipletaskbars">Mai multe taskbar-uri</s:String>
+    <s:String x:Key="perfimpact">(valoarea selectată poate afecta performanța)</s:String>
+    <s:String x:Key="samerad">Aceeași rază</s:String>
+    <s:String x:Key="graphicsrepeat">Repetă graficile</s:String>
+    <s:String x:Key="comingsoon">În curând...</s:String>
+    <s:String x:Key="webfps">FPS (cadre pe secundă) maxim web</s:String>
+    <s:String x:Key="systemdefault">(Utilizează limba sistemului)</s:String>
+    <s:String x:Key="globalprop">Proprietăți globale</s:String>
+    <s:String x:Key="globalpropdef">*pentru a păstra setările configurației selectate, utilizați valoarea '-1'</s:String>
+    <s:String x:Key="globalopacity">Transparență taskbar (0-1)</s:String>
+
+    <!-- Browse Tab -->
+    <s:String x:Key="search">Caută...</s:String>
+    <!-- Sort by Likes/Match-->
+    <s:String x:Key="enum_likes">După aprecieri</s:String>
+    <s:String x:Key="enum_match">După potrivire</s:String>
+
+    <!-- Instructions and displayed format strings -->
+    <s:String x:Key="borderradiusinstruction">Raza colțurilor</s:String>
+    <s:String x:Key="clearlayerinstruction">Golește strat</s:String>
+    <s:String x:Key="colorinstruction">Culoare</s:String>
+    <s:String x:Key="delayinstruction">Întârziere</s:String>
+    <s:String x:Key="imageinstruction">Imagine</s:String>
+    <s:String x:Key="shapeinstruction">Formă</s:String>
+    <s:String x:Key="textinstruction">Text</s:String>
+    <s:String x:Key="transparencyinstruction">Transparență/Stil</s:String>
+
+    <s:String x:Key="borderradiusinstructionformat">Raza colțurilor - {0}px</s:String>
+    <s:String x:Key="clearlayerinstructionformat">Golește strat - {0}</s:String>
+    <s:String x:Key="colorinstructionrandomizedformat">{0} - Aleatoriu</s:String>
+    <!-- no translation --> <s:String x:Key="colorinstructiongradientformat">{0} - {1} -> {2}</s:String>
+    <!-- no translation --> <s:String x:Key="colorinstructionsolidformat">{0} - {1}</s:String>
+    <s:String x:Key="delayinstructionformat">Intârziere - {0}ms</s:String>
+    <s:String x:Key="imageinstructionformat">Imagine - {0}</s:String>
+    <s:String x:Key="shapeinstructionformat">Formă- {0}</s:String>
+    <s:String x:Key="textinstructionformat">Text - {0}</s:String>
+    <s:String x:Key="transparencyinstructionstyleformat">Stil - {0}</s:String>
+    <s:String x:Key="transparencyinstructionlayerformat">Strat {0} - {1}%</s:String>
+    <s:String x:Key="transparencyinstructionopacityformat">{0} - {1}%</s:String>
+
+    <!-- Enums -->
+        <!-- Shapes -->
+    <s:String x:Key="enum_line">Linie</s:String>
+    <s:String x:Key="enum_rectangle">Dreptunghi</s:String>
+    <s:String x:Key="enum_roundedrect">Dreptunghi rotunjit</s:String>
+    <s:String x:Key="enum_ellipse">Elipsă</s:String>
+        <!-- Color instruction effects -->
+    <s:String x:Key="enum_solid">Solid</s:String>
+    <s:String x:Key="enum_fade">Solid cu estompare</s:String>
+    <s:String x:Key="enum_gradient">Gradient</s:String>
+    <s:String x:Key="enum_fadegradient">Gradient cu estompare</s:String>
+        <!-- Color instruction transitions -->
+    <s:String x:Key="enum_linear">Linear</s:String>
+    <s:String x:Key="enum_cubic">Cubic</s:String>
+    <s:String x:Key="enum_sine">Sinus</s:String>
+    <s:String x:Key="enum_exponential">Exponențial</s:String>
+    <s:String x:Key="enum_back">Înapoi</s:String>
+        <!-- Transparency instruction option 1 -->
+    <s:String x:Key="enum_taskbar">Opacitate taskbar</s:String>
+    <s:String x:Key="enum_rainbowtaskbar">Opacitate substrat</s:String>
+    <s:String x:Key="enum_all">Opacitate taskbar și substrat</s:String>
+    <s:String x:Key="enum_layer">Opacitate strat</s:String>
+    <s:String x:Key="enum_style">Stilul taskbar-ului</s:String>
+        <!-- Transparency instruction styles -->
+    <s:String x:Key="enum_default">Prestabilit</s:String>
+    <s:String x:Key="enum_blur">Blurat</s:String>
+    <s:String x:Key="enum_transparent">Transparent</s:String>
+    
+    <!-- Instruction controls -->
+        <!-- Shape -->
+    <s:String x:Key="drawonce">Desenează o singură dată</s:String>
+    <s:String x:Key="strokecolor">Culoare linie</s:String> <!-- stroke is a noun! -->
+    <s:String x:Key="fillcolor">Culoare umplutură</s:String> <!-- fill is a noun! -->
+    <s:String x:Key="thickness">Grosime</s:String>
+    <s:String x:Key="radius">Raza colțurilor</s:String>
+    <s:String x:Key="fittaskbars">Potrivește la dimensiunea taskbar-ului</s:String> <!-- fit is a verb! -->
+        <!-- Color -->
+    <s:String x:Key="randomize">Culori aleatorii</s:String>
+    <s:String x:Key="holdtime">Timp de susținere</s:String>
+    <s:String x:Key="fadetime">Timp de estompare</s:String>
+    <s:String x:Key="gradientangle">Unghiul gradientului °</s:String>
+    <s:String x:Key="layer">Strat</s:String>
+    <s:String x:Key="milliseconds">ms</s:String>
+        <!-- Image -->
+    <s:String x:Key="chooseimg">Alege imagine</s:String>
+    <s:String x:Key="width">Lățime</s:String>
+    <s:String x:Key="height">Înălțime</s:String>
+        <!-- Text -->
+    <s:String x:Key="fontsize">Marime font</s:String>
+    <s:String x:Key="fontcolor">Culoare font</s:String>
+    <s:String x:Key="centerx">Centrează pe axa Ox</s:String> <!-- center is a verb! -->
+        <!-- Transparency -->
+    <s:String x:Key="change">Schimbă</s:String>
+    <s:String x:Key="to">la</s:String>
+
+
+
+    <!-- Instruction context menu -->
+    <s:String x:Key="duplicate">Duplică</s:String> <!-- it's a verb! -->
+    <s:String x:Key="delete">Șterge</s:String>
+    <s:String x:Key="duplicate_rev_color">Duplică - Inversează culorile</s:String>
+    
+    <!-- Tray window context menu -->
+    <s:String x:Key="openeditor">Deschide editor-ul</s:String>
+    <s:String x:Key="donate">Donează</s:String>
+    <s:String x:Key="projectpage">Deschide pagina proiectului</s:String>
+    <s:String x:Key="issueorreq">Publică o cerere sau problema</s:String>
+    <s:String x:Key="exit">Închide</s:String>
+
+    <!-- Dialog boxes -->
+    <s:String x:Key="msgbox_baddll">Se pare că există o problema cu DLL-ul injectat in procesul explorer.exe. 
+        Acest proces este experimental, va rugăm să publicați o problema pe GitHub (Click-dreapta pe iconița de notificari -> Publică o cerere sau problema) 
+        pentru a permite depanarea problemei. Vă rugam să menționați și orice altă eroare ați mai întâmpinat.</s:String>
+    <s:String x:Key="msgbox_olddll">Pentru a permite efectele de transparență, RainbowTaskbar trebuie să reporneasca procesul explorer.exe.
+        Doriți să continuați?</s:String>
+    <s:String x:Key="msgbox_badarch">Tipul procesorului dvs. (x64) este incompatibil cu acest executabil (x86). 
+        Vă rugăm să descărcați varianta corectă a programului (rnbtsk-x64.exe / setup-x64.exe) de pe GitHub.</s:String>
+    <s:String x:Key="msgbox_migrateoldcfg">RainbowTaskbar a găsit o configurație veche.
+        Doriți să o actualizați la noul format?
+    </s:String>
+    <s:String x:Key="msgbox_login">
+        Introduceți codul afișat pe pagina de autentificare cu succes
+    </s:String>
+    <s:String x:Key="msgbox_notloggedin">Trebuie să fiți autentificat pentru a publica o configurație! Verificați pagina Setări pentru a vă autentifica.</s:String>
+    <s:String x:Key="msgbox_notloggedin_title">Neautentificat</s:String>
+    <s:String x:Key="msgbox_notloggedin2">Trebuie sa fiți autentificat pentru a aprecia o configurație!</s:String>
+    <s:String x:Key="msgbox_fail">Nu s-a putut publica configurația.</s:String>
+    <s:String x:Key="msgbox_fail_title">Eșec</s:String>
+    <s:String x:Key="msgbox_thumbnail">Datele/informațiile configurației au fost actualizate. Nu s-a putut actualiza poza.</s:String>
+    <s:String x:Key="msgbox_property_title">Creează proprietate nouă</s:String>
+    <s:String x:Key="msgbox_login_title">Autentificare cu cod</s:String>
+    <s:String x:Key="msgbox_login_button">Autentificare</s:String>
+    <s:String x:Key="msgbox_save_title">Salvați?</s:String>
+    <s:String x:Key="msgbox_save">Doriți să salvați configurația actuală?</s:String>
+    <s:String x:Key="msgbox_save_b1">Salvează</s:String>
+    <s:String x:Key="msgbox_save_b2">Nu salva</s:String>
+    <s:String x:Key="msgbox_button_cancel">Anulează</s:String>
+    <s:String x:Key="msgbox_update">Un nou update RainbowTaskbar a fost găsit. Doriți să actualizați?</s:String>
+    <s:String x:Key="msgbox_migrate">Vrei să migrezi configurațiile v2 la v3 (actual)?</s:String>
+    <s:String x:Key="msgbox_issuegithub">Folosește GitHub</s:String>
+    <!-- Fill with "Translated by ..." -->
+    <s:String x:Key="langcredits">‎</s:String>
+
+</ResourceDictionary>
