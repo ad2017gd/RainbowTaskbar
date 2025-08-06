@@ -24,7 +24,7 @@ EndPoint="0,1">
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
-        <Button Click="Select" Width="256" Height="256"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+        <Button Click="Select" Width="340" Height="340"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>

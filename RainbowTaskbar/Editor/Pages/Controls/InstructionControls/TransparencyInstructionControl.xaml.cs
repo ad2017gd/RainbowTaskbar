@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 
 namespace RainbowTaskbar.Editor.Pages.Controls.InstructionControls
 {
@@ -23,6 +24,8 @@ namespace RainbowTaskbar.Editor.Pages.Controls.InstructionControls
         public TransparencyInstructionControl()
         {
             InitializeComponent();
+            App.localization.Enable(Resources.MergedDictionaries);
+            ApplicationThemeManager.ApplySystemTheme(true);
         }
     }
 }

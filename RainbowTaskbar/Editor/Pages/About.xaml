@@ -17,7 +17,7 @@
     </Page.Resources>
     <Grid Margin="16">
         <StackPanel>
-            <TextBlock HorizontalAlignment="Center" FontSize="32" FontWeight="SemiBold">About RainbowTaskbar</TextBlock>
+            <TextBlock HorizontalAlignment="Center" FontSize="32" FontWeight="SemiBold" Text="{DynamicResource aboutrnb}"></TextBlock>
             <TextBlock HorizontalAlignment="Center" Text="{DynamicResource description}"></TextBlock>
             <TextBlock HorizontalAlignment="Center" Text="{DynamicResource donations}"></TextBlock>
         </StackPanel>
@@ -36,13 +36,18 @@
 
         </Image>
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center">
+                <Hyperlink Click="Hyperlink_Click_2">
+                    <TextBlock Text="{DynamicResource rnbweb}"></TextBlock>
+                </Hyperlink>
+                <LineBreak></LineBreak>
             <Hyperlink Click="Hyperlink_Click">
                 GitHub
             </Hyperlink>
             <LineBreak></LineBreak>
-            <Hyperlink Click="Hyperlink_Click_1">
-                Submit an issue or request
+            <Hyperlink Click="Hyperlink_Click_1" >
+                <TextBlock Text="{DynamicResource issueorreq}"></TextBlock>
             </Hyperlink>
+            <LineBreak></LineBreak>
             <Run Text="{DynamicResource langcredits}"></Run>
         </TextBlock>
         

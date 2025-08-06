@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -41,10 +42,10 @@ public class WindowHelper {
     }
 
     [DllImport("user32.dll")]
-    private static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+    public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-    private static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+    public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
 
     [DllImport("user32.dll")]
     static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
@@ -88,7 +89,7 @@ public class WindowHelper {
             taskbar.SetBlur();
         }
 
-            if (DateTime.Now - lastZIndex > TimeSpan.FromSeconds(0.1) && !changed) {
+        if (DateTime.Now - lastZIndex > TimeSpan.FromSeconds(0.05) && !changed) {
             lastZIndex = DateTime.Now;
             taskbar.PlaceWindowUnder(window);
             taskbar.SetBlur();
@@ -124,8 +125,8 @@ public class WindowHelper {
             DeleteObject(rgn1);
             DeleteObject(rgn2);
             
-           // window.AutoHideClip.RadiusX = window.AutoHideClip.RadiusY = 0;
-            //window.AutoHideClip.Rect = new(0, max, 1920, rect.Height);
+            window.AutoHideClip.RadiusX = window.AutoHideClip.RadiusY = 0;
+            window.AutoHideClip.Rect = new(0, max, 1920, rect.Height);
 
         }
         if (ddHandle != IntPtr.Zero) UpdateDuplicate();
@@ -133,12 +134,17 @@ public class WindowHelper {
 
     public static IntPtr GetHWND(Window window) => new WindowInteropHelper(Window.GetWindow(window)).EnsureHandle();
     public bool alive = true;
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+
     public void Init(TaskbarHelper taskbarHelper) {
         HWND = GetHWND(window);
         SetWindowLong(HWND, (int) GWL.EXSTYLE,
             (uint) GetWindowLong(HWND, (int) GWL.EXSTYLE).ToInt32() | (uint) WS_EX.TRANSPARENT);
         SetWindowLong(HWND, (int) GWL.STYLE,
             (uint) GetWindowLong(HWND, (int) GWL.STYLE).ToInt32() | (uint) WS.POPUP | (uint) WS.VISIBLE);
+
+        
         taskbar = taskbarHelper;
         taskbarHelper.TaskbarPositionChanged += TaskbarPosChanged;
 
@@ -244,7 +250,7 @@ public class WindowHelper {
         ddHandle = IntPtr.Zero;
     }
 
-    private enum GWL {
+    public enum GWL {
         EXSTYLE = -20,
         HINSTANCE = -6,
         HWNDPARENT = -8,
@@ -259,7 +265,7 @@ public class WindowHelper {
     }
 
     [Flags]
-    private enum WS : uint {
+    public enum WS : uint {
         OVERLAPPED = 0x00000000,
         POPUP = 0x80000000,
         CHILD = 0x40000000,
@@ -293,7 +299,7 @@ public class WindowHelper {
     }
 
 
-    private enum WS_EX : uint {
+    public enum WS_EX : uint {
         DLGMODALFRAME = 0x00000001,
         NOPARENTNOTIFY = 0x00000004,
         TOPMOST = 0x00000008,

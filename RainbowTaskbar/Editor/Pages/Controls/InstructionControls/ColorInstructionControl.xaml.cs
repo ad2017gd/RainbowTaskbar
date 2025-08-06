@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 using static RainbowTaskbar.Configuration.Instruction.Instructions.ColorInstruction;
 
 namespace RainbowTaskbar.Editor.Pages.Controls.InstructionControls {
@@ -22,6 +23,8 @@ namespace RainbowTaskbar.Editor.Pages.Controls.InstructionControls {
     public partial class ColorInstructionControl : UserControl {
         public ColorInstructionControl() {
             InitializeComponent();
+            App.localization.Enable(Resources.MergedDictionaries);
+            ApplicationThemeManager.ApplySystemTheme(true);
             Task.Run(() => {
                 Thread.Sleep(100);
                 Dispatcher.Invoke(() => {

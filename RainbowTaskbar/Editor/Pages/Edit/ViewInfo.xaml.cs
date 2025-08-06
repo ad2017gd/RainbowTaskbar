@@ -6,6 +6,7 @@ using RainbowTaskbar.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -93,6 +94,9 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                 Thread.Sleep(50);
                 Dispatcher.Invoke(() => App.editor.nav.ReplaceContent(page));
             });
+        }
+        private void OpenWeb(object sender, RoutedEventArgs e) {
+            Process.Start(new ProcessStartInfo("https://ad2017.dev/rnb/web/config/"+Config.PublishedID) { UseShellExecute = true });
         }
     }
 }

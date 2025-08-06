@@ -9,6 +9,8 @@
     <s:String x:Key="configs">Configurations</s:String>
 
     <!-- About Tab -->
+    <s:String x:Key="aboutrnb">About RainbowTaskbar</s:String>
+    <s:String x:Key="rnbweb">Open RainbowTaskbar website</s:String>
     <s:String x:Key="description">RainbowTaskbar est un outil gratuit et open source qui permet de personnaliser l'apparence de la barre des tâches.</s:String>
     <s:String x:Key="donations">Les dons sont les bienvenus !</s:String>
     
@@ -16,6 +18,7 @@
          Made by ad2017 , with the help of zCri .-->
 
     <!-- Configs Tab -->
+    <s:String x:Key="untitled">Untitled</s:String>
     <s:String x:Key="new">Nouveau</s:String>
     <s:String x:Key="enum_classic">Classique</s:String>
     <s:String x:Key="enum_web">Web</s:String>
@@ -26,6 +29,7 @@
     <s:String x:Key="group">Groupe</s:String>
     <s:String x:Key="run">Lancer</s:String>
     <s:String x:Key="save">Enregistrer</s:String>
+    <s:String x:Key="add">Add</s:String>
     
     <!-- Config edit -->
     <s:String x:Key="name">Titre</s:String>
@@ -44,7 +48,9 @@
     <s:String x:Key="propkey">Clé de la propriété</s:String>
     <s:String x:Key="proptype">Type de la propriété</s:String>
     <s:String x:Key="devtools">Ouvrir les outils développeur</s:String>
-    
+    <s:String x:Key="defpropkey">property_1</s:String>
+    <s:String x:Key="defpropname">New property</s:String>
+
     <!--  -->
     <s:String x:Key="enum_string">Chaîne</s:String>
     <s:String x:Key="enum_number">Nombre</s:String>
@@ -62,6 +68,7 @@
     <s:String x:Key="unlike">Supprimer des favoris</s:String><!-- verb! -->
     <s:String x:Key="comments">Commentaires</s:String>
     <s:String x:Key="goback">Retour</s:String>
+    <s:String x:Key="openweb">Open in web</s:String>
 
     <!-- Home tab -->
     <s:String x:Key="welcome">Bienvenue dans l'éditeur de RainbowTaskbar !</s:String>
@@ -101,6 +108,9 @@
 
     <!-- Browse Tab -->
     <s:String x:Key="search">Rechercher...</s:String>
+    <!-- Sort by Likes/Match-->
+    <s:String x:Key="enum_likes">Likes</s:String>
+    <s:String x:Key="enum_match">Match</s:String>
 
     <!-- Instructions and displayed format strings -->
     <s:String x:Key="borderradiusinstruction">Rayon de Bordure</s:String>

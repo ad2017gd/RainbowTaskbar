@@ -223,9 +223,6 @@ public partial class App : Application {
     }
     private void Application_Startup(object sender, StartupEventArgs e) {
 
-        
-
-
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
             if (e.Args.Length > 0 && e.Args[0] == "shell") {
                 Task.Run(() => {
@@ -356,6 +353,8 @@ public partial class App : Application {
             Task.Run(() => {
                 ExplorerTAP.ExplorerTAP.TryInject();
 
+                
+
                 App.Current.Dispatcher.Invoke(() => {
                     taskbars = FindAllTaskbars();
                     SetupTaskbars();
@@ -376,8 +375,9 @@ public partial class App : Application {
                         });
                     }
 
+
                     // todo: add back?
-                   // API.Start();
+                    // API.Start();
                 });
 
 
@@ -444,7 +444,9 @@ public partial class App : Application {
         
         return tsk;
     }
+
     public static void SetupTaskbars() {
+        
         taskbars.MinBy(t => t.Left).taskbarHelper.first = true;
         taskbars.MaxBy(t => t.Left).taskbarHelper.last = true;
         taskbars.ForEach(t => {
@@ -476,7 +478,7 @@ public partial class App : Application {
                 taskbar.windowHelper.RemoveDuplicate();
                 taskbar.Close();
             });
-
+            if(Config.currentlyRunning is not null) Config.currentlyRunning.Stop().Wait(500);
             Config.currentlyRunning = null;
 
             taskbars = FindAllTaskbars();
@@ -486,7 +488,7 @@ public partial class App : Application {
             Taskbar.SetupWebViews();
 
             Task.Run(() => {
-                Thread.Sleep(500);
+                Thread.Sleep(100);
                 App.Current.Dispatcher.Invoke(() => Taskbar.SoftReset(startConfig));
             });
         });

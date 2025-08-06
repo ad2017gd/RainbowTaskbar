@@ -29,8 +29,8 @@ namespace RainbowTaskbar.Configuration.Web {
     }
     [Serializable]
     public class WebConfigUserSetting {
-        public string Name { get; set; } = "New property";
-        public string Key { get; set; } = "property_1";
+        public string Name { get; set; } = App.localization?.Get("defpropname") ?? "New property";
+        public string Key { get; set; } = App.localization?.Get("defpropkey") ?? "property_1";
         public string _value { get; set; } = string.Empty;
         // probably should have used a converter but i gave up trying
         [JsonIgnore]
@@ -236,11 +236,11 @@ namespace RainbowTaskbar.Configuration.Web {
             }
         }
 
-        public override async Task Stop() {
+        public override Task Stop() {
             var wv = App.webView;
             var tsk = wv?.EnsureCoreWebView2Async();
-            await Task.Run(() => {
-                try { tsk?.Wait(100); } catch { return; }
+            return Task.Run(() => {
+                try { tsk?.Wait(500); } catch { return; }
                 App.Current.Dispatcher.Invoke(() => {
                     try {
                         wv?.NavigateToString("<html></html>");

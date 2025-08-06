@@ -167,7 +167,7 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock FontSize="16" VerticalAlignment="Center" Margin="0,0,0,4" Text="{DynamicResource descriptionlit}"></TextBlock>
-            <ui:RichTextBox Grid.Row="1" AcceptsReturn="True" x:Name="richDescription" Margin="0,0,0,16" MouseWheel="richDescription_MouseWheel">
+            <ui:RichTextBox DataObject.Pasting="richDescription_Pasting" AllowDrop="False" IsDocumentEnabled="False"  Grid.Row="1" AcceptsReturn="True" x:Name="richDescription" Margin="0,0,0,16" MouseWheel="richDescription_MouseWheel">
             </ui:RichTextBox>
         </Grid>
         <StackPanel Grid.Row="2">
@@ -191,7 +191,7 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <ui:Button Icon="{ui:SymbolIcon Save24}" Click="Save" Content="{DynamicResource save}"></ui:Button>
             <ui:Button Icon="{ui:SymbolIcon ArrowUpload24}" Click="Publish" Content="{DynamicResource saveandpublish}"></ui:Button>
-            <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" xml:space="preserve" Text="Publish status: "></TextBlock>
+            <TextBlock VerticalAlignment="Center" Margin="5,0,0,0" xml:space="preserve" Text="{DynamicResource publishstatus}"></TextBlock>
             <TextBlock VerticalAlignment="Center" Text="{Binding Config.PublishStatus, Converter={StaticResource EnumTranslator}}"></TextBlock>
         </StackPanel>
     </Grid>

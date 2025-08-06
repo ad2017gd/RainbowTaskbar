@@ -40,7 +40,7 @@ namespace RainbowTaskbar.Configuration {
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public string Name { get; set; } = "Untitled";
+        public string Name { get; set; } = App.localization?.Get("untitled") ?? "Untitled";
         public string Description { get; set; } = "";
         public string? PublishedID { get; set; }
         public string? PreviousPublishedID { get; set; }
@@ -94,6 +94,10 @@ namespace RainbowTaskbar.Configuration {
         public virtual void Start() {
            
             if (currentlyRunning is not null) currentlyRunning.Stop().Wait(150);
+            var inst = new TransparencyInstruction() {
+                Type = TransparencyInstruction.TransparencyInstructionType.All, Opacity = 1
+            };
+            App.taskbars.ForEach(x => inst.Execute(x));
             currentlyRunning = this;
            
             

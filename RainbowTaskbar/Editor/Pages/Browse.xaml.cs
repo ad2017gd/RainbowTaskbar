@@ -43,7 +43,7 @@ namespace RainbowTaskbar.Editor.Pages
             DataContext = this;
             InitializeComponent();
             ApplicationThemeManager.ApplySystemTheme(true);
-            //App.localization.Enable(Resources.MergedDictionaries);
+            App.localization.Enable(Resources.MergedDictionaries);
 
 
 

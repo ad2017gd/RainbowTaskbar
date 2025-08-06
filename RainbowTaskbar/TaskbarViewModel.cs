@@ -38,8 +38,8 @@ public class TaskbarViewModel {
         TaskbarHelper.SetWindowLong(thisHwnd, TaskbarHelper.GWL_EXSTYLE, (uint) (TaskbarHelper.GetWindowLong(thisHwnd, TaskbarHelper.GWL_EXSTYLE).ToInt32() | 0x00000080L) /*WS_EX_TOOLWINDOW*/);
 
         var Taskbar = window.taskbarHelper.GetRectangle(true);
-        window.Left = 0;
-        window.Top = 0;
+        //window.Left = 0;
+        //window.Top = 0;
         double scale = window.taskbarHelper.GetScalingFactor();
         window.MinWidth = Taskbar.Width * (1/ scale);
         window.Width = Taskbar.Width * (1 / scale);

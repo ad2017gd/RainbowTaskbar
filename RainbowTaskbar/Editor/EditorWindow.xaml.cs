@@ -95,7 +95,7 @@ namespace RainbowTaskbar.Editor {
                 nav.Navigate(typeof(EmptyPageBadFix));
                 Type t = args.Page.GetType();
                 Task.Run(() => {
-                    Thread.Sleep(40);
+                    Thread.Sleep(50);
                     Dispatcher.Invoke(() => nav.Navigate(t));
                 });
             }

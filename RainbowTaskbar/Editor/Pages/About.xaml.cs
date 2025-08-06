@@ -41,5 +41,9 @@ namespace RainbowTaskbar.Editor.Pages {
         private void Hyperlink_Click_1(object sender, RoutedEventArgs e) {
             Process.Start(new ProcessStartInfo("https://github.com/ad2017gd/RainbowTaskbar/issues/new/choose") { UseShellExecute = true });
         }
+
+        private void Hyperlink_Click_2(object sender, RoutedEventArgs e) {
+            Process.Start(new ProcessStartInfo("https://ad2017.dev/rnb") { UseShellExecute = true });
+        }
     }
 }

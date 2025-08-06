@@ -94,9 +94,10 @@ public partial class Taskbar : System.Windows.Window {
             }
         }
         if (msg == WM_Shell) {
-            if ((uint) wParam == 53) 
+            var dontcare = lParam == TaskbarHelper.FindWindow("XamlExplorerHostIslandWindow", null);
+            if ((uint) wParam == 53 && !dontcare) 
                 App.IsAppFullscreen = true;
-            if ((uint) wParam == 54) 
+            if ((uint) wParam == 54 && !dontcare) 
                 App.IsAppFullscreen = false;
         }
         return IntPtr.Zero;
@@ -111,10 +112,12 @@ public partial class Taskbar : System.Windows.Window {
 
     private uint WM_Shell = 0;
     
+
     protected override void OnSourceInitialized(EventArgs e) {
         base.OnSourceInitialized(e);
-        HwndSource source = (HwndSource) HwndSource.FromHwnd(new WindowInteropHelper(this).EnsureHandle());
-        if(!secondary) {
+        var hWnd = new WindowInteropHelper(this).EnsureHandle();
+        HwndSource source = (HwndSource) HwndSource.FromHwnd(hWnd);
+        if (!secondary) {
             RegisterShellHookWindow(new WindowInteropHelper(this).EnsureHandle());
             WM_Shell = RegisterWindowMessage("SHELLHOOK");
         }

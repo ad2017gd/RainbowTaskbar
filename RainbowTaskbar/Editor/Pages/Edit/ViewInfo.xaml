@@ -72,12 +72,12 @@
             <ui:Button Margin="5,0,0,0" Click="Like">
                 <ui:Button.Style>
                     <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
-                        <Setter Property="Content" Value="Like"></Setter>
+                        <Setter Property="Content" Value="{DynamicResource like}"></Setter>
                         <Setter Property="Icon" Value="{ui:SymbolIcon Heart24}"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Liked}" Value="True">
                                 <DataTrigger.Setters>
-                                    <Setter Property="Content" Value="Unlike"></Setter>
+                                    <Setter Property="Content" Value="{DynamicResource unlike}"></Setter>
                                     <Setter Property="Icon" Value="{ui:SymbolIcon HeartBroken24}"></Setter>
                                 </DataTrigger.Setters>
                             </DataTrigger>
@@ -86,6 +86,8 @@
                 </ui:Button.Style>
             </ui:Button>
             <ui:Button Margin="5,0,0,0" Click="Comment" Content="{Binding CommentButtonText}" Icon="{ui:SymbolIcon Comment24}">
+            </ui:Button>
+            <ui:Button Margin="5,0,0,0" Click="OpenWeb" Content="{DynamicResource openweb}" Icon="{ui:SymbolIcon Globe24}">
             </ui:Button>
         </StackPanel>
     </Grid>

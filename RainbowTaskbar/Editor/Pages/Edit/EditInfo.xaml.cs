@@ -208,5 +208,11 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
             });
         }
 
+        private void richDescription_Pasting(object sender, DataObjectPastingEventArgs e) {
+            // also checked server side dont worry!
+            if (e.FormatToApply == "Bitmap" || e.FormatToApply == DataFormats.FileDrop) {
+                e.CancelCommand();
+            }
+        }
     }
 }

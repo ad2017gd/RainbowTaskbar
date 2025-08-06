@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:RainbowTaskbar.Editor"
         xmlns:pages="clr-namespace:RainbowTaskbar.Editor.Pages"
         mc:Ignorable="d"
+        xmlns:extensions="clr-namespace:RainbowTaskbar.Editor.Pages.Controls"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  Closing="FluentWindow_Closing"
                  Icon="pack://application:,,,/RainbowTaskbar;component/Resources/icon.ico"
-        Title="EditorWindow" Height="600" Width="1000">
+        Title="EditorWindow" Height="700" Width="1200">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -29,13 +30,43 @@
         <Grid Grid.Row="1">
             <ui:NavigationView x:Name="nav"  PaneDisplayMode="LeftFluent" Navigating="nav_Navigating">
                 <ui:NavigationView.MenuItems>
-                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Content="{DynamicResource home}" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type pages:Home}"/>
-                    <ui:NavigationViewItem NavigationCacheMode="Disabled" Content="{DynamicResource configs}" Icon="{ui:SymbolIcon CalendarAgenda24}" TargetPageType="{x:Type pages:Configs}"/>
-                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Content="{DynamicResource browse}" Icon="{ui:SymbolIcon Globe24}" TargetPageType="{x:Type pages:Browse}"/>
+                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type pages:Home}">
+                        <ui:NavigationViewItem.Content>
+                            <Viewbox StretchDirection="DownOnly">
+                                <TextBlock Text="{DynamicResource home}"></TextBlock>
+                            </Viewbox>
+                        </ui:NavigationViewItem.Content>
+                    </ui:NavigationViewItem>
+                    <ui:NavigationViewItem NavigationCacheMode="Disabled" Icon="{ui:SymbolIcon CalendarAgenda24}" TargetPageType="{x:Type pages:Configs}">
+                        <ui:NavigationViewItem.Content>
+                            <Viewbox StretchDirection="DownOnly">
+                                <TextBlock Text="{DynamicResource configs}"></TextBlock>
+                            </Viewbox>
+                        </ui:NavigationViewItem.Content>
+                    </ui:NavigationViewItem>
+                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Icon="{ui:SymbolIcon Globe24}" TargetPageType="{x:Type pages:Browse}">
+                        <ui:NavigationViewItem.Content>
+                            <Viewbox StretchDirection="DownOnly">
+                                <TextBlock Text="{DynamicResource browse}"></TextBlock>
+                            </Viewbox>
+                        </ui:NavigationViewItem.Content>
+                    </ui:NavigationViewItem>
                 </ui:NavigationView.MenuItems>
                 <ui:NavigationView.FooterMenuItems>
-                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Content="{DynamicResource settings}" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:Settings}"/>
-                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Content="{DynamicResource about}" Icon="{ui:SymbolIcon Info24}" TargetPageType="{x:Type pages:About}"/>
+                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:Settings}">
+                        <ui:NavigationViewItem.Content>
+                            <Viewbox StretchDirection="DownOnly">
+                                <TextBlock Text="{DynamicResource settings}"></TextBlock>
+                            </Viewbox>
+                        </ui:NavigationViewItem.Content>
+                    </ui:NavigationViewItem>
+                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Icon="{ui:SymbolIcon Info24}" TargetPageType="{x:Type pages:About}">
+                        <ui:NavigationViewItem.Content>
+                            <Viewbox StretchDirection="DownOnly">
+                                <TextBlock Text="{DynamicResource about}"></TextBlock>
+                            </Viewbox>
+                        </ui:NavigationViewItem.Content>
+                    </ui:NavigationViewItem>
                 </ui:NavigationView.FooterMenuItems>
             </ui:NavigationView>
 

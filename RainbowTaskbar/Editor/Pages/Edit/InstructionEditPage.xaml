@@ -90,7 +90,7 @@ SelectionChanged="ListBox_SelectionChanged">
                                                         </DataTemplate>
                                                     </ListBox.ItemTemplate>
                                                 </ListBox>
-                                                <ui:Button DataContext="{Binding}" HorizontalAlignment="Right" Icon="{ui:SymbolIcon Add24}" Click="AddInstruction" Content="Add">
+                                                <ui:Button DataContext="{Binding}" HorizontalAlignment="Right" Icon="{ui:SymbolIcon Add24}" Click="AddInstruction" Content="{DynamicResource add}">
 
                                                 </ui:Button>
                                             </StackPanel>

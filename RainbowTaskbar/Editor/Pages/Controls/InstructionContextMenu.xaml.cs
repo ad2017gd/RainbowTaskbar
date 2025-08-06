@@ -40,6 +40,7 @@ namespace RainbowTaskbar.Editor.Pages.Controls
         public InstructionContextMenu()
         {
             InitializeComponent();
+            App.localization.Enable(Resources.MergedDictionaries);
         }
 
         private void Duplicate_Click(object sender, RoutedEventArgs e) {

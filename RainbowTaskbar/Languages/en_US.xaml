@@ -9,12 +9,15 @@
     <s:String x:Key="configs">Configs</s:String>
 
     <!-- About Tab -->
+    <s:String x:Key="aboutrnb">About RainbowTaskbar</s:String>
+    <s:String x:Key="rnbweb">Open RainbowTaskbar website</s:String>
     <s:String x:Key="description">RainbowTaskbar is a tool that allows you to greatly customize the appearance of your taskbar.</s:String>
     <s:String x:Key="donations">It is completely free to use, but donations are well appreciated!</s:String>
     <!-- RainbowTaskbar is free software.
          Made by ad2017 , with the help of zCri .-->
 
     <!-- Configs Tab -->
+    <s:String x:Key="untitled">Untitled</s:String>
     <s:String x:Key="new">New</s:String>
     <s:String x:Key="enum_classic">Classic</s:String>
     <s:String x:Key="enum_web">Web</s:String>
@@ -25,6 +28,7 @@
     <s:String x:Key="group">Group</s:String>
     <s:String x:Key="run">Run</s:String>
     <s:String x:Key="save">Save</s:String>
+    <s:String x:Key="add">Add</s:String>
         <!-- Config edit -->
     <s:String x:Key="name">Title</s:String>
     <s:String x:Key="thumbnail">Thumbnail</s:String>
@@ -41,6 +45,8 @@
     <s:String x:Key="propname">Property name</s:String>
     <s:String x:Key="propkey">Property key</s:String>
     <s:String x:Key="proptype">Property type</s:String>
+    <s:String x:Key="defpropkey">property_1</s:String>
+    <s:String x:Key="defpropname">New property</s:String>
 
     <s:String x:Key="devtools">Open Developer Tools</s:String>
 
@@ -61,6 +67,7 @@
     <s:String x:Key="unlike">Unlike</s:String><!-- verb! -->
     <s:String x:Key="comments">Comments</s:String>
     <s:String x:Key="goback">Go back</s:String>
+    <s:String x:Key="openweb">Open in web</s:String>
 
     <!-- Home tab -->
     <s:String x:Key="welcome">Welcome to the RainbowTaskbar editor!</s:String>
@@ -100,6 +107,9 @@
 
     <!-- Browse Tab -->
     <s:String x:Key="search">Search something...</s:String>
+    <!-- Sort by Likes/Match-->
+    <s:String x:Key="enum_likes">Likes</s:String>
+    <s:String x:Key="enum_match">Match</s:String>
 
     <!-- Instructions and displayed format strings -->
     <s:String x:Key="borderradiusinstruction">Border radius</s:String>

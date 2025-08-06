@@ -5,13 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RainbowTaskbar.Editor.Pages.Controls"
         mc:Ignorable="d">
-    <ContextMenu.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../../Languages/en_US.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </ContextMenu.Resources>
     <ContextMenu.Style>
         <Style TargetType="ContextMenu" BasedOn="{StaticResource {x:Type ContextMenu}}">
         </Style>

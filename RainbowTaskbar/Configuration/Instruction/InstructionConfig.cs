@@ -67,24 +67,27 @@ public class InstructionConfig : Config {
         });
         Task.Run(() => StartGroupTasks());
     }
-    public override async Task Stop() {
-        StopGroupTasks();
+    public override Task Stop() {
+        return Task.WhenAll(StopGroupTasks());
     }
 
-    public void StopGroupTasks() {
+    public List<Task> StopGroupTasks() {
+        var tasks = new List<Task>();
         if(cts is not null) {
             cts.Cancel();
-            cts = null;
+            //cts = null;
         }
-        if(Data.RunOnceGroup.Task is not null) Data.RunOnceGroup.Task.Wait();
+        if(Data.RunOnceGroup.Task is not null) tasks.Add(Data.RunOnceGroup.Task);
         foreach(var group in Data.LoopGroups) {
-            if(group.Task is not null) group.Task.Wait();
+            if(group.Task is not null) tasks.Add(group.Task);
         }
+
+        return tasks;
     }
 
     public void StartGroupTasks() {
 
-        StopGroupTasks();
+        Stop().Wait();
         cts = new CancellationTokenSource();
         Data.RunOnceGroup.StartOnceTask(cts.Token);
         Data.RunOnceGroup.Task.Wait(cts.Token);

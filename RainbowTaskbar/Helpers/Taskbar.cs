@@ -177,16 +177,16 @@ public class TaskbarHelper {
     public void SetAlpha(double alpha) {
         if (!IsWindow(HWND)) return;
         if (!layered) {
-            //SetWindowLong(HWND, GWL_EXSTYLE, (uint) GetWindowLong(HWND, GWL_EXSTYLE).ToInt32() | WS_EX_LAYERED);
+            SetWindowLong(HWND, GWL_EXSTYLE, (uint) GetWindowLong(HWND, GWL_EXSTYLE).ToInt32() | WS_EX_LAYERED);
             layered = true;
         }
         // I have no idea what the reasoning behind this is, but it probably meant something when i first did it so we're keeping it!
         if (_alpha != (byte) (alpha * 255)) {
-            //SetLayeredWindowAttributes(HWND, 0, (byte) (alpha * 255), LWA_ALPHA);
+            SetLayeredWindowAttributes(HWND, 0, (byte) (alpha * 255), LWA_ALPHA);
             _alpha = (byte) (alpha * 255);
         } else {
-            //SetLayeredWindowAttributes(HWND, 0, 100, LWA_ALPHA);
-            _alpha = 100;
+            SetLayeredWindowAttributes(HWND, 0, 254, LWA_ALPHA);
+            _alpha = 254;
         }
         
     }
@@ -298,6 +298,7 @@ public class TaskbarHelper {
         UpdateRadius();
         var rect = GetRectangle();
 
+
         SetWindowPos(window.windowHelper.HWND, HWND, rect.X, rect.Y, 0, 0,
             SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOSIZE);
         if (window.Width != rect.Width * (1 / scale)) window.Width = rect.Width * (1/scale);
@@ -307,11 +308,6 @@ public class TaskbarHelper {
 
     }
 
-    public void SetWindowZUnder(Taskbar window) {
-        if (!IsWindow(HWND)) return;
-        SetWindowPos(window.windowHelper.HWND, HWND, 0, 0, 0, 0,
-        SWP.NOACTIVATE | SWP.SHOWWINDOW | SWP.NOMOVE | SWP.NOSIZE);
-    }
 
     //SetWindowLong(HWND, GWL_EXSTYLE, (uint)((int)GetWindowLong(HWND, GWL_EXSTYLE) | WS_EX_LAYERED));
     [DllImport("shell32.dll")]
@@ -381,6 +377,7 @@ public class TaskbarHelper {
     public static extern int OffsetRgn(IntPtr hrgn, int nXOffset, int nYOffset);
     private TaskbarStyle old_style = TaskbarStyle.ForceDefault;
     public bool UpdateRadius() {
+
         if (!IsWindow(HWND)) return false;
         if (old_radius != Radius && old_style != Style) {
             old_radius = Radius;

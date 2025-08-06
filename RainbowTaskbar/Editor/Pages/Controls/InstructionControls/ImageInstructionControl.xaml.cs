@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 
 namespace RainbowTaskbar.Editor.Pages.Controls.InstructionControls {
     /// <summary>
@@ -24,6 +25,8 @@ namespace RainbowTaskbar.Editor.Pages.Controls.InstructionControls {
     public partial class ImageInstructionControl : UserControl {
         public ImageInstructionControl() {
             InitializeComponent();
+            App.localization.Enable(Resources.MergedDictionaries);
+            ApplicationThemeManager.ApplySystemTheme(true);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
