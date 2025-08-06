@@ -59,7 +59,7 @@
 
     <!-- Config view -->
     <s:String x:Key="filesize" xml:space="preserve">Taille du fichier: </s:String> <!-- do not omit space at the end please! -->
-    <s:String x:Key="filesizeextra"> Ko (image inclue)</s:String> <!-- incl. = including, do not omit space at the end please! -->
+    <s:String x:Key="filesizeextra"> Ko (image inclue) </s:String> <!-- incl. = including, do not omit space at the end please! -->
     <s:String x:Key="author" xml:space="preserve">Auteur: </s:String> <!-- do not omit space at the end please! -->
     <s:String x:Key="likes" xml:space="preserve">Favoris: </s:String> <!-- do not omit space at the end please! -->
     <s:String x:Key="download">Télécharger</s:String><!-- verb! -->
@@ -238,4 +238,5 @@
     <s:String x:Key="langcredits">Traduit par Jean-Baptiste A.</s:String>
 
 </ResourceDictionary>
+
 
