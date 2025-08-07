@@ -1,3 +1,0 @@
-C:\Users\Ad2017\source\repos\RainbowTaskbar\RainbowTaskbarDLL\Release (MSIX)\RainbowTaskbarDLL.vcxproj.MdMergeInputs.cache
-C:\Users\Ad2017\source\repos\RainbowTaskbar\RainbowTaskbarDLL\Release (MSIX)\RainbowTaskbarDLL.vcxproj.cppwinrt_plat.cache
-C:\Users\Ad2017\source\repos\RainbowTaskbar\RainbowTaskbarDLL\Release (MSIX)\RainbowTaskbarDLL.vcxproj.cppwinrt_comp.cache
