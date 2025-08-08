@@ -102,6 +102,7 @@
     <s:String x:Key="globalprop">全局属性</s:String>
     <s:String x:Key="globalpropdef">*为了保持配置的设置，使用值 '-1'</s:String>
     <s:String x:Key="globalopacity">任务栏透明度 (0-1)</s:String>
+    <s:String x:Key="reportex">Send info on unhandled exception</s:String>
 
     <!-- Browse Tab -->
     <s:String x:Key="search">搜索内容...</s:String>

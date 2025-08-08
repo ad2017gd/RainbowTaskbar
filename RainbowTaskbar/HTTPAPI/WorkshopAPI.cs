@@ -156,6 +156,11 @@ namespace RainbowTaskbar.HTTPAPI {
         public string Contact { get; set; }
 
     }
+    public class ExceptionRequest {
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+    }
     public class WorkshopAPI {
         public string LoginKey { get; set; }
         public async Task<PublishConfigResponse?> PublishConfigAsync(Config cfg) {
@@ -331,6 +336,21 @@ namespace RainbowTaskbar.HTTPAPI {
                     Title = title,
                     Contact = contact == "" || contact == string.Empty ? "Not provided" : contact,
                     Content = desc
+                });
+                var result = await content.Content.ReadFromJsonAsync<ResultResponse>();
+
+                return result;
+            }
+            catch {
+                return null;
+            }
+        }
+        public async Task<ResultResponse> ReportException(Exception e) {
+            try {
+                using var http = new HttpClient();
+
+                var content = await http.PostAsJsonAsync($"https://rnbsrv.ad2017.dev/exception", new ExceptionRequest {
+                    Message = e.Message + "\n" + e.StackTrace,
                 });
                 var result = await content.Content.ReadFromJsonAsync<ResultResponse>();
 

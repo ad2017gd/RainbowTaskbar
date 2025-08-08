@@ -222,7 +222,14 @@ public partial class App : Application {
        
     }
     private void Application_Startup(object sender, StartupEventArgs e) {
-
+        AppDomain.CurrentDomain.UnhandledException += (_, e) => {
+            Exception err = (Exception) e.ExceptionObject;
+            if(App.Settings is not null && App.Settings.workshopAPI is not null && App.Settings.ReportExceptions) {
+                App.Settings.workshopAPI.ReportException(err);
+            }
+            MessageBox.Show(err.Message + "\n" + err.StackTrace, "RainbowTaskbar - Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            Exit();
+        };
         if (mutex.WaitOne(TimeSpan.Zero, true)) {
             if (e.Args.Length > 0 && e.Args[0] == "shell") {
                 Task.Run(() => {

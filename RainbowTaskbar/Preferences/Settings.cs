@@ -80,8 +80,7 @@ namespace RainbowTaskbar.Preferences {
         public Version Version { get; set; } = new Version("1.0");
 
         [OnChangedMethod(nameof(SaveChanged))]
-        [OnChangedMethod(nameof(OnTaskbarBehaviourChanged))]
-        public bool LowMemoryMode { get; set; } = false;
+        public bool ReportExceptions { get; set; } = true;
 
         public void OnGlobalOpacityChanged() {
             if(GlobalOpacity != -1) App.taskbars.ForEach(x => {

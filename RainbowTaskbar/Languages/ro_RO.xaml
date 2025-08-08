@@ -104,6 +104,7 @@
     <s:String x:Key="globalprop">Proprietăți globale</s:String>
     <s:String x:Key="globalpropdef">*pentru a păstra setările configurației selectate, utilizați valoarea '-1'</s:String>
     <s:String x:Key="globalopacity">Transparență taskbar (0-1)</s:String>
+    <s:String x:Key="reportex">Trimite informații despre erori</s:String>
 
     <!-- Browse Tab -->
     <s:String x:Key="search">Caută...</s:String>
