@@ -67,18 +67,25 @@
 
     <ItemGroup>
         <None Remove="Resources\Paypal.png" />
-        <Resource Include="..\x64\Release\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
+        <Resource Condition="'$(Configuration)'=='Release'" Include="..\x64\Release\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
           <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
         <Resource Include="Resources\monaco.zip">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
-        <Resource Include="..\Release\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
+        <Resource Condition="'$(Configuration)'=='Release'" Include="..\Release\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
           <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
         <None Include="Resources\icon.ico">
             <Pack>True</Pack>
         </None>
+
+        <Resource Condition="'$(Configuration)'=='Debug'" Include="..\x64\Debug\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Condition="'$(Configuration)'=='Debug'" Include="..\Debug\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
     </ItemGroup>
 
 

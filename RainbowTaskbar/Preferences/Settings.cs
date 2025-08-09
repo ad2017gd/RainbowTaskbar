@@ -105,6 +105,7 @@ namespace RainbowTaskbar.Preferences {
         private Timer TryLoginTimer = null;
         public async void OnLoginKeyChanged() {
             if (App.Settings is null) return;
+            if (LoginKey is null) return;
             try {
                 using var http = new HttpClient();
                 using var web = new WebClient();
@@ -121,16 +122,13 @@ namespace RainbowTaskbar.Preferences {
                     workshopAPI = new WorkshopAPI() { LoginKey = LoginKey };
                     ToFile();
                 }
-                else {
-                    throw new Exception();
-                }
             } catch {
                 LoggedIn = false;
                 AccountUsername = "";
                 if(TryLoginTimer is null) {
                     TryLoginTimer = new Timer((_) => {
                         OnLoginKeyChanged();
-                    }, null, 15000, 15000);
+                    }, null, 30000, 30000);
                 }
             }
         }

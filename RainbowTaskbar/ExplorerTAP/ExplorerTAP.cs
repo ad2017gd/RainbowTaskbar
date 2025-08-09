@@ -326,6 +326,7 @@ namespace RainbowTaskbar.ExplorerTAP {
             if (DebugGetUITreeDLL is null) return null;
             IntPtr bstr = IntPtr.Zero;
             var a = DebugGetUITreeDLL(ref bstr);
+            if (bstr == IntPtr.Zero) return "";
             string str = Marshal.PtrToStringBSTR(bstr);
             Marshal.FreeBSTR(bstr);
 

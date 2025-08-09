@@ -1,0 +1,29 @@
+﻿<ui:FluentWindow  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" x:Class="RainbowTaskbar.Editor.DebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RainbowTaskbar.Editor" xmlns:configuration="clr-namespace:RainbowTaskbar.Configuration" d:DataContext="{d:DesignInstance Type=local:DebugWindow}"
+                  mc:Ignorable="d"
+        Title="DebugWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Languages/en_US.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+        <ui:TitleBar Title="Debug"/>
+        <Grid Grid.Row="1">
+            <TextBlock Text="{Binding DebugText}"></TextBlock>
+        </Grid>
+    </Grid>
+</ui:FluentWindow>

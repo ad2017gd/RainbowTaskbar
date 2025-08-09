@@ -68,7 +68,7 @@ catch (...)
 
 HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Version() { 
 
-    return 2;
+    return 3;
 }
 
 #include <fstream>
@@ -77,13 +77,14 @@ _E  auto watch = treeWatch.get();
 _E  if (!watch->taskbarMap.begin()->first) return S_FALSE;
 _E  std::wstring str = std::wstring();
     for (auto& taskbar : watch->taskbarMap) {
-_E      auto root = watch->ConvertFromH<winrt::Windows::UI::Xaml::FrameworkElement>(taskbar.first);
+_E      auto frame = watch->ConvertFromH<winrt::Windows::UI::Xaml::FrameworkElement>(taskbar.first);
+_E      auto root = frame.Parent().as<winrt::Windows::UI::Xaml::FrameworkElement>();
 _E      auto children = watch->FindChildrenRecursive(std::nullopt, root, 0);
 _E      std::sort(children.begin(), children.end(), [&](std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>& a, std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>& b) { return a.first < b.first; });
 _E      for (auto& child : children) {
 _E          auto iinsp = watch->ConvertFromH<IInspectable>(watch->ConvertToH(child.second));
 _E          winrt::hstring str3 = winrt::get_class_name(iinsp);
-_E          auto add = std::wstring(L"  ", child.first);
+_E          auto add = std::wstring(L"    ", child.first);
 _E          auto pt = child.second.TransformToVisual(watch->root).TransformPoint(winrt::Windows::Foundation::Point(0, 0));
 _E          str = str + add + std::wstring{ str3 } + L" " + std::wstring{ child.second.Name() } + L" " + std::to_wstring(child.second.ActualHeight()) + L" " + std::to_wstring(pt.X) + L" " + std::to_wstring(pt.Y) + L"\n";
 _E

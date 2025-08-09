@@ -197,5 +197,15 @@ namespace RainbowTaskbar.Editor {
             //e.Cancel = true;
             //Hide();
         }
+        DebugWindow curDeb = null;
+        private void FluentWindow_KeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.F12) {
+                if(curDeb is not null) {
+                    curDeb.Close();
+                }
+                curDeb = new DebugWindow();
+                curDeb.Show();
+            }
+        }
     }
 }

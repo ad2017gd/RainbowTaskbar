@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:RainbowTaskbar.Editor"
         xmlns:pages="clr-namespace:RainbowTaskbar.Editor.Pages"
         mc:Ignorable="d"
+        KeyDown="FluentWindow_KeyDown"
         xmlns:extensions="clr-namespace:RainbowTaskbar.Editor.Pages.Controls"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  Closing="FluentWindow_Closing"

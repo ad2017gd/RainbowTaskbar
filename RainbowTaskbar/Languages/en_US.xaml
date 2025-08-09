@@ -104,7 +104,7 @@
     <s:String x:Key="globalprop">Global properties</s:String>
     <s:String x:Key="globalpropdef">*to keep config setting, use value '-1'</s:String>
     <s:String x:Key="globalopacity">Taskbar transparency (0-1)</s:String>
-    <s:String x:Key="reportex">Send info on unhandled exception</s:String>
+    <s:String x:Key="reportex">Send info on unhandled exceptions</s:String>
 
     <!-- Browse Tab -->
     <s:String x:Key="search">Search something...</s:String>

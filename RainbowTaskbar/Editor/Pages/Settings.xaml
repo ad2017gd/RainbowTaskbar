@@ -30,6 +30,7 @@
             <CheckBox Content="{DynamicResource runstartup}" IsChecked="{Binding SettingsCfg.RunAtStartup}"></CheckBox>
             <CheckBox Content="{DynamicResource checkupdate}" IsChecked="{Binding SettingsCfg.CheckUpdate}"></CheckBox>
             <CheckBox Content="{DynamicResource showicon}" IsChecked="{Binding SettingsCfg.ShowTrayIcon}"></CheckBox>
+            <CheckBox Content="{DynamicResource reportex}" IsChecked="{Binding SettingsCfg.ReportExceptions}"></CheckBox>
             <StackPanel Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" Text="{DynamicResource language}"></TextBlock>
                 <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding SettingsCfg.Language, Mode=TwoWay}">
