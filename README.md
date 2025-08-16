@@ -1,6 +1,6 @@
 <div align="center">
    
-## [Official site](https://ad2017.dev/rnb)
+## [Official site](https://rnb.ad2017.dev)
 
 [<sub>*</sub>](#microsoft-store)
 [<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://apps.microsoft.com/detail/9nn78x0674xw)
