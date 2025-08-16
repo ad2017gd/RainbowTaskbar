@@ -38,6 +38,7 @@ After launching the app for the first time, the editor will automatically open. 
 Have fun using RainbowTaskbar!
 
 # Documentation
+https://rnb.ad2017.dev/web/docs
 TODO
 
 <div align="center">
