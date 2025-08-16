@@ -9,15 +9,15 @@
     <s:String x:Key="configs">配置</s:String>
 
     <!-- About Tab -->
-    <s:String x:Key="aboutrnb">About RainbowTaskbar</s:String>
-    <s:String x:Key="rnbweb">Open RainbowTaskbar website</s:String>
-    <s:String x:Key="description">RainbowTaskbar 是一个增强工具，允许您极大地自定义任务栏的外观。</s:String>
+    <s:String x:Key="aboutrnb">关于 RainbowTaskbar</s:String>
+    <s:String x:Key="rnbweb">打开 RainbowTaskbar 网站</s:String>
+    <s:String x:Key="description">RainbowTaskbar 是一款系统增强工具，允许您极大地自定义任务栏的外观。</s:String>
     <s:String x:Key="donations">它完全免费使用，但非常欢迎捐赠支持！</s:String>
     <!-- RainbowTaskbar is free software.
          Made by ad2017 , with the help of zCri .-->
 
     <!-- Configs Tab -->
-    <s:String x:Key="untitled">Untitled</s:String>
+    <s:String x:Key="untitled">未命名</s:String>
     <s:String x:Key="new">新建</s:String>
     <s:String x:Key="enum_classic">经典</s:String>
     <s:String x:Key="enum_web">网络</s:String>
@@ -28,7 +28,7 @@
     <s:String x:Key="group">组</s:String>
     <s:String x:Key="run">运行</s:String>
     <s:String x:Key="save">保存</s:String>
-    <s:String x:Key="add">Add</s:String>
+    <s:String x:Key="add">添加</s:String>
         <!-- Config edit -->
     <s:String x:Key="name">标题</s:String>
     <s:String x:Key="thumbnail">缩略图</s:String>
@@ -46,9 +46,9 @@
     <s:String x:Key="propkey">属性键</s:String>
     <s:String x:Key="proptype">属性类型</s:String>
     <s:String x:Key="defpropkey">property_1</s:String>
-    <s:String x:Key="defpropname">New property</s:String>
+    <s:String x:Key="defpropname">新建属性</s:String>
 
-    <s:String x:Key="devtools">Open Developer Tools</s:String>
+    <s:String x:Key="devtools">打开开发者工具</s:String>
 
     <s:String x:Key="enum_string">字符串</s:String>
     <s:String x:Key="enum_number">数字</s:String>
@@ -63,19 +63,19 @@
     <s:String x:Key="downloadnew">下载新版本</s:String><!-- download is a verb! -->
     <s:String x:Key="like">点赞</s:String><!-- verb! -->
     <s:String x:Key="unlike">取消点赞</s:String><!-- verb! -->
-    <s:String x:Key="comments">Comments</s:String>
-    <s:String x:Key="goback">Go back</s:String>
-    <s:String x:Key="openweb">Open in web</s:String>
+    <s:String x:Key="comments">评论</s:String>
+    <s:String x:Key="goback">返回</s:String>
+    <s:String x:Key="openweb">在网页中打开</s:String>
 
     <!-- Home tab -->
-    <s:String x:Key="welcome">Welcome to the RainbowTaskbar editor!</s:String>
-    <s:String x:Key="whatsnew">What's new in the latest update</s:String>
-    <s:String x:Key="review">Review on Store</s:String>
+    <s:String x:Key="welcome">欢迎使用 RainbowTaskbar 编辑器！</s:String>
+    <s:String x:Key="whatsnew">最新更新中的新功能</s:String>
+    <s:String x:Key="review">商店评论</s:String>
 
-    <s:String x:Key="issueremind">*using GitHub to submit an issue or request is preferred.</s:String>
-    <s:String x:Key="issuetitle">Issue title</s:String>
-    <s:String x:Key="issuedesc">Description</s:String>
-    <s:String x:Key="issuecontact">Contact info (optional)</s:String>
+    <s:String x:Key="issueremind">*最好使用 GitHub 提交问题或请求。</s:String>
+    <s:String x:Key="issuetitle">问题标题</s:String>
+    <s:String x:Key="issuedesc">描述</s:String>
+    <s:String x:Key="issuecontact">联系信息（可选）</s:String>
 
     <!-- Settings tab -->
     <s:String x:Key="general">常规</s:String>
@@ -87,7 +87,7 @@
     <s:String x:Key="signedin">已登录为</s:String>
     <s:String x:Key="logingit">登录（GitHub）</s:String>
     <s:String x:Key="logingoog">登录（Google）</s:String>
-    <s:String x:Key="signout">Log out</s:String>
+    <s:String x:Key="signout">注销</s:String>
     <s:String x:Key="passmouse">传递鼠标输入到底层（可能会使用 CPU）</s:String>
     <s:String x:Key="allowjs">允许 JavaScript</s:String>
     <s:String x:Key="graphics">图形</s:String>
@@ -102,13 +102,13 @@
     <s:String x:Key="globalprop">全局属性</s:String>
     <s:String x:Key="globalpropdef">*为了保持配置的设置，使用值 '-1'</s:String>
     <s:String x:Key="globalopacity">任务栏透明度 (0-1)</s:String>
-    <s:String x:Key="reportex">Send info on unhandled exceptions</s:String>
+    <s:String x:Key="reportex">发送未处理异常的信息</s:String>
 
     <!-- Browse Tab -->
     <s:String x:Key="search">搜索内容...</s:String>
     <!-- Sort by Likes/Match-->
-    <s:String x:Key="enum_likes">Likes</s:String>
-    <s:String x:Key="enum_match">Match</s:String>
+    <s:String x:Key="enum_likes">喜欢</s:String>
+    <s:String x:Key="enum_match">匹配</s:String>
 
     <!-- Instructions and displayed format strings -->
     <s:String x:Key="borderradiusinstruction">圆角半径</s:String>
@@ -231,8 +231,8 @@
     <s:String x:Key="msgbox_save_b2">不保存</s:String>
     <s:String x:Key="msgbox_button_cancel">取消</s:String>
     <s:String x:Key="msgbox_update">RainbowTaskbar 有新版本发布了。您想要更新吗？</s:String>
-    <s:String x:Key="msgbox_migrate">Do you wish to migrate the legacy (v2) config and presets to the current version?</s:String>
-    <s:String x:Key="msgbox_issuegithub">Use GitHub</s:String>
+    <s:String x:Key="msgbox_migrate">您是否希望将旧版（v2）配置和预设迁移到当前版本？</s:String>
+    <s:String x:Key="msgbox_issuegithub">使用 GitHub</s:String>
     <!-- Fill with "Translated by ..." -->
     <s:String x:Key="langcredits">大眼仔~旭</s:String>
 
