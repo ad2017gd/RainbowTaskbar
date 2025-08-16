@@ -1,22 +1,27 @@
 ﻿using H.Pipes;
-using RainbowTaskbar.Helpers;
 using RainbowTaskbar.Configuration.Instruction;
 using RainbowTaskbar.Configuration.Instruction.Instructions;
+using RainbowTaskbar.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Reflection.Metadata;
-using System.Runtime.ConstrainedExecution;
+using System.Windows.Shapes;
+using WebSocketSharp;
 
 namespace RainbowTaskbar.ExplorerTAP {
     [StructLayout(LayoutKind.Sequential)]
@@ -81,7 +86,7 @@ namespace RainbowTaskbar.ExplorerTAP {
                 
         }
 
-        public const int TAPVERSION = 2;
+        public const int TAPVERSION = 4;
 
        
         private static void StartExplorer() {
@@ -96,18 +101,14 @@ namespace RainbowTaskbar.ExplorerTAP {
         }
         public static IntPtr dataPtr = IntPtr.Zero;
         static IntPtr proc = IntPtr.Zero;
-        static IntPtr str = IntPtr.Zero;
+        static IntPtr rtdStruct = IntPtr.Zero;
+        static int version = 0;
 
         public static bool TryInject() {
 
             var taskbarHWND = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
 
             if (NeedsTAP() && !IsInjecting) {
-                if(Environment.Is64BitOperatingSystem && !Environment.Is64BitProcess) {
-                    MessageBox.Show(App.localization["msgbox_badarch"], "RainbowTaskbar", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    IsInjecting = true;
-                    return true;
-                }
                 if (library != IntPtr.Zero) FreeLibrary(library);
                 
 
@@ -129,7 +130,6 @@ namespace RainbowTaskbar.ExplorerTAP {
                     if (!deleted) {
                         library = LoadLibrary(dllPath);
                         IntPtr VersionDLLPtr = GetProcAddress(library, "VersionDLL");
-                        int version = 0;
                         if (VersionDLLPtr != IntPtr.Zero) {
                             VersionDLL = Marshal.GetDelegateForFunctionPointer<VersionDelegate>(VersionDLLPtr);
                             version = VersionDLL();
@@ -161,7 +161,17 @@ namespace RainbowTaskbar.ExplorerTAP {
                     
                 }
                 try {
-                    File.WriteAllBytes(dllPath, Environment.Is64BitOperatingSystem ? Properties.Resources.RainbowTaskbarDLL_x64 : Properties.Resources.RainbowTaskbarDLL_Win32);
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var arch = System.Runtime.InteropServices.RuntimeInformation.OSArchitecture.ToString();
+                    if (arch == "X64") arch = "x64";
+                    var resourceName = $"RainbowTaskbar.RainbowTaskbarDLL_{arch}.dll";
+
+                    using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                    using (BinaryReader reader = new BinaryReader(stream)) {
+                        var fstr = File.OpenWrite(dllPath);
+                        reader.BaseStream.CopyTo(fstr);
+                        fstr.Close();
+                    }
                 }
                 catch { }
 
@@ -206,11 +216,11 @@ namespace RainbowTaskbar.ExplorerTAP {
                 }
 
                 if (proc != IntPtr.Zero) CloseHandle(proc);
-                if (str != IntPtr.Zero) Marshal.FreeHGlobal(str);
+                if (rtdStruct != IntPtr.Zero) Marshal.FreeHGlobal(rtdStruct);
 
                 GetWindowThreadProcessId(taskbarHWND, out var pidd);
                 proc = OpenProcess(ProcessAccessFlags.VirtualMemoryRead, false, pidd);
-                str = Marshal.AllocHGlobal(Marshal.SizeOf<RainbowTaskbarData>());
+                rtdStruct = Marshal.AllocHGlobal(Marshal.SizeOf<RainbowTaskbarData>());
 
                 IsInjecting = false;
                 IsInjected = true;
@@ -224,7 +234,7 @@ namespace RainbowTaskbar.ExplorerTAP {
         }
         public static void Reset() {
             if (!IsInjected) return;
-            if (CloseDLL is not null)
+            if (CloseDLL is not null || !IsInjected)
                 CloseDLL();
             if (library != IntPtr.Zero) FreeLibrary(library);
             SetAppearanceTypeDLL = null;
@@ -234,7 +244,7 @@ namespace RainbowTaskbar.ExplorerTAP {
 
         public static void SetAppearanceType(TransparencyInstruction.TransparencyInstructionStyle type) {
             if (!NeedsTAP() || IsInjecting) return;
-            if (SetAppearanceTypeDLL is null) return;
+            if (SetAppearanceTypeDLL is null || !IsInjected) return;
             uint hres = unchecked((uint) SetAppearanceTypeDLL((uint) type));
             if (hres == 0) tries = 0;
             if (hres != 0 && tries < 10) { // MK_E_UNAVAILABLE or other errors?
@@ -255,7 +265,7 @@ namespace RainbowTaskbar.ExplorerTAP {
 
         public static int GetDataPtr() {
             if (!NeedsTAP() || IsInjecting) return -1;
-            if (GetDataPtrDLL is null) return -1;
+            if (GetDataPtrDLL is null || !IsInjected) return -1;
             return GetDataPtrDLL();
         }
 
@@ -269,9 +279,18 @@ namespace RainbowTaskbar.ExplorerTAP {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 8)]
+        public struct TaskbarInfo2 {
+            public IntPtr taskbar;
+            public IntPtr UIDataPtr;
+            public int UIDataSize;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 8)]
         public struct RainbowTaskbarData {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
             public TaskbarInfo[] lTaskbarInfo;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+            public TaskbarInfo2[] lTaskbarInfo2;
 
         }
 
@@ -313,24 +332,55 @@ namespace RainbowTaskbar.ExplorerTAP {
 
         public static int GetYPosition(Taskbar t) {
             if (!NeedsTAP() || IsInjecting) return 0;
+            if (version > 0 && version < TAPVERSION) return 0;
 
             if (dataPtr == IntPtr.Zero) dataPtr = GetDataPtr();
-            ReadProcessMemory(proc, dataPtr, str, Marshal.SizeOf<RainbowTaskbarData>(), out _);
-            var data = Marshal.PtrToStructure<RainbowTaskbarData>(str);
+            ReadProcessMemory(proc, dataPtr, rtdStruct, Marshal.SizeOf<RainbowTaskbarData>(), out _);
+            var data = Marshal.PtrToStructure<RainbowTaskbarData>(rtdStruct);
 
             var x = data.lTaskbarInfo.FirstOrDefault(x => x.taskbar == t.taskbarHelper.HWND, new()).YPosition;
             return x;
         }
-        public static string DebugGetUITree() {
-            if (!NeedsTAP() || IsInjecting) return null;
-            if (DebugGetUITreeDLL is null) return null;
-            IntPtr bstr = IntPtr.Zero;
-            var a = DebugGetUITreeDLL(ref bstr);
-            if (bstr == IntPtr.Zero) return "";
-            string str = Marshal.PtrToStringBSTR(bstr);
-            Marshal.FreeBSTR(bstr);
+        public static string GetUIDataStr(Taskbar t) {
+            if (!NeedsTAP() || IsInjecting) return string.Empty;
+            if (version > 0 && version < TAPVERSION) return string.Empty;
 
-            return str;
+            if (dataPtr == IntPtr.Zero) dataPtr = GetDataPtr();
+            ReadProcessMemory(proc, dataPtr, rtdStruct, Marshal.SizeOf<RainbowTaskbarData>(), out _);
+            var data = Marshal.PtrToStructure<RainbowTaskbarData>(rtdStruct);
+
+            var x = data.lTaskbarInfo2.FirstOrDefault(x => x.taskbar == t.taskbarHelper.HWND, new());
+            var alloc = Marshal.AllocHGlobal(x.UIDataSize);
+            ReadProcessMemory(proc, x.UIDataPtr, alloc, x.UIDataSize, out _);
+
+            string st = Marshal.PtrToStringUni(alloc);
+            Marshal.FreeHGlobal(alloc);
+
+            return st;
+        }
+
+        [Serializable]
+        public class UIData {
+            [JsonPropertyName("stfPt")]
+            public List<float> SystemTrayFramePoint { get; set; }
+            [JsonPropertyName("stfSize")]
+            public List<float> SystemTrayFrameSize { get; set; }
+            [JsonPropertyName("tfrPt")]
+            public List<float> TaskbarFrameRepeaterPoint { get; set; }
+            [JsonPropertyName("tfrSize")]
+            public List<float> TaskbarFrameRepeaterSize { get; set; }
+
+            public RectangleF SystemTrayFrame { get => new(SystemTrayFramePoint[0], SystemTrayFramePoint[1], SystemTrayFrameSize[0], SystemTrayFrameSize[1]); }
+            public RectangleF TaskbarFrameRepeater { get => new(TaskbarFrameRepeaterPoint[0], TaskbarFrameRepeaterPoint[1], TaskbarFrameRepeaterSize[0], TaskbarFrameRepeaterSize[1]); }
+        }
+
+        public static UIData GetUIData(Taskbar t) {
+            string str = GetUIDataStr(t);
+            if(!str.IsNullOrEmpty()) {
+                return JsonSerializer.Deserialize<UIData>(str);
+            }
+
+            return null;
         }
     }
 

@@ -113,51 +113,34 @@ namespace RainbowTaskbar.Configuration.Web {
             ConfigData = new WebConfigData() { WebContent = """
 <html>
     <head>
-        <script>
-            // !!! Helper taskbar interop functions !!! //
-            const TASKBAR=0;const UNDERLAY=1;const DEFAULT=0;const BLUR=1;const TRANSPARENT=2;const setOpacity = (which,v) => window.chrome.webview.postMessage({m:"transparency",v,which});const setStyle = (style) => window.chrome.webview.postMessage({m:"style",style});const setOffset = (offset) => window.chrome.webview.postMessage({m:"offset",v:offset});
-            let last = performance.now() / 1000;let fpsTh = 0;
-
-            // ---------------------- !!! Place your code (except any requestAnimationFrame stuff) inside of this self-executing function !!! ---------------------- //
-            (function() {
-                // DEFAULT, BLUR, TRANSPARENT
-                setStyle(TRANSPARENT);
-                // TASKBAR, UNDERLAY
-                setOpacity(TASKBAR, 1.0);
-                setOpacity(UNDERLAY, 1.0);
-                // UNDERLAY Y OFFSET
-                setOffset(0);
-
-                // All config-specific properties can be found in the 'rtUserConfig' variable using the specified keys
-
-                // Uncomment line below if you use the update loop ('loop') function.
-                // _startLoop();
-
-                // ...
-            })();
-
-            function loop() {
-                 window.requestAnimationFrame(loop);let now = performance.now() / 1000;let dt = Math.min(now - last, 1);last = now;if (rtMaxFPS > 0) {fpsTh += dt;if (fpsTh < 1 / rtMaxFPS) {return;}fpsTh -= 1 / rtMaxFPS;}
-                 
-                 // ------------- !!! PLACE YOUR ANIMATION/UPDATE CODE BELOW THIS LINE, INSIDE THIS FUNCTION !!! ------------------- //
-             }
-             function _startLoop() {
-                // Restore original requestAnimationFrame, since this script is FPS-option-aware.
-                window.requestAnimationFrame = __raf;
-                setTimeout(loop, 50);
-             }
-        </script>
+        <style>
+            body,html {
+                width:100%;
+                height:100%;
+                margin:0;
+                padding:0;
+                overflow:hidden;
+            }
+        </style>
     </head>
     <body>
-        <!-- Your body here... -->
-    </body>
 
+    </body>
+    <script>
+        rainbowTaskbar
+            .setTaskbarOpacity(1)
+            .setStyleTransparent();
+
+        rainbowTaskbar.onUIChanged = (info) => {
+            
+        }
+     </script>
 
 </html>
 """ };
         }
 
-        private void _Start(WebView2 webView, Mutex webViewReady) {
+        private void _Start(WebView2 webView, Mutex webViewReady, Taskbar t) {
             webViewReady.WaitOne();
             webViewReady.ReleaseMutex();
             App.Current.Dispatcher.Invoke(() => {
@@ -167,9 +150,10 @@ namespace RainbowTaskbar.Configuration.Web {
                 File.WriteAllText(Path.Join(App.rainbowTaskbarDir, "current.html"), Data.WebContent);
 
                 var code = $$"""
-                        // code adapted from https://github.com/PixelsCommander/fps-control-chrome-extension/blob/master/src/js/content.js
+                        // requestAnimationFrame code adapted from https://github.com/PixelsCommander/fps-control-chrome-extension/blob/master/src/js/content.js
 
                         window.rtMaxFPS = {{App.Settings.MaxWebFPS}};
+                        window.rtUserConfig = {};
 
                         let __rafs = 0;
                         let __raf = window.requestAnimationFrame;
@@ -191,13 +175,110 @@ namespace RainbowTaskbar.Configuration.Web {
                                 window.requestAnimationFrame(func);
                             })
                         }
+
+                        window.rainbowTaskbar = {
+                            setTaskbarOpacity: (v) => {window.chrome.webview.postMessage({m:"transparency",v,which:0}); return window.rainbowTaskbar},
+                            setUnderlayOpacity: (v) => {window.chrome.webview.postMessage({m:"transparency",v,which:1}); return window.rainbowTaskbar},
+                            setStyleDefault: () => {window.chrome.webview.postMessage({m:"style",style:0}); return window.rainbowTaskbar},
+                            setStyleBlur: () => {window.chrome.webview.postMessage({m:"style",style:1}); return window.rainbowTaskbar},
+                            setStyleTransparent: () => {window.chrome.webview.postMessage({m:"style",style:2}); return window.rainbowTaskbar},
+                            setTaskbarOffset: (offset) => {window.chrome.webview.postMessage({m:"offset",v:offset}); return window.rainbowTaskbar},
+                            
+                            uiInfo: {},
+                            graphicsRepeat: {{(App.Settings.GraphicsRepeat ? "true" : "false")}},
+                            maxFps: window.rtMaxFPS,
+                            rtUserConfig: window.rtUserConfig,
+                            taskbarIndex: {{(t is not null ? App.taskbars.IndexOf(t) : -1)}},
+
+                            helpers: {
+                                normalizeTaskbarCoords: (_ui, copy = true) => {
+                                    let ui = copy ? JSON.parse(JSON.stringify(_ui)) : _ui;
+                        
+                                    let minX = _ui.sort((a,b)=>a.taskbar.X - b.taskbar.X)[0].taskbar.X;
+                                    for(let e of ui) {
+                                        e.taskbar.X -= minX;
+                                    }
+                        
+                                    return ui;
+                                },
+                                normalizeAndScaleUICoords: (_ui, copy = true) => {
+                                    let ui = rainbowTaskbar.helpers.normalizeTaskbarCoords(_ui, copy);
+
+                                    for(let e of ui) {
+                                        e.taskbar.X *= window.devicePixelRatio;
+                                        e.taskbar.Y *= window.devicePixelRatio;
+                                        e.taskbar.Width *= window.devicePixelRatio;
+                                        e.taskbar.Height *= window.devicePixelRatio;
+                        
+                                        e.taskbarFrameRepeater.X *= window.devicePixelRatio;
+                                        e.taskbarFrameRepeater.Y *= window.devicePixelRatio;
+                                        e.taskbarFrameRepeater.Width *= window.devicePixelRatio;
+                                        e.taskbarFrameRepeater.Height *= window.devicePixelRatio;
+                        
+                                        e.systemTrayFrame.X *= window.devicePixelRatio;
+                                        e.systemTrayFrame.Y *= window.devicePixelRatio;
+                                        e.systemTrayFrame.Width *= window.devicePixelRatio;
+                                        e.systemTrayFrame.Height *= window.devicePixelRatio;
+                                    }
+
+                                    return ui;
+                                },
+                                generateCSSMaskForUI: (_ui, fadeTop = true) => {
+                                    let ui = rainbowTaskbar.helpers.normalizeAndScaleUICoords(_ui);
+                                    ui.sort((a,b) => a.taskbar.X - b.taskbar.X);
+
+                                    let genVis = ``;
+
+                                    if(rainbowTaskbar.graphicsRepeat) {
+                                        let x = _ui.find(x=>x.taskbarIndex == rainbowTaskbar.taskbarIndex);
+
+                                        genVis = `rgba(255, 255, 255, 0) ${x.taskbarFrameRepeater.X - 24}px, rgba(255, 255, 255, 1) ${x.taskbarFrameRepeater.X + 64}px, rgba(255, 255, 255, 1) ${x.taskbarFrameRepeater.X + x.taskbarFrameRepeater.Width - 64}px, rgba(255, 255, 255, 0) ${x.taskbarFrameRepeater.X + x.taskbarFrameRepeater.Width + 24}px, rgba(255, 255, 255, 0) ${x.systemTrayFrame.X - 24}px, rgba(255, 255, 255, 1) ${x.systemTrayFrame.X + 64}px, rgba(255, 255, 255, 1) ${x.taskbar.Width - 8}px, rgba(255, 255, 255, 0) ${x.taskbar.Width}px,`
+                                    } else {
+                                        genVis = ui.map((x,i)=>
+                                            `rgba(255, 255, 255, ${+(x.taskbarFrameRepeater.X == 0)}) ${x.taskbar.X + x.taskbarFrameRepeater.X - 24}px, rgba(255, 255, 255, 1) ${x.taskbar.X + x.taskbarFrameRepeater.X + 64}px, rgba(255, 255, 255, 1) ${x.taskbar.X + x.taskbarFrameRepeater.X + x.taskbarFrameRepeater.Width - 64}px, rgba(255, 255, 255, 0) ${x.taskbar.X + x.taskbarFrameRepeater.X + x.taskbarFrameRepeater.Width + 24}px, rgba(255, 255, 255, 0) ${x.taskbar.X + x.systemTrayFrame.X - 24}px, rgba(255, 255, 255, 1) ${x.taskbar.X + x.systemTrayFrame.X + 64}px, rgba(255, 255, 255, 1) ${x.taskbar.X + x.taskbar.Width - 8}px, rgba(255, 255, 255, ${+(x.taskbarFrameRepeater.X == 0)}) ${x.taskbar.X + x.taskbar.Width}px,`
+                                        ).join("")
+                                    }
+
+                                   
+
+                                    let mask = `linear-gradient(90deg,rgba(255, 255, 255, 0) 0%, ${genVis} rgba(255, 255, 255, 1) 100%) 0px 0px / 100% 100% no-repeat${fadeTop ? ", linear-gradient(180deg,rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1) 100%) 0px 0px / 100% 100% no-repeat" : ""}`;
+                                    let maskComposite = 'intersect';
+                                    return {
+                                        mask, maskComposite, 
+                                        apply: () => {
+                                            document.documentElement.style.mask = mask;
+                                            document.documentElement.style.maskComposite = maskComposite;
+                                        }
+                                    }
+                                }
+                            },
+
+                            onUIChanged: (uiInfo) => {},
+
+                            __internal: {
+                                __onUIChanged: (data) => {window.rainbowTaskbar.uiInfo=data;window.rainbowTaskbar.onUIChanged(window.rainbowTaskbar.uiInfo);},
+                            }
+                            
+                        }
+
+                        window.chrome.webview.addEventListener("message", (m) => {
+                            let message = JSON.parse(m.data);
+                            if(message.message == "ui") {
+                                window.rainbowTaskbar.__internal.__onUIChanged(message.data);
+                            }
+                        });
+
+                        window.chrome.webview.postMessage({m:"ui"})
+                        for(let i = 1; i <= 5; i++) setTimeout(() => window.chrome.webview.postMessage({m:"ui"}), i*500);
+
+
                         window.requestAnimationFrame = __mockedRaf;
-                        window.rtUserConfig = {};
                         {{string.Join('\n', Data.UserSettings.Select((x) => {
                     return "window.rtUserConfig[" + JsonSerializer.Serialize(new Regex("[^\\w$]").Replace(x.Key, " ")) + "]=" + x.ValueJS + ";";
                 })) ?? ""}}
 
                         """;
+                
                 webView?.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
                     code).ContinueWith((s) => {
                         App.Current.Dispatcher.Invoke(() => {
@@ -226,12 +307,12 @@ namespace RainbowTaskbar.Configuration.Web {
             if(App.Settings.GraphicsRepeat) {
                 App.taskbars.ForEach(x => {
                     Task.Run(() => {
-                        _Start(x.webView, x.webViewReady_);
+                        _Start(x.webView, x.webViewReady_, x);
                     });
                 });
             } else {
                 Task.Run(() => {
-                    _Start(App.webView, App.webViewReady);
+                    _Start(App.webView, App.webViewReady, null);
                 });
             }
         }

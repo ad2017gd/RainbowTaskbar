@@ -59,7 +59,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
             thumbPreview.Source = Config.LoadImage();
         }
 
-        private void Save(object sender, RoutedEventArgs e) {
+        public void Save(object sender, RoutedEventArgs e) {
             string newDesc = "";
             var textRange = new TextRange(richDescription.Document.ContentStart, richDescription.Document.ContentEnd);
             using (var stream = new MemoryStream()) {

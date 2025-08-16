@@ -105,7 +105,7 @@
     <s:String x:Key="globalprop">Propriétés globales</s:String>
     <s:String x:Key="globalpropdef">*pour garder le paramètre de la configuration, utiliser '-1'</s:String>
     <s:String x:Key="globalopacity">Opacité de la barre (0-1)</s:String>
-    <s:String x:Key="reportex">Send info on unhandled exceptions</s:String>
+    <s:String x:Key="reportex">Envoyer les informations sur les exceptions non gérées</s:String>
 
     <!-- Browse Tab -->
     <s:String x:Key="search">Rechercher...</s:String>

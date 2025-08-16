@@ -24,6 +24,7 @@ _E  winrt::com_ptr<::IInspectable> _disp;
 _E  visualTreeWatch->xamlDiagnostics->GetDispatcher(_disp.put());
 _E  visualTreeWatch->dispatcher = _disp.as<winrt::Windows::UI::Core::CoreDispatcher>();
 _E  return S_OK;
+
 }
 catch (...)
 {

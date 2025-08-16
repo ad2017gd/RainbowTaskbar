@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:drawing="clr-namespace:RainbowTaskbar.Drawing"
-         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:local="clr-namespace:RainbowTaskbar.Helpers"
         mc:Ignorable="d"
         AllowsTransparency="True"
         ShowInTaskbar="False"

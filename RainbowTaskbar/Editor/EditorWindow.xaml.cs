@@ -62,8 +62,6 @@ namespace RainbowTaskbar.Editor {
             
         }
 
-        Page current = null;
-
         public void OpenConfig(Config config) {
             App.editor.nav.Navigate(typeof(EmptyPageBadFix));
 
@@ -83,6 +81,12 @@ namespace RainbowTaskbar.Editor {
                 b.OnSortChanged(); 
             }
 
+            var navigationViewContentPresenter = (NavigationViewContentPresenter) sender.GetType()
+                .GetProperty("NavigationViewContentPresenter", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(sender);
+
+            var current = (Page)navigationViewContentPresenter.Content;
+
             current.FindVisualChildren<UnsafeImage>().ToList().ForEach(x => {
                 x.Dispose();
             });
@@ -99,10 +103,14 @@ namespace RainbowTaskbar.Editor {
                     Dispatcher.Invoke(() => nav.Navigate(t));
                 });
             }
-            current = args.Page as Page;
-            
 
-            
+            if(current is EditInfo editInfo) {
+                editInfo.Save(null, null);
+                
+                return;
+            }
+
+
             if (App.editorViewModel.EditPage is not null && App.editorViewModel.EditPage is InstructionEditPage) {
                 var page = App.editorViewModel.EditPage as InstructionEditPage;
                 page.Current.Stop();

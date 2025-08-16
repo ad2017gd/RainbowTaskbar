@@ -49,7 +49,10 @@
                     </Style>
                 </ui:Button.Style></ui:Button>
 
-            <ui:Button Icon="{ui:SymbolIcon Info24}" Content="{DynamicResource issueorreq}" Click="Button_Click_1">
+            <ui:Button Margin="0,0,4,0" Icon="{ui:SymbolIcon Info24}" Content="{DynamicResource issueorreq}" Click="Button_Click_1">
+            </ui:Button>
+
+            <ui:Button Icon="{ui:SymbolIcon Globe24}" Content="{DynamicResource rnbweb}" Click="Button_Click_2">
             </ui:Button>
         </StackPanel>
     </Grid>

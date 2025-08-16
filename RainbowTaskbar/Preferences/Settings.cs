@@ -212,6 +212,10 @@ namespace RainbowTaskbar.Preferences {
             if (App.editor is not null) {
                 App.editor.Close();
                 App.editor = new EditorWindow();
+
+                App.trayWindow.TrayIcon.Dispose();
+                App.trayWindow.Close();
+                App.trayWindow = new();
                 App.LaunchEditor();
             }
         }

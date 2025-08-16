@@ -77,21 +77,6 @@ __declspec(dllexport) STDAPI GetDataPtrDLL() {
 }
 
 __declspec(dllexport) STDAPI DebugGetUITreeDLL(BSTR* tree) {
-    IF_GET_API{
-        VARIANTARG arg = {0};
-        memset(&arg, 0, sizeof(arg));
-        arg.vt = VT_BSTR | VT_BYREF;
-        arg.pbstrVal = tree;
-
-        DISPPARAMS params;
-        params.cArgs = 1;
-        params.cNamedArgs = 0;
-        params.rgvarg = &arg;
-        hr = INVOKE(DGetUiTree);
-        return hr;
-    }
-    else {
-        return E_FAIL;
-    }
+    return E_FAIL;
 
 }

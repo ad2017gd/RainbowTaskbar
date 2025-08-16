@@ -28,6 +28,7 @@ public:
     winrt::Windows::UI::Core::CoreDispatcher dispatcher = nullptr;
     winrt::Windows::UI::Xaml::Hosting::IDesktopWindowXamlSource dwxsource = nullptr;
     struct RainbowTaskbarData* data;
+    HANDLE hPipe = 0;
     int taskbarFrames = 0;
 
     std::map<InstanceHandle, Taskbar> taskbarMap = std::map<InstanceHandle, Taskbar>();
@@ -54,7 +55,10 @@ public:
 
         return handle;
     }
-    std::vector<std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>> FindChildrenRecursive(std::optional<std::wstring> name, winrt::Windows::UI::Xaml::FrameworkElement root, int deep);
-    std::vector<std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>> FindAllChildren(winrt::Windows::UI::Xaml::FrameworkElement root);
+    std::vector<std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>> FindChildrenRecursive(std::optional<std::wstring> name, winrt::Windows::UI::Xaml::UIElement root, int deep);
+    winrt::Windows::UI::Xaml::FrameworkElement FindChildRecursive(std::wstring name, winrt::Windows::UI::Xaml::UIElement root);
+    winrt::Windows::Foundation::IAsyncAction StartYPosTask(Taskbar* taskbar);
+    winrt::Windows::Foundation::IAsyncAction StartUITask(Taskbar* taskbar);
+
 };
 

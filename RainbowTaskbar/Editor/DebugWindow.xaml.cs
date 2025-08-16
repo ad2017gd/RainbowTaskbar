@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +26,7 @@ namespace RainbowTaskbar.Editor
     public partial class DebugWindow : FluentWindow, INotifyPropertyChanged
     {
         public string DebugText { get; set; }
+        private bool active = true;
         public DebugWindow()
         {
 
@@ -31,13 +34,21 @@ namespace RainbowTaskbar.Editor
             InitializeComponent();
             ApplicationThemeManager.ApplySystemTheme(true);
             Task.Run(() => {
-                while (true) {
-                    DebugText = ExplorerTAP.ExplorerTAP.DebugGetUITree();
-                    Thread.Sleep(5);
+                if (ExplorerTAP.ExplorerTAP.IsInjected) {
+                    while (active) {
+                        if(ExplorerTAP.ExplorerTAP.IsInjected) {
+                            DebugText = $"{ExplorerTAP.ExplorerTAP.GetUIDataStr(App.taskbars[0])}\n";
+                        }
+                        Thread.Sleep(100);
+                    }
                 }
             });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void FluentWindow_Closing(object sender, CancelEventArgs e) {
+            active = false;
+        }
     }
 }

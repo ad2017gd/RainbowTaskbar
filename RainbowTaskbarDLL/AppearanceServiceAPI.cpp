@@ -68,41 +68,46 @@ catch (...)
 
 HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Version() { 
 
-    return 3;
+    return 4;
 }
 
-#include <fstream>
-HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::DebugGetUITree(BSTR* tree) try { _F
-_E  auto watch = treeWatch.get();
-_E  if (!watch->taskbarMap.begin()->first) return S_FALSE;
-_E  std::wstring str = std::wstring();
-    for (auto& taskbar : watch->taskbarMap) {
-_E      auto frame = watch->ConvertFromH<winrt::Windows::UI::Xaml::FrameworkElement>(taskbar.first);
-_E      auto root = frame.Parent().as<winrt::Windows::UI::Xaml::FrameworkElement>();
-_E      auto children = watch->FindChildrenRecursive(std::nullopt, root, 0);
-_E      std::sort(children.begin(), children.end(), [&](std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>& a, std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>& b) { return a.first < b.first; });
-_E      for (auto& child : children) {
-_E          auto iinsp = watch->ConvertFromH<IInspectable>(watch->ConvertToH(child.second));
-_E          winrt::hstring str3 = winrt::get_class_name(iinsp);
-_E          auto add = std::wstring(L"    ", child.first);
-_E          auto pt = child.second.TransformToVisual(watch->root).TransformPoint(winrt::Windows::Foundation::Point(0, 0));
-_E          str = str + add + std::wstring{ str3 } + L" " + std::wstring{ child.second.Name() } + L" " + std::to_wstring(child.second.ActualHeight()) + L" " + std::to_wstring(pt.X) + L" " + std::to_wstring(pt.Y) + L"\n";
-_E
-        }
-        str = str + L"\n\n\n";
-    }
-_E  BSTR bstr = SysAllocString(str.c_str());
-_E  if (tree)
-        *tree = bstr;
+//#include <fstream>
+//HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::DebugGetUITree(BSTR* tree) try { _F
+//_E  auto watch = treeWatch.get();
+//
+//_E  if (!watch->taskbarMap.begin()->first) return S_FALSE;
+//_E  std::wstring str = std::wstring();
+//    for (auto& taskbar : watch->taskbarMap) {
+//_E      auto frame = watch->ConvertFromH<winrt::Windows::UI::Xaml::FrameworkElement>(taskbar.first);
+//_E      auto root = frame.Parent().as<winrt::Windows::UI::Xaml::FrameworkElement>();
+//_E      auto children = watch->FindChildrenRecursive(std::nullopt, root, 0);
+////_E      std::sort(children.begin(), children.end(), [&](std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>& a, std::pair<int, winrt::Windows::UI::Xaml::FrameworkElement>& b) { return a.first < b.first; });
+//_E      for (auto& child : children) {
+//_E          auto iinsp = watch->ConvertFromH<IInspectable>(watch->ConvertToH(child.second));
+//_E          winrt::hstring str3 = winrt::get_class_name(iinsp);
+//_E          auto add = std::wstring(child.first*2, ' ');
+//_E          auto pt = child.second.TransformToVisual(watch->root).TransformPoint(winrt::Windows::Foundation::Point(0, 0));
+//_E          auto felem = child.second.try_as< winrt::Windows::UI::Xaml::FrameworkElement>();
+//_E          str = str + add + std::wstring{ str3 } + L" " + (felem ? std::wstring{ felem.Name() } : L"NULL") + L" " + L" " + std::to_wstring(pt.X) + L" " + std::to_wstring(pt.Y) + L"\n";
+//
+//_E
+//        }
+//        str = str + L"\n\n\n";
+//    }
+//_E  BSTR bstr = SysAllocStringLen(str.data(), str.size());
+//_E  if (tree)
+//        *tree = bstr;
+//
+//} catch (...) {
+//    HRESULT res = winrt::to_hresult();
+//    
+//    _com_error err(res);
+//    WCHAR data[1024];
+//    __EFMT(data, err.ErrorMessage());
+//    return res;
+//}
 
-} catch (...) {
-    HRESULT res = winrt::to_hresult();
-    
-    _com_error err(res);
-    WCHAR data[1024];
-    __EFMT(data, err.ErrorMessage());
-    return res;
-}
+\
 
 HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::GetDataPtr(){
     auto watch = treeWatch.get();
@@ -147,15 +152,6 @@ HRESULT AppearanceServiceAPI::Invoke(DISPID dispIdMember, // 0 or 1
         return Version();
     case 3: {
         return GetDataPtr();
-    case 10:
-        if (pDispParams->cArgs == 1 && pDispParams->rgvarg[0].vt == (VT_BSTR|VT_BYREF))
-        {
-            BSTR* ptr = (BSTR*)pDispParams->rgvarg[0].pbstrVal;
-            HRESULT hr = DebugGetUITree(ptr);
-            if (FAILED(hr))
-                return hr;
-        }
-        return DISP_E_BADVARTYPE;
     }
 
 }
@@ -177,6 +173,13 @@ HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::GetIDsOfNames(REFIID riid, LPOLE
     return E_NOTIMPL;
 }
 
+void AppearanceServiceAPI::Unload() {
+    CoRevokeClassObject(s_proxyCookie);
+}
+
+DWORD s_proxyCookie = 0;
+DWORD s_activeObjectCookie = 0;
+
 AppearanceServiceAPI::AppearanceServiceAPI(winrt::com_ptr<VisualTreeWatch> watch) try {_F
     treeWatch = watch;
 
@@ -186,9 +189,9 @@ AppearanceServiceAPI::AppearanceServiceAPI(winrt::com_ptr<VisualTreeWatch> watch
     winrt::com_ptr<IUnknown> stub;
     const CLSID CLSID_PROXY = PROXY_CLSID_IS;
 _E  winrt::check_hresult(DllGetClassObject(CLSID_PROXY, winrt::guid_of<decltype(stub)::type>(), (void**)stub.put()));
-_E  winrt::check_hresult(CoRegisterClassObject(CLSID_PROXY, stub.get(), CLSCTX_INPROC_SERVER, REGCLS_MULTIPLEUSE, &proxyCookie));
+_E  winrt::check_hresult(CoRegisterClassObject(CLSID_PROXY, stub.get(), CLSCTX_INPROC_SERVER, REGCLS_MULTIPLEUSE, &s_proxyCookie));
 _E
-_E  winrt::check_hresult(RegisterActiveObject(static_cast<IDispatch*>(this), CLSID_AppearanceServiceAPI, ACTIVEOBJECT_STRONG, &activeObjectCookie));
+_E  winrt::check_hresult(RegisterActiveObject(static_cast<IDispatch*>(this), CLSID_AppearanceServiceAPI, ACTIVEOBJECT_STRONG, &s_activeObjectCookie));
 
 }
 catch (...)

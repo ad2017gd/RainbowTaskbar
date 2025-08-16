@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -67,7 +68,11 @@ namespace RainbowTaskbar.Editor.Pages.Controls
         private void Edit(object sender, RoutedEventArgs e) {
             e.Handled = true;
             var page = new EditInfo(Config);
-            App.editor.nav.ReplaceContent(page);
+            App.editor.nav.Navigate(typeof(EmptyPageBadFix));
+            Task.Run(() => {
+                Thread.Sleep(50);
+                Dispatcher.Invoke(() => App.editor.nav.ReplaceContent(page));
+            });
             
         }
 

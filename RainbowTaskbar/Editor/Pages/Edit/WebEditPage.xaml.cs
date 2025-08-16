@@ -40,9 +40,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
                 if(!App.Settings.GraphicsRepeat) {
                     App.hiddenWebViewHost.webView_.CoreWebView2?.OpenDevToolsWindow();
                 } else {
-                    if (App.taskbars.Count > 0) {
-                        App.taskbars[0].webView.CoreWebView2?.OpenDevToolsWindow();
-                    }
+                    App.taskbars.ForEach(x=>x.webView.CoreWebView2?.OpenDevToolsWindow());
                 }
             }
         }

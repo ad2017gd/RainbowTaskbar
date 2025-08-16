@@ -5,6 +5,9 @@
 #include "RainbowTaskbarDLL_h.h"
 #include "ErrorDebug.h"
 
+extern DWORD s_proxyCookie;
+extern DWORD s_activeObjectCookie;
+
 class AppearanceServiceAPI : public winrt::implements<AppearanceServiceAPI, IDispatch, IErrorDebug, winrt::non_agile>
 {
 private:
@@ -13,8 +16,7 @@ private:
 public:
     winrt::com_ptr<VisualTreeWatch> treeWatch;
 
-    DWORD proxyCookie = 0;
-    DWORD activeObjectCookie = 0;
+    
     bool active = true;
 
     HRESULT STDMETHODCALLTYPE SetAppearanceType(UINT type);
@@ -24,8 +26,6 @@ public:
     HRESULT STDMETHODCALLTYPE Version();
 
     HRESULT STDMETHODCALLTYPE GetDataPtr();
-
-    HRESULT STDMETHODCALLTYPE DebugGetUITree(BSTR* tree);
 
     HRESULT STDMETHODCALLTYPE Invoke(DISPID dispIdMember,
         REFIID riid,
@@ -55,6 +55,7 @@ public:
 
 
     AppearanceServiceAPI(winrt::com_ptr<VisualTreeWatch> watch);
+    static void Unload();
 
     
 };

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RainbowTaskbar.Editor" xmlns:configuration="clr-namespace:RainbowTaskbar.Configuration" d:DataContext="{d:DesignInstance Type=local:DebugWindow}"
                   mc:Ignorable="d"
+                  Closing="FluentWindow_Closing"
         Title="DebugWindow" Height="450" Width="800">
     <Window.Resources>
         <ResourceDictionary>

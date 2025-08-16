@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Wpf.Ui.Controls;
+using static RainbowTaskbar.Taskbar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using WebView2 = Microsoft.Web.WebView2.Wpf.WebView2;
 
@@ -100,7 +102,7 @@ public partial class Taskbar : System.Windows.Window {
             GetClassName(wnd, clname, clname.Capacity);
 
             // fix: used to hide underlay when peeking window on taskbar
-            var dontcare = clname.ToString() == "XamlExplorerHostIslandWindow";
+            var dontcare = clname.ToString() == "XamlExplorerHostIslandWindow" || clname.ToString() == "Shell_InputSwitchTopLevelWindow";
 
             if ((uint) wParam == 53 && !dontcare) 
                 App.IsAppFullscreen = true;
@@ -205,7 +207,78 @@ public partial class Taskbar : System.Windows.Window {
 
         
     }
+
+    [Serializable]
+    public class RectangleF {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
+
+        public RectangleF(System.Drawing.Rectangle rectangle) {
+            X = rectangle.X;
+            Y = rectangle.Y;
+            Width = rectangle.Width;
+            Height = rectangle.Height;
+        }
+        public RectangleF(System.Drawing.RectangleF rectangle) {
+            X = rectangle.X;
+            Y = rectangle.Y;
+            Width = rectangle.Width;
+            Height = rectangle.Height;
+        }
+    }
+    [Serializable]
+    public class UIData {
+        [JsonPropertyName("systemTrayFrame")]
+        public RectangleF SystemTrayFrame { get; set; }
+        [JsonPropertyName("taskbarFrameRepeater")]
+        public RectangleF TaskbarFrameRepeater { get; set; }
+        [JsonPropertyName("taskbar")]
+        public RectangleF Taskbar { get; set; }
+        [JsonPropertyName("taskbarIndex")]
+        public int Index { get; set; }
+
+        public UIData(string rawUIData, Taskbar t) {
+            var form = JsonSerializer.Deserialize<ExplorerTAP.ExplorerTAP.UIData>(rawUIData);
+            SystemTrayFrame = new(form.SystemTrayFrame);
+            var off = ExplorerTAP.ExplorerTAP.GetYPosition(t);
+            SystemTrayFrame.Y -= off;
+            TaskbarFrameRepeater = new(form.TaskbarFrameRepeater);
+            TaskbarFrameRepeater.Y -= off;
+            
+            Taskbar = new(t.taskbarHelper.GetRectangle());
+
+            SystemTrayFrame.Height = Taskbar.Height;
+            Index = App.taskbars.IndexOf(t);
+        }
+    }
+
+    public class CS2WVMessage<T> {
+        [JsonPropertyName("message")]
+        public string Message { get; set; } = "";
+        [JsonPropertyName("data")]
+        public T Data { get; set; }
+        public CS2WVMessage(string message, T data) {
+            Message = message;
+            Data = data;
+        }
+    }
+
+    public List<UIData> UIDataForAllTaskbars() {
+        try {
+            return App.taskbars.Select(x => new UIData(x.windowHelper.LastUIData, x)).ToList();
+        } catch { return new List<UIData>(); }
+    }
+
+    EventHandler uiChangedHandler = null;
+
     public void SetupWebViewMessageReceiver() {
+        uiChangedHandler = (_, args) => {
+            if (webView.CoreWebView2 is null) return;
+            webView.CoreWebView2.PostWebMessageAsString(JsonSerializer.Serialize(new CS2WVMessage<List<UIData>>("ui",UIDataForAllTaskbars())));
+        };
+        windowHelper.TaskbarUIChanged += uiChangedHandler;
         webView.WebMessageReceived += (_, args) => {
             var message = JsonSerializer.Deserialize<JsonNode>(args.WebMessageAsJson);
             switch (message["m"]?.GetValue<string?>()) {
@@ -241,6 +314,10 @@ public partial class Taskbar : System.Windows.Window {
 
                         break;
                     }
+                case "ui": {
+                        webView.CoreWebView2.PostWebMessageAsString(JsonSerializer.Serialize(new CS2WVMessage<List<UIData>>("ui", UIDataForAllTaskbars())));
+                        break;
+                    }
                 case "audio":
                     // request audio stream
                     // todo
@@ -250,6 +327,7 @@ public partial class Taskbar : System.Windows.Window {
         };
     }
     public static void SetupWebViews() {
+        
         App.Current.Dispatcher.Invoke(() => {
             if (App.Settings.GraphicsRepeat) {
                 App.taskbars.ForEach((t) => {
@@ -269,7 +347,7 @@ public partial class Taskbar : System.Windows.Window {
 
                         App.Current.Dispatcher.Invoke(() => {
 
-                            App.hiddenWebViewHost.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
+                            App.hiddenWebViewHost.Background = Brushes.Transparent;
                             var taskbars = App.taskbars;
                             App.hiddenWebViewHost.MinWidth = App.taskbars.Sum(t2 => t2.Width);
                             App.hiddenWebViewHost.MinHeight = App.taskbars.Max(t2 => t2.Height);
@@ -310,5 +388,6 @@ public partial class Taskbar : System.Windows.Window {
     }
 
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        windowHelper.TaskbarUIChanged -= uiChangedHandler;
     }
 }

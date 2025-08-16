@@ -35,8 +35,7 @@ internal static class AutoUpdate {
                 var res = MessageBox.Show(App.localization.Get("msgbox_update"),
                     "RainbowTaskbar", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (res == MessageBoxResult.Yes) {
-                    var asset = response.Assets.First(asset =>
-                        Environment.Is64BitProcess ? asset.Name.Contains("x64") : !asset.Name.Contains("x64"));
+                    var asset = response.Assets.First(asset => asset.Name.StartsWith($"rnbtsk-{System.Runtime.InteropServices.RuntimeInformation.OSArchitecture.ToString().ToLower()}"));
 
                     var uri = new Uri(asset.BrowserDownloadUrl);
                     var oldfile = Environment.ProcessPath;

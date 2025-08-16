@@ -57,6 +57,17 @@ namespace RainbowTaskbar.Editor.Pages {
                 });
                 t.Wait();
                 Dispatcher.Invoke(() => {
+
+
+                    wv.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
+                    wv.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+                    wv.CoreWebView2.Settings.IsSwipeNavigationEnabled = false;
+                    wv.CoreWebView2.Settings.IsStatusBarEnabled = false;
+                    wv.CoreWebView2.Settings.IsPinchZoomEnabled = false;
+                    wv.CoreWebView2.Settings.AreDevToolsEnabled = false;
+                    wv.CoreWebView2.Settings.UserAgent = "RainbowTaskbar Web Display https://ad2017.dev/rnb";
+                    wv.CoreWebView2.IsMuted = true;
+
                     wv.NavigateToString(
                         $$"""
                     <style>
@@ -70,6 +81,7 @@ namespace RainbowTaskbar.Editor.Pages {
                     """ + App.editorViewModel.LatestUpdateInfo);
 
                     lastupdate.Visibility = Visibility.Visible;
+                    ApplicationThemeManager.ApplySystemTheme(true);
                 });
             });
 
@@ -120,6 +132,10 @@ namespace RainbowTaskbar.Editor.Pages {
 
                 
             });
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e) {
+            Process.Start(new ProcessStartInfo("https://ad2017.dev/rnb") { UseShellExecute = true });
         }
     }
 }

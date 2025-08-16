@@ -65,10 +65,10 @@
     <ClCompile Include="csharpinterop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dlldata.c">
+    <ClCompile Include="IUnused_i.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IUnused_i.c">
+    <ClCompile Include="dlldata.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IUnused_p.c">

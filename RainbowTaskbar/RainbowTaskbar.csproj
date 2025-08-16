@@ -5,7 +5,7 @@
         <TargetFramework Condition="'$(Configuration)'=='Release (MSIX)'">net8.0-windows10.0.19041.0</TargetFramework>
         <TargetFramework Condition="'$(Configuration)'!='Release (MSIX)'">net8.0-windows7.0</TargetFramework>
         <UseWPF>true</UseWPF>
-        <Version>3.2</Version>
+        <Version>3.2.1</Version>
         <PackageProjectUrl>https://ad2017.dev/rnb</PackageProjectUrl>
         <Description>RainbowTaskbar is a Windows utility to customize the shell taskbar.</Description>
         <Authors>ad2017gd, zCri</Authors>
@@ -21,13 +21,13 @@
         
         <Nullable>disable</Nullable>
         <ErrorReport>prompt</ErrorReport>
-        <AssemblyVersion>3.2</AssemblyVersion>
-        <FileVersion>3.2</FileVersion>
+        <AssemblyVersion>3.2.1</AssemblyVersion>
+        <FileVersion>3.2.1</FileVersion>
         <SignAssembly>False</SignAssembly>
 		
 		   <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 		
-		   <Platforms>AnyCPU;x64;x86</Platforms>
+		   <Platforms>AnyCPU;x64;x86;ARM64</Platforms>
 		
 		   <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		
@@ -51,9 +51,18 @@
         <ProjectReference Include="..\RainbowTaskbarDLL\RainbowTaskbarDLL.vcxproj" />
     </ItemGroup>
 
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <ProjectReference Include="..\RainbowTaskbarDLL\RainbowTaskbarDLL.vcxproj" />
+    </ItemGroup>
+
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <Optimize>False</Optimize>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+      <Optimize>False</Optimize>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -67,25 +76,27 @@
 
     <ItemGroup>
         <None Remove="Resources\Paypal.png" />
-        <Resource Condition="'$(Configuration)'=='Release'" Include="..\x64\Release\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </Resource>
         <Resource Include="Resources\monaco.zip">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </Resource>
-        <Resource Condition="'$(Configuration)'=='Release'" Include="..\Release\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </Resource>
         <None Include="Resources\icon.ico">
             <Pack>True</Pack>
         </None>
 
-        <Resource Condition="'$(Configuration)'=='Debug'" Include="..\x64\Debug\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
+        <EmbeddedResource Condition="'$(Configuration)'=='Release (MSIX)' Or '$(Configuration)'=='Release'" Include="..\x64\Release\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </Resource>
-        <Resource Condition="'$(Configuration)'=='Debug'" Include="..\Debug\RainbowTaskbarDLL_Win32.dll" Link="RainbowTaskbarDLL_Win32.dll">
+        </EmbeddedResource>
+        <EmbeddedResource Condition="'$(Configuration)'=='Release (MSIX)' Or '$(Configuration)'=='Release'" Include="..\ARM64\Release\RainbowTaskbarDLL_ARM64.dll" Link="RainbowTaskbarDLL_ARM64.dll">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </Resource>
+        </EmbeddedResource>
+
+
+        <EmbeddedResource Condition="'$(Configuration)'=='Debug'" Include="..\x64\Debug\RainbowTaskbarDLL_x64.dll" Link="RainbowTaskbarDLL_x64.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Condition="'$(Configuration)'=='Debug'" Include="..\ARM64\Debug\RainbowTaskbarDLL_ARM64.dll" Link="RainbowTaskbarDLL_ARM64.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </EmbeddedResource>
     </ItemGroup>
 
 
@@ -94,11 +105,12 @@
         <PackageReference Include="FastMember" Version="1.5.0" />
         <PackageReference Include="gong-wpf-dragdrop" Version="4.0.0" />
         <PackageReference Include="H.Pipes" Version="15.0.0" />
+        <PackageReference Include="H.Pipes.AccessControl" Version="15.0.0" />
         <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1">
         </PackageReference>
         <PackageReference Include="Kasay.DependencyProperty.WPF.Fody" Version="1.0.3" />
         <PackageReference Include="Markdig" Version="0.40.0" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3065.39" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3405.78" />
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 
         <PackageReference Include="PropertyChanged.Fody" Version="4.1.0">

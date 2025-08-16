@@ -1,4 +1,5 @@
 ﻿using H.Pipes;
+using H.Pipes.AccessControl;
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Win32;
 using PropertyChanged;
@@ -18,10 +19,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
@@ -30,6 +34,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Threading;
 using System.Xml;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Localization = RainbowTaskbar.Languages.Localization;
@@ -96,29 +101,42 @@ public partial class App : Application {
         if (neww != 0 && neww != parent) return FindLastChildAtPoint(neww, x, y);
         else return parent;
     }
+    static DateTime lastMove = DateTime.MinValue;
     private static int HookCallback(int nCode, IntPtr wParam, IntPtr lParam) {
         var mhs = Marshal.PtrToStructure<MOUSEHOOKSTRUCT>(lParam);
 
         
         if (nCode >= 0) {
 
-            if (wParam == 0x0201 && trayWindow.TrayIcon.ContextMenu.IsOpen || wParam == 0x0204) return CallNextHookEx(mouseHookId, nCode, wParam, lParam);
-            var farLeft = (int) (App.taskbars.Count > 0 ? App.taskbars.Min(x => x.Left) : 0);
-            App.taskbars.ForEach(x => {
-                if (x.webView is null) return;
 
-                // passing WM_LBUTTONDOWN interferes with tray icon, too bad
-                
-                var pn = System.Windows.Forms.Control.MousePosition;
-                var scale = x.windowHelper.scale;
-                if (!new System.Drawing.Rectangle(new((int) (x.Left * scale), (int) (x.Top * scale)), new((int) (x.ActualWidth * scale), (int) (x.ActualHeight * scale))).Contains(pn)) return;
+            App.Current.Dispatcher.BeginInvoke(() => {
+                var synthetic = false;
+                if (wParam == 0x0201 && trayWindow.TrayIcon.ContextMenu.IsOpen || wParam == 0x0204) return;
+                if(wParam == 0x0200 /* MOUSEMOVE */) {
+                    if (DateTime.Now - lastMove > TimeSpan.FromMilliseconds(8)) {
+                        lastMove = DateTime.Now;
+                    }
+                    else return;
+                    
+                }
+                var farLeft = (int) (App.taskbars.Count > 0 ? App.taskbars.Min(x => x.Left) : 0);
+                App.taskbars.ForEach(x => {
+                    if (x.webView is null) return;
 
-                POINT p = new POINT { X = (int) (pn.X), Y = (int) (pn.Y ) };
-                IntPtr cch = FindLastChildAtPoint(x.webView.Handle, 0, 0);
-                ScreenToClient(App.Settings.GraphicsRepeat ? cch : x.windowHelper.HWND, ref p);
-                if (!App.Settings.GraphicsRepeat) p.X += (int) x.Left - farLeft;
-                PostMessage(cch, (uint) wParam, 0x0000, (IntPtr) (((uint) (p.Y) << 16) | ((((ushort) (p.X)) & 0xFFFF))));
+                    // passing WM_LBUTTONDOWN interferes with tray icon, too bad
+
+                    var pn = System.Windows.Forms.Control.MousePosition;
+                    var scale = x.windowHelper.scale;
+                    if (!new System.Drawing.Rectangle(new((int) (x.Left * scale), (int) (x.Top * scale)), new((int) (x.ActualWidth * scale), (int) (x.ActualHeight * scale))).Contains(pn)) return;
+
+                    POINT p = new POINT { X = (int) (pn.X), Y = (int) (pn.Y) };
+                    IntPtr cch = FindLastChildAtPoint(x.webView.Handle, 0, 0);
+                    ScreenToClient(App.Settings.GraphicsRepeat ? cch : x.windowHelper.HWND, ref p);
+                    if (!App.Settings.GraphicsRepeat) p.X += (int) x.Left - farLeft;
+                    PostMessage(cch, (uint) wParam, 0x0000, (IntPtr) (((uint) (p.Y) << 16) | ((((ushort) (p.X)) & 0xFFFF))));
+                });
             });
+            
 
             
         }
@@ -182,6 +200,7 @@ public partial class App : Application {
         if(trayWindow is not null) trayWindow.TrayIcon.Dispose();
 
         StopHook();
+        ExplorerTAP.ExplorerTAP.Reset();
 
         taskbars.ForEach(t => {
             t.taskbarHelper.Radius = 0;
@@ -193,14 +212,44 @@ public partial class App : Application {
             t.taskbarHelper.Style = TaskbarHelper.TaskbarStyle.ForceDefault;
             t.taskbarHelper.SetBlur();
             // win11 fix
-            ExplorerTAP.ExplorerTAP.Reset();
         });
         Current.Dispatcher.Invoke(() => { Current.Shutdown(); });
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    struct MSG {
+        public IntPtr hwnd;
+        public uint message;
+        public IntPtr wParam;
+        public IntPtr lParam;
+        public uint time;
+        public System.Drawing.Point pt;
+    }
+
+    [DllImport("user32.dll")]
+    static extern bool GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+
+    [DllImport("user32.dll")]
+    static extern bool TranslateMessage(ref MSG lpMsg);
+
+    [DllImport("user32.dll")]
+    static extern IntPtr DispatchMessage(ref MSG lpMsg);
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
     public static void StartHook() {
-        if (mouseHookId != -1) return;
-        mouseHookId = SetWindowsHookEx(WH_MOUSE_LL, callback, 0, 0);
+        Task.Run(() => {
+            Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+
+            if (mouseHookId != -1) return;
+            mouseHookId = SetWindowsHookEx(WH_MOUSE_LL, callback, 0, 0);
+
+            MSG msg;
+            while (GetMessage(out msg, IntPtr.Zero, 0, 0)) {
+                TranslateMessage(ref msg);
+                DispatchMessage(ref msg);
+            }
+        });
     }
     public static void StopHook() {
         UnhookWindowsHookEx(mouseHookId);
@@ -222,7 +271,10 @@ public partial class App : Application {
        
     }
     private void Application_Startup(object sender, StartupEventArgs e) {
+        var exceptionCount = 0;
         AppDomain.CurrentDomain.UnhandledException += (_, e) => {
+            if (++exceptionCount >= 3) return;
+
             Exception err = (Exception) e.ExceptionObject;
             if(App.Settings is not null && App.Settings.workshopAPI is not null && App.Settings.ReportExceptions) {
                 App.Settings.workshopAPI.ReportException(err);
@@ -241,6 +293,7 @@ public partial class App : Application {
 
             Task.Run(async () => {
                 await using var pipe = new PipeServer<string>("RainbowTaskbar Pipe");
+                pipe.AddAccessRules(new PipeAccessRule("Everyone", PipeAccessRights.FullControl, AccessControlType.Allow));
                 pipe.MessageReceived += (sender, args) => {
                     if (args.Message == "OpenEditor")
                         Dispatcher.Invoke(() => {
@@ -324,10 +377,6 @@ public partial class App : Application {
 
 
 
-            
-
-
-
 
 
 
@@ -367,12 +416,14 @@ public partial class App : Application {
                     SetupTaskbars();
 
                     Taskbar.SetupLayers();
+
                     Taskbar.SetupWebViews();
 
                     if(App.Settings.SelectedConfig is not null) App.Settings.SelectedConfig.Start();
 
                     Settings.OnGlobalOpacityChanged();
 
+                    
 
 
                     if (firstRun == true) {
@@ -460,6 +511,36 @@ public partial class App : Application {
             t.taskbarHelper.UpdateRadius();
             int fals = 1;
             TaskbarHelper.DwmSetWindowAttribute(new WindowInteropHelper(t).EnsureHandle(), TaskbarHelper.DWMWINDOWATTRIBUTE.ExcludedFromPeek, ref fals, sizeof(int));
+        });
+
+        Task.Run(() => {
+            if (!ExplorerTAP.ExplorerTAP.NeedsTAP()) return;
+
+            var hwnd = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
+            while(hwnd != IntPtr.Zero) {
+                Thread.Sleep(150);
+                hwnd = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
+            }
+
+            ExplorerTAP.ExplorerTAP.IsInjected = false;
+
+            do {
+                hwnd = TaskbarHelper.FindWindow("Shell_TrayWnd", null);
+                Thread.Sleep(150);
+            } while (hwnd == IntPtr.Zero);
+
+            while (!ExplorerTAP.ExplorerTAP.NeedsTAP()) {
+                Thread.Sleep(150);
+            }
+
+            Thread.Sleep(2000);
+            
+            ExplorerTAP.ExplorerTAP.TryInject();
+
+            while (!ExplorerTAP.ExplorerTAP.IsInjected) {
+                Thread.Sleep(150);
+            }
+            ReloadTaskbars();
         });
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -78,8 +79,15 @@ public class WindowHelper {
     [DllImport("user32.dll")]
     static extern IntPtr WindowFromPoint(System.Drawing.Point p);
 
+    
+
+    public event EventHandler? TaskbarUIChanged;
+    public string LastUIData = "";
 
     DateTime lastZIndex = DateTime.MinValue;
+
+
+
     private void TaskbarPosChanged(object sender, EventArgs args) {
 
         var rect = taskbar.GetRectangle();
@@ -95,10 +103,18 @@ public class WindowHelper {
             taskbar.SetBlur();
         }
 
+        if(ExplorerTAP.ExplorerTAP.IsInjected) {
+            string UIData = ExplorerTAP.ExplorerTAP.GetUIDataStr(window);
+            if(UIData != LastUIData) {
+                LastUIData = UIData;
+                TaskbarUIChanged?.Invoke(this, null);
+            }
+        }
+
        
 
         if (!App.Settings.GraphicsRepeat && App.hiddenWebViewHost is not null && window.Height != rect.Height * (1 / scale)) {
-            App.hiddenWebViewHost.Height = rect.Height * (1/scale);
+            App.hiddenWebViewHost.Height = App.taskbars.Max(x=>x.Height);
         }
         if(autoHide && changed) {
             var Taskbar = rect;

@@ -37,11 +37,6 @@ namespace RainbowTaskbar {
             App.localization.Enable(TrayIcon.ContextMenu.Resources.MergedDictionaries);
             App.trayWindow = this;
 
-
-            
-
-
-
         }
 
         private void TrayIcon_TrayMouseDoubleClick(object sender, RoutedEventArgs e) {

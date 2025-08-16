@@ -50,7 +50,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
         break;
     case DLL_PROCESS_DETACH:
-
+        AppearanceServiceAPI::Unload();
         break;
     }
     return TRUE;
