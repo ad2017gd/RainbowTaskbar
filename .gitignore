@@ -399,3 +399,4 @@ FodyWeavers.xsd
 .idea/*
 /RainbowTaskbar/RainbowTaskbar - Backup.csproj
 /vcpkg_installed
+/Output
