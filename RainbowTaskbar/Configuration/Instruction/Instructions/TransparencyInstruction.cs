@@ -21,7 +21,8 @@ public class TransparencyInstruction : Instruction {
         RainbowTaskbar,
         All,
         Style,
-        Layer
+        Layer,
+        TaskbarElements
     }
 
     public TransparencyInstructionType Type { get; set; }
@@ -110,6 +111,10 @@ public class TransparencyInstruction : Instruction {
                 window.Dispatcher.Invoke(() =>
                     window.canvasManager.canvases[Layer].Opacity = Opacity
                     , System.Windows.Threading.DispatcherPriority.Normal, token);
+                break;
+
+            case TransparencyInstructionType.TaskbarElements:
+                ExplorerTAP.ExplorerTAP.SetTaskbarElementsOpacity(Opacity);
                 break;
         }
 

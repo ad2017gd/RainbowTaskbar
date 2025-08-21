@@ -31,7 +31,7 @@ return hr
 #define Close 1
 #define Version 2
 #define GetDataPtr 3
-#define SetStartup 4
+#define SetTaskbarElementsOpacity 4
 
 #define DGetUiTree 10
 
@@ -78,5 +78,25 @@ __declspec(dllexport) STDAPI GetDataPtrDLL() {
 
 __declspec(dllexport) STDAPI DebugGetUITreeDLL(BSTR* tree) {
     return E_FAIL;
+
+}
+
+
+__declspec(dllexport) STDAPI SetTaskbarElementsOpacityDLL(UINT opac) {
+    IF_GET_API{
+        VARIANTARG arg = {0};
+        arg.vt = VT_UI4;
+        arg.ulVal = opac;
+
+        DISPPARAMS params;
+        params.cArgs = 1;
+        params.cNamedArgs = 0;
+        params.rgvarg = &arg;
+        hr = INVOKE(SetTaskbarElementsOpacity);
+        return hr;
+    }
+else {
+    return E_FAIL;
+}
 
 }

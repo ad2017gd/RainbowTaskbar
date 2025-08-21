@@ -179,6 +179,7 @@ namespace RainbowTaskbar.Configuration.Web {
                         window.rainbowTaskbar = {
                             setTaskbarOpacity: (v) => {window.chrome.webview.postMessage({m:"transparency",v,which:0}); return window.rainbowTaskbar},
                             setUnderlayOpacity: (v) => {window.chrome.webview.postMessage({m:"transparency",v,which:1}); return window.rainbowTaskbar},
+                            setTaskbarElementsOpacity: (v) => {window.chrome.webview.postMessage({m:"transparency",v,which:5}); return window.rainbowTaskbar},
                             setStyleDefault: () => {window.chrome.webview.postMessage({m:"style",style:0}); return window.rainbowTaskbar},
                             setStyleBlur: () => {window.chrome.webview.postMessage({m:"style",style:1}); return window.rainbowTaskbar},
                             setStyleTransparent: () => {window.chrome.webview.postMessage({m:"style",style:2}); return window.rainbowTaskbar},
@@ -205,20 +206,20 @@ namespace RainbowTaskbar.Configuration.Web {
                                     let ui = rainbowTaskbar.helpers.normalizeTaskbarCoords(_ui, copy);
 
                                     for(let e of ui) {
-                                        e.taskbar.X *= window.devicePixelRatio;
-                                        e.taskbar.Y *= window.devicePixelRatio;
-                                        e.taskbar.Width *= window.devicePixelRatio;
-                                        e.taskbar.Height *= window.devicePixelRatio;
+                                        e.taskbar.X /= window.devicePixelRatio;
+                                        e.taskbar.Y /= window.devicePixelRatio;
+                                        e.taskbar.Width /= window.devicePixelRatio;
+                                        e.taskbar.Height /= window.devicePixelRatio;
                         
-                                        e.taskbarFrameRepeater.X *= window.devicePixelRatio;
-                                        e.taskbarFrameRepeater.Y *= window.devicePixelRatio;
-                                        e.taskbarFrameRepeater.Width *= window.devicePixelRatio;
-                                        e.taskbarFrameRepeater.Height *= window.devicePixelRatio;
+                                        e.taskbarFrameRepeater.X /= window.devicePixelRatio;
+                                        e.taskbarFrameRepeater.Y /= window.devicePixelRatio;
+                                        e.taskbarFrameRepeater.Width /= window.devicePixelRatio;
+                                        e.taskbarFrameRepeater.Height /= window.devicePixelRatio;
                         
-                                        e.systemTrayFrame.X *= window.devicePixelRatio;
-                                        e.systemTrayFrame.Y *= window.devicePixelRatio;
-                                        e.systemTrayFrame.Width *= window.devicePixelRatio;
-                                        e.systemTrayFrame.Height *= window.devicePixelRatio;
+                                        e.systemTrayFrame.X /= window.devicePixelRatio;
+                                        e.systemTrayFrame.Y /= window.devicePixelRatio;
+                                        e.systemTrayFrame.Width /= window.devicePixelRatio;
+                                        e.systemTrayFrame.Height /= window.devicePixelRatio;
                                     }
 
                                     return ui;
@@ -230,7 +231,7 @@ namespace RainbowTaskbar.Configuration.Web {
                                     let genVis = ``;
 
                                     if(rainbowTaskbar.graphicsRepeat) {
-                                        let x = _ui.find(x=>x.taskbarIndex == rainbowTaskbar.taskbarIndex);
+                                        let x = ui.find(x=>x.taskbarIndex == rainbowTaskbar.taskbarIndex);
 
                                         genVis = `rgba(255, 255, 255, 0) ${x.taskbarFrameRepeater.X - 24}px, rgba(255, 255, 255, 1) ${x.taskbarFrameRepeater.X + 64}px, rgba(255, 255, 255, 1) ${x.taskbarFrameRepeater.X + x.taskbarFrameRepeater.Width - 64}px, rgba(255, 255, 255, 0) ${x.taskbarFrameRepeater.X + x.taskbarFrameRepeater.Width + 24}px, rgba(255, 255, 255, 0) ${x.systemTrayFrame.X - 24}px, rgba(255, 255, 255, 1) ${x.systemTrayFrame.X + 64}px, rgba(255, 255, 255, 1) ${x.taskbar.Width - 8}px, rgba(255, 255, 255, 0) ${x.taskbar.Width}px,`
                                     } else {

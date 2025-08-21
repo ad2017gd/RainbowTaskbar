@@ -58,7 +58,7 @@ namespace RainbowTaskbar.ExplorerTAP {
         public delegate int GetDataPtrDelegate();
         public delegate int DebugGetUITreeDelegate(ref IntPtr tree);
         public delegate int GetYPositionDelegate(IntPtr hwnd);
-        public delegate int SetStartupDelegate(uint type);
+        public delegate int SetTaskbarElementsOpacityDelegate(uint alpha);
 
         public static SetAppearanceTypeDelegate SetAppearanceTypeDLL;
         public static CloseDelegate CloseDLL;
@@ -66,8 +66,8 @@ namespace RainbowTaskbar.ExplorerTAP {
         public static GetDataPtrDelegate GetDataPtrDLL;
         public static DebugGetUITreeDelegate DebugGetUITreeDLL;
         public static GetYPositionDelegate GetYPositionDLL;
+        public static SetTaskbarElementsOpacityDelegate SetTaskbarElementsOpacityDLL;
 
-        public static SetStartupDelegate SetStartupDLL;
 
         public static IntPtr library;
         public static int tries = 0;
@@ -187,7 +187,9 @@ namespace RainbowTaskbar.ExplorerTAP {
                     DebugGetUITreeDLL = Marshal.GetDelegateForFunctionPointer<DebugGetUITreeDelegate>(GetProcAddress(library, "DebugGetUITreeDLL"));
                 if (GetProcAddress(library, "GetYPositionDLL") != IntPtr.Zero)
                     GetYPositionDLL = Marshal.GetDelegateForFunctionPointer<GetYPositionDelegate>(GetProcAddress(library, "GetYPositionDLL"));
-                
+                if (GetProcAddress(library, "SetTaskbarElementsOpacityDLL") != IntPtr.Zero)
+                    SetTaskbarElementsOpacityDLL = Marshal.GetDelegateForFunctionPointer<SetTaskbarElementsOpacityDelegate>(GetProcAddress(library, "SetTaskbarElementsOpacityDLL"));
+
                 if (inject) {
                     var guid = new GUID() {
                         a = 0xc9d60190,
@@ -261,6 +263,13 @@ namespace RainbowTaskbar.ExplorerTAP {
 
 
             }
+        }
+
+        public static void SetTaskbarElementsOpacity(double opacity) {
+            if (!NeedsTAP() || IsInjecting) return;
+            if (SetTaskbarElementsOpacityDLL is null || !IsInjected) return;
+
+            SetTaskbarElementsOpacityDLL((uint)(opacity * 255));
         }
 
         public static int GetDataPtr() {

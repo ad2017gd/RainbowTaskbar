@@ -110,31 +110,35 @@ public partial class App : Application {
 
 
             App.Current.Dispatcher.BeginInvoke(() => {
-                var synthetic = false;
-                if (wParam == 0x0201 && trayWindow.TrayIcon.ContextMenu.IsOpen || wParam == 0x0204) return;
-                if(wParam == 0x0200 /* MOUSEMOVE */) {
-                    if (DateTime.Now - lastMove > TimeSpan.FromMilliseconds(8)) {
-                        lastMove = DateTime.Now;
+
+                try {
+                    if (App.Settings.SelectedConfig is InstructionConfig) return;
+
+                    if (wParam == 0x0201 && trayWindow.TrayIcon.ContextMenu.IsOpen || wParam == 0x0204) return;
+                    if (wParam == 0x0200 /* MOUSEMOVE */) {
+                        if (DateTime.Now - lastMove > TimeSpan.FromMilliseconds(8)) {
+                            lastMove = DateTime.Now;
+                        }
+                        else return;
+
                     }
-                    else return;
-                    
-                }
-                var farLeft = (int) (App.taskbars.Count > 0 ? App.taskbars.Min(x => x.Left) : 0);
-                App.taskbars.ForEach(x => {
-                    if (x.webView is null) return;
+                    var farLeft = (int) (App.taskbars.Count > 0 ? App.taskbars.Min(x => x.Left) : 0);
+                    App.taskbars.ForEach(x => {
+                        if (x.webView is null) return;
 
-                    // passing WM_LBUTTONDOWN interferes with tray icon, too bad
+                        // passing WM_LBUTTONDOWN interferes with tray icon, too bad
 
-                    var pn = System.Windows.Forms.Control.MousePosition;
-                    var scale = x.windowHelper.scale;
-                    if (!new System.Drawing.Rectangle(new((int) (x.Left * scale), (int) (x.Top * scale)), new((int) (x.ActualWidth * scale), (int) (x.ActualHeight * scale))).Contains(pn)) return;
+                        var pn = System.Windows.Forms.Control.MousePosition;
+                        var scale = x.windowHelper.scale;
+                        if (!new System.Drawing.Rectangle(new((int) (x.Left * scale), (int) (x.Top * scale)), new((int) (x.ActualWidth * scale), (int) (x.ActualHeight * scale))).Contains(pn)) return;
 
-                    POINT p = new POINT { X = (int) (pn.X), Y = (int) (pn.Y) };
-                    IntPtr cch = FindLastChildAtPoint(x.webView.Handle, 0, 0);
-                    ScreenToClient(App.Settings.GraphicsRepeat ? cch : x.windowHelper.HWND, ref p);
-                    if (!App.Settings.GraphicsRepeat) p.X += (int) x.Left - farLeft;
-                    PostMessage(cch, (uint) wParam, 0x0000, (IntPtr) (((uint) (p.Y) << 16) | ((((ushort) (p.X)) & 0xFFFF))));
-                });
+                        POINT p = new POINT { X = (int) (pn.X), Y = (int) (pn.Y) };
+                        IntPtr cch = FindLastChildAtPoint(x.webView.Handle, 0, 0);
+                        ScreenToClient(App.Settings.GraphicsRepeat ? cch : x.windowHelper.HWND, ref p);
+                        if (!App.Settings.GraphicsRepeat) p.X += (int) x.Left - farLeft;
+                        PostMessage(cch, (uint) wParam, 0x0000, (IntPtr) (((uint) (p.Y) << 16) | ((((ushort) (p.X)) & 0xFFFF))));
+                    });
+                } catch { }
             });
             
 

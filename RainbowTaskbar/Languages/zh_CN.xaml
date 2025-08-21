@@ -156,6 +156,7 @@
     <s:String x:Key="enum_all">任务栏和底层透明度</s:String>
     <s:String x:Key="enum_layer">图层透明度</s:String>
     <s:String x:Key="enum_style">任务栏样式</s:String>
+    <s:String x:Key="enum_taskbarelements">Taskbar elements</s:String>
         <!-- Transparency instruction styles -->
     <s:String x:Key="enum_default">默认</s:String>
     <s:String x:Key="enum_blur">模糊</s:String>

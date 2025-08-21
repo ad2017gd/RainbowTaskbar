@@ -6,3 +6,4 @@ CloseDLL
 VersionDLL
 GetDataPtrDLL
 DebugGetUITreeDLL
+SetTaskbarElementsOpacityDLL

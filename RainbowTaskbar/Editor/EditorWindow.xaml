@@ -54,7 +54,7 @@
                     </ui:NavigationViewItem>
                 </ui:NavigationView.MenuItems>
                 <ui:NavigationView.FooterMenuItems>
-                    <ui:NavigationViewItem NavigationCacheMode="Enabled" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:Settings}">
+                    <ui:NavigationViewItem NavigationCacheMode="Disabled" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:Settings}">
                         <ui:NavigationViewItem.Content>
                             <Viewbox StretchDirection="DownOnly">
                                 <TextBlock Text="{DynamicResource settings}"></TextBlock>

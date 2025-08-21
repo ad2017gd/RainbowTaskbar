@@ -227,6 +227,21 @@ public partial class Taskbar : System.Windows.Window {
             Width = rectangle.Width;
             Height = rectangle.Height;
         }
+        public RectangleF(RectangleF rectangle) {
+            X = rectangle.X;
+            Y = rectangle.Y;
+            Width = rectangle.Width;
+            Height = rectangle.Height;
+        }
+
+        public static RectangleF operator*(RectangleF left, float right) {
+            var nw = new RectangleF(left);
+            nw.X *= right;
+            nw.Y *= right;
+            nw.Width *= right;
+            nw.Height *= right;
+            return nw;
+        }
     }
     [Serializable]
     public class UIData {
@@ -246,7 +261,10 @@ public partial class Taskbar : System.Windows.Window {
             SystemTrayFrame.Y -= off;
             TaskbarFrameRepeater = new(form.TaskbarFrameRepeater);
             TaskbarFrameRepeater.Y -= off;
-            
+
+            SystemTrayFrame *= (t.windowHelper.scale);
+            TaskbarFrameRepeater *= (t.windowHelper.scale);
+
             Taskbar = new(t.taskbarHelper.GetRectangle());
 
             SystemTrayFrame.Height = Taskbar.Height;

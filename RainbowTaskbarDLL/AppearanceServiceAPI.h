@@ -20,6 +20,7 @@ public:
     bool active = true;
 
     HRESULT STDMETHODCALLTYPE SetAppearanceType(UINT type);
+    HRESULT STDMETHODCALLTYPE ChangeTaskbarElementsOpacity(UINT alpha);
 
     HRESULT STDMETHODCALLTYPE Close();
 

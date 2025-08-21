@@ -105,6 +105,8 @@ _E    auto start = taskbar->frame.Parent().try_as< winrt::Windows::UI::Xaml::Fra
 _E
 _E    auto SystemTrayFrame = FindChildRecursive(L"SystemTrayFrameGrid", start);
 _E    auto TaskbarFrameRepeater = FindChildRecursive(L"TaskbarFrameRepeater", start);
+_E    taskbar->SystemTrayFrame = SystemTrayFrame;
+_E    taskbar->TaskbarFrameRepeater = TaskbarFrameRepeater;
 _E    auto StartButton = FindChildRecursive(L"LaunchListButton", TaskbarFrameRepeater);
 _E
 _E    auto stfPt = winrt::Windows::Foundation::Point(0, 0);

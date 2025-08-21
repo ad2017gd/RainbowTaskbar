@@ -44,10 +44,9 @@ internal static class AutoUpdate {
                     var programfilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
                     var verb = "";
                     var programfiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-                    if (true || Environment.ProcessPath.StartsWith(programfilesX86, StringComparison.OrdinalIgnoreCase) || Environment.ProcessPath.StartsWith(programfiles, StringComparison.OrdinalIgnoreCase)) {
+                    if (Environment.ProcessPath.StartsWith(programfilesX86, StringComparison.OrdinalIgnoreCase) || Environment.ProcessPath.StartsWith(programfiles, StringComparison.OrdinalIgnoreCase)) {
                         verb = "runas";
                         newfile = Environment.ExpandEnvironmentVariables("%temp%\\rnbtsk_newver_.exe");
-                        MessageBox.Show(newfile);
                     }
 
                     await web.DownloadFileTaskAsync(uri, newfile);

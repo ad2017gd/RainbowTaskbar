@@ -158,6 +158,7 @@
     <s:String x:Key="enum_all">Taskbar and underlay opacities</s:String>
     <s:String x:Key="enum_layer">Layer opacity</s:String>
     <s:String x:Key="enum_style">Taskbar style</s:String>
+    <s:String x:Key="enum_taskbarelements">Taskbar elements</s:String>
         <!-- Transparency instruction styles -->
     <s:String x:Key="enum_default">Default</s:String>
     <s:String x:Key="enum_blur">Blurred</s:String>

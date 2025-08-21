@@ -159,6 +159,7 @@
     <s:String x:Key="enum_all">Opacité de la barre des tâches et de la sous-couche</s:String>
     <s:String x:Key="enum_layer">Opacité du calque</s:String>
     <s:String x:Key="enum_style">Style de la barre des tâches</s:String>
+    <s:String x:Key="enum_taskbarelements">Taskbar elements</s:String>
         <!-- Transparency instruction styles -->
     <s:String x:Key="enum_default">Par défaut</s:String>
     <s:String x:Key="enum_blur">Flou</s:String>

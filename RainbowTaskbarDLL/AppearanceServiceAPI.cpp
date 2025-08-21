@@ -52,9 +52,32 @@ _E      }
     return S_OK;
 }
 
+HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::ChangeTaskbarElementsOpacity(UINT alpha) {_F
+    if (!active) return S_FALSE;
+    try {
+_E      auto watch = treeWatch.get();
+_E      for (auto& [handle, taskbar] : watch->taskbarMap) {
+_E          Taskbar& t = taskbar;//?
+_E          if (t.SystemTrayFrame && t.TaskbarFrameRepeater) {
+_E              t.SystemTrayFrame.Opacity(alpha / 255.0);
+_E              t.TaskbarFrameRepeater.Opacity(alpha / 255.0);
+_E          }
+_E      }
+    }
+    catch (...) {
+        HRESULT res = winrt::to_hresult();
+        _com_error err(res);
+        WCHAR data[1024];
+        __EFMT(data, err.ErrorMessage());
+        return res;
+    }
+
+    return S_OK;
+}
 
 HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Close() try { _F
 _E  SetAppearanceType(0);
+_E  ChangeTaskbarElementsOpacity(255);
 _E  return 0;
 }
 catch (...)
@@ -68,7 +91,7 @@ catch (...)
 
 HRESULT STDMETHODCALLTYPE AppearanceServiceAPI::Version() { 
 
-    return 4;
+    return 5;
 }
 
 //#include <fstream>
@@ -152,6 +175,15 @@ HRESULT AppearanceServiceAPI::Invoke(DISPID dispIdMember, // 0 or 1
         return Version();
     case 3: {
         return GetDataPtr();
+    case 4:
+        if (pDispParams->cArgs == 1 && pDispParams->rgvarg[0].vt == VT_UI4)
+        {
+            UINT opac = pDispParams->rgvarg[0].ulVal;
+            HRESULT hr = ChangeTaskbarElementsOpacity(opac);
+            if (FAILED(hr))
+                return hr;
+        }
+        return S_OK;
     }
 
 }

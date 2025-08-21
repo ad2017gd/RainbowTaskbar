@@ -10,7 +10,7 @@
         AllowsTransparency="True"
         WindowStyle="None"
         Title="HiddenWebViewHost" Height="1" Width="1">
-    <Grid Background="#01FFFF00">
+    <Grid Background="#00FFFF00">
         <wpf:WebView2 x:Name="webView_" DefaultBackgroundColor="Transparent"></wpf:WebView2>
     </Grid>
 </Window>

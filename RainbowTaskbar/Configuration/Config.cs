@@ -97,7 +97,10 @@ namespace RainbowTaskbar.Configuration {
             var inst = new TransparencyInstruction() {
                 Type = TransparencyInstruction.TransparencyInstructionType.All, Opacity = 1
             };
-            App.taskbars.ForEach(x => inst.Execute(x));
+            var inst2 = new TransparencyInstruction() {
+                Type = TransparencyInstruction.TransparencyInstructionType.TaskbarElements, Opacity = 1
+            };
+            App.taskbars.ForEach(x => { inst.Execute(x); inst2.Execute(x); });
             currentlyRunning = this;
            
             

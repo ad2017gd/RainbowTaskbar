@@ -14,7 +14,8 @@ public:
     winrt::Windows::UI::Core::CoreDispatcher dispatcher = nullptr;
     winrt::Windows::UI::Xaml::FrameworkElement gripper = nullptr;
     winrt::Windows::UI::Xaml::FrameworkElement frame = nullptr;
-    
+    winrt::Windows::UI::Xaml::FrameworkElement SystemTrayFrame = nullptr;
+    winrt::Windows::UI::Xaml::FrameworkElement TaskbarFrameRepeater = nullptr;
     
     HWND handle = NULL;
     int tInfoIndex = 0;
