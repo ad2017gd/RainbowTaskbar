@@ -5,7 +5,7 @@
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280434808-334b68d6-9568-4cc5-988d-a9bf186c1b8c.png" alt="Download x64" height="64">](https://github.com/ad2017gd/RainbowTaskbar/releases/download/3.2/setup-x64.msi)
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280435213-f3b1165b-dba6-4f0d-84ac-2cae15ec992a.png" alt="Donate" height="64">](https://paypal.me/ad2k17)
 
-   <h1><a href="https://ad2017.dev/rnb">RainbowTaskbar</a></h1>
+   <h1><a href="https://rnb.ad2017.dev">RainbowTaskbar</a></h1>
 <p>Useful tool for Windows taskbar customization. Supports web configurations or instruction-like configurations that feature color effects, transitions, blur, images, text, rounded corners, shapes, transparency. Now rewritten in .NET 8!</p>
    <p><strong>Conflicts with TranslucentTB! Close it before running RainbowTaskbar</strong></p>
 
