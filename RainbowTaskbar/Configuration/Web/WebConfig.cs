@@ -141,7 +141,7 @@ namespace RainbowTaskbar.Configuration.Web {
         }
 
         private void _Start(WebView2 webView, Mutex webViewReady, Taskbar t) {
-            webViewReady.WaitOne();
+            if(!webViewReady.WaitOne(1500)) return;
             webViewReady.ReleaseMutex();
             App.Current.Dispatcher.Invoke(() => {
                 webView?.CoreWebView2.Resume();
@@ -297,8 +297,8 @@ namespace RainbowTaskbar.Configuration.Web {
             });
         }
 
-        public override void Start() {
-            base.Start();
+        public override async Task<bool> Start() {
+            if (!(await base.Start())) return false;
 
             App.taskbars.ForEach(x => {
                 x.ClassicGrid.Visibility = System.Windows.Visibility.Collapsed;
@@ -316,13 +316,13 @@ namespace RainbowTaskbar.Configuration.Web {
                     _Start(App.webView, App.webViewReady, null);
                 });
             }
+
+            return true;
         }
 
         public override Task Stop() {
             var wv = App.webView;
-            var tsk = wv?.EnsureCoreWebView2Async();
             return Task.Run(() => {
-                try { tsk?.Wait(500); } catch { return; }
                 App.Current.Dispatcher.Invoke(() => {
                     try {
                         wv?.NavigateToString("<html></html>");

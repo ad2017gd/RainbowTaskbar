@@ -179,7 +179,7 @@
     <s:String x:Key="fadetime">Durée de fondu</s:String>
     <s:String x:Key="gradientangle">Angle du dégradé °</s:String>
     <s:String x:Key="layer">Calque</s:String>
-    <s:String x:Key="millisecondes">ms</s:String>
+    <s:String x:Key="milliseconds">ms</s:String>
         <!-- Image -->
     <s:String x:Key="chooseimg">Choisir une image</s:String>
     <s:String x:Key="width">Largeur</s:String>

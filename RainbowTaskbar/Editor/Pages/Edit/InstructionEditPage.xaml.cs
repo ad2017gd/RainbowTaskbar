@@ -101,8 +101,7 @@ namespace RainbowTaskbar.Editor.Pages.Edit {
         }
         
         private void RunConfig(object sender, RoutedEventArgs e) {
-            // fuck this shit i hate this why did i do it like this
-            App.Settings.SelectedConfig.Stop();
+            if(App.Settings.SelectedConfig is not null) App.Settings.SelectedConfig.Stop();
             App.ReloadTaskbars(false);
             Taskbar.SoftReset(true, Current);
         }

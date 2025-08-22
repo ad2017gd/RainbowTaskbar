@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
@@ -34,13 +35,16 @@ namespace RainbowTaskbar.Editor
             InitializeComponent();
             ApplicationThemeManager.ApplySystemTheme(true);
             Task.Run(() => {
-                if (ExplorerTAP.ExplorerTAP.IsInjected) {
-                    while (active) {
-                        if(ExplorerTAP.ExplorerTAP.IsInjected) {
-                            DebugText = $"{ExplorerTAP.ExplorerTAP.GetUIDataStr(App.taskbars[0])}\n";
-                        }
-                        Thread.Sleep(100);
+                while (active) {
+                    List<string> missingKeys = new List<string>();
+                    foreach (DictionaryEntry key in App.localization.dictionary_en_US) {
+                        if(!App.localization.dictionary.Contains(key.Key)) missingKeys.Add((string)key.Key);
                     }
+                    DebugText = $"Missing translation keys: {string.Join(", ", missingKeys)}\n\n";
+                    if (ExplorerTAP.ExplorerTAP.IsInjected) {
+                        DebugText += $"UI Data: {ExplorerTAP.ExplorerTAP.GetUIDataStr(App.taskbars[0])}\n";
+                    }
+                    Thread.Sleep(100);
                 }
             });
         }

@@ -59,13 +59,14 @@ public class InstructionConfig : Config {
 
         Data.RunOnceGroup = new InstructionGroup();
     }
-    public override void Start() {
-        base.Start();
+    public override async Task<bool> Start() {
+        if(!(await base.Start())) return false;
         App.taskbars.ForEach(x => {
             x.ClassicGrid.Visibility = System.Windows.Visibility.Visible;
             x.WebGrid.Visibility = System.Windows.Visibility.Collapsed;
         });
         Task.Run(() => StartGroupTasks());
+        return true;
     }
     public override Task Stop() {
         return Task.WhenAll(StopGroupTasks());

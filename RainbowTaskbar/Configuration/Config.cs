@@ -91,17 +91,31 @@ namespace RainbowTaskbar.Configuration {
             if (File.Exists(fileName)) File.Delete(fileName);
         }
 
-        public virtual void Start() {
-           
-            if (currentlyRunning is not null) currentlyRunning.Stop().Wait(150);
-            var inst = new TransparencyInstruction() {
-                Type = TransparencyInstruction.TransparencyInstructionType.All, Opacity = 1
-            };
-            var inst2 = new TransparencyInstruction() {
-                Type = TransparencyInstruction.TransparencyInstructionType.TaskbarElements, Opacity = 1
-            };
-            App.taskbars.ForEach(x => { inst.Execute(x); inst2.Execute(x); });
-            currentlyRunning = this;
+        static bool stopping = false;
+        public virtual Task<bool> Start() {
+            if (stopping) return Task.FromResult(false);
+
+            return Task.Run(() => {
+                stopping = true;
+
+                if (currentlyRunning is not null) currentlyRunning.Stop().Wait(300);
+                stopping = false;
+
+                App.Current.Dispatcher.Invoke(() => {
+                    var inst = new TransparencyInstruction() {
+                        Type = TransparencyInstruction.TransparencyInstructionType.All, Opacity = 1
+                    };
+                    var inst2 = new TransparencyInstruction() {
+                        Type = TransparencyInstruction.TransparencyInstructionType.TaskbarElements, Opacity = 1
+                    };
+                    App.taskbars.ForEach(x => { inst.Execute(x); inst2.Execute(x); });
+                    currentlyRunning = this;
+                });
+
+                return true;
+
+            });
+            
            
             
 

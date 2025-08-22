@@ -15,7 +15,11 @@ namespace RainbowTaskbar.Languages {
     {
         public static List<string> languages = new List<string>() { "SystemDefault", "en_US", "zh_CN", "fr_FR", "ro_RO" };
         public ResourceDictionary dictionary;
+        public en_US dictionary_en_US;
         public Localization() {
+            dictionary_en_US = new en_US();
+            dictionary_en_US.InitializeComponent();
+
             Switch(CultureInfo.InstalledUICulture.Name);
         }
 
@@ -40,8 +44,7 @@ namespace RainbowTaskbar.Languages {
                     (dictionary as ro_RO).InitializeComponent();
                     break;
                 default:
-                    dictionary = new en_US();
-                    (dictionary as en_US).InitializeComponent();
+                    dictionary = dictionary_en_US;
                     break;
             }
         }
@@ -77,10 +80,11 @@ namespace RainbowTaskbar.Languages {
 
 
         public void Enable(Collection<ResourceDictionary> mergedDicts) {
-            var idx = mergedDicts.ToList().FindIndex((x) => x.Contains("systemdefault"));
-            if (idx > -1) mergedDicts.RemoveAt(idx);
-            mergedDicts.Add(dictionary);
+            mergedDicts.ToList().Where(x=>x.Contains("systemdefault")).ToList().ForEach(x => mergedDicts.Remove(x));
 
+            mergedDicts.Add(dictionary_en_US);
+            mergedDicts.Add(dictionary);
+            
         }
 
     }
