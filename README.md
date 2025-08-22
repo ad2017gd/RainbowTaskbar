@@ -1,7 +1,5 @@
 <div align="center">
    
-## [Official site](https://rnb.ad2017.dev)
-
 [<sub>*</sub>](#microsoft-store)
 [<img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" height="64">](https://apps.microsoft.com/detail/9nn78x0674xw)
 [<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/39013925/280434808-334b68d6-9568-4cc5-988d-a9bf186c1b8c.png" alt="Download x64" height="64">](https://github.com/ad2017gd/RainbowTaskbar/releases/download/3.2/setup-x64.msi)
